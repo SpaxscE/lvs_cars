@@ -4,6 +4,8 @@ include("shared.lua")
 include("sv_workarounds.lua")
 include("sv_wheelsystem.lua")
 
+ENT.PostInitDelay = 0.05
+
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 

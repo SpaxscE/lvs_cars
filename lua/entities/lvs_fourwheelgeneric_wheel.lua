@@ -28,6 +28,7 @@ if SERVER then
 	end
 
 	function ENT:Initialize()
+		self:SetModel("models/diggercars/nissan_bluebird910/bluebird_tire.mdl")
 		self:DrawShadow( false )
 
 		debugoverlay.Cross( self:GetPos(), 5, 1, Color(150,150,150) )
@@ -42,6 +43,7 @@ if SERVER then
 		local PhysObj = self:GetPhysicsObject()
 
 		PhysObj:SetMass( mass )
+		--PhysObj:EnableMotion( )
 
 		debugoverlay.Sphere( self:GetPos(), radius, 1, Color(150,150,150), true )
 
@@ -83,6 +85,7 @@ else
 	end
 
 	function ENT:Draw()
+		self:DrawModel()
 	end
 
 	function ENT:Think()

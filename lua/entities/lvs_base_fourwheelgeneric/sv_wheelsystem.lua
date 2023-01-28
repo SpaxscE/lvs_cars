@@ -131,7 +131,5 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	Elastic.DoNotDuplicate = true
 	debugoverlay.SweptBox( P1, P2,- Vector(0,2,2), Vector(0,2,2), (P1 - P2):Angle(), 5, Color( 255, 255, 0 ) )
 
-	Wheel:SetPos( Pos )
-
 	return Elastic
 end
