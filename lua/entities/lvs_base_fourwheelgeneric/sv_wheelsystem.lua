@@ -97,6 +97,9 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local damping = data.SpringDamping
 	local rdamping = data.SpringRelativeDamping
 
+	local LimiterLength = 60
+	local LimiterRopeLength = math.sqrt( maxtravel ^ 2 + LimiterLength ^ 2 )
+
 	local Pos = Wheel:GetPos()
 
 	local PosL, _ = WorldToLocal( Pos, DirectionAngle, CenterPos, DirectionAngle )
@@ -123,14 +126,14 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	Rope2.DoNotDuplicate = true
 	debugoverlay.Line( P1, P2, 5, Color(0,255,0), true )
 
-	local Limiter = constraint.Rope(self,Wheel,0,0,self:WorldToLocal( Pos ), Vector(0,0,0), 0, maxtravel, 0, RopeSize,"cable/cable2", false )
-	Limiter.DoNotDuplicate = true
-
 	local Offset = Up * height
 
 	Wheel:SetPos( Pos - Offset )
 
 	Wheel:SetSolid( SOLID_NONE )
+
+	local Limiter = constraint.Rope(self,Wheel,0,0,self:WorldToLocal( Pos - Up * height * 0.5 - Right * LimiterLength), Vector(0,0,0),LimiterRopeLength, 0, 0, RopeSize,"cable/cable2", false )
+	Limiter.DoNotDuplicate = true
 
 	P1 = Wheel:GetPos() + Up * height * 2
 	local Elastic = constraint.Elastic( Wheel, self, 0, 0, Vector(0,0,0), self:WorldToLocal( P1 ), constant, damping, rdamping,"cable/cable2", RopeSize, false ) 
