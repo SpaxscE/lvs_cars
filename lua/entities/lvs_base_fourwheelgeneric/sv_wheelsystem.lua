@@ -1,0 +1,137 @@
+ENT._WheelEnts = {}
+ENT._WheelAxles = {}
+
+function ENT:GetWheels()
+	for id, ent in pairs( self._WheelEnts ) do
+		if IsValid( ent ) then continue end
+
+		self._WheelEnts[ id ] = nil
+	end
+
+	return self._WheelEnts
+end
+
+function ENT:AddWheel( pos, ang, radius, mass )
+	local Wheel = ents.Create( "lvs_fourwheelgeneric_wheel" )
+
+	if not IsValid( Wheel ) then
+		self:Remove()
+
+		print("LVS: Failed to create wheel entity. Vehicle terminated.")
+
+		return
+	end
+
+	Wheel:SetPos( self:LocalToWorld( pos ) )
+	Wheel:SetAngles( self:LocalToWorldAngles( ang ) )
+	Wheel:Spawn()
+	Wheel:Activate()
+	Wheel:SetBase( self )
+	Wheel:Define( radius, mass )
+
+	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
+
+	self:DeleteOnRemove( Wheel )
+	self:TransferCPPI( Wheel )
+
+	table.insert( self._WheelEnts, Wheel )
+
+	return Wheel
+end
+
+function ENT:DefineAxle( data )
+	if not istable( data ) then print("LVS: couldn't define axle: no axle data") return end
+
+	if not istable( data.Axle ) or not istable( data.Wheels ) or not istable( data.Suspension ) then print("LVS: couldn't define axle: no axle/wheel/suspension data") return end
+
+	data.Axle.ForwardAngle = data.Axle.ForwardAngle or Angle(0,0,0)
+	data.Axle.SteerType = data.Axle.SteerType or LVS.WHEEL_STEER_NONE
+	data.Axle.SteerAngle = data.Axle.SteerAngle or 20
+
+	data.Suspension.Height = data.Suspension.Height or 20
+	data.Suspension.MaxTravel = data.Suspension.MaxTravel or data.Suspension.Height
+	data.Suspension.ControlArmLength = data.Suspension.ControlArmLength or 25
+	data.Suspension.SpringConstant = data.Suspension.SpringConstant or 20000
+	data.Suspension.SpringDamping = data.Suspension.SpringDamping or 2000
+	data.Suspension.SpringRelativeDamping = data.Suspension.SpringRelativeDamping or 2000
+	data.Suspension.ElasticConstraints = {}
+
+	local AxleCenter = Vector(0,0,0)
+	for _, Wheel in ipairs( data.Wheels ) do
+		if not IsEntity( Wheel ) then print("LVS: !ERROR!, given wheel is not a entity!") return end
+
+		AxleCenter = AxleCenter + Wheel:GetPos()
+	end
+	AxleCenter = AxleCenter / #data.Wheels
+
+	data.Axle.CenterPos = self:WorldToLocal( AxleCenter )
+
+	for id, Wheel in ipairs( data.Wheels ) do
+		local Elastic = self:CreateSuspension( Wheel, AxleCenter, self:LocalToWorldAngles( data.Axle.ForwardAngle ), data.Suspension )
+
+		table.insert( data.Suspension.ElasticConstraints, Elastic )
+
+		-- nocollide them with each other
+		for i = id, #data.Wheels do
+			local Ent = data.Wheels[ i ]
+			if Ent == Wheel then continue end
+
+			local nocollide = constraint.NoCollide(Ent,Wheel,0,0)
+			nocollide.DoNotDuplicate = true
+		end
+	end
+
+	table.insert( self._WheelAxles, data )
+end
+
+function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
+	if not IsValid( Wheel ) or not IsEntity( Wheel ) then return end
+
+	local height = data.Height
+	local maxtravel = data.MaxTravel
+	local constant = data.SpringConstant
+	local damping = data.SpringDamping
+	local rdamping = data.SpringRelativeDamping
+
+	local Pos = Wheel:GetPos()
+
+	local PosL, _ = WorldToLocal( Pos, DirectionAngle, CenterPos, DirectionAngle )
+
+	local Forward = DirectionAngle:Forward()
+	local Right = DirectionAngle:Right() * (PosL.y > 0 and 1 or -1)
+	local Up = DirectionAngle:Up()
+
+	local RopeSize = 0
+	local RopeLength = data.ControlArmLength
+	local Lock = 0.0001
+
+	local Ballsocket = constraint.AdvBallsocket( Wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -Lock, -Lock, -Lock, Lock, Lock, Lock, 0, 0, 0, 1, 1)
+	Ballsocket.DoNotDuplicate = true
+
+	local P1 = Pos + Forward * RopeLength * 0.5 + Right * RopeLength
+	local P2 = Pos
+	local Rope1 = constraint.Rope(self, Wheel,0,0,self:WorldToLocal( P1 ), Vector(0,0,0), Vector(RopeLength * 0.5,RopeLength,0):Length(), 0, 0, RopeSize,"cable/cable2", true )
+	Rope1.DoNotDuplicate = true
+	debugoverlay.Line( P1, P2, 5, Color(0,255,0), true )
+
+	P1 = Pos - Forward * RopeLength * 0.5 + Right * RopeLength
+	local Rope2 = constraint.Rope(self, Wheel,0,0,self:WorldToLocal( P1 ), Vector(0,0,0), Vector(RopeLength * 0.5,RopeLength,0):Length(), 0, 0, RopeSize,"cable/cable2", true )
+	Rope2.DoNotDuplicate = true
+	debugoverlay.Line( P1, P2, 5, Color(0,255,0), true )
+
+	local Limiter = constraint.Rope(self,Wheel,0,0,self:WorldToLocal( Pos ), Vector(0,0,0), 0, maxtravel, 0, RopeSize,"cable/cable2", false )
+	Limiter.DoNotDuplicate = true
+
+	local Offset = Up * height
+
+	Wheel:SetPos( Pos - Offset )
+
+	P1 = Wheel:GetPos() + Up * height * 2
+	local Elastic = constraint.Elastic( Wheel, self, 0, 0, Vector(0,0,0), self:WorldToLocal( P1 ), constant, damping, rdamping,"cable/cable2", RopeSize, false ) 
+	Elastic.DoNotDuplicate = true
+	debugoverlay.SweptBox( P1, P2,- Vector(0,2,2), Vector(0,2,2), (P1 - P2):Angle(), 5, Color( 255, 255, 0 ) )
+
+	Wheel:SetPos( Pos )
+
+	return Elastic
+end
