@@ -13,13 +13,12 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(-14,14.94,4.2394), Angle(0,-90,7.8) )
 
 	local radius = 12
-	local mass = 100
 
-	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), radius, mass )
-	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,90,0), radius, mass )
+	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), radius )
+	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,90,0), radius )
 
-	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,-90,0), radius, mass )
-	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,90,0), radius, mass )
+	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,-90,0), radius )
+	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,90,0), radius )
 
 	local FrontAxle = {
 		Axle = {

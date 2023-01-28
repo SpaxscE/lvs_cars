@@ -12,6 +12,10 @@ function ENT:GetWheels()
 end
 
 function ENT:AddWheel( pos, ang, radius, mass )
+	if not mass then
+		mass = self:GetPhysicsObject():GetMass() / 10
+	end
+
 	local Wheel = ents.Create( "lvs_fourwheelgeneric_wheel" )
 
 	if not IsValid( Wheel ) then

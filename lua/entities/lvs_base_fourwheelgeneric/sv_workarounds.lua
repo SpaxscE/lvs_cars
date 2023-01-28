@@ -31,21 +31,21 @@ function ENT:SetMassCenter( offset )
 
 	local OffsetMassCenter = BaseMassCenter + Dir * (Dist + DistAdd)
 
-	local MassOffset = ents.Create( "prop_physics" )
-	MassOffset:SetModel( "models/hunter/plates/plate.mdl" )
-	MassOffset:SetPos( OffsetMassCenter )
-	MassOffset:SetAngles( self:GetAngles() )
-	MassOffset:Spawn()
-	MassOffset:Activate()
-	MassOffset.DoNotDuplicate = true
-	MassOffset:SetOwner( self )
-	MassOffset:DrawShadow( false )
-	MassOffset:SetNotSolid( true )
-	MassOffset:SetNoDraw( true )
+	local CounterWeight = ents.Create( "prop_physics" )
+	CounterWeight:SetModel( "models/hunter/plates/plate.mdl" )
+	CounterWeight:SetPos( OffsetMassCenter )
+	CounterWeight:SetAngles( self:GetAngles() )
+	CounterWeight:Spawn()
+	CounterWeight:Activate()
+	CounterWeight.DoNotDuplicate = true
+	CounterWeight:SetOwner( self )
+	CounterWeight:DrawShadow( false )
+	CounterWeight:SetNotSolid( true )
+	CounterWeight:SetNoDraw( true )
 
-	self:TransferCPPI( MassOffset )
+	self:TransferCPPI( CounterWeight )
 
-	local PhysObj = MassOffset:GetPhysicsObject()
+	local PhysObj = CounterWeight:GetPhysicsObject()
 
 	if not IsValid( PhysObj ) then
 		self:Remove()
@@ -59,13 +59,13 @@ function ENT:SetMassCenter( offset )
 	PhysObj:SetMass( OffsetMass )
 	PhysObj:EnableDrag( false )
 
-	local weld = constraint.Weld( MassOffset, self, 0, 0, 0, true, true ) 
+	local weld = constraint.Weld( CounterWeight, self, 0, 0, 0, true, true ) 
 	weld.DoNotDuplicate = true
 
-	local ballsocket = constraint.AdvBallsocket( MassOffset, self,0,0, Vector(0,0,0), Vector(0,0,0), 0,0, -0.01, -0.01, -0.01, 0.01, 0.01, 0.01, 0, 0, 0, 0, 1)
+	local ballsocket = constraint.AdvBallsocket( CounterWeight, self,0,0, Vector(0,0,0), Vector(0,0,0), 0,0, -0.01, -0.01, -0.01, 0.01, 0.01, 0.01, 0, 0, 0, 0, 1)
 	ballsocket.DoNotDuplicate = true
 
 	PhysObj:EnableMotion( true )
 
-	self._MassCenterEntity = MassOffset
+	self._MassCenterEntity = CounterWeight
 end
