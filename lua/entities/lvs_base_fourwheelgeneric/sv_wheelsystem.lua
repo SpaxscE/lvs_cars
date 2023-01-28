@@ -87,6 +87,10 @@ end
 function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	if not IsValid( Wheel ) or not IsEntity( Wheel ) then return end
 
+	if self:GetSolid() ~= SOLID_NONE then
+		self:SetSolid( SOLID_NONE )
+	end
+
 	local height = data.Height
 	local maxtravel = data.MaxTravel
 	local constant = data.SpringConstant
@@ -126,10 +130,14 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 
 	Wheel:SetPos( Pos - Offset )
 
+	Wheel:SetSolid( SOLID_NONE )
+
 	P1 = Wheel:GetPos() + Up * height * 2
 	local Elastic = constraint.Elastic( Wheel, self, 0, 0, Vector(0,0,0), self:WorldToLocal( P1 ), constant, damping, rdamping,"cable/cable2", RopeSize, false ) 
 	Elastic.DoNotDuplicate = true
 	debugoverlay.SweptBox( P1, P2,- Vector(0,2,2), Vector(0,2,2), (P1 - P2):Angle(), 5, Color( 255, 255, 0 ) )
+
+	Wheel:SetPos( Pos )
 
 	return Elastic
 end

@@ -4,8 +4,6 @@ include("shared.lua")
 include("sv_workarounds.lua")
 include("sv_wheelsystem.lua")
 
-ENT.PostInitDelay = 0.05
-
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
@@ -66,6 +64,23 @@ function ENT:OnSpawn( PObj )
 	self:DefineAxle( RearAxle )
 
 	self:SetMassCenter( Vector(0,0,0) )
+end
+
+function ENT:OnSpawnFinish( PObj )
+	timer.Simple(0, function()
+		if not IsValid( self ) or not IsValid( PObj ) then return end
+
+		if GetConVar( "developer" ):GetInt() ~= 1 then
+			PObj:EnableMotion( true )
+		end
+
+		self:SetSolid( SOLID_VPHYSICS )
+		self:PhysWake()
+
+		for _, Wheel in pairs( self:GetWheels() ) do
+			Wheel:SetSolid( SOLID_VPHYSICS )
+		end
+	end )
 end
 
 function ENT:AlignView( ply )
