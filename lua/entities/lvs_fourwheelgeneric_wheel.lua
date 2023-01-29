@@ -28,31 +28,55 @@ if SERVER then
 	end
 
 	function ENT:Initialize()
-		self:SetModel("models/diggercars/nissan_bluebird910/bluebird_tire.mdl")
+		self:SetModel("models/diggercars/NISSAN_BLUEBIRD910/bluebird_rim.mdl")
 		self:DrawShadow( false )
 
 		debugoverlay.Cross( self:GetPos(), 5, 1, Color(150,150,150) )
 	end
 
-	function ENT:Define( radius, mass )
-		local bbox = Vector(radius,radius,radius)
+	function ENT:Define( rRim, rTire, mass )
+		local bbox = Vector(rRim,rRim,rRim)
 
-		self:PhysicsInitSphere( radius, "default_silent" )
+		self:PhysicsInitSphere( rRim, "default_silent" )
 		self:SetCollisionBounds( -bbox, bbox )
 
 		local PhysObj = self:GetPhysicsObject()
 
 		PhysObj:SetMass( mass )
-		--PhysObj:EnableMotion( )
 
-		debugoverlay.Sphere( self:GetPos(), radius, 1, Color(150,150,150), true )
+		debugoverlay.Sphere( self:GetPos(), rRim, 1, Color(150,150,150), true )
 
-		local base = self:GetBase()
+		local Base = self:GetBase()
 
-		if not IsValid( base ) then return end
+		if not IsValid( Base ) then return end
 
-		local nocollide = constraint.NoCollide(base,self,0,0)
+		local nocollide = constraint.NoCollide(Base,self,0,0)
 		nocollide.DoNotDuplicate = true
+
+		self:SetRimRadius( rRim )
+		self:SetTireRadius( rTire )
+
+		self:StartMotionController()
+	end
+
+	function ENT:SetRimRadius( n )
+		self._RimRadius = n
+	end
+
+	function ENT:GetRimRadius()
+		return (self._RimRadius or 0)
+	end
+	
+	function ENT:SetAxle( n )
+		self._Axle = n
+	end
+
+	function ENT:GetAxleData()
+		local Base = self:GetBase()
+
+		if not IsValid( Base ) or not isnumber( self._Axle  ) then return end
+
+		return Base._WheelAxles[ self._Axle ]
 	end
 
 	function ENT:Think()	
@@ -65,21 +89,54 @@ if SERVER then
 	function ENT:OnTakeDamage( dmginfo )	
 	end
 
-	--[[
 	function ENT:PhysicsSimulate( phys, deltatime )
 		phys:Wake()
 
-		local ForceLinear = Vector(0,0,0)
+		local Base = self:GetBase()
+		local Pos = phys:GetPos()
+		local Vel = phys:GetVelocity()
+		local VelL = phys:WorldToLocal( Pos + Vel )
+		local Axle = self:GetAxleData().Axle
 
-		local angvel = phys:GetAngleVelocity()
+		local WheelRadius = self:GetTireRadius()
 
-		self:SetSpeed( angvel.x )
+		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
 
-		local ForceAngle = Vector(self:GetTargetSpeed() - angvel.x,0,0)
+		local Up = Ang:Up()
+
+		local Len = WheelRadius
+
+		local traceLine = util.TraceHull( {
+			start = Pos,
+			endpos = Pos - Up * Len,
+			filter = Base:GetCrosshairFilterEnts()
+		} )
+
+		local HitPos = traceLine.HitPos
+		local Mul = math.Clamp( (1 - traceLine.Fraction) * Len,0,1.5)
+
+		local ForceLinear = phys:WorldToLocal( Pos + ((HitPos + Up * WheelRadius - Pos) * 100 - Vel * 10) * 5 )
+		ForceLinear.z = ForceLinear.z * Mul
+		ForceLinear.x = 0
+		ForceLinear.y = 0
+
+		local LocalForward = phys:WorldToLocal( Pos + Ang:Forward() )
+		local LocalRight = phys:WorldToLocal( Pos + Ang:Right() )
+		local LocalVelForward = VelL:GetNormalized()
+
+		local Ax = math.acos( math.Clamp( LocalForward:Dot(LocalVelForward) ,-1,1) )
+		local Ay = math.asin( math.Clamp( LocalRight:Dot(LocalVelForward) ,-1,1) )
+
+		local F = VelL:Length()
+		local Fx = math.cos( Ax ) * F
+		local Fy = math.sin( Ay ) * F
+
+		ForceLinear = ForceLinear + (LocalRight * -Fy * 100 + LocalForward * -Fx * 10) * Mul
+
+		local ForceAngle = Vector(0,0,0)
 
 		return ForceAngle, ForceLinear, SIM_LOCAL_ACCELERATION
 	end
-	]]
 else
 	function ENT:Initialize()
 	end
@@ -89,8 +146,27 @@ else
 	end
 
 	function ENT:Think()
+		if not IsValid( self.asdf ) then
+			local asdf = ents.CreateClientProp()
+			asdf:SetPos( self:GetPos() )
+			asdf:SetAngles( self:GetAngles() )
+			asdf:SetModel( "models/diggercars/NISSAN_BLUEBIRD910/bluebird_tire.mdl" )
+			asdf:SetParent( self )
+			asdf:Spawn()
+			
+			self.asdf = asdf
+		end
+
+		if not IsValid( self.asdf:GetParent() ) then
+			self.asdf:SetPos( self:GetPos() )
+			self.asdf:SetAngles( self:GetAngles() )
+			self.asdf:SetParent( self )
+		end
 	end
 
 	function ENT:OnRemove()
+		if IsValid( self.asdf ) then
+			self.asdf:Remove()
+		end
 	end
 end

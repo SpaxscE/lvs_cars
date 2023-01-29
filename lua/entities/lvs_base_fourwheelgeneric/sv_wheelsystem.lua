@@ -1,4 +1,6 @@
 ENT._WheelEnts = {}
+
+ENT._WheelAxleID = 0
 ENT._WheelAxles = {}
 
 function ENT:GetWheels()
@@ -11,7 +13,7 @@ function ENT:GetWheels()
 	return self._WheelEnts
 end
 
-function ENT:AddWheel( pos, ang, radius, mass )
+function ENT:AddWheel( pos, ang, rRim, rTire, mass )
 	if not mass then
 		mass = self:GetPhysicsObject():GetMass() / 10
 	end
@@ -31,7 +33,7 @@ function ENT:AddWheel( pos, ang, radius, mass )
 	Wheel:Spawn()
 	Wheel:Activate()
 	Wheel:SetBase( self )
-	Wheel:Define( radius, mass )
+	Wheel:Define( rRim, rTire, mass )
 
 	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
 
@@ -47,6 +49,8 @@ function ENT:DefineAxle( data )
 	if not istable( data ) then print("LVS: couldn't define axle: no axle data") return end
 
 	if not istable( data.Axle ) or not istable( data.Wheels ) or not istable( data.Suspension ) then print("LVS: couldn't define axle: no axle/wheel/suspension data") return end
+
+	self._WheelAxleID = self._WheelAxleID + 1
 
 	data.Axle.ForwardAngle = data.Axle.ForwardAngle or Angle(0,0,0)
 	data.Axle.SteerType = data.Axle.SteerType or LVS.WHEEL_STEER_NONE
@@ -65,6 +69,10 @@ function ENT:DefineAxle( data )
 		if not IsEntity( Wheel ) then print("LVS: !ERROR!, given wheel is not a entity!") return end
 
 		AxleCenter = AxleCenter + Wheel:GetPos()
+
+		if not Wheel.SetAxle then continue end
+
+		Wheel:SetAxle( self._WheelAxleID )
 	end
 	AxleCenter = AxleCenter / #data.Wheels
 
@@ -85,7 +93,9 @@ function ENT:DefineAxle( data )
 		end
 	end
 
-	table.insert( self._WheelAxles, data )
+	self._WheelAxles[ self._WheelAxleID ] = data
+
+	return self._WheelAxleID
 end
 
 function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )

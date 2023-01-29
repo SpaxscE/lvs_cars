@@ -12,13 +12,14 @@ function ENT:OnSpawn( PObj )
 
 	self:AddDriverSeat( Vector(-14,14.94,4.2394), Angle(0,-90,7.8) )
 
-	local radius = 12
+	local RimRadius = 7
+	local TireRadius = 12
 
-	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), radius )
-	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,90,0), radius )
+	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), RimRadius, TireRadius )
+	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,90,0), RimRadius, TireRadius )
 
-	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,-90,0), radius )
-	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,90,0), radius )
+	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,-90,0), RimRadius, TireRadius )
+	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,90,0), RimRadius, TireRadius )
 
 	local FrontAxle = {
 		Axle = {
@@ -91,4 +92,7 @@ function ENT:AlignView( ply )
 
 		ply:SetEyeAngles( Ang )
 	end)
+end
+
+function ENT:TakeCollisionDamage( damage, attacker )
 end
