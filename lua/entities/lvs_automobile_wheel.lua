@@ -2,13 +2,6 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.PrintName = "Wheel"
-ENT.Author = "Luna"
-ENT.Information = "Luna's Vehicle Script"
-ENT.Category = "[LVS] - Cars"
-
-ENT.Spawnable		= true
-
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "TireRadius" )
 	self:NetworkVar( "Entity", 0, "Base" )
@@ -28,7 +21,6 @@ if SERVER then
 
 	function ENT:Initialize()
 		self:DrawShadow( false )
-		--debugoverlay.Cross( self:GetPos(), 5, 1, Color(150,150,150) )
 	end
 
 	function ENT:Define( rRim, rTire, mass )
@@ -40,8 +32,6 @@ if SERVER then
 		local PhysObj = self:GetPhysicsObject()
 
 		PhysObj:SetMass( mass )
-
-		--debugoverlay.Sphere( self:GetPos(), rTire, 1, Color(150,150,150), true )
 
 		local Base = self:GetBase()
 
