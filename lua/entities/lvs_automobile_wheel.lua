@@ -142,7 +142,7 @@ if SERVER then
 		local Fy = math.sin( Ay ) * F
 		local Fz = math.cos( aUp ) * fUp:Length()
 
-		local ForceLinear = Up * Fz + (Right * -Fy * 100 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 1000 * Mul
+		local ForceLinear = Up * Fz + (Right * -Fy * 10 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 2000 * Mul
 
 		local ForceAngle = Vector(0,0,0)
 
