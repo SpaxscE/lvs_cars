@@ -76,10 +76,10 @@ function ENT:DefineAxle( data )
 	end
 	AxleCenter = AxleCenter / #data.Wheels
 
-	debugoverlay.Text( AxleCenter, "Axle Center "..self._WheelAxleID, 5, true )
+	debugoverlay.Text( AxleCenter, "Axle "..self._WheelAxleID.." Center ", 5, true )
 	debugoverlay.Cross( AxleCenter, 5, 5, Color( 255, 0, 0 ), true )
 	debugoverlay.Line( AxleCenter, AxleCenter + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * 25, 5, Color(255,0,0), true )
-	debugoverlay.Text( AxleCenter + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * 25, "Axle Forward "..self._WheelAxleID, 5, true )
+	debugoverlay.Text( AxleCenter + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * 25, "Axle "..self._WheelAxleID.." Forward", 5, true )
 
 	data.Axle.CenterPos = self:WorldToLocal( AxleCenter )
 
