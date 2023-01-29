@@ -76,10 +76,33 @@ function ENT:DefineAxle( data )
 	end
 	AxleCenter = AxleCenter / #data.Wheels
 
+	debugoverlay.Text( AxleCenter, "Axle Center "..self._WheelAxleID, 5, true )
+	debugoverlay.Cross( AxleCenter, 5, 5, Color( 255, 0, 0 ), true )
+	debugoverlay.Line( AxleCenter, AxleCenter + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * 25, 5, Color(255,0,0), true )
+	debugoverlay.Text( AxleCenter + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * 25, "Axle Forward "..self._WheelAxleID, 5, true )
+
 	data.Axle.CenterPos = self:WorldToLocal( AxleCenter )
 
 	for id, Wheel in ipairs( data.Wheels ) do
 		local Elastic = self:CreateSuspension( Wheel, AxleCenter, self:LocalToWorldAngles( data.Axle.ForwardAngle ), data.Suspension )
+
+		debugoverlay.Line( AxleCenter, Wheel:GetPos(), 5, Color(150,0,0), true )
+		debugoverlay.Text( Wheel:GetPos(), "Axle "..self._WheelAxleID.." Wheel "..id, 5, true )
+
+		local AngleStep = 15
+		for ang = 15, 360, AngleStep do
+			local radius = Wheel:GetTireRadius()
+			local X1 = math.cos( math.rad( ang ) ) * radius
+			local Y1 = math.sin( math.rad( ang ) ) * radius
+
+			local X2 = math.cos( math.rad( ang + AngleStep ) ) * radius
+			local Y2 = math.sin( math.rad( ang + AngleStep ) ) * radius
+
+			local P1 = Wheel:GetPos() + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Up() * Y1 + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * X1
+			local P2 = Wheel:GetPos() + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Up() * Y2 + self:LocalToWorldAngles( data.Axle.ForwardAngle ):Forward() * X2
+
+			debugoverlay.Line( P1, P2, 5, Color( 150, 150, 150 ), true )
+		end
 
 		table.insert( data.Suspension.ElasticConstraints, Elastic )
 
@@ -152,7 +175,7 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	P1 = Wheel:GetPos() + Up * height * 2
 	local Elastic = constraint.Elastic( Wheel, self, 0, 0, Vector(0,0,0), self:WorldToLocal( P1 ), constant, damping, rdamping,"cable/cable2", RopeSize, false ) 
 	Elastic.DoNotDuplicate = true
-	debugoverlay.SweptBox( P1, P2,- Vector(0,2,2), Vector(0,2,2), (P1 - P2):Angle(), 5, Color( 255, 255, 0 ) )
+	debugoverlay.SweptBox( P1, P2,- Vector(0,1,1), Vector(0,1,1), (P1 - P2):Angle(), 5, Color( 255, 255, 0 ), true )
 
 	Wheel:SetPos( Pos )
 
