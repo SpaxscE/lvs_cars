@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base"
 
-ENT.PrintName = "[LVS] Four Wheel Generic"
+ENT.PrintName = "[LVS] Automobile Base"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
