@@ -96,11 +96,19 @@ if SERVER then
 		local VelForward = Vel:GetNormalized()
 
 		local VelL = phys:WorldToLocal( Pos + Vel )
-		local Axle = self:GetAxleData().Axle
+		local data = self:GetAxleData()
+		local Axle = data.Axle
+		local SteerType = Axle.SteerType
 
 		local WheelRadius = self:GetTireRadius()
 
 		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
+
+		if SteerType >= LVS.WHEEL_STEER_FRONT then
+			local Swap = (LVS.WHEEL_STEER_FRONT == SteerType) and -1 or 1
+
+			Ang:RotateAroundAxis( self:GetUp(), Base:GetSteer() * Axle.SteerAngle * Swap )
+		end
 
 		local Forward = Ang:Forward()
 		local Right = Ang:Right()
@@ -123,7 +131,6 @@ if SERVER then
 		local HitPos = traceLine.HitPos
 		local Mul = math.Clamp( (1 - traceLine.Fraction) * Len,0,1.5)
 
-
 		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
 		local Ay = math.asin( math.Clamp( Right:Dot(VelForward) ,-1,1) )
 
@@ -135,7 +142,7 @@ if SERVER then
 		local Fy = math.sin( Ay ) * F
 		local Fz = math.cos( aUp ) * fUp:Length()
 
-		local ForceLinear = Up * Fz + (Right * -Fy * 100 + Forward * -Fx * 1) * Mul
+		local ForceLinear = Up * Fz + (Right * -Fy * 100 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 1000 * Mul
 
 		local ForceAngle = Vector(0,0,0)
 
