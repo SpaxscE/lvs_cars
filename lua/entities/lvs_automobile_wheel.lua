@@ -10,7 +10,6 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable		= true
 
 function ENT:SetupDataTables()
-	self:NetworkVar( "String", 0, "TireModel" )
 	self:NetworkVar( "Float", 0, "TireRadius" )
 	self:NetworkVar( "Entity", 0, "Base" )
 end
@@ -28,10 +27,8 @@ if SERVER then
 	end
 
 	function ENT:Initialize()
-		self:SetModel("models/diggercars/NISSAN_BLUEBIRD910/bluebird_rim.mdl")
 		self:DrawShadow( false )
-
-		debugoverlay.Cross( self:GetPos(), 5, 1, Color(150,150,150) )
+		--debugoverlay.Cross( self:GetPos(), 5, 1, Color(150,150,150) )
 	end
 
 	function ENT:Define( rRim, rTire, mass )
@@ -44,7 +41,7 @@ if SERVER then
 
 		PhysObj:SetMass( mass )
 
-		debugoverlay.Sphere( self:GetPos(), rRim, 1, Color(150,150,150), true )
+		--debugoverlay.Sphere( self:GetPos(), rTire, 1, Color(150,150,150), true )
 
 		local Base = self:GetBase()
 
@@ -94,7 +91,10 @@ if SERVER then
 
 		local Base = self:GetBase()
 		local Pos = phys:GetPos()
+
 		local Vel = phys:GetVelocity()
+		local VelForward = Vel:GetNormalized()
+
 		local VelL = phys:WorldToLocal( Pos + Vel )
 		local Axle = self:GetAxleData().Axle
 
@@ -102,6 +102,8 @@ if SERVER then
 
 		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
 
+		local Forward = Ang:Forward()
+		local Right = Ang:Right()
 		local Up = Ang:Up()
 
 		local Len = WheelRadius
@@ -109,64 +111,46 @@ if SERVER then
 		local traceLine = util.TraceHull( {
 			start = Pos,
 			endpos = Pos - Up * Len,
-			filter = Base:GetCrosshairFilterEnts()
+			filter = function( entity )
+				if Base:GetCrosshairFilterLookup()[ entity:EntIndex() ] or entity:IsPlayer() or entity:IsNPC() or entity:IsVehicle() or Base.CollisionFilter[ entity:GetCollisionGroup() ] then
+					return false
+				end
+
+				return true
+			end,
 		} )
 
 		local HitPos = traceLine.HitPos
 		local Mul = math.Clamp( (1 - traceLine.Fraction) * Len,0,1.5)
 
-		local ForceLinear = phys:WorldToLocal( Pos + ((HitPos + Up * WheelRadius - Pos) * 100 - Vel * 10) * 5 )
-		ForceLinear.z = ForceLinear.z * Mul
-		ForceLinear.x = 0
-		ForceLinear.y = 0
 
-		local LocalForward = phys:WorldToLocal( Pos + Ang:Forward() )
-		local LocalRight = phys:WorldToLocal( Pos + Ang:Right() )
-		local LocalVelForward = VelL:GetNormalized()
+		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
+		local Ay = math.asin( math.Clamp( Right:Dot(VelForward) ,-1,1) )
 
-		local Ax = math.acos( math.Clamp( LocalForward:Dot(LocalVelForward) ,-1,1) )
-		local Ay = math.asin( math.Clamp( LocalRight:Dot(LocalVelForward) ,-1,1) )
+		local fUp = ((HitPos + traceLine.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * Mul
+		local aUp = math.acos( math.Clamp( Up:Dot( fUp:GetNormalized() ) ,-1,1) )
 
-		local F = VelL:Length()
+		local F = Vel:Length()
 		local Fx = math.cos( Ax ) * F
 		local Fy = math.sin( Ay ) * F
+		local Fz = math.cos( aUp ) * fUp:Length()
 
-		ForceLinear = ForceLinear + (LocalRight * -Fy * 100 + LocalForward * -Fx * 10) * Mul
+		local ForceLinear = Up * Fz + (Right * -Fy * 100 + Forward * -Fx * 1) * Mul
 
 		local ForceAngle = Vector(0,0,0)
 
-		return ForceAngle, ForceLinear, SIM_LOCAL_ACCELERATION
+		return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 	end
 else
 	function ENT:Initialize()
 	end
 
 	function ENT:Draw()
-		self:DrawModel()
 	end
 
 	function ENT:Think()
-		if not IsValid( self.asdf ) then
-			local asdf = ents.CreateClientProp()
-			asdf:SetPos( self:GetPos() )
-			asdf:SetAngles( self:GetAngles() )
-			asdf:SetModel( "models/diggercars/NISSAN_BLUEBIRD910/bluebird_tire.mdl" )
-			asdf:SetParent( self )
-			asdf:Spawn()
-			
-			self.asdf = asdf
-		end
-
-		if not IsValid( self.asdf:GetParent() ) then
-			self.asdf:SetPos( self:GetPos() )
-			self.asdf:SetAngles( self:GetAngles() )
-			self.asdf:SetParent( self )
-		end
 	end
 
 	function ENT:OnRemove()
-		if IsValid( self.asdf ) then
-			self.asdf:Remove()
-		end
 	end
 end

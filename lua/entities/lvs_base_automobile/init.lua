@@ -15,11 +15,11 @@ function ENT:OnSpawn( PObj )
 	local RimRadius = 7
 	local TireRadius = 12
 
-	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), RimRadius, TireRadius )
-	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,90,0), RimRadius, TireRadius )
+	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,180,0), RimRadius, TireRadius )
+	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,0,0), RimRadius, TireRadius )
 
-	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,-90,0), RimRadius, TireRadius )
-	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,90,0), RimRadius, TireRadius )
+	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,180,0), RimRadius, TireRadius )
+	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,0,0), RimRadius, TireRadius )
 
 	local FrontAxle = {
 		Axle = {
