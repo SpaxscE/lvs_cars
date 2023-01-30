@@ -274,13 +274,15 @@ else
 	end
 
 	function ENT:IsInitialized()
+		local T = CurTime()
+
+		if (self._TimeInit or 0) < T then return true end
+
 		local Base = self:GetBase()
 
 		if not IsValid( Base ) then return false end
 
 		if not Base:IsInitialized() then return false end
-
-		local T = CurTime()
 
 		if not self._TimeInit then
 			self._TimeInit = T + 0.1
@@ -288,9 +290,7 @@ else
 			return false
 		end
 
-		if self._TimeInit > T then return false end
-
-		return true
+		return false
 	end
 
 	-- ENT:GetAnglesStored() purpose: fix wobbly tires because source constraint system has alot of flex causing calculations to be off
