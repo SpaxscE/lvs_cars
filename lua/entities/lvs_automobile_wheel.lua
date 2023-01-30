@@ -183,7 +183,7 @@ if SERVER then
 		local Fy = math.sin( Ay ) * F
 		local Fz = math.cos( aUp ) * fUp:Length()
 
-		local ForceLinear = Up * Fz + (Right * -Fy * 10 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 2000 * Mul
+		local ForceLinear = Up * Fz + (Right * -Fy * 25 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 2000 * Mul
 
 		local ForceAngle = Vector(0,0,0)
 
@@ -203,18 +203,6 @@ else
 		}
 	end)
 
-	function ENT:GetSteer()
-		local Axle = self:GetAxleData()
-
-		local SteerType = Axle.SteerType
-
-		if SteerType < LVS.WHEEL_STEER_FRONT then return 0 end
-
-		local Swap = (LVS.WHEEL_STEER_FRONT == SteerType) and -1 or 1
-
-		return self:GetBase():GetSteer() * Axle.SteerAngle * Swap
-	end
-
 	function ENT:GetAxleData()
 		if self._AxleData then
 			return self._AxleData
@@ -232,6 +220,38 @@ else
 	function ENT:Initialize()
 	end
 
+	function ENT:GetSteer()
+		local Axle = self:GetAxleData()
+
+		local SteerType = Axle.SteerType
+
+		if SteerType < LVS.WHEEL_STEER_FRONT then return 0 end
+
+		local Swap = (LVS.WHEEL_STEER_FRONT == SteerType) and -1 or 1
+
+		return self:GetBase():GetSteer() * Axle.SteerAngle * Swap
+	end
+
+	function ENT:GetRotation()
+		local Base = self:GetBase()
+
+		local Axle = self:GetAxleData()
+
+		local Vel = self:GetVelocity()
+		local VelForward = Vel:GetNormalized()
+
+		local Forward = Base:LocalToWorldAngles( Axle.ForwardAngle ):Forward()
+
+		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
+
+		local F = Vel:Length()
+		local Fx = math.cos( Ax ) * F
+
+		self._WheelRotation = (self._WheelRotation or 0) - (Fx * RealFrameTime() / math.pi) * self:GetTireRadius() * 2
+
+		return self._WheelRotation
+	end
+
 	function ENT:Draw()
 		local Base = self:GetBase()
 
@@ -242,7 +262,9 @@ else
 		if not Axle then return end
 
 		local AxleAng = Base:LocalToWorldAngles( Axle.ForwardAngle )
+
 		local WheelAng = self:GetAngles()
+		WheelAng:RotateAroundAxis( AxleAng:Right(), self:GetRotation() )
 		WheelAng:RotateAroundAxis( AxleAng:Up(), self:GetSteer() )
 
 		self:SetRenderAngles( WheelAng )
