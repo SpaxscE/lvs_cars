@@ -12,63 +12,6 @@ include("sv_wheelsystem.lua")
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
-function ENT:OnSpawn( PObj )
-	PObj:SetMass( 1000 )
-
-	self:AddDriverSeat( Vector(-14,14.94,4.2394), Angle(0,-90,7.8) )
-
-	local RimRadius = 7
-	local TireRadius = 12
-
-	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,180,0), RimRadius, TireRadius )
-	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,0,0), RimRadius, TireRadius )
-
-	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,180,0), RimRadius, TireRadius )
-	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,0,0), RimRadius, TireRadius )
-
-	local FrontAxle = {
-		Axle = {
-			ForwardAngle = Angle(0,0,0),
-			SteerType = LVS.WHEEL_STEER_FRONT, --LVS.WHEEL_STEER_REAR   LVS.WHEEL_STEER_NONE
-			SteerAngle = 20,
-		},
-		Wheels = {
-			FrontRight,
-			FrontLeft,
-		},
-		Suspension = {
-			Height = 10,
-			MaxTravel = 7,
-			ControlArmLength = 25,
-			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
-		},
-	}
-	self:DefineAxle( FrontAxle )
-
-
-	local RearAxle = {
-		Axle = {
-			ForwardAngle = Angle(0,0,0),
-			SteerType = LVS.WHEEL_STEER_NONE,
-		},
-		Wheels = {
-			RearRight,
-			RearLeft,
-		},
-		Suspension = {
-			Height = 10,
-			MaxTravel = 7,
-			ControlArmLength = 25,
-			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
-		},
-	}
-	self:DefineAxle( RearAxle )
-end
-
 function ENT:OnSpawnFinish( PObj )
 	self:SetMassCenter( Vector(0,0,5) )
 

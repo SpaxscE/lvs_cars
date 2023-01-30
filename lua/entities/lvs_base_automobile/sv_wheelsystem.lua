@@ -13,11 +13,7 @@ function ENT:GetWheels()
 	return self._WheelEnts
 end
 
-function ENT:AddWheel( pos, ang, rRim, rTire, mass )
-	if not mass then
-		mass = self:GetPhysicsObject():GetMass() / 10
-	end
-
+function ENT:AddWheel( pos, ang, model, radius )
 	local Wheel = ents.Create( "lvs_automobile_wheel" )
 
 	if not IsValid( Wheel ) then
@@ -27,18 +23,19 @@ function ENT:AddWheel( pos, ang, rRim, rTire, mass )
 
 		return
 	end
-
+	Wheel:SetModel( model )
 	Wheel:SetPos( self:LocalToWorld( pos ) )
 	Wheel:SetAngles( self:LocalToWorldAngles( ang ) )
 	Wheel:Spawn()
 	Wheel:Activate()
-	Wheel:SetBase( self )
-	Wheel:Define( rRim, rTire, mass )
-
-	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
 
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )
+
+	Wheel:SetBase( self )
+	Wheel:Define( radius, self:GetPhysicsObject():GetMass() / 10 )
+
+	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
 
 	table.insert( self._WheelEnts, Wheel )
 

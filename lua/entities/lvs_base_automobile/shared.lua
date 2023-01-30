@@ -6,19 +6,14 @@ ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
-ENT.Spawnable			= true
+ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/nissan_bluebird910/chassis.mdl"
-ENT.GibModels = { ENT.MDL }
+ENT.MaxHealth = 1000
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
-
-	--if SERVER then
-		--self:NetworkVarNotify( "Disabled", self.OnDisabled )
-	--end
 end
