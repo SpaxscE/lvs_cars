@@ -39,6 +39,7 @@ if SERVER then
 		end
 
 		PhysObj:SetMass( mass )
+		PhysObj:SetMaterial("friction_00")
 
 		local Base = self:GetBase()
 
@@ -59,7 +60,7 @@ if SERVER then
 
 		local OBBRadius = math.max( mins.x, mins.y, mins.z, maxs.x, maxs.y, maxs.z )
 
-		self:SetOBBRadius( math.min( OBBRadius, radius ) )
+		self:SetOBBRadius( OBBRadius )
 		self:SetRadius( math.max( OBBRadius, radius ) )
 
 		self:StartMotionController()
@@ -127,6 +128,10 @@ if SERVER then
 	function ENT:OnTakeDamage( dmginfo )	
 	end
 
+	local HullSize = 2.5
+	local HullVector = Vector( HullSize, HullSize, HullSize )
+	local VectorZero = Vector(0,0,0)
+
 	function ENT:PhysicsSimulate( phys, deltatime )
 		phys:Wake()
 
@@ -141,6 +146,7 @@ if SERVER then
 		local Axle = data.Axle
 		local SteerType = Axle.SteerType
 
+		local ModelRadius = self:GetOBBRadius()
 		local WheelRadius = self:GetRadius()
 
 		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
@@ -155,11 +161,16 @@ if SERVER then
 		local Right = Ang:Right()
 		local Up = Ang:Up()
 
-		local Len = WheelRadius
+		local IsRayCast = WheelRadius > ModelRadius
 
-		local traceLine = util.TraceHull( {
+		local Len = IsRayCast and WheelRadius or ModelRadius + HullSize
+		local HullSize = IsRayCast and VectorZero or HullVector
+
+		local trace = util.TraceHull( {
 			start = Pos,
 			endpos = Pos - Up * Len,
+			maxs = HullSize,
+			mins = -HullSize,
 			filter = function( entity )
 				if Base:GetCrosshairFilterLookup()[ entity:EntIndex() ] or entity:IsPlayer() or entity:IsNPC() or entity:IsVehicle() or Base.CollisionFilter[ entity:GetCollisionGroup() ] then
 					return false
@@ -169,25 +180,23 @@ if SERVER then
 			end,
 		} )
 
-		local HitPos = traceLine.HitPos
-		local Mul = math.Clamp( (1 - traceLine.Fraction) * Len,0,1.5)
+		local HitPos = trace.HitPos
+		local Mul = math.Clamp( (1 - trace.Fraction) * Len,0,1.5)
 
 		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
 		local Ay = math.asin( math.Clamp( Right:Dot(VelForward) ,-1,1) )
 
-		local fUp = ((HitPos + traceLine.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * Mul
+		local fUp = ((HitPos + trace.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * Mul
 		local aUp = math.acos( math.Clamp( Up:Dot( fUp:GetNormalized() ) ,-1,1) )
 
 		local F = Vel:Length()
 		local Fx = math.cos( Ax ) * F
 		local Fy = math.sin( Ay ) * F
-		local Fz = math.cos( aUp ) * fUp:Length()
+		local Fz = IsRayCast and math.cos( aUp ) * fUp:Length() or 0
 
 		local ForceLinear = Up * Fz + (Right * -Fy * 25 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 2000 * Mul
 
-		local ForceAngle = Vector(0,0,0)
-
-		return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
+		return VectorZero, ForceLinear, SIM_GLOBAL_ACCELERATION
 	end
 else
 
