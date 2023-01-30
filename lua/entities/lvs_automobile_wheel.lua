@@ -41,6 +41,10 @@ if SERVER then
 		PhysObj:SetMass( mass )
 		PhysObj:SetMaterial("friction_00")
 
+		local Inertia = PhysObj:GetInertia()
+		local NewInertia = math.min( Inertia.x, Inertia.y, Inertia.z )
+		PhysObj:SetInertia( Vector( NewInertia, NewInertia, NewInertia ) )
+
 		local Base = self:GetBase()
 
 		if not IsValid( Base ) then return end
