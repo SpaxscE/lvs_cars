@@ -186,6 +186,11 @@ if SERVER then
 		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
 		local Ay = math.asin( math.Clamp( Right:Dot(VelForward) ,-1,1) )
 
+		if IsValid( trace.Entity ) then
+			local EntVel = trace.Entity:GetVelocity()
+			WheelRadius = WheelRadius + math.max( EntVel.z, 0 ) * deltatime * 7
+		end
+
 		local fUp = ((HitPos + trace.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * Mul
 		local aUp = math.acos( math.Clamp( Up:Dot( fUp:GetNormalized() ) ,-1,1) )
 
