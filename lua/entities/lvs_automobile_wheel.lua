@@ -276,7 +276,7 @@ else
 	function ENT:IsInitialized()
 		local T = CurTime()
 
-		if (self._TimeInit or 0) < T then return true end
+		if (self._TimeInit or T) < T then return true end
 
 		local Base = self:GetBase()
 
