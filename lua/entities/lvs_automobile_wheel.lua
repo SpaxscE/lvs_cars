@@ -273,18 +273,52 @@ else
 		return self._WheelRotation
 	end
 
-	function ENT:Draw()
+	function ENT:IsInitialized()
 		local Base = self:GetBase()
 
-		if not IsValid( Base ) then return end
+		if not IsValid( Base ) then return false end
+
+		if not Base:IsInitialized() then return false end
+
+		local T = CurTime()
+
+		if not self._TimeInit then
+			self._TimeInit = T + 0.1
+
+			return false
+		end
+
+		if self._TimeInit > T then return false end
+
+		return true
+	end
+
+	-- ENT:GetAnglesStored() purpose: fix wobbly tires because source constraint system has alot of flex causing calculations to be off
+	function ENT:GetAnglesStored()
+		if self._smAngles then
+			return self:GetBase():LocalToWorldAngles( self._smAngles )
+		end
+
+		local Ang = self:GetAngles()
+
+		local TargetAngles = self:GetBase():WorldToLocalAngles( Ang )
+
+		self._smAngles = TargetAngles
+	
+		return Ang
+	end
+
+	function ENT:Draw()
+		if not self:IsInitialized() then return end
 
 		local Axle = self:GetAxleData()
 
 		if not Axle then return end
 
-		local AxleAng = Base:LocalToWorldAngles( Axle.ForwardAngle )
+		local AxleAng = self:GetBase():LocalToWorldAngles( Axle.ForwardAngle )
 
-		local WheelAng = self:GetAngles()
+		local WheelAng = self:GetAnglesStored()
+
 		WheelAng:RotateAroundAxis( AxleAng:Right(), self:GetRotation() )
 		WheelAng:RotateAroundAxis( AxleAng:Up(), self:GetSteer() )
 
