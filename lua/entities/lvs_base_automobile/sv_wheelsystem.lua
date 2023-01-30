@@ -88,7 +88,7 @@ function ENT:DefineAxle( data )
 
 		local AngleStep = 15
 		for ang = 15, 360, AngleStep do
-			local radius = Wheel:GetTireRadius()
+			local radius = Wheel:GetRadius()
 			local X1 = math.cos( math.rad( ang ) ) * radius
 			local Y1 = math.sin( math.rad( ang ) ) * radius
 

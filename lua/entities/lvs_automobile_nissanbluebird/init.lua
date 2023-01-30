@@ -10,11 +10,11 @@ function ENT:OnSpawn( PObj )
 	local WheelModel = "models/diggercars/nissan_bluebird910/bluebird_rim.mdl"
 	local WheelRadius = 12
 
-	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,180,0), WheelModel, WheelRadius )
-	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,0,0), WheelModel, WheelRadius )
+	local FrontRight = self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), WheelModel, WheelRadius )
+	local FrontLeft = self:AddWheel( Vector(50.814,29,12.057), Angle(0,90,0), WheelModel, WheelRadius )
 
-	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,180,0), WheelModel, WheelRadius )
-	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,0,0), WheelModel, WheelRadius )
+	local RearRight = self:AddWheel( Vector(-50.814,-29,12.057), Angle(0,-90,0), WheelModel, WheelRadius )
+	local RearLeft = self:AddWheel( Vector(-50.814,29,12.057), Angle(0,90,0), WheelModel, WheelRadius )
 
 	local FrontAxle = {
 		Axle = {

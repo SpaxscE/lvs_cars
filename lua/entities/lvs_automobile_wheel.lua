@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Type            = "anim"
 
 function ENT:SetupDataTables()
-	self:NetworkVar( "Float", 0, "TireRadius" )
+	self:NetworkVar( "Float", 0, "Radius" )
 	self:NetworkVar( "Entity", 0, "Base" )
 end
 
@@ -57,22 +57,22 @@ if SERVER then
 		maxs.y = math.abs( maxs.y )
 		maxs.z = math.abs( maxs.z )
 
-		local RimRadius = math.max( mins.x, mins.y, mins.z, maxs.x, maxs.y, maxs.z )
+		local OBBRadius = math.max( mins.x, mins.y, mins.z, maxs.x, maxs.y, maxs.z )
 
-		self:SetRimRadius( math.min( RimRadius, radius ) )
-		self:SetTireRadius( radius )
+		self:SetOBBRadius( math.min( OBBRadius, radius ) )
+		self:SetRadius( math.max( OBBRadius, radius ) )
 
 		self:StartMotionController()
 	end
 
-	function ENT:SetRimRadius( n )
-		self._RimRadius = n
+	function ENT:SetOBBRadius( n )
+		self._OBBRadius = n
 	end
 
-	function ENT:GetRimRadius()
-		return (self._RimRadius or 0)
+	function ENT:GetOBBRadius()
+		return (self._OBBRadius or 0)
 	end
-	
+
 	function ENT:SetAxle( n )
 		self._Axle = n
 	end
@@ -141,7 +141,7 @@ if SERVER then
 		local Axle = data.Axle
 		local SteerType = Axle.SteerType
 
-		local WheelRadius = self:GetTireRadius()
+		local WheelRadius = self:GetRadius()
 
 		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
 
@@ -240,14 +240,17 @@ else
 		local Vel = self:GetVelocity()
 		local VelForward = Vel:GetNormalized()
 
-		local Forward = Base:LocalToWorldAngles( Axle.ForwardAngle ):Forward()
+		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
+		Ang:RotateAroundAxis( Ang:Up(), self:GetSteer() )
+
+		local Forward = Ang:Forward()
 
 		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
 
 		local F = Vel:Length()
 		local Fx = math.cos( Ax ) * F
 
-		self._WheelRotation = (self._WheelRotation or 0) - (Fx * RealFrameTime() / math.pi) * self:GetTireRadius() * 2
+		self._WheelRotation = (self._WheelRotation or 0) - (Fx * RealFrameTime() / math.pi) * self:GetRadius() * 2
 
 		return self._WheelRotation
 	end
