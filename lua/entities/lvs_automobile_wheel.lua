@@ -185,7 +185,7 @@ if SERVER then
 		} )
 
 		local HitPos = trace.HitPos
-		local Mul = math.Clamp( (1 - trace.Fraction) * Len,0,1.5)
+		local WheelLoad = math.Clamp( (1 - trace.Fraction) * Len,0,1.5)
 
 		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
 		local Ay = math.asin( math.Clamp( Right:Dot(VelForward) ,-1,1) )
@@ -195,7 +195,7 @@ if SERVER then
 			WheelRadius = WheelRadius + math.max( EntVel.z, 0 ) * deltatime * 7
 		end
 
-		local fUp = ((HitPos + trace.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * Mul
+		local fUp = ((HitPos + trace.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * WheelLoad
 		local aUp = math.acos( math.Clamp( Up:Dot( fUp:GetNormalized() ) ,-1,1) )
 
 		local F = Vel:Length()
@@ -203,7 +203,7 @@ if SERVER then
 		local Fy = math.sin( Ay ) * F
 		local Fz = IsRayCast and math.cos( aUp ) * fUp:Length() or 0
 
-		local ForceLinear = Up * Fz + (Right * -Fy * 25 + Forward * -Fx * 1) * Mul + Forward * Base:GetThrottle() * 2000 * Mul
+		local ForceLinear = Up * Fz + (Right * -Fy * 25 + Forward * -Fx) * WheelLoad
 
 		return VectorZero, ForceLinear, SIM_GLOBAL_ACCELERATION
 	end
