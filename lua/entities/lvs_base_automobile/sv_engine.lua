@@ -24,3 +24,6 @@ function ENT:AddEngine( pos )
 
 	return Engine
 end
+
+function ENT:AddTransmission( data )
+end
