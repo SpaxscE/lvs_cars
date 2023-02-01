@@ -6,6 +6,9 @@ function ENT:OnSpawn( PObj )
 	PObj:SetMass( 1000 )
 
 	self:AddDriverSeat( Vector(-14,14.94,4.2394), Angle(0,-90,7.8) )
+	self:AddPassengerSeat( Vector(-3,-14.94,13), Angle(0,-90,20) )
+
+	self:AddEngine( Vector(50,0,20) )
 
 	local WheelModel = "models/diggercars/nissan_bluebird910/bluebird_rim.mdl"
 	local WheelRadius = 12
