@@ -6,6 +6,7 @@ include("shared.lua")
 include("sh_animations.lua")
 include("sv_controls.lua")
 include("sh_collisionfilter.lua")
+include("sv_engine.lua")
 include("sv_workarounds.lua")
 include("sv_wheelsystem.lua")
 

@@ -16,4 +16,6 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
+
+	self:AddDT( "Entity", "Engine" )
 end
