@@ -15,7 +15,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT, --LVS.WHEEL_STEER_REAR   LVS.WHEEL_STEER_NONE
-			SteerAngle = 20,
+			SteerAngle = 35,
 		},
 		Wheels = {
 			self:AddWheel( Vector(50.814,-29,12.057), Angle(0,-90,0), WheelModel, WheelRadius ),
@@ -50,14 +50,29 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 
-	self:AddEngine( Vector(50,0,20) )
+	self:AddEngine( {
+		Pos = Vector(50,0,20),
+		Ang = Angle(0,0,0),
+		Specs = {
+			IdleRPM = 600,
+			LimitRPM = 7700,
+			PeakTorque = 200,
+			PowerbandStart = 1500,
+			PowerbandEnd = 7400,
+		},
+	} )
 
 	self:AddTransmission( {
-		PowerDistribution = 1,
+		Pos = Vector(30,0,20),
+		Ang = Angle(0,0,0),
 		Gears = {
-			Ratios = {2.45,1.45,1.0},
-			ReverseRatio = 2.45,
-			DifferentialRatio = 2.94,
+			Forward = {0.12,0.21,0.32,0.42,0.5},
+			Reverse = {0.12},
+			Differential = 0.6,
 		},
+		Axles = {
+			[FrontAxle] = 0,
+			[RearAxle] = 1,
+		}
 	} )
 end

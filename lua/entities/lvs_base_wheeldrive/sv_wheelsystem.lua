@@ -14,7 +14,7 @@ function ENT:GetWheels()
 end
 
 function ENT:AddWheel( pos, ang, model, radius )
-	local Wheel = ents.Create( "lvs_automobile_wheel" )
+	local Wheel = ents.Create( "lvs_wheeldrive_wheel" )
 
 	if not IsValid( Wheel ) then
 		self:Remove()

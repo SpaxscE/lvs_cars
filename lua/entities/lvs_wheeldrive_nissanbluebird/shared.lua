@@ -1,5 +1,5 @@
 
-ENT.Base = "lvs_base_automobile"
+ENT.Base = "lvs_base_wheeldrive"
 
 ENT.PrintName = "[LVS] Nissan Bluebird"
 ENT.Author = "Luna"
