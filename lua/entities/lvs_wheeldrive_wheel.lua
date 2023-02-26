@@ -233,9 +233,13 @@ else
 	end
 
 	function ENT:Think()
+		local Axle = self:GetAxleData()
+
+		if not Axle then return end
+
 		local Base = self:GetBase()
 
-		local Axle = self:GetAxleData()
+		if not IsValid( Base ) then return end
 
 		local Vel = self:GetVelocity()
 		local VelForward = Vel:GetNormalized()
