@@ -8,8 +8,8 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(-14,14.94,4.2394), Angle(0,-90,7.8) )
 	self:AddPassengerSeat( Vector(-3,-14.94,13), Angle(0,-90,20) )
 
-	local WheelModel = "models/diggercars/nissan_bluebird910/bluebird_rim.mdl"
-	local WheelRadius = 12
+	local WheelModel = "models/diggercars/nissan_bluebird910/bluebird_wheel.mdl"
+	local WheelRadius = 13
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
