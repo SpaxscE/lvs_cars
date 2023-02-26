@@ -174,29 +174,6 @@ else
 		return self:GetBase():GetSteer() * Axle.SteerAngle * Swap
 	end
 
-	function ENT:GetRotation()
-		local Base = self:GetBase()
-
-		local Axle = self:GetAxleData()
-
-		local Vel = self:GetVelocity()
-		local VelForward = Vel:GetNormalized()
-
-		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
-		Ang:RotateAroundAxis( Ang:Up(), self:GetSteer() )
-
-		local Forward = Ang:Forward()
-
-		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
-
-		local F = Vel:Length()
-		local Fx = math.cos( Ax ) * F
-
-		self._WheelRotation = (self._WheelRotation or 0) - (Fx * RealFrameTime() / math.pi) * self:GetRadius() * 2
-
-		return self._WheelRotation
-	end
-
 	function ENT:IsInitialized()
 		local T = CurTime()
 
@@ -232,6 +209,10 @@ else
 		return Ang
 	end
 
+	function ENT:GetRotation()
+		return self._WheelRotation or 0
+	end
+
 	function ENT:Draw()
 		if not self:IsInitialized() then return end
 
@@ -252,6 +233,31 @@ else
 	end
 
 	function ENT:Think()
+		local Base = self:GetBase()
+
+		local Axle = self:GetAxleData()
+
+		local Vel = self:GetVelocity()
+		local VelForward = Vel:GetNormalized()
+
+		local Ang = Base:LocalToWorldAngles( Axle.ForwardAngle )
+		Ang:RotateAroundAxis( Ang:Up(), self:GetSteer() )
+
+		local Forward = Ang:Forward()
+
+		local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
+
+		local F = Vel:Length()
+		local Fx = math.cos( Ax ) * F
+
+
+		-- school math yay:
+		local RPM = (Fx * FrameTime() * 254) / ((self:GetRadius() * 2) * math.pi)
+		local AngleStepPerFrame = RPM * 360 * RealFrameTime()
+		self._WheelRotation = (self._WheelRotation or 0) - AngleStepPerFrame
+
+		if self._WheelRotation > 360 then self._WheelRotation = self._WheelRotation - 360 end
+		if self._WheelRotation < -360 then self._WheelRotation = self._WheelRotation + 360 end
 	end
 
 	function ENT:OnRemove()
