@@ -12,9 +12,10 @@ function ENT:CalcSteer( ply, cmd )
 end
 
 function ENT:CalcThrottle( ply, cmd )
-	local ThrottleUp = cmd:KeyDown( IN_FORWARD )
-	local ThrottleDown = cmd:KeyDown( IN_BACK )
-	local Throttle = (ThrottleUp and 1 or 0) - (ThrottleDown and 1 or 0)
+	local KeyThrottle = cmd:KeyDown( IN_FORWARD )
+	local KeyBoost = cmd:KeyDown( IN_SPEED )
+
+	local Throttle = KeyThrottle and (KeyBoost and 1 or 0.5) or 0
 
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetThrottle()
