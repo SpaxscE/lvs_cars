@@ -254,10 +254,7 @@ else
 		local F = Vel:Length()
 		local Fx = math.cos( Ax ) * F
 
-
-		-- school math yay:
-		local RPM = (Fx * FrameTime()) / ((self:GetRadius() * 2) * math.pi)
-		local AngleStepPerFrame = RPM * 360
+		local AngleStepPerFrame = (Fx * FrameTime()) / ((self:GetRadius() * 2) * math.pi) * 360
 		self._WheelRotation = (self._WheelRotation or 0) - AngleStepPerFrame
 
 		if self._WheelRotation > 360 then self._WheelRotation = self._WheelRotation - 360 end
