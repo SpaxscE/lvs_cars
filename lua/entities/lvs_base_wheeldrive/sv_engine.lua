@@ -1,5 +1,5 @@
 
-function ENT:AddEngine( data )
+function ENT:AddEngine( Pos )
 	local Engine = self:GetEngine()
 
 	if IsValid( Engine ) then
@@ -15,38 +15,13 @@ function ENT:AddEngine( data )
 
 		return
 	end
-	Engine:SetPos( self:LocalToWorld( data.Pos ) )
-	Engine:SetAngles( self:LocalToWorldAngles( data.Ang ) )
+
+	Engine:SetPos( self:LocalToWorld( Pos ) )
+	Engine:SetAngles( self:GetAngles() )
 	Engine:Spawn()
 	Engine:Activate()
 
 	self:SetEngine( Engine )
 
 	return Engine
-end
-
-function ENT:AddTransmission( data )
-	local Transmission = self:GetTransmission()
-
-	if IsValid( Transmission ) then
-		Transmission:Remove()
-	end
-
-	local Transmission = ents.Create( "lvs_wheeldrive_transmission" )
-
-	if not IsValid( Transmission ) then
-		self:Remove()
-
-		print("LVS: Failed to create transmission entity. Vehicle terminated.")
-
-		return
-	end
-	Transmission:SetPos( self:LocalToWorld( data.Pos ) )
-	Transmission:SetAngles( self:LocalToWorldAngles( data.Ang ) )
-	Transmission:Spawn()
-	Transmission:Activate()
-
-	self:SetTransmission( Transmission )
-
-	return Transmission
 end
