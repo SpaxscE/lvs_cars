@@ -3,6 +3,8 @@ ENT._WheelEnts = {}
 ENT._WheelAxleID = 0
 ENT._WheelAxles = {}
 
+include("sv_wheelsystem_masscenter.lua")
+
 function ENT:GetWheels()
 	for id, ent in pairs( self._WheelEnts ) do
 		if IsValid( ent ) then continue end
