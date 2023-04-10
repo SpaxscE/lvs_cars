@@ -1,6 +1,7 @@
 include("shared.lua")
 include("sh_animations.lua")
 include("sh_collisionfilter.lua")
+include("sh_simfphys.lua")
 
  function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 	if pod == self:GetDriverSeat() then

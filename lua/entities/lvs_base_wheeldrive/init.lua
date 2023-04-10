@@ -2,20 +2,23 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "sh_animations.lua" )
 AddCSLuaFile( "sh_collisionfilter.lua" )
+AddCSLuaFile( "sh_simfphys.lua" )
 include("shared.lua")
 include("sh_animations.lua")
 include("sv_controls.lua")
 include("sh_collisionfilter.lua")
 include("sv_engine.lua")
-include("sv_workarounds.lua")
 include("sv_wheelsystem.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
-function ENT:OnSpawnFinish( PObj )
-	self:SetMassCenter( Vector(0,0,5) )
+function ENT:OnSpawn( PObj )
+end
 
+include("sh_simfphys.lua")
+
+function ENT:OnSpawnFinish( PObj )
 	timer.Simple(0, function()
 		if not IsValid( self ) or not IsValid( PObj ) then return end
 
