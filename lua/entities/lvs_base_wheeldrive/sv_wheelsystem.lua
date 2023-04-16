@@ -25,6 +25,7 @@ function ENT:AddWheel( pos, ang, model, radius )
 
 		return
 	end
+
 	Wheel:SetModel( model )
 	Wheel:SetPos( self:LocalToWorld( pos ) )
 	Wheel:SetAngles( self:LocalToWorldAngles( ang ) )

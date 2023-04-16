@@ -42,10 +42,5 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	end
 end
 
-function ENT:LVSPreHudPaint( X, Y, ply )
-	return true
-end
-
 function ENT:LVSHudPaint( X, Y, ply )
-	if not self:LVSPreHudPaint( X, Y, ply ) then return end
 end
