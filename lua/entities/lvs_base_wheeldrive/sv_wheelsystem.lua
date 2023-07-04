@@ -3,8 +3,6 @@ ENT._WheelEnts = {}
 ENT._WheelAxleID = 0
 ENT._WheelAxles = {}
 
-include("sv_wheelsystem_masscenter.lua")
-
 function ENT:GetWheels()
 	for id, ent in pairs( self._WheelEnts ) do
 		if IsValid( ent ) then continue end
@@ -15,8 +13,8 @@ function ENT:GetWheels()
 	return self._WheelEnts
 end
 
-function ENT:AddWheel( pos, ang, model, radius )
-	local Wheel = ents.Create( "lvs_wheeldrive_wheel" )
+function ENT:AddWheel( pos, ang, model )
+	local Wheel = ents.Create( "prop_physics" )
 
 	if not IsValid( Wheel ) then
 		self:Remove()
@@ -32,11 +30,28 @@ function ENT:AddWheel( pos, ang, model, radius )
 	Wheel:Spawn()
 	Wheel:Activate()
 
+	local radius = (Wheel:OBBMaxs() - Wheel:OBBMins()) * 0.5
+	radius = math.max( radius.x, radius.y, radius.z )
+
+	Wheel:PhysicsInitSphere( radius, "jeeptire" )
+
+	Wheel.GetRadius = function()
+		return radius
+	end
+
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )
 
-	Wheel:SetBase( self )
-	Wheel:Define( radius, self:GetPhysicsObject():GetMass() / 10 )
+	local PhysObj = Wheel:GetPhysicsObject()
+
+	if IsValid( PhysObj ) then
+		local mass = self:GetPhysicsObject():GetMass() / 10
+
+		PhysObj:SetMass( mass )
+
+		local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
+		nocollide_constraint.DoNotDuplicate = true
+	end
 
 	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
 
@@ -91,6 +106,8 @@ function ENT:DefineAxle( data )
 
 		local AngleStep = 15
 		for ang = 15, 360, AngleStep do
+			if not Wheel.GetRadius then continue end
+
 			local radius = Wheel:GetRadius()
 			local X1 = math.cos( math.rad( ang ) ) * radius
 			local Y1 = math.sin( math.rad( ang ) ) * radius
@@ -149,8 +166,8 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local RopeLength = data.ControlArmLength
 	local Lock = 0.0001
 
-	local Ballsocket = constraint.AdvBallsocket( Wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -Lock, -Lock, -Lock, Lock, Lock, Lock, 0, 0, 0, 1, 1)
-	Ballsocket.DoNotDuplicate = true
+	--local Ballsocket = constraint.AdvBallsocket( Wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -Lock, -Lock, -Lock, Lock, Lock, Lock, 0, 0, 0, 1, 1)
+	--Ballsocket.DoNotDuplicate = true
 
 	local P1 = Pos + Forward * RopeLength * 0.5 + Right * RopeLength
 	local P2 = Pos
