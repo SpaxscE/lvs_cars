@@ -1,7 +1,6 @@
 ENT._WheelEnts = {}
-
 ENT._WheelAxleID = 0
-ENT._WheelAxles = {}
+ENT._WheelAxleData = {}
 
 function ENT:GetWheels()
 	for id, ent in pairs( self._WheelEnts ) do
@@ -13,7 +12,60 @@ function ENT:GetWheels()
 	return self._WheelEnts
 end
 
-function ENT:AddWheel( pos, ang, model )
+function ENT:GetAxleData( ID )
+	if not self._WheelAxleData[ ID ] then return {} end
+
+	return self._WheelAxleData[ ID ]
+end
+
+function ENT:CreateSteerMaster( TargetEntity )
+	if not IsValid( TargetEntity ) then return end
+
+	local Master = ents.Create( "prop_physics" )
+
+	if not IsValid( Master ) then
+		self:Remove()
+
+		print("LVS: Failed to create steermaster entity. Vehicle terminated.")
+
+		return
+	end
+
+	Master:SetModel( "models/hunter/plates/plate.mdl" )
+	Master:SetPos( TargetEntity:GetPos() )
+	Master:SetAngles( Angle(0,90,0) )
+	Master:Spawn()
+	Master:Activate()
+
+	self:DeleteOnRemove( Master )
+	self:TransferCPPI( Master )
+
+	local PhysObj = Master:GetPhysicsObject()
+
+	if not IsValid( PhysObj ) then
+		self:Remove()
+
+		print("LVS: Failed to create steermaster physics. Vehicle terminated.")
+
+		return
+	end
+
+	PhysObj:SetMass( 1 )
+	PhysObj:EnableMotion( false )
+
+	Master:SetNotSolid( true )
+	Master:SetColor( Color( 255, 255, 255, 0 ) ) 
+	Master:SetRenderMode( RENDERMODE_TRANSALPHA )
+	Master:DrawShadow( false )
+
+	Master.DoNotDuplicate = true
+
+	return Master
+end
+
+function ENT:AddWheel( data )-- pos, ang, model )
+	if not istable( data ) or not isvector( data.pos ) then return end
+
 	local Wheel = ents.Create( "prop_physics" )
 
 	if not IsValid( Wheel ) then
@@ -24,9 +76,9 @@ function ENT:AddWheel( pos, ang, model )
 		return
 	end
 
-	Wheel:SetModel( model )
-	Wheel:SetPos( self:LocalToWorld( pos ) )
-	Wheel:SetAngles( self:LocalToWorldAngles( ang ) )
+	Wheel:SetModel( data.mdl or "models/props_vehicles/tire001c_car.mdl" )
+	Wheel:SetPos( self:LocalToWorld( data.pos ) )
+	Wheel:SetAngles( data.mdl_ang or Angle(0,0,0) )
 	Wheel:Spawn()
 	Wheel:Activate()
 
@@ -35,27 +87,68 @@ function ENT:AddWheel( pos, ang, model )
 
 	Wheel:PhysicsInitSphere( radius, "jeeptire" )
 
-	Wheel.GetRadius = function()
-		return radius
-	end
+	Wheel._Radius = radius
+	Wheel._Camber = data.camber or 0
+	Wheel._Caster = data.caster or 0
+	Wheel._Toe = data.toe or 0
 
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )
 
 	local PhysObj = Wheel:GetPhysicsObject()
 
-	if IsValid( PhysObj ) then
-		local mass = self:GetPhysicsObject():GetMass() / 10
+	if not IsValid( PhysObj ) then
+		self:Remove()
 
-		PhysObj:SetMass( mass )
+		print("LVS: Failed to create wheel physics. Vehicle terminated.")
 
-		local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
-		nocollide_constraint.DoNotDuplicate = true
+		return
 	end
 
-	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
+	local mass = self:GetPhysicsObject():GetMass() / 10
+
+	PhysObj:SetMass( mass )
+	PhysObj:SetInertia( Vector(0.25,0.25,0.25) * mass )
+	PhysObj:EnableDrag( false )
+
+	local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
+	nocollide_constraint.DoNotDuplicate = true
+
+	debugoverlay.Line( self:GetPos(), self:LocalToWorld( data.pos ), 5, Color(150,150,150), true )
 
 	table.insert( self._WheelEnts, Wheel )
+
+	local Master = self:CreateSteerMaster( Wheel )
+
+	local Lock = 0.0001
+
+	local B1 = constraint.AdvBallsocket( Wheel, Master,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, -Lock, -Lock, 180, Lock, Lock, 0, 0, 0, 1, 1)
+	B1.DoNotDuplicate = true
+
+	local B2 = constraint.AdvBallsocket( Master, Wheel,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, Lock, Lock, 180, -Lock, -Lock, 0, 0, 0, 1, 1)
+	B2.DoNotDuplicate = true
+
+	Wheel._Master = Master
+
+	Wheel.GetMaster = function( ent )
+		return ent._Master
+	end
+
+	Wheel.SetAxle = function( ent, ID )
+		ent._AxleID = ID
+	end
+
+	Wheel.GetAxle = function( ent )
+		return (ent._AxleID or 0)
+	end
+
+	Wheel.GetRadius = function( ent )
+		return ent._Radius
+	end
+
+	Wheel.GetAlignment = function( ent )
+		return Wheel._Camber, Wheel._Caster, Wheel._Toe
+	end
 
 	return Wheel
 end
@@ -70,6 +163,12 @@ function ENT:DefineAxle( data )
 	data.Axle.ForwardAngle = data.Axle.ForwardAngle or Angle(0,0,0)
 	data.Axle.SteerType = data.Axle.SteerType or LVS.WHEEL_STEER_NONE
 	data.Axle.SteerAngle = data.Axle.SteerAngle or 20
+
+	self._WheelAxleData[ self._WheelAxleID ] = {
+		ForwardAngle = data.Axle.ForwardAngle,
+		SteerType = data.Axle.SteerType,
+		SteerAngle = data.Axle.SteerAngle,
+	}
 
 	data.Suspension.Height = data.Suspension.Height or 20
 	data.Suspension.MaxTravel = data.Suspension.MaxTravel or data.Suspension.Height
@@ -128,14 +227,10 @@ function ENT:DefineAxle( data )
 			local Ent = data.Wheels[ i ]
 			if Ent == Wheel then continue end
 
-			local nocollide = constraint.NoCollide(Ent,Wheel,0,0)
-			nocollide.DoNotDuplicate = true
+			local nocollide_constraint = constraint.NoCollide(Ent,Wheel,0,0)
+			nocollide_constraint.DoNotDuplicate = true
 		end
 	end
-
-	self._WheelAxles[ self._WheelAxleID ] = data
-
-	return self._WheelAxleID
 end
 
 function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
@@ -162,12 +257,8 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local Right = DirectionAngle:Right() * (PosL.y > 0 and 1 or -1)
 	local Up = DirectionAngle:Up()
 
-	local RopeSize = 0
+	local RopeSize = 1
 	local RopeLength = data.ControlArmLength
-	local Lock = 0.0001
-
-	--local Ballsocket = constraint.AdvBallsocket( Wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -Lock, -Lock, -Lock, Lock, Lock, Lock, 0, 0, 0, 1, 1)
-	--Ballsocket.DoNotDuplicate = true
 
 	local P1 = Pos + Forward * RopeLength * 0.5 + Right * RopeLength
 	local P2 = Pos

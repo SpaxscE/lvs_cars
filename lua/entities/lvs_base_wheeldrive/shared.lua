@@ -6,12 +6,8 @@ ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
-ENT.Spawnable			= true
+ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
-
-ENT.MaxHealth = 1000
-
-ENT.MDL = "models/sprops/rectangles/size_54/rect_54x132x3.mdl"
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
@@ -21,4 +17,32 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "Transmission" )
+
+	self:AddDT( "Float", "Camber", { KeyName = "camber", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment Specs"} } )
+	self:AddDT( "Float", "Caster", { KeyName = "caster", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment Specs"} } )
+	self:AddDT( "Float", "Toe", { KeyName = "toe", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment Specs"} } )
+
+	if SERVER then
+		self:SetCamber( 0 )
+		self:SetCaster( 5 )
+		self:SetToe( 0 )
+	end
+end
+
+function ENT:InitFromList()
+	local class = self:GetClass()
+
+	local data = list.Get( "simfphys_vehicles" )[ class ]
+
+	if not data or not data.Members then return end
+
+	self._VehicleInfo = data.Members
+end
+
+function ENT:GetVehicleParams()
+	return istable( self._VehicleInfo ) and self._VehicleInfo or {}
+end
+
+function ENT:GetVehicleClass()
+	return self:GetClass()
 end
