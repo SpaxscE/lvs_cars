@@ -57,6 +57,7 @@ function ENT:CreateSteerMaster( TargetEntity )
 	Master:SetColor( Color( 255, 255, 255, 0 ) ) 
 	Master:SetRenderMode( RENDERMODE_TRANSALPHA )
 	Master:DrawShadow( false )
+	Master:SetNoDraw( true )
 
 	Master.DoNotDuplicate = true
 
@@ -108,7 +109,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	local mass = self:GetPhysicsObject():GetMass() / 10
 
 	PhysObj:SetMass( mass )
-	PhysObj:SetInertia( Vector(0.25,0.25,0.25) * mass )
+	PhysObj:SetInertia( Vector(0.1,0.1,0.1) * mass )
 	PhysObj:EnableDrag( false )
 
 	local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
@@ -236,10 +237,6 @@ end
 function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	if not IsValid( Wheel ) or not IsEntity( Wheel ) then return end
 
-	if self:GetSolid() ~= SOLID_NONE then
-		self:SetSolid( SOLID_NONE )
-	end
-
 	local height = data.Height
 	local maxtravel = data.MaxTravel
 	local constant = data.SpringConstant
@@ -257,7 +254,7 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local Right = DirectionAngle:Right() * (PosL.y > 0 and 1 or -1)
 	local Up = DirectionAngle:Up()
 
-	local RopeSize = 1
+	local RopeSize = 0
 	local RopeLength = data.ControlArmLength
 
 	local P1 = Pos + Forward * RopeLength * 0.5 + Right * RopeLength
@@ -274,8 +271,6 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local Offset = Up * height
 
 	Wheel:SetPos( Pos - Offset )
-
-	Wheel:SetSolid( SOLID_NONE )
 
 	local Limiter = constraint.Rope(self,Wheel,0,0,self:WorldToLocal( Pos - Up * height * 0.5 - Right * LimiterLength), Vector(0,0,0),LimiterRopeLength, 0, 0, RopeSize,"cable/cable2", false )
 	Limiter.DoNotDuplicate = true

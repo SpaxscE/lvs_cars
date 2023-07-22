@@ -5,40 +5,91 @@ include("shared.lua")
 include("sh_animations.lua")
 include("sv_controls.lua")
 include("sv_wheelsystem.lua")
-include("sv_setupvehicle.lua")
-include("sv_setupwheels.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
-DEFINE_BASECLASS( "lvs_base" )
+function ENT:OnSpawn()
+	self:AddDriverSeat( Vector(-8,11,13), Angle(0,-95,-8) )
 
-function ENT:Initialize()
-	self:InitFromList()
+	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"
 
-	BaseClass.Initialize( self )
+	local FrontAxle = self:DefineAxle( {
+		Axle = {
+			ForwardAngle = Angle(0,0,0),
+			SteerType = LVS.WHEEL_STEER_FRONT,
+			SteerAngle = 30,
+		},
+		Wheels = {
+			self:AddWheel( {
+				pos = Vector(47.5,-20,16),
 
-	self:SetSolid( SOLID_NONE )
+				mdl = WheelModel,
+				mdl_ang = Angle(0,180,0),
 
-	self:SetupDriverSeat()
-	self:SetupPassengerSeat()
-	self:SetupPhysics()
+				camber = -1,
+				caster = 1,
+				toe = 1,
+			} ),
 
-	local PObj = self:GetPhysicsObject()
+			self:AddWheel( {
+				pos = Vector(47.5,20,16),
 
-	timer.Simple( (self:SetupWheels() or 0), function()
-		if not IsValid( self ) or not IsValid( PObj ) then print("LVS: ERROR couldn't initialize vehicle.") return end
+				mdl = WheelModel,
+				mdl_ang = Angle(0,0,0),
 
-		BaseClass.PostInitialize(self, PObj )
+				camber = 1,
+				caster = 1,
+				toe = -1,
+			} ),
+		},
+		Suspension = {
+			Height = 10,
+			MaxTravel = 7,
+			ControlArmLength = 25,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
 
-		self:SetSolid( SOLID_VPHYSICS )
+	local RearAxle = self:DefineAxle( {
+		Axle = {
+			ForwardAngle = Angle(0,0,0),
+			SteerType = LVS.WHEEL_STEER_NONE,
+		},
+		Wheels = {
+			self:AddWheel( {
+				pos = Vector(-41,-20,14),
 
-		for _, Wheel in pairs( self:GetWheels() ) do
-			if not IsValid( Wheel ) then print("LVS: ERROR couldn't initialize vehicle.") self:Remove() break end
+				mdl = WheelModel,
+				mdl_ang = Angle(0,180,0),
 
-			Wheel:SetSolid( SOLID_VPHYSICS )
-		end
-	end)
+				camber = -1,
+				caster = 0,
+				toe = 0,
+			} ),
+
+			self:AddWheel( {
+				pos = Vector(-41,20,14),
+
+				mdl = WheelModel,
+				mdl_ang = Angle(0,0,0),
+
+				camber = 1,
+				caster = 0,
+				toe = 0,
+			} ),
+		},
+		Suspension = {
+			Height = 10,
+			MaxTravel = 7,
+			ControlArmLength = 25,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
 end
 
 function ENT:AlignView( ply )
@@ -50,12 +101,6 @@ function ENT:AlignView( ply )
 
 		ply:SetEyeAngles( Ang )
 	end)
-end
-
-function ENT:PostInitialize( PObj )
-	-- prevent call of:
-	-- self:OnSpawn( PObj )
-	-- self:OnSpawnFinished( PObj )
 end
 
 function ENT:TakeCollisionDamage( damage, attacker )

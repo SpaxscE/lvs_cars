@@ -6,8 +6,10 @@ ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
-ENT.Spawnable			= false
+ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
+
+ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
@@ -27,22 +29,4 @@ function ENT:SetupDataTables()
 		self:SetCaster( 5 )
 		self:SetToe( 0 )
 	end
-end
-
-function ENT:InitFromList()
-	local class = self:GetClass()
-
-	local data = list.Get( "simfphys_vehicles" )[ class ]
-
-	if not data or not data.Members then return end
-
-	self._VehicleInfo = data.Members
-end
-
-function ENT:GetVehicleParams()
-	return istable( self._VehicleInfo ) and self._VehicleInfo or {}
-end
-
-function ENT:GetVehicleClass()
-	return self:GetClass()
 end
