@@ -9,7 +9,10 @@ include("sv_wheelsystem.lua")
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
-function ENT:OnSpawn()
+function ENT:OnSpawn( PObj )
+	PObj:SetMass( 1000 )
+	PObj:EnableDrag( false )
+
 	self:AddDriverSeat( Vector(-8,11,13), Angle(0,-95,-8) )
 
 	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"
@@ -27,9 +30,9 @@ function ENT:OnSpawn()
 				mdl = WheelModel,
 				mdl_ang = Angle(0,180,0),
 
-				camber = -1,
-				caster = 1,
-				toe = 1,
+				camber = -0.5,
+				caster = 5,
+				toe = 0,
 			} ),
 
 			self:AddWheel( {
@@ -38,9 +41,9 @@ function ENT:OnSpawn()
 				mdl = WheelModel,
 				mdl_ang = Angle(0,0,0),
 
-				camber = 1,
-				caster = 1,
-				toe = -1,
+				camber = -0.5,
+				caster = 5,
+				toe = 0,
 			} ),
 		},
 		Suspension = {
@@ -64,10 +67,6 @@ function ENT:OnSpawn()
 
 				mdl = WheelModel,
 				mdl_ang = Angle(0,180,0),
-
-				camber = -1,
-				caster = 0,
-				toe = 0,
 			} ),
 
 			self:AddWheel( {
@@ -75,10 +74,6 @@ function ENT:OnSpawn()
 
 				mdl = WheelModel,
 				mdl_ang = Angle(0,0,0),
-
-				camber = 1,
-				caster = 0,
-				toe = 0,
 			} ),
 		},
 		Suspension = {
@@ -107,6 +102,17 @@ function ENT:TakeCollisionDamage( damage, attacker )
 end
 
 function ENT:OnTick()
+	local ply = self:GetDriver()
+
+	-- temp code
+	local X = 0
+	if IsValid( ply ) then
+		X = ply:KeyDown( IN_FORWARD ) and 500 or 0
+		X = X - (ply:KeyDown( IN_BACK ) and 500 or 0)
+	end
+
+	local Steer = self:GetSteer()
+
 	for ID, Wheel in pairs( self:GetWheels() ) do
 		local Master = Wheel:GetMaster()
 
@@ -124,17 +130,18 @@ function ENT:OnTick()
 
 		local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
 
-		local Camber, Caster, Toe = Wheel:GetAlignment()
+		-- temp code
+		Wheel:GetPhysicsObject():ApplyTorqueCenter( -AxleAng:Right() * X )
 
-		AxleAng:RotateAroundAxis( AxleAng:Right(), Caster * self:GetCaster() )
-		AxleAng:RotateAroundAxis( AxleAng:Forward(), Camber * self:GetCamber() )
-		AxleAng:RotateAroundAxis( AxleAng:Up(), Toe * self:GetToe() )
+		AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
+		AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
+		AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
 
 		if Axle.SteerType == LVS.WHEEL_STEER_REAR then
-			AxleAng:RotateAroundAxis( AxleAng:Up(), self:GetSteer() * Axle.SteerAngle )
+			AxleAng:RotateAroundAxis( AxleAng:Up(), Steer * Axle.SteerAngle )
 		else
 			if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
-				AxleAng:RotateAroundAxis( AxleAng:Up(), -self:GetSteer() * Axle.SteerAngle )
+				AxleAng:RotateAroundAxis( AxleAng:Up(), -Steer * Axle.SteerAngle )
 			end
 		end
 

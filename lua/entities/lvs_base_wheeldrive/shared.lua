@@ -19,14 +19,4 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "Transmission" )
-
-	self:AddDT( "Float", "Camber", { KeyName = "camber", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment Specs"} } )
-	self:AddDT( "Float", "Caster", { KeyName = "caster", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment Specs"} } )
-	self:AddDT( "Float", "Toe", { KeyName = "toe", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment Specs"} } )
-
-	if SERVER then
-		self:SetCamber( 0 )
-		self:SetCaster( 5 )
-		self:SetToe( 0 )
-	end
 end

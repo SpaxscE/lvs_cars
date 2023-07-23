@@ -67,7 +67,7 @@ end
 function ENT:AddWheel( data )-- pos, ang, model )
 	if not istable( data ) or not isvector( data.pos ) then return end
 
-	local Wheel = ents.Create( "prop_physics" )
+	local Wheel = ents.Create( "lvs_wheeldrive_wheel" )
 
 	if not IsValid( Wheel ) then
 		self:Remove()
@@ -83,15 +83,11 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	Wheel:Spawn()
 	Wheel:Activate()
 
-	local radius = (Wheel:OBBMaxs() - Wheel:OBBMins()) * 0.5
-	radius = math.max( radius.x, radius.y, radius.z )
+	Wheel:MakeSpherical()
 
-	Wheel:PhysicsInitSphere( radius, "jeeptire" )
-
-	Wheel._Radius = radius
-	Wheel._Camber = data.camber or 0
-	Wheel._Caster = data.caster or 0
-	Wheel._Toe = data.toe or 0
+	Wheel:SetCamber( data.camber or 0 )
+	Wheel:SetCaster( data.caster or 0 )
+	Wheel:SetToe( data.toe or 0 )
 
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )
@@ -129,27 +125,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	local B2 = constraint.AdvBallsocket( Master, Wheel,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -180, Lock, Lock, 180, -Lock, -Lock, 0, 0, 0, 1, 1)
 	B2.DoNotDuplicate = true
 
-	Wheel._Master = Master
-
-	Wheel.GetMaster = function( ent )
-		return ent._Master
-	end
-
-	Wheel.SetAxle = function( ent, ID )
-		ent._AxleID = ID
-	end
-
-	Wheel.GetAxle = function( ent )
-		return (ent._AxleID or 0)
-	end
-
-	Wheel.GetRadius = function( ent )
-		return ent._Radius
-	end
-
-	Wheel.GetAlignment = function( ent )
-		return Wheel._Camber, Wheel._Caster, Wheel._Toe
-	end
+	Wheel:SetMaster( Master )
 
 	return Wheel
 end
