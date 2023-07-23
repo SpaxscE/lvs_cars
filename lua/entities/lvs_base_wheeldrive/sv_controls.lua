@@ -12,6 +12,8 @@ function ENT:CalcSteer( ply, cmd )
 end
 
 function ENT:CalcThrottle( ply, cmd )
+	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
+
 	local ThrottleUp = cmd:KeyDown( IN_FORWARD )
 	local ThrottleDown = cmd:KeyDown( IN_BACK )
 	local Throttle = (ThrottleUp and 1 or 0) - (ThrottleDown and 1 or 0)

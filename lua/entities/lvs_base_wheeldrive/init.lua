@@ -101,56 +101,58 @@ end
 function ENT:TakeCollisionDamage( damage, attacker )
 end
 
-function ENT:OnTick()
-	local ply = self:GetDriver()
+function ENT:AlignWheel( Wheel )
+	if not IsValid( Wheel ) then return end
 
-	-- temp code
-	local X = 0
-	if IsValid( ply ) then
-		X = ply:KeyDown( IN_FORWARD ) and 500 or 0
-		X = X - (ply:KeyDown( IN_BACK ) and 500 or 0)
-	end
+	if not isfunction( Wheel.GetMaster ) then Wheel:Remove() return end
+
+	local Master = Wheel:GetMaster()
+
+	if not IsValid( Master ) then Wheel:Remove() return end
 
 	local Steer = self:GetSteer()
 
-	for ID, Wheel in pairs( self:GetWheels() ) do
-		local Master = Wheel:GetMaster()
+	local PhysObj = Master:GetPhysicsObject()
 
-		if not IsValid( Master ) then continue end
+	if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) return end
 
-		local PhysObj = Master:GetPhysicsObject()
+	local ID = Wheel:GetAxle()
 
-		if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) continue end
+	local Axle = self:GetAxleData( ID )
 
-		Wheel:PhysWake()
+	local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
 
-		local ID = Wheel:GetAxle()
+	AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
+	AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
+	AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
 
-		local Axle = self:GetAxleData( ID )
-
-		local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
-
-		-- temp code
-		Wheel:GetPhysicsObject():ApplyTorqueCenter( -AxleAng:Right() * X )
-
-		AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
-		AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
-		AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
-
-		if Axle.SteerType == LVS.WHEEL_STEER_REAR then
-			AxleAng:RotateAroundAxis( AxleAng:Up(), Steer * Axle.SteerAngle )
-		else
-			if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
-				AxleAng:RotateAroundAxis( AxleAng:Up(), -Steer * Axle.SteerAngle )
-			end
+	if Axle.SteerType == LVS.WHEEL_STEER_REAR then
+		AxleAng:RotateAroundAxis( AxleAng:Up(), Steer * Axle.SteerAngle )
+	else
+		if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
+			AxleAng:RotateAroundAxis( AxleAng:Up(), -Steer * Axle.SteerAngle )
 		end
-
-		Master:SetAngles( AxleAng )
 	end
+
+	Master:SetAngles( AxleAng )
+
+	return AxleAng
 end
 
 function ENT:PhysicsSimulate( phys, deltatime )
-	--phys:Wake()
+	local ent = phys:GetEntity()
 
-	return vector_origin, vector_origin, SIM_NOTHING
+	if ent == self then
+		return vector_origin, vector_origin, SIM_NOTHING
+	end
+
+	phys:Wake()
+
+	local AxleAng = self:AlignWheel( ent )
+
+	if not AxleAng then return end
+
+	local torque = -ent:WorldToLocalAngles( AxleAng ):Right() * 1500 * self:GetThrottle()
+
+	return torque, vector_origin, SIM_LOCAL_ACCELERATION
 end

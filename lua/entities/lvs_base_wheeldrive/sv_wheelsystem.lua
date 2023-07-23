@@ -31,7 +31,7 @@ function ENT:CreateSteerMaster( TargetEntity )
 		return
 	end
 
-	Master:SetModel( "models/hunter/plates/plate.mdl" )
+	Master:SetModel( "models/dav0r/hoverball.mdl" )
 	Master:SetPos( TargetEntity:GetPos() )
 	Master:SetAngles( Angle(0,90,0) )
 	Master:Spawn()
@@ -83,6 +83,8 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	Wheel:Spawn()
 	Wheel:Activate()
 
+	Wheel:SetBase( self )
+
 	Wheel:MakeSpherical()
 
 	Wheel:SetCamber( data.camber or 0 )
@@ -126,6 +128,12 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	B2.DoNotDuplicate = true
 
 	Wheel:SetMaster( Master )
+
+	timer.Simple(0, function()
+		if not IsValid( self ) or not IsValid( Wheel ) or not IsValid( PhysObj ) then return end
+
+		self:AddToMotionController( PhysObj )
+	end )
 
 	return Wheel
 end

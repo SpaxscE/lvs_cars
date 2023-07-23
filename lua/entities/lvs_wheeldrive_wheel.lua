@@ -48,8 +48,16 @@ if SERVER then
 		self._AxleID = ID
 	end
 
+	function ENT:SetBase( base )
+		self._Base = base
+	end
+
 	function ENT:SetMaster( master )
 		self._Master = master
+	end
+
+	function ENT:GetBase()
+		return self._Base
 	end
 
 	function ENT:GetMaster()
@@ -59,7 +67,6 @@ if SERVER then
 	function ENT:GetAxle()
 		return (self._AxleID or 0)
 	end
-
 
 	function ENT:MakeSpherical()
 		local radius = (self:OBBMaxs() - self:OBBMins()) * 0.5
