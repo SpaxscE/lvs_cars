@@ -309,3 +309,18 @@ function ENT:AlignWheel( Wheel )
 
 	return Axle, AxleAng
 end
+
+function ENT:WheelsOnGround()
+
+	for _, ent in pairs( self:GetWheels() ) do
+		if not IsValid( ent ) then continue end
+
+		local phys = ent:GetPhysicsObject()
+
+		local EntLoad,_ = phys:GetStress()
+
+		if EntLoad == 0 then return false end
+	end
+
+	return true
+end

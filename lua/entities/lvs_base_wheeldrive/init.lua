@@ -149,7 +149,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 	local Force = self:GetVelocityDifference( AngleDirection )
 
-	local ForceAngle = RotationAxis * Force * self.MaxPower * 0.1 * Axle.TorqueFactor
+	local ForceAngle = RotationAxis * Force * self.ForceAngleMultiplier * Axle.TorqueFactor
 
 	local AngVel = phys:GetAngleVelocity()
 	local AngVelForward = AngVel:GetNormalized()
@@ -163,9 +163,12 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local Right = AngleDirection:Right()
 	local Fx = math.cos( math.acos( math.Clamp( Right:Dot( VelForward ) ,-1,1) ) ) * VelLength
 
-	local EntLoad,_ = phys:GetStress()
+	if  self:WheelsOnGround() then
 
-	local ForceLinear = Forward * Force * Axle.TorqueFactor - Right * Fx * self.TractionMultiplier * Slip - self:GetUp() * math.abs( Fx ) * self.TractionMultiplier * (EntLoad > 0 and 1 or 0)
+		local ForceLinear = (Forward * Force * Axle.TorqueFactor * self.ForceLinearMultiplier - Right * Fx * self.ForceLinearMultiplier * Slip - self:GetUp() * math.abs( Fx ) * self.ForceLinearMultiplier)
 
-	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
+		return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
+	end
+
+	return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
 end
