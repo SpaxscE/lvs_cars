@@ -4,6 +4,7 @@ AddCSLuaFile( "sh_animations.lua" )
 include("shared.lua")
 include("sh_animations.lua")
 include("sv_controls.lua")
+include("sv_components.lua")
 include("sv_wheelsystem.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
@@ -14,6 +15,9 @@ function ENT:OnSpawn( PObj )
 	PObj:EnableDrag( false )
 
 	self:AddDriverSeat( Vector(-8,11,13), Angle(0,-95,-8) )
+	self:AddPassengerSeat( Vector(10,-11,16), Angle(0,-85,8) )
+
+	self:AddEngine( Vector(-45,0,30) )
 
 	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"
 
@@ -22,6 +26,8 @@ function ENT:OnSpawn( PObj )
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
 			SteerAngle = 30,
+			TorqueFactor = 0,
+			BrakeFactor = 1,
 		},
 		Wheels = {
 			self:AddWheel( {
@@ -60,6 +66,8 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
+			TorqueFactor = 1,
+			BrakeFactor = 1,
 		},
 		Wheels = {
 			self:AddWheel( {
@@ -101,42 +109,21 @@ end
 function ENT:TakeCollisionDamage( damage, attacker )
 end
 
-function ENT:AlignWheel( Wheel )
-	if not IsValid( Wheel ) then return end
+function ENT:GetVelocityDifference( AngleDirection )
+	if not isangle( AngleDirection ) then return vector_origin end
 
-	if not isfunction( Wheel.GetMaster ) then Wheel:Remove() return end
+	local Forward = AngleDirection:Forward()
 
-	local Master = Wheel:GetMaster()
+	local Velocity = self:GetVelocity()
+	local VelForward = Velocity:GetNormalized()
 
-	if not IsValid( Master ) then Wheel:Remove() return end
+	local Throttle = self:GetThrottle()
 
-	local Steer = self:GetSteer()
+	local TargetVelocity = self.MaxVelocity * Throttle
 
-	local PhysObj = Master:GetPhysicsObject()
+	local Force = math.max( TargetVelocity - math.cos( math.acos( math.Clamp( Forward:Dot( VelForward ) ,-1,1) ) ) * Velocity:Length(), 0 )
 
-	if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) return end
-
-	local ID = Wheel:GetAxle()
-
-	local Axle = self:GetAxleData( ID )
-
-	local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
-
-	AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
-	AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
-	AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
-
-	if Axle.SteerType == LVS.WHEEL_STEER_REAR then
-		AxleAng:RotateAroundAxis( AxleAng:Up(), Steer * Axle.SteerAngle )
-	else
-		if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
-			AxleAng:RotateAroundAxis( AxleAng:Up(), -Steer * Axle.SteerAngle )
-		end
-	end
-
-	Master:SetAngles( AxleAng )
-
-	return AxleAng
+	return Force
 end
 
 function ENT:PhysicsSimulate( phys, deltatime )
@@ -148,11 +135,37 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 	phys:Wake()
 
-	local AxleAng = self:AlignWheel( ent )
+	local Axle, AngleDirection = self:AlignWheel( ent )
 
-	if not AxleAng then return end
+	if not Axle or not AngleDirection then return end
 
-	local torque = -ent:WorldToLocalAngles( AxleAng ):Right() * 1500 * self:GetThrottle()
+	local wAngleDir = -ent:WorldToLocalAngles( AngleDirection )
 
-	return torque, vector_origin, SIM_LOCAL_ACCELERATION
+	local RotationAxis = wAngleDir:Right()
+
+	local Vel = phys:GetVelocity()
+	local VelForward = Vel:GetNormalized()
+	local VelLength = Vel:Length()
+
+	local Force = self:GetVelocityDifference( AngleDirection )
+
+	local ForceAngle = RotationAxis * Force * self.MaxPower * 0.1 * Axle.TorqueFactor
+
+	local AngVel = phys:GetAngleVelocity()
+	local AngVelForward = AngVel:GetNormalized()
+
+	local tRPM = VelLength * 60 / math.pi / (ent:GetRadius() * 2)
+	local aRPM = math.cos( math.acos( math.Clamp( RotationAxis:Dot( AngVelForward ) ,-1,1) ) ) * AngVel:Length() / 6
+
+	local Slip = math.min( math.abs( tRPM / aRPM ), 1 )
+
+	local Forward = AngleDirection:Forward()
+	local Right = AngleDirection:Right()
+	local Fx = math.cos( math.acos( math.Clamp( Right:Dot( VelForward ) ,-1,1) ) ) * VelLength
+
+	local EntLoad,_ = phys:GetStress()
+
+	local ForceLinear = Forward * Force * Axle.TorqueFactor - Right * Fx * self.TractionMultiplier * Slip - self:GetUp() * math.abs( Fx ) * self.TractionMultiplier * (EntLoad > 0 and 1 or 0)
+
+	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

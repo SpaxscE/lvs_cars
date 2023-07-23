@@ -11,6 +11,11 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
+ENT.MaxVelocity = 1200
+ENT.MaxPower = 100
+
+ENT.TractionMultiplier = 5
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 

@@ -52,6 +52,7 @@ function ENT:CreateSteerMaster( TargetEntity )
 
 	PhysObj:SetMass( 1 )
 	PhysObj:EnableMotion( false )
+	PhysObj:EnableDrag( false )
 
 	Master:SetNotSolid( true )
 	Master:SetColor( Color( 255, 255, 255, 0 ) ) 
@@ -145,14 +146,19 @@ function ENT:DefineAxle( data )
 
 	self._WheelAxleID = self._WheelAxleID + 1
 
+	-- defaults
 	data.Axle.ForwardAngle = data.Axle.ForwardAngle or Angle(0,0,0)
 	data.Axle.SteerType = data.Axle.SteerType or LVS.WHEEL_STEER_NONE
 	data.Axle.SteerAngle = data.Axle.SteerAngle or 20
+	data.Axle.TorqueFactor = data.Axle.TorqueFactor or 1
+	data.Axle.BrakeFactor = data.Axle.BrakeFactor or 1
 
 	self._WheelAxleData[ self._WheelAxleID ] = {
 		ForwardAngle = data.Axle.ForwardAngle,
 		SteerType = data.Axle.SteerType,
 		SteerAngle = data.Axle.SteerAngle,
+		TorqueFactor = data.Axle.TorqueFactor,
+		BrakeFactor = data.Axle.BrakeFactor,
 	}
 
 	data.Suspension.Height = data.Suspension.Height or 20
@@ -161,7 +167,6 @@ function ENT:DefineAxle( data )
 	data.Suspension.SpringConstant = data.Suspension.SpringConstant or 20000
 	data.Suspension.SpringDamping = data.Suspension.SpringDamping or 2000
 	data.Suspension.SpringRelativeDamping = data.Suspension.SpringRelativeDamping or 2000
-	data.Suspension.ElasticConstraints = {}
 
 	local AxleCenter = Vector(0,0,0)
 	for _, Wheel in ipairs( data.Wheels ) do
@@ -204,8 +209,6 @@ function ENT:DefineAxle( data )
 
 			debugoverlay.Line( P1, P2, 5, Color( 150, 150, 150 ), true )
 		end
-
-		table.insert( data.Suspension.ElasticConstraints, Elastic )
 
 		-- nocollide them with each other
 		for i = id, #data.Wheels do
@@ -267,4 +270,42 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	Wheel:SetPos( Pos )
 
 	return Elastic
+end
+
+function ENT:AlignWheel( Wheel )
+	if not IsValid( Wheel ) then return end
+
+	if not isfunction( Wheel.GetMaster ) then Wheel:Remove() return end
+
+	local Master = Wheel:GetMaster()
+
+	if not IsValid( Master ) then Wheel:Remove() return end
+
+	local Steer = self:GetSteer()
+
+	local PhysObj = Master:GetPhysicsObject()
+
+	if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) return end
+
+	local ID = Wheel:GetAxle()
+
+	local Axle = self:GetAxleData( ID )
+
+	local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
+
+	AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
+	AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
+	AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
+
+	if Axle.SteerType == LVS.WHEEL_STEER_REAR then
+		AxleAng:RotateAroundAxis( AxleAng:Up(), Steer * Axle.SteerAngle )
+	else
+		if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
+			AxleAng:RotateAroundAxis( AxleAng:Up(), -Steer * Axle.SteerAngle )
+		end
+	end
+
+	Master:SetAngles( AxleAng )
+
+	return Axle, AxleAng
 end

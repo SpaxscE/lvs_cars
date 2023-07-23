@@ -84,9 +84,6 @@ if CLIENT then
 		self:DrawModel()
 	end
 
-	function ENT:Think()
-	end
-
 	function ENT:OnRemove()
 	end
 end
