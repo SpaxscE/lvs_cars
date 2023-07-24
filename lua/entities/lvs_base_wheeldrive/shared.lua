@@ -11,14 +11,46 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
-ENT.MaxVelocity = 1500
+ENT.MaxVelocity = 4000
 
 ENT.ForceLinearMultiplier = 1
 ENT.ForceAngleMultiplier = 1
+
+ENT.SteerSpeed = 3.5
+ENT.SteerReturnSpeed = 10
+
+ENT.SteerAssistDeadZoneAngle = 3
+ENT.SteerAssistActivationVelocity = 500
+ENT.SteerAssistMaxAngle = 15
+ENT.SteerAssistMaxAssistAngle = 15
+
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
+	self:AddDT( "Float", "NWMaxSteer" )
+end
+
+function ENT:GetMaxSteerAngle()
+	if CLIENT then return self:GetNWMaxSteer() end
+
+	if self._WheelMaxSteerAngle then return self._WheelMaxSteerAngle end
+
+	local Cur = 0
+
+	for _, Axle in pairs( self._WheelAxleData ) do
+		if not Axle.SteerAngle then continue end
+
+		if Axle.SteerAngle > Cur then
+			Cur = Axle.SteerAngle
+		end
+	end
+
+	self._WheelMaxSteerAngle = Cur
+
+	self:SetNWMaxSteer( Cur )
+
+	return Cur
 end

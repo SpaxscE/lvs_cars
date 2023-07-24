@@ -298,10 +298,10 @@ function ENT:AlignWheel( Wheel )
 	AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
 
 	if Axle.SteerType == LVS.WHEEL_STEER_REAR then
-		AxleAng:RotateAroundAxis( AxleAng:Up(), Steer * Axle.SteerAngle )
+		AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(Steer,-Axle.SteerAngle,Axle.SteerAngle) )
 	else
 		if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
-			AxleAng:RotateAroundAxis( AxleAng:Up(), -Steer * Axle.SteerAngle )
+			AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(-Steer,-Axle.SteerAngle,Axle.SteerAngle) )
 		end
 	end
 

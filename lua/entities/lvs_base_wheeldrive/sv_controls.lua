@@ -2,11 +2,54 @@
 function ENT:CalcSteer( ply, cmd )
 	local KeyLeft = cmd:KeyDown( IN_MOVELEFT )
 	local KeyRight = cmd:KeyDown( IN_MOVERIGHT )
-	local Steer = (KeyRight and 1 or 0) - (KeyLeft and 1 or 0)
 
-	local Rate = FrameTime() * 3.5
-	local Cur = self:GetSteer()
-	local New = Cur + math.Clamp(Steer - Cur,-Rate,Rate)
+	local MaxSteer = self:GetMaxSteerAngle()
+
+	local Vel = self:GetVelocity()
+
+	local TargetValue = (KeyRight and 1 or 0) - (KeyLeft and 1 or 0)
+
+	if Vel:Length() > self.SteerAssistActivationVelocity then
+		local Forward = self:GetForward()
+		local Right = self:GetRight()
+
+		local Axle = self:GetAxleData( 1 )
+
+		if Axle then
+			local Ang = self:LocalToWorldAngles( self:GetAxleData( 1 ).ForwardAngle )
+
+			Forward = Ang:Forward()
+			Right = Ang:Right()
+		end
+
+		local VelNormal = Vel:GetNormalized()
+
+		local DriftAngle = self:AngleBetweenNormal( Forward, VelNormal )
+
+		if DriftAngle < self.SteerAssistMaxAngle then
+			MaxSteer = math.min( MaxSteer, self.SteerAssistMaxAngle )
+		end
+
+		if DriftAngle > self.SteerAssistDeadZoneAngle then
+			if not KeyLeft and not KeyRight then
+				local Cur = self:GetSteer() / MaxSteer
+
+				local HelpAng = math.min( MaxSteer, self.SteerAssistMaxAssistAngle )
+
+				TargetValue = math.Clamp( -(self:AngleBetweenNormal( Right, VelNormal ) - 90),-HelpAng,HelpAng) / MaxSteer
+			end
+		end
+	end
+
+	local Cur = self:GetSteer() / MaxSteer
+
+	local Diff = TargetValue - Cur
+
+	local Returning = (Diff > 0 and Cur < 0) or (Diff < 0 and Cur > 0)
+
+	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or self.SteerSpeed)
+
+	local New = (Cur + math.Clamp(Diff,-Rate,Rate)) * MaxSteer
 
 	self:SetSteer( New )
 end
