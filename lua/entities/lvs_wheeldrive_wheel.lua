@@ -3,18 +3,16 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.Editable = true
-
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "Radius")
 
-	self:NetworkVar( "Float", 1, "Camber", { KeyName = "camber", Edit = { type = "Float", order = 1,min = -15, max = 15, category = "Alignment"} } )
-	self:NetworkVar( "Float", 2, "Caster", { KeyName = "caster", Edit = { type = "Float", order = 2,min = -15, max = 15, category = "Alignment"} } )
-	self:NetworkVar( "Float", 3, "Toe", { KeyName = "toe", Edit = { type = "Float", order = 3,min = -15, max = 15, category = "Alignment"} } )
+	self:NetworkVar( "Float", 1, "Camber" )
+	self:NetworkVar( "Float", 2, "Caster" )
+	self:NetworkVar( "Float", 3, "Toe" )
 
 	if SERVER then
 		self:SetCamber( 0 )
-		self:SetCaster( 5 )
+		self:SetCaster( 0 )
 		self:SetToe( 0 )
 	end
 end
