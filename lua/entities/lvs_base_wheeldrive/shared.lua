@@ -11,10 +11,12 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
-ENT.MaxVelocity = 4000
+ENT.MaxVelocity = 1200
 
-ENT.ForceLinearMultiplier = 1
+ENT.ForceLinearMultiplier = 3
 ENT.ForceAngleMultiplier = 1
+
+ENT.TorqueCurveMultiplier = 2
 
 ENT.SteerSpeed = 3.5
 ENT.SteerReturnSpeed = 10
