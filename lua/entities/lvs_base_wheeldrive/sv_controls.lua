@@ -26,15 +26,15 @@ function ENT:CalcSteer( ply, cmd )
 
 		local DriftAngle = self:AngleBetweenNormal( Forward, VelNormal )
 
-		if DriftAngle < self.SteerAssistMaxAngle then
-			MaxSteer = math.min( MaxSteer, self.SteerAssistMaxAngle )
+		if DriftAngle < 7.5 then
+			MaxSteer = math.min( MaxSteer, 15 )
 		end
 
 		if DriftAngle > self.SteerAssistDeadZoneAngle then
 			if not KeyLeft and not KeyRight then
 				local Cur = self:GetSteer() / MaxSteer
 
-				local HelpAng = math.min( MaxSteer, self.SteerAssistMaxAssistAngle )
+				local HelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
 
 				TargetValue = math.Clamp( -(self:AngleBetweenNormal( Right, VelNormal ) - 90),-HelpAng,HelpAng) / MaxSteer
 			end
