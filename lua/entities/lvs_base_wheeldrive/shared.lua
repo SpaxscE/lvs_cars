@@ -1,15 +1,15 @@
 
 ENT.Base = "lvs_base"
 
-ENT.PrintName = "[LVS] Automobile Base"
+ENT.PrintName = "[LVS] Wheeldrive Base"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
-ENT.Spawnable			= true
+ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
+--ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
 ENT.MaxVelocity = 1200
 
@@ -24,8 +24,6 @@ ENT.SteerReturnSpeed = 10
 ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistActivationVelocity = 500
 ENT.SteerAssistMaxAngle = 15
-ENT.SteerAssistMaxAssistAngle = 15
-
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
