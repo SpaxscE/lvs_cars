@@ -21,9 +21,14 @@ ENT.TorqueCurveMultiplier = 2
 ENT.SteerSpeed = 3.5
 ENT.SteerReturnSpeed = 10
 
+ENT.FastSteerSpeed = 1
+ENT.FastSteerActiveVelocity = 500
+ENT.FastSteerAngleClamp = 15
+ENT.FastSteerDeactivationDriftAngle = 5
+
 ENT.SteerAssistDeadZoneAngle = 3
-ENT.SteerAssistActivationVelocity = 500
 ENT.SteerAssistMaxAngle = 15
+ENT.SteerAssistMultiplier = 0.8
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
