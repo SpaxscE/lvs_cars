@@ -14,7 +14,10 @@ ENT.MaxVelocity = 1200
 ENT.ForceLinearMultiplier = 1
 ENT.ForceAngleMultiplier = 1
 
-ENT.TorqueCurveMultiplier = 10
+ENT.AccelerationMultiplier = 1
+ENT.DecelerationMultiplier = 1
+
+ENT.TorqueCurveMultiplier = 1
 
 ENT.SteerSpeed = 2
 ENT.SteerReturnSpeed = 10
