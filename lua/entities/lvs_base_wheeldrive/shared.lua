@@ -9,26 +9,24 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
---ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
-
 ENT.MaxVelocity = 1200
 
-ENT.ForceLinearMultiplier = 3
+ENT.ForceLinearMultiplier = 1
 ENT.ForceAngleMultiplier = 1
 
-ENT.TorqueCurveMultiplier = 2
+ENT.TorqueCurveMultiplier = 10
 
-ENT.SteerSpeed = 3.5
+ENT.SteerSpeed = 2
 ENT.SteerReturnSpeed = 10
 
 ENT.FastSteerSpeed = 1
 ENT.FastSteerActiveVelocity = 500
-ENT.FastSteerAngleClamp = 15
-ENT.FastSteerDeactivationDriftAngle = 5
+ENT.FastSteerAngleClamp = 10
+ENT.FastSteerDeactivationDriftAngle = 10
 
 ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
-ENT.SteerAssistMultiplier = 0.8
+ENT.SteerAssistMultiplier = 0.9
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
