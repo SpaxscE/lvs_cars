@@ -80,11 +80,13 @@ function ENT:AddWheel( data )-- pos, ang, model )
 
 	Wheel:SetModel( data.mdl or "models/props_vehicles/tire001c_car.mdl" )
 	Wheel:SetPos( self:LocalToWorld( data.pos ) )
-	Wheel:SetAngles( data.mdl_ang or Angle(0,0,0) )
+	Wheel:SetAngles( Angle(0,0,0) )
 	Wheel:Spawn()
 	Wheel:Activate()
 
 	Wheel:SetBase( self )
+
+	Wheel:SetAlignmentAngle( data.mdl_ang or Angle(0,0,0) )
 
 	Wheel:MakeSpherical()
 

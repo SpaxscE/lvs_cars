@@ -10,6 +10,8 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 2, "Caster" )
 	self:NetworkVar( "Float", 3, "Toe" )
 
+	self:NetworkVar( "Angle", 0, "AlignmentAngle" )
+
 	if SERVER then
 		self:SetCamber( 0 )
 		self:SetCaster( 0 )
@@ -79,6 +81,8 @@ end
 
 if CLIENT then
 	function ENT:Draw()
+		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
+
 		self:DrawModel()
 	end
 

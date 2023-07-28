@@ -36,7 +36,7 @@ function ENT:GetVelocityDifference( AngleDirection )
 
 	local TargetVelocity = self.MaxVelocity * self:Sign( Throttle )
 
-	local Force = math.min( math.max( (TargetVelocity - math.cos( math.acos( math.Clamp( Forward:Dot( VelForward ) ,-1,1) ) ) * Velocity:Length()) * self.TorqueCurveMultiplier * Throttle, 0 ), self.MaxVelocity )
+	local Force = math.min( math.max( (TargetVelocity - math.cos( math.acos( math.Clamp( Forward:Dot( VelForward ) ,-1,1) ) ) * Velocity:Length()) * 2 * self.TorqueCurveMultiplier * Throttle, 0 ), self.MaxVelocity )
 
 	return Force
 end
@@ -78,8 +78,8 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local Right = AngleDirection:Right()
 	local Fx = math.cos( math.acos( math.Clamp( Right:Dot( VelForward ) ,-1,1) ) ) * VelLength
 
-	if  self:WheelsOnGround() then
-		local ForceLinear = (Forward * Force * Axle.TorqueFactor * self.ForceLinearMultiplier - Right * Fx * self.ForceLinearMultiplier * Slip - self:GetUp() * math.abs( Fx ) * self.ForceLinearMultiplier)
+	if self:WheelsOnGround() then
+		local ForceLinear = (Forward * Force * Axle.TorqueFactor * self.AccelerationMultiplier - Right * Fx * self.ForceLinearMultiplier * Slip - self:GetUp() * math.abs( Fx ) * self.ForceLinearMultiplier)
 
 		return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 	end
