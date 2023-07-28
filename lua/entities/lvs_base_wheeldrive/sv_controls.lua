@@ -9,8 +9,6 @@ function ENT:CalcSteer( ply, cmd )
 
 	local TargetValue = (KeyRight and 1 or 0) - (KeyLeft and 1 or 0)
 
-	local SteerRate = self.SteerSpeed
-
 	if Vel:Length() > self.FastSteerActiveVelocity then
 		local Forward = self:GetForward()
 		local Right = self:GetRight()
@@ -30,7 +28,6 @@ function ENT:CalcSteer( ply, cmd )
 
 		if DriftAngle < self.FastSteerDeactivationDriftAngle then
 			MaxSteer = math.min( MaxSteer, self.FastSteerAngleClamp )
-			SteerRate =  SteerRate * self.FastSteerSpeed
 		end
 
 		if DriftAngle > self.SteerAssistDeadZoneAngle then
@@ -50,7 +47,7 @@ function ENT:CalcSteer( ply, cmd )
 
 	local Returning = (Diff > 0 and Cur < 0) or (Diff < 0 and Cur > 0)
 
-	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or SteerRate)
+	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or self.SteerSpeed)
 
 	local New = (Cur + math.Clamp(Diff,-Rate,Rate)) * MaxSteer
 
@@ -72,6 +69,8 @@ function ENT:CalcThrottle( ply, cmd )
 	local New = Cur + math.Clamp(Throttle - Cur,-Rate,Rate)
 
 	self:SetThrottle( New )
+
+	self:SetPoseParameter( "vehicle_steer", self:GetSteer() /  self:GetMaxSteerAngle() )
 end
 
 function ENT:StartCommand( ply, cmd )

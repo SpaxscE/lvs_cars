@@ -13,8 +13,8 @@ ENT.MDL = "models/diggercars/highwayman/1.mdl"
 
 ENT.MaxVelocity = 2500
 
-ENT.ForceLinearMultiplier = 1.25
+ENT.ForceLinearMultiplier = 2
 
-ENT.AccelerationMultiplier = 2
+ENT.AccelerationMultiplier = 1
 
-ENT.TorqueCurveMultiplier = 1
+ENT.TorqueCurveMultiplier = 2

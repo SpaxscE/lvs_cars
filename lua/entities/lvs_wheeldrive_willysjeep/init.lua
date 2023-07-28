@@ -18,7 +18,7 @@ function ENT:OnSpawn( PObj )
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
 			SteerAngle = 30,
-			TorqueFactor = 0,
+			TorqueFactor = 0.5,
 			BrakeFactor = 1,
 		},
 		Wheels = {
@@ -58,7 +58,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 1,
+			TorqueFactor = 0.5,
 			BrakeFactor = 1,
 		},
 		Wheels = {

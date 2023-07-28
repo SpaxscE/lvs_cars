@@ -19,13 +19,12 @@ ENT.DecelerationMultiplier = 1
 
 ENT.TorqueCurveMultiplier = 1
 
-ENT.SteerSpeed = 2
+ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
 
-ENT.FastSteerSpeed = 1
 ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
-ENT.FastSteerDeactivationDriftAngle = 10
+ENT.FastSteerDeactivationDriftAngle = 1
 
 ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
