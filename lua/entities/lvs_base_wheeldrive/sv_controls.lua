@@ -52,6 +52,8 @@ function ENT:CalcSteer( ply, cmd )
 	local New = (Cur + math.Clamp(Diff,-Rate,Rate)) * MaxSteer
 
 	self:SetSteer( New )
+
+	self:SetPoseParameter( "vehicle_steer",  self:GetSteerPercent() )
 end
 
 function ENT:CalcThrottle( ply, cmd )

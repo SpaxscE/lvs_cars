@@ -4,7 +4,6 @@ include("shared.lua")
 
 function ENT:OnSpawn( PObj )
 	PObj:SetMass( 1000 )
-	PObj:EnableDrag( false )
 
 	self:AddDriverSeat( Vector(-10,16,-1), Angle(0,-90,10) )
 	self:AddPassengerSeat( Vector(0,-16,8), Angle(0,-90,20) )
@@ -23,16 +22,16 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( Vector(59.1,32,10), Angle(0,180,0), WheelModel, WheelRadius ),
-			self:AddWheel( Vector(59.1,-32,10), Angle(0,0,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(59.1,32,5), Angle(0,180,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(59.1,-32,5), Angle(0,0,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
 			MaxTravel = 7,
 			ControlArmLength = 25,
 			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
+			SpringDamping = 3500,
+			SpringRelativeDamping = 3500,
 		},
 	} )
 
@@ -44,16 +43,16 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( Vector(-59.5,32,10), Angle(0,180,0), WheelModel, WheelRadius ),
-			self:AddWheel( Vector(-59.5,-32,10), Angle(0,0,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-59.5,32,5), Angle(0,180,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-59.5,-32,5), Angle(0,0,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
 			MaxTravel = 7,
 			ControlArmLength = 25,
 			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
+			SpringDamping = 3500,
+			SpringRelativeDamping = 3500,
 		},
 	} )
 end

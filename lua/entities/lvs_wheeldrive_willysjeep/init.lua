@@ -4,7 +4,6 @@ include("shared.lua")
 
 function ENT:OnSpawn( PObj )
 	PObj:SetMass( 1000 )
-	PObj:EnableDrag( false )
 
 	self:AddDriverSeat( Vector(-29,17.5,21), Angle(0,-90,-10) )
 	self:AddPassengerSeat( Vector(-11,-17.5,24), Angle(0,-90,10) )
@@ -31,8 +30,8 @@ function ENT:OnSpawn( PObj )
 			MaxTravel = 7,
 			ControlArmLength = 25,
 			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
+			SpringDamping = 3500,
+			SpringRelativeDamping = 3500,
 		},
 	} )
 
@@ -52,8 +51,8 @@ function ENT:OnSpawn( PObj )
 			MaxTravel = 7,
 			ControlArmLength = 25,
 			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
+			SpringDamping = 3500,
+			SpringRelativeDamping = 3500,
 		},
 	} )
 end

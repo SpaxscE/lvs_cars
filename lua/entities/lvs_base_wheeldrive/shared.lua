@@ -13,20 +13,21 @@ ENT.MaxHealth = 1000
 
 ENT.MaxVelocity = 2000
 
-ENT.TorqueMultiplier = 10
+ENT.TorqueMultiplier = 5
 ENT.TorqueCurveMultiplier = 0.1
 
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
 
 ENT.FastSteerActiveVelocity = 500
-ENT.FastSteerAngleClamp = 10
+ENT.FastSteerAngleClamp = 15
 ENT.FastSteerDeactivationDriftAngle = 10
 
 ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 0.9
 
+ENT.MassCenterOffset = Vector(0,0,10) 
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()

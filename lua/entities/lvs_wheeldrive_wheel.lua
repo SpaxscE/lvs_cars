@@ -27,8 +27,11 @@ if SERVER then
 		self:DrawShadow( false )
 	end
 
-	function ENT:Define( radius, mass )
-		self:PhysicsInit( SOLID_VPHYSICS )
+	function ENT:MakeSpherical( radius, mass )
+		self:SetRadius( radius )
+
+		--self:PhysicsInit( SOLID_VPHYSICS )
+		self:PhysicsInitSphere( math.max( radius - 10, 1 ), "default_silent" )
 
 		local PhysObj = self:GetPhysicsObject()
 
@@ -40,12 +43,9 @@ if SERVER then
 			return
 		end
 
+		--PhysObj:SetMaterial( "default_silent" )
 		PhysObj:SetMass( mass )
 		PhysObj:EnableDrag( false )
-
-		local Inertia = PhysObj:GetInertia()
-		local NewInertia = math.min( Inertia.x, Inertia.y, Inertia.z )
-		PhysObj:SetInertia( Vector( NewInertia, NewInertia, NewInertia ) )
 
 		local Base = self:GetBase()
 
@@ -53,29 +53,6 @@ if SERVER then
 
 		local nocollide = constraint.NoCollide(Base,self,0,0)
 		nocollide.DoNotDuplicate = true
-
-		local mins = self:OBBMins()
-		mins.x = math.abs( mins.x )
-		mins.y = math.abs( mins.y )
-		mins.z = math.abs( mins.z )
-
-		local maxs = self:OBBMaxs()
-		maxs.x = math.abs( maxs.x )
-		maxs.y = math.abs( maxs.y )
-		maxs.z = math.abs( maxs.z )
-
-		local OBBRadius = math.max( mins.x, mins.y, mins.z, maxs.x, maxs.y, maxs.z )
-
-		self:SetOBBRadius( OBBRadius )
-		self:SetRadius( math.max( OBBRadius, radius ) )
-	end
-
-	function ENT:SetOBBRadius( n )
-		self._OBBRadius = n
-	end
-
-	function ENT:GetOBBRadius()
-		return (self._OBBRadius or 0)
 	end
 
 	function ENT:SetAxle( n )

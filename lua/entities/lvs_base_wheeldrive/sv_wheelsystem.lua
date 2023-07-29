@@ -41,7 +41,7 @@ function ENT:AddWheel( pos, ang, model, radius )
 
 	Wheel:SetBase( self )
 
-	Wheel:Define( radius, self:GetPhysicsObject():GetMass() / 10 )
+	Wheel:MakeSpherical( radius, self:GetPhysicsObject():GetMass() / 10 )
 
 	Wheel:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 

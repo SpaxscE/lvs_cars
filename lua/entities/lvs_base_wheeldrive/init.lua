@@ -81,7 +81,6 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local Axle = data.Axle
 	local SteerType = Axle.SteerType
 
-	local ModelRadius = base:GetOBBRadius()
 	local WheelRadius = base:GetRadius()
 
 	local Ang = self:LocalToWorldAngles( Axle.ForwardAngle )
@@ -94,7 +93,6 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		Ang:RotateAroundAxis( Ang:Up(), self:GetSteerPercent() * Axle.SteerAngle * Swap )
 	end
 
-	local Forward = Ang:Forward()
 	local Right = Ang:Right()
 	local Up = Ang:Up()
 
@@ -110,8 +108,14 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		end,
 	} )
 
+	local Forward = trace.HitNormal:Angle()
+	Forward:RotateAroundAxis( Ang:Right(), -90 )
+	Forward = Forward:Forward()
+
 	local HitPos = trace.HitPos
-	local WheelLoad = math.Clamp( (1 - trace.Fraction) * WheelRadius,0,1.5)
+
+	local PhysicsTraceFraction = 1 - (trace.Fraction * (WheelRadius + 1) - WheelRadius)
+	local PhysicsLoad = PhysicsTraceFraction > 0 and (math.min( PhysicsTraceFraction, 0.7 ) + PhysicsTraceFraction / 10) or 0
 
 	local Ax = math.acos( math.Clamp( Forward:Dot(VelForward) ,-1,1) )
 	local Ay = math.asin( math.Clamp( Right:Dot(VelForward) ,-1,1) )
@@ -122,7 +126,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		WheelRadius = WheelRadius + math.max( EntVel.z, 0 ) * deltatime * 7
 	end
 
-	local fUp = ((HitPos + trace.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * WheelLoad
+	local fUp = ((HitPos + trace.HitNormal * WheelRadius - Pos) * 100 - Vel * 10) * 5 * PhysicsLoad
 	local aUp = math.acos( math.Clamp( Up:Dot( fUp:GetNormalized() ) ,-1,1) )
 
 	local F = Vel:Length()
@@ -130,7 +134,13 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local Fy = math.sin( Ay ) * F
 	local Fz = math.cos( aUp ) * fUp:Length()
 
-	local ForceLinear = Up * Fz + (Right * -Fy * 25 + Forward * -Fx) * WheelLoad + Forward * Force * Axle.TorqueFactor * self.TorqueMultiplier
+	local MaxGrip = 250 * PhysicsLoad ^ 10
+
+	local ForceLinear = Up * Fz
+
+	if trace.Hit then
+		ForceLinear = ForceLinear + Right * math.Clamp(-Fy,-MaxGrip,MaxGrip) * 25 + Forward * Force * Axle.TorqueFactor * self.TorqueMultiplier
+	end
 
 	return vector_origin, ForceLinear, SIM_GLOBAL_ACCELERATION
 end
