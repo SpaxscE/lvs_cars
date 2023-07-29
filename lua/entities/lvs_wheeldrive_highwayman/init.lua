@@ -12,7 +12,7 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(45,0,20) )
 
 	local WheelModel = "models/diggercars/highwayman/wheel.mdl"
-	local WheelRadius = 13
+	local WheelRadius = 13.5
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
@@ -44,8 +44,8 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( Vector(-59.5,32,8), Angle(0,180,0), WheelModel, WheelRadius ),
-			self:AddWheel( Vector(-59.5,-32,8), Angle(0,0,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-59.5,32,10), Angle(0,180,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-59.5,-32,10), Angle(0,0,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,

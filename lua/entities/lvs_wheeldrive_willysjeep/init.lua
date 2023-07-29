@@ -12,7 +12,7 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(-45,0,30) )
 
 	local WheelModel = "models/diggercars/willys/wh.mdl"
-	local WheelRadius = 13
+	local WheelRadius = 16
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
