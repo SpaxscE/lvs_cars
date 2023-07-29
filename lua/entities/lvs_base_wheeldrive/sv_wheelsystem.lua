@@ -43,6 +43,8 @@ function ENT:AddWheel( pos, ang, model, radius )
 
 	Wheel:Define( radius, self:GetPhysicsObject():GetMass() / 10 )
 
+	Wheel:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
+
 	debugoverlay.Line( self:GetPos(), self:LocalToWorld( pos ), 5, Color(150,150,150), true )
 
 	table.insert( self._WheelEnts, Wheel )
