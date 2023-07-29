@@ -11,7 +11,8 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	local WheelModel = "models/DiggerCars/highwayman/wheel.mdl"
+	local WheelModel = "models/diggercars/highwayman/wheel.mdl"
+	local WheelRadius = 13
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
@@ -22,27 +23,8 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( {
-				pos = Vector(59.1,32,10),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(-90,180,90),
-
-				camber = -0.5,
-				caster = 5,
-				toe = 0,
-			} ),
-
-			self:AddWheel( {
-				pos = Vector(59.1,-32,10),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(-90,0,90),
-
-				camber = -0.5,
-				caster = 5,
-				toe = 0,
-			} ),
+			self:AddWheel( Vector(59.1,32,10), Angle(0,180,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(59.1,-32,10), Angle(0,0,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
@@ -62,19 +44,8 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( {
-				pos = Vector(-59.5,32,8),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(-90,180,90),
-			} ),
-
-			self:AddWheel( {
-				pos = Vector(-59.5,-32,8),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(-90,0,90),
-			} ),
+			self:AddWheel( Vector(-59.5,32,8), Angle(0,180,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-59.5,-32,8), Angle(0,0,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
@@ -89,7 +60,7 @@ end
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
-		self:EmitSound( "lvs/vehicles/highwayman/CARSTART.wav" )
+		self:EmitSound( "lvs/vehicles/highwayman/carstart.wav" )
 	else
 		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_stop.wav" )
 	end

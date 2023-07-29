@@ -22,7 +22,7 @@ function ENT:UpdateAnimation( ply, velocity, maxseqgroundspeed )
 
 	if CLIENT then
 		if ply == self:GetDriver() then
-			ply:SetPoseParameter( "vehicle_steer", self:GetSteer() /  self:GetMaxSteerAngle() )
+			ply:SetPoseParameter( "vehicle_steer",  self:GetSteerPercent() )
 			ply:InvalidateBoneCache()
 		end
 

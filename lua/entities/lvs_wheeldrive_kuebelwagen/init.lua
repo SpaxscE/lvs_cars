@@ -12,6 +12,7 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(-45,0,30) )
 
 	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"
+	local WheelRadius = 20
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
@@ -22,27 +23,8 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( {
-				pos = Vector(47.5,-20,16),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
-
-				camber = -0.5,
-				caster = 5,
-				toe = 0,
-			} ),
-
-			self:AddWheel( {
-				pos = Vector(47.5,20,16),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
-
-				camber = -0.5,
-				caster = 5,
-				toe = 0,
-			} ),
+			self:AddWheel( Vector(47.5,-20,16), Angle(0,90,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(47.5,20,16), Angle(0,-90,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
@@ -62,19 +44,8 @@ function ENT:OnSpawn( PObj )
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( {
-				pos = Vector(-41,-20,14),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
-			} ),
-
-			self:AddWheel( {
-				pos = Vector(-41,20,14),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
-			} ),
+			self:AddWheel( Vector(-41,-20,16), Angle(0,90,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-41,20,16), Angle(0,-90,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
