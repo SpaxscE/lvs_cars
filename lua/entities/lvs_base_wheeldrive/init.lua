@@ -47,14 +47,6 @@ end
 function ENT:TakeCollisionDamage( damage, attacker )
 end
 
-function ENT:OnCollision( data, physobj )
-	if not self._CollisionIgnoreBelow then return end
-
-	if self:WorldToLocal( data.HitPos ).z < self._CollisionIgnoreBelow then return true end
-
-	return
-end
-
 function ENT:GetVelocityDifference( AngleDirection )
 	if not isangle( AngleDirection ) then return vector_origin end
 

@@ -25,8 +25,6 @@ function ENT:SetMassCenter( offset )
 
 	if CenterWheels:Length() <= 1 then return end
 
-	self._CollisionIgnoreBelow = self:WorldToLocal( CenterWheels ).z
-
 	local Sub = CenterWheels - BaseMassCenter
 	local Dir = Sub:GetNormalized()
 	local Dist = Sub:Length()
