@@ -12,37 +12,19 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(-45,0,30) )
 
 	local WheelModel = "models/diggercars/willys/wh.mdl"
+	local WheelRadius = 13
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
 			SteerAngle = 30,
-			TorqueFactor = 0.5,
+			TorqueFactor = 0.4,
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( {
-				pos = Vector(49.5,-27,16),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
-
-				camber = -0.5,
-				caster = 5,
-				toe = 0,
-			} ),
-
-			self:AddWheel( {
-				pos = Vector(49.5,27,16),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
-
-				camber = -0.5,
-				caster = 5,
-				toe = 0,
-			} ),
+			self:AddWheel( Vector(49.5,-27,14), Angle(0,90,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(49.5,27,14), Angle(0,-90,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,
@@ -58,23 +40,12 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 0.5,
+			TorqueFactor = 0.6,
 			BrakeFactor = 1,
 		},
 		Wheels = {
-			self:AddWheel( {
-				pos = Vector(-37,-27,12),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
-			} ),
-
-			self:AddWheel( {
-				pos = Vector(-37,27,12),
-
-				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
-			} ),
+			self:AddWheel( Vector(-37,-27,14), Angle(0,90,0), WheelModel, WheelRadius ),
+			self:AddWheel( Vector(-37,27,14), Angle(0,-90,0), WheelModel, WheelRadius ),
 		},
 		Suspension = {
 			Height = 10,

@@ -1,5 +1,6 @@
 include("shared.lua")
 include("sh_animations.lua")
+include("sh_collisionfilter.lua")
 
  function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 	if pod == self:GetDriverSeat() then
@@ -38,4 +39,12 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	if Throttle > 1 then
 		draw.SimpleText( "+"..math.Round((Throttle - 1) * 100,0).."%" , "LVS_FONT",  hX, hY, Col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	end
+end
+
+function ENT:LVSPreHudPaint( X, Y, ply )
+	return true
+end
+
+function ENT:LVSHudPaint( X, Y, ply )
+	if not self:LVSPreHudPaint( X, Y, ply ) then return end
 end
