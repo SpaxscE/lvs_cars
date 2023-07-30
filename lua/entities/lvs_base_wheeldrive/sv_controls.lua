@@ -76,10 +76,19 @@ function ENT:CalcHandbrake( ply, cmd )
 	end
 end
 
+function ENT:CalcBrake( ply, cmd )
+	local KeyBrake = cmd:KeyDown( IN_BACK )
+
+	if KeyBrake == self:GetBrake() then return end
+
+	self:SetBrake( KeyBrake )
+end
+
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
 	self:CalcSteer( ply, cmd )
 	self:CalcThrottle( ply, cmd )
 	self:CalcHandbrake( ply, cmd )
+	self:CalcBrake( ply, cmd )
 end

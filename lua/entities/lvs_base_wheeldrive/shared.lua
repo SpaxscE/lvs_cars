@@ -34,6 +34,7 @@ function ENT:SetupDataTables()
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
 	self:AddDT( "Float", "NWMaxSteer" )
+	self:AddDT( "Bool", "Brake" )
 end
 
 function ENT:GetMaxSteerAngle()

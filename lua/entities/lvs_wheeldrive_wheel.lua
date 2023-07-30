@@ -41,11 +41,27 @@ if SERVER then
 	end
 
 	function ENT:IsHandbrakeActive()
-		return IsValid( self.bsLock )
+		return self._handbrakeActive == true
 	end
 
 	function ENT:EnableHandbrake()
-		if self:IsHandbrakeActive() then return end
+		if self._handbrakeActive then return end
+
+		self._handbrakeActive = true
+
+		self:LockRotation()
+	end
+
+	function ENT:ReleaseHandbrake()
+		if not self._handbrakeActive then return end
+
+		self._handbrakeActive = nil
+
+		self:ReleaseRotation()
+	end
+
+	function ENT:LockRotation()
+		if self:IsRotationLocked() then return end
 
 		local Master = self:GetMaster()
 
@@ -55,10 +71,14 @@ if SERVER then
 		self.bsLock.DoNotDuplicate = true
 	end
 
-	function ENT:ReleaseHandbrake()
-		if not self:IsHandbrakeActive() then return end
+	function ENT:ReleaseRotation()
+		if not self:IsRotationLocked() then return end
 
 		self.bsLock:Remove()
+	end
+
+	function ENT:IsRotationLocked()
+		return IsValid( self.bsLock )
 	end
 
 	function ENT:Use( ply )
