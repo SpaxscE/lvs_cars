@@ -44,8 +44,8 @@ end
 
 function ENT:OnHandbrakeActiveChanged( Active )
 	if Active then
-		self:EmitSound( "buttons/lever4.wav", 75, 255, 0.15 )
+		self:EmitSound( "buttons/lever4.wav", 75, 255, 0.25 )
 	else
-		self:EmitSound( "buttons/lever7.wav", 75, 80, 0.15 )
+		self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
 	end
 end

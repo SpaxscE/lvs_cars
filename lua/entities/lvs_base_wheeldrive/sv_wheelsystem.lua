@@ -277,19 +277,19 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 end
 
 function ENT:AlignWheel( Wheel )
-	if not IsValid( Wheel ) then return end
+	if not IsValid( Wheel ) then return false end
 
-	if not isfunction( Wheel.GetMaster ) then Wheel:Remove() return end
+	if not isfunction( Wheel.GetMaster ) then Wheel:Remove() return false end
 
 	local Master = Wheel:GetMaster()
 
-	if not IsValid( Master ) then Wheel:Remove() return end
+	if not IsValid( Master ) then Wheel:Remove() return false end
 
 	local Steer = self:GetSteer()
 
 	local PhysObj = Master:GetPhysicsObject()
 
-	if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) return end
+	if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) return false end
 
 	local ID = Wheel:GetAxle()
 
@@ -311,7 +311,7 @@ function ENT:AlignWheel( Wheel )
 
 	Master:SetAngles( AxleAng )
 
-	return Axle, AxleAng
+	return true
 end
 
 function ENT:WheelsOnGround()

@@ -123,6 +123,56 @@ if SERVER then
 
 		self:SetRadius( radius )
 	end
+
+	function ENT:VelToRPM( speed )
+		if not speed then return 0 end
+
+		return speed * 60 / math.pi / (self:GetRadius() * 2)
+	end
+
+	function ENT:GetDirectionAngle()
+		local master = self:GetMaster()
+
+		if not IsValid( master ) then return self:GetAngles() end
+
+		return master:GetAngles()
+	end
+
+	function ENT:GetRotationAxis()
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return vector_origin end
+
+		local Axle = base:GetAxleData( self:GetAxle() )
+
+		local WorldAngleDirection = -self:WorldToLocalAngles( self:GetDirectionAngle() )
+
+		return WorldAngleDirection:Right()
+	end
+
+	function ENT:GetTorqueFactor()
+		if self._torqueFactor then return self._torqueFactor end
+
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return 0 end
+
+		self._torqueFactor = base:GetAxleData( self:GetAxle() ).TorqueFactor or 0
+
+		return self._torqueFactor
+	end
+
+	function ENT:GetBrakeFactor()
+		if self._brakeFactor then return self._brakeFactor end
+
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return 0 end
+
+		self._brakeFactor = base:GetAxleData( self:GetAxle() ).BrakeFactor or 0
+
+		return self._brakeFactor
+	end
 end
 
 if CLIENT then

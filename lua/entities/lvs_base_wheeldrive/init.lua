@@ -32,57 +32,49 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		return vector_origin, vector_origin, SIM_NOTHING
 	end
 
-	local Axle, AngleDirection = self:AlignWheel( ent )
+	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then return vector_origin, vector_origin, SIM_NOTHING end
 
-	if ent:IsHandbrakeActive() then return vector_origin, vector_origin, SIM_NOTHING end
+	local RotationAxis = ent:GetRotationAxis()
 
-	if not Axle or not AngleDirection then return end
+	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
 
-	local WorldAngleDirection = -ent:WorldToLocalAngles( AngleDirection )
+	local TorqueFactor = ent:GetTorqueFactor()
 
-	local RotationAxis = WorldAngleDirection:Right()
-
-	local AngVel = phys:GetAngleVelocity()
-	local AngVelForward = AngVel:GetNormalized()
-
-	local RotationAxisVel = math.cos( math.acos( math.Clamp( RotationAxis:Dot( AngVelForward ) ,-1,1) ) ) * AngVel:Length()
-
-	local targetRPM = self.MaxVelocity * 60 / math.pi / (ent:GetRadius() * 2)
-	local curRPM = RotationAxisVel / 6
-
-	local MaxTorque = 1000 * self.TorqueMultiplier
-	local Torque = math.Clamp( (targetRPM - curRPM) * 0.5 * self.TorqueCurveMultiplier,-MaxTorque,MaxTorque) * self.WheelAccelerationForce * self.ForceAngleMultiplier * Axle.TorqueFactor * self:GetThrottle()
-
-	phys:Wake()
-
-	local ForceAngle = RotationAxis * Torque
+	local ForceAngle = vector_origin
 
 	if self:GetBrake() then
 		if ent:IsRotationLocked() then
 			ForceAngle = vector_origin
 		else
-			local Vel = phys:GetVelocity()
-			local ForwardVel = math.cos( math.acos( math.Clamp( AngleDirection:Forward():Dot( Vel:GetNormalized() ) ,-1,1) ) ) * Vel:Length()
+			local ForwardVel = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
 
-			targetRPM = (ForwardVel * 60 / math.pi / (ent:GetRadius() * 2)) * 0.5
+			local targetRPM = ent:VelToRPM( ForwardVel ) * 0.5
 
 			if math.abs( curRPM ) < self.WheelBrakeLockRPM then
 				ent:LockRotation()
-
-				ForceAngle = vector_origin
 			else
-				ForceAngle = RotationAxis * (targetRPM - curRPM) * self.WheelBrakeForce * self.ForceAngleMultiplier * Axle.BrakeFactor
+				ForceAngle = RotationAxis * (targetRPM - curRPM) * self.WheelBrakeForce * self.ForceAngleMultiplier * ent:GetBrakeFactor()
 			end
 		end
 	else
+		local MaxTorque = 1000 * self.TorqueMultiplier
+
+		local targetRPM = ent:VelToRPM( self.MaxVelocity )
+
+		local Torque = math.Clamp( (targetRPM - curRPM) * 0.5 * self.TorqueCurveMultiplier,-MaxTorque,MaxTorque) * self.WheelAccelerationForce * self.ForceAngleMultiplier * TorqueFactor * self:GetThrottle()
+
 		if ent:IsRotationLocked() then
 			ent:ReleaseRotation()
 		end
+
+		ForceAngle = RotationAxis * Torque
 	end
+
+	phys:Wake()
 
 	if not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
 
-	local ForceLinear = -self:GetUp() * (1000 + 1000 * Axle.TorqueFactor) * self.ForceLinearMultiplier
+	local ForceLinear = -self:GetUp() * (self.WheelDownForce + self.WheelDownForceAcceleration * TorqueFactor) * self.ForceLinearMultiplier
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

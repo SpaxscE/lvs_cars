@@ -32,6 +32,9 @@ ENT.WheelBrakeLockRPM = 50
 ENT.WheelBrakeForce = 400
 ENT.WheelAccelerationForce = 100
 
+ENT.WheelDownForce = 1000
+ENT.WheelDownForceAcceleration = 1000
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
