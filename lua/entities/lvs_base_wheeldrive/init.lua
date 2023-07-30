@@ -71,7 +71,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 				ForceAngle = vector_origin
 			else
-				ForceAngle = RotationAxis * (targetRPM - curRPM) * 500 * self.ForceAngleMultiplier * Axle.BrakeFactor
+				ForceAngle = RotationAxis * (targetRPM - curRPM) * 100 * self.ForceAngleMultiplier * Axle.BrakeFactor
 			end
 		end
 	else
