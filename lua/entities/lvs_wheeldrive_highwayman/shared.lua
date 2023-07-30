@@ -10,12 +10,3 @@ ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/highwayman/1.mdl"
-
-ENT.MaxHealth = 1000
-
-ENT.MaxVelocity = 4000
-
-ENT.TorqueMultiplier = 1
-ENT.TorqueCurveMultiplier = 1
-
-ENT.MassCenterOffset = Vector(0,0,5) 

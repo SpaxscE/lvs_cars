@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base"
 
-ENT.PrintName = "[LVS] Automobile Base"
+ENT.PrintName = "[LVS] Wheeldrive Base"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -9,44 +9,31 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.MaxHealth = 100
+ENT.MaxVelocity = 1000
 
-ENT.MaxVelocity = 2000
+ENT.ForceLinearMultiplier = 1
+ENT.ForceAngleMultiplier = 1
 
-ENT.TorqueMultiplier = 5
-ENT.TorqueCurveMultiplier = 0.1
-
+ENT.TorqueMultiplier = 0.5
+ENT.TorqueCurveMultiplier = 0.75
+ 
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
 
 ENT.FastSteerActiveVelocity = 500
-ENT.FastSteerAngleClamp = 15
-ENT.FastSteerDeactivationDriftAngle = 10
+ENT.FastSteerAngleClamp = 10
+ENT.FastSteerDeactivationDriftAngle = 5
 
 ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 0.9
 
-ENT.MassCenterOffset = Vector(0,0,5) 
-
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
 	self:AddDT( "Float", "Steer" )
-	self:AddDT( "Float", "NWThrottle" )
-	self:AddDT( "Float", "MaxThrottle" )
+	self:AddDT( "Float", "Throttle" )
 	self:AddDT( "Float", "NWMaxSteer" )
-
-	self:AddDT( "Entity", "Engine" )
-	self:AddDT( "Entity", "Transmission" )
-
-	if SERVER then
-		self:SetMaxThrottle( 1 )
-	end
-end
-
-function ENT:GetSteerPercent()
-	return (self:GetSteer() / self:GetMaxSteerAngle())
 end
 
 function ENT:GetMaxSteerAngle()
@@ -69,20 +56,4 @@ function ENT:GetMaxSteerAngle()
 	self:SetNWMaxSteer( Cur )
 
 	return Cur
-end
-
-function ENT:SetThrottle( NewThrottle )
-	if self:GetEngineActive() then
-		self:SetNWThrottle( math.Clamp(NewThrottle,0,self:GetMaxThrottle()) )
-	else
-		self:SetNWThrottle( 0 )
-	end
-end
-
-function ENT:GetThrottle()
-	if self:GetEngineActive() then
-		return self:GetNWThrottle()
-	else
-		return 0
-	end
 end

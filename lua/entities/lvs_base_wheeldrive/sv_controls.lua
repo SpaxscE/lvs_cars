@@ -52,15 +52,17 @@ function ENT:CalcSteer( ply, cmd )
 	local New = (Cur + math.Clamp(Diff,-Rate,Rate)) * MaxSteer
 
 	self:SetSteer( New )
-
-	self:SetPoseParameter( "vehicle_steer",  self:GetSteerPercent() )
 end
 
 function ENT:CalcThrottle( ply, cmd )
-	local KeyThrottle = cmd:KeyDown( IN_FORWARD )
-	local KeyBoost = cmd:KeyDown( IN_SPEED )
+	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
 
-	local Throttle = KeyThrottle and (KeyBoost and 1 or 0.5) or 0
+	local ThrottleUp = cmd:KeyDown( IN_FORWARD )
+	local ThrottleDown = cmd:KeyDown( IN_BACK )
+
+	local ThrottleValue = cmd:KeyDown( IN_SPEED ) and 1 or 0.5
+
+	local Throttle = (ThrottleUp and ThrottleValue or 0) - (ThrottleDown and ThrottleValue or 0)
 
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetThrottle()
@@ -69,9 +71,18 @@ function ENT:CalcThrottle( ply, cmd )
 	self:SetThrottle( New )
 end
 
+function ENT:CalcHandbrake( ply, cmd )
+	if cmd:KeyDown( IN_JUMP ) then
+		self:EnableHandbrake()
+	else
+		self:ReleaseHandbrake()
+	end
+end
+
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
 	self:CalcSteer( ply, cmd )
 	self:CalcThrottle( ply, cmd )
+	self:CalcHandbrake( ply, cmd )
 end
