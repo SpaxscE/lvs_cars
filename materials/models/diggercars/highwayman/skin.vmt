@@ -1,0 +1,19 @@
+"VertexLitGeneric"
+{
+
+	"$basetexture" "models/DiggerCars/Highwayman/skin"
+	"$bumpmap" "models/DiggerCars/Highwayman/skin_nm"
+        "$blendtintbybasealpha" 1
+        "$detailscale" 5
+        "$detailblendfactor" ".6"
+
+	"$phong" "1"
+	"$phongexponent" "20"
+	"$phongboost" "0"
+	"$phongfresnelranges"	"[1 1.5 4]"
+	"$phongalbedotint" "1"
+
+        "$envmap" "env_cubemap"
+        "$envmaptint" "[.02 .02 .02]"
+        "$envmapfresnel" 1
+}

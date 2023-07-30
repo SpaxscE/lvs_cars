@@ -1,0 +1,11 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/DiggerCars/Willys/jeep_us"
+	"$bumpmap" "models/DiggerCars/Willys/jeep_us_normal"
+	"$translucent"	1
+	//"$alpha"	1
+	"$alphatest"	1			
+
+
+
+}
