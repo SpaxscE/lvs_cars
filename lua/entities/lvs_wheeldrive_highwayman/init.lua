@@ -3,9 +3,6 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	PObj:SetMass( 1000 )
-	PObj:EnableDrag( false )
-
 	self:AddDriverSeat( Vector(-10,16,-1), Angle(0,-90,10) )
 	self:AddPassengerSeat( Vector(0,-16,8), Angle(0,-90,20) )
 
