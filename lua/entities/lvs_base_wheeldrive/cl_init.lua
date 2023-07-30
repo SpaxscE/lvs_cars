@@ -8,7 +8,6 @@ function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 	self._smDelta = self._smDelta or 0
 	self._smFov = self._smFov or 0
 
-	local T = CurTime()
 	local FT = RealFrameTime()
 
 	local Vel = self:GetVelocity()
@@ -18,19 +17,12 @@ function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 
 	self.oldVel = NewVel
 
-	self._smDelta = self._smDelta + (VelDelta - self._smDelta) * FT
+	self._smDelta = self._smDelta + (VelDelta - self._smDelta) * FT * 3
 
-	if math.abs( self._smDelta ) > 1 then
-		self._Hide = T + 0.5
-	end
+	local newFov = math.Clamp(self._smDelta * 10 * math.max( 1 - (NewVel / self.MaxVelocity), 0 ),-15,15)
+	newFov = (math.abs( newFov ) / 15) ^ 10 * self:Sign( newFov ) * 15
 
-	local newFov = math.Clamp(self._smDelta * 10,-15,15)
-
-	if (self._Hide or 0) < T then
-		newFov = 0
-	end
-
-	self._smFov = self._smFov + (newFov * ((90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90) - self._smFov) * FT * 2.5
+	self._smFov = self._smFov + (newFov * math.max((90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90,-0.5) - self._smFov) * FT * 2.5
 
 	if pod == self:GetDriverSeat() then
 		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
