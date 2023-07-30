@@ -57,12 +57,9 @@ end
 function ENT:CalcThrottle( ply, cmd )
 	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
 
-	local ThrottleUp = cmd:KeyDown( IN_FORWARD )
-	local ThrottleDown = cmd:KeyDown( IN_BACK )
-
 	local ThrottleValue = cmd:KeyDown( IN_SPEED ) and 1 or 0.5
 
-	local Throttle = (ThrottleUp and ThrottleValue or 0) - (ThrottleDown and ThrottleValue or 0)
+	local Throttle = cmd:KeyDown( IN_FORWARD ) and ThrottleValue or 0
 
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetThrottle()
