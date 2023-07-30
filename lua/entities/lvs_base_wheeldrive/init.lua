@@ -51,7 +51,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local curRPM = RotationAxisVel / 6
 
 	local MaxTorque = 1000 * self.TorqueMultiplier
-	local Torque = math.Clamp( (targetRPM - curRPM) * 0.5 * self.TorqueCurveMultiplier,-MaxTorque,MaxTorque) * 100 * self.ForceAngleMultiplier * Axle.TorqueFactor * self:GetThrottle()
+	local Torque = math.Clamp( (targetRPM - curRPM) * 0.5 * self.TorqueCurveMultiplier,-MaxTorque,MaxTorque) * self.WheelAccelerationForce * self.ForceAngleMultiplier * Axle.TorqueFactor * self:GetThrottle()
 
 	phys:Wake()
 
@@ -66,12 +66,12 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 			targetRPM = (ForwardVel * 60 / math.pi / (ent:GetRadius() * 2)) * 0.5
 
-			if math.abs( curRPM ) < 100 then
+			if math.abs( curRPM ) < self.WheelBrakeLockRPM then
 				ent:LockRotation()
 
 				ForceAngle = vector_origin
 			else
-				ForceAngle = RotationAxis * (targetRPM - curRPM) * 100 * self.ForceAngleMultiplier * Axle.BrakeFactor
+				ForceAngle = RotationAxis * (targetRPM - curRPM) * self.WheelBrakeForce * self.ForceAngleMultiplier * Axle.BrakeFactor
 			end
 		end
 	else

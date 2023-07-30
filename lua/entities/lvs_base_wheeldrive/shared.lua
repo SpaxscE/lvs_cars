@@ -16,7 +16,7 @@ ENT.ForceAngleMultiplier = 1
 
 ENT.TorqueMultiplier = 0.5
 ENT.TorqueCurveMultiplier = 0.75
- 
+
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
 
@@ -27,6 +27,10 @@ ENT.FastSteerDeactivationDriftAngle = 5
 ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 0.9
+
+ENT.WheelBrakeLockRPM = 50
+ENT.WheelBrakeForce = 400
+ENT.WheelAccelerationForce = 100
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
