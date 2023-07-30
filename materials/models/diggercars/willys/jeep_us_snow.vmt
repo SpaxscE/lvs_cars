@@ -1,11 +1,9 @@
 "VertexLitGeneric"
 {
 	"$baseTexture" "models/DiggerCars/Willys/jeep_us_snow"
-	"$bumpmap" "models/DiggerCars/Willys/jeep_us_normal"
-	"$translucent"	1
-	//"$alpha"	1
-	"$alphatest"	1			
-
-
-
+	"$bumpmap" "models/DiggerCars/Willys/jeep_us_normal2"
+	"$phong" "1" 
+	"$phongboost" "0.02" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
 }
