@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.MaxHealth = 1000
+ENT.MaxHealth = 100
 
 ENT.MaxVelocity = 2000
 
@@ -27,7 +27,7 @@ ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 0.9
 
-ENT.MassCenterOffset = Vector(0,0,10) 
+ENT.MassCenterOffset = Vector(0,0,5) 
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()

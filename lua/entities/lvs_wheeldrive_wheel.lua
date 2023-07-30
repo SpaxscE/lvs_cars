@@ -182,14 +182,30 @@ else
 
 		if not Axle then return end
 
-		local AxleAng = self:GetBase():LocalToWorldAngles( Axle.ForwardAngle )
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return end
+
+		local AxleAng = base:LocalToWorldAngles( Axle.ForwardAngle )
 
 		local WheelAng = self:LocalToWorldAngles( Angle(0,0,0) )
 
 		WheelAng:RotateAroundAxis( AxleAng:Right(), self:GetRotation() )
 		WheelAng:RotateAroundAxis( AxleAng:Up(), self:GetSteer() )
 
+		local Pos = self:GetPos()
+		local Up = self:GetUp()
+		local WheelRadius = self:GetRadius()
+
+		local trace = util.TraceLine( {
+			start = Pos,
+			endpos = Pos - Up * WheelRadius,
+			mask = MASK_SOLID_BRUSHONLY,
+		} )
+
 		self:SetRenderAngles( WheelAng )
+		self:SetPos( trace.HitPos + Up * WheelRadius )
+	
 		self:DrawModel()
 		self:SetRenderAngles( nil )
 	end

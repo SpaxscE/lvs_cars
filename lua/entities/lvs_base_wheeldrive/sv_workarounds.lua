@@ -23,6 +23,8 @@ function ENT:SetMassCenter( offset )
 	end
 	CenterWheels = CenterWheels / #self:GetWheels()
 
+	self._CollisionIgnoreBelow = self:WorldToLocal( CenterWheels ).z
+
 	if CenterWheels:Length() <= 1 then return end
 
 	local Sub = CenterWheels - BaseMassCenter

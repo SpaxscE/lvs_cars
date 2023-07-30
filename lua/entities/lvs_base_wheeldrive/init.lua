@@ -14,7 +14,7 @@ ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
 function ENT:OnSpawnFinish( PObj )
-	self:SetMassCenter( Vector(0,0,5) )
+	self:SetMassCenter( self.MassCenterOffset )
 
 	timer.Simple(0, function()
 		if not IsValid( self ) or not IsValid( PObj ) then return end
@@ -45,6 +45,14 @@ function ENT:AlignView( ply )
 end
 
 function ENT:TakeCollisionDamage( damage, attacker )
+end
+
+function ENT:OnCollision( data, physobj )
+	if not self._CollisionIgnoreBelow then return end
+
+	if self:WorldToLocal( data.HitPos ).z < self._CollisionIgnoreBelow then return true end
+
+	return
 end
 
 function ENT:GetVelocityDifference( AngleDirection )
@@ -134,7 +142,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local Fy = math.sin( Ay ) * F
 	local Fz = math.cos( aUp ) * fUp:Length()
 
-	local MaxGrip = 250 * PhysicsLoad ^ 10
+	local MaxGrip = 222 * math.min( PhysicsLoad, 1 ) ^ 2
 
 	local ForceLinear = Up * Fz
 

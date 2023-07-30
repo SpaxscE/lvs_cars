@@ -10,3 +10,12 @@ ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/willys/willys.mdl"
+
+ENT.MaxHealth = 1000
+
+ENT.MaxVelocity = 2000
+
+ENT.TorqueMultiplier = 20
+ENT.TorqueCurveMultiplier = 0.05
+
+ENT.MassCenterOffset = Vector(0,0,5) 
