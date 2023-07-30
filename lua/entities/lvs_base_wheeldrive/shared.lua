@@ -35,6 +35,10 @@ ENT.WheelAccelerationForce = 100
 ENT.WheelDownForce = 1000
 ENT.WheelDownForceAcceleration = 1000
 
+ENT.PhysicsDrag = false
+ENT.PhysicsMass = 1000
+ENT.PhysicsInertia = Vector(1.5,1.5,0.5)
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 

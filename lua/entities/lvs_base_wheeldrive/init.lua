@@ -11,6 +11,19 @@ include("sv_wheelsystem.lua")
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
+DEFINE_BASECLASS( "lvs_base" )
+
+function ENT:PostInitialize( PObj )
+	PObj:SetMass( self.PhysicsMass )
+	PObj:EnableDrag( self.PhysicsDrag )
+
+	local Inertia = PObj:GetInertia()
+
+	PObj:SetInertia( Vector(Inertia.x * self.PhysicsInertia.x,Inertia.y * self.PhysicsInertia.y,Inertia.z * self.PhysicsInertia.z) )
+
+	BaseClass.PostInitialize( self, PObj )
+end
+
 function ENT:AlignView( ply )
 	if not IsValid( ply ) then return end
 
