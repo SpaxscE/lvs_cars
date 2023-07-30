@@ -4,31 +4,11 @@ include("sh_animations.lua")
 ENT.GroundEffectsMultiplier = 1.6
 
 function ENT:LVSCalcView( ply, pos, angles, fov, pod )
-
-	self._smDelta = self._smDelta or 0
-	self._smFov = self._smFov or 0
-
-	local FT = RealFrameTime()
-
-	local Vel = self:GetVelocity()
-	local NewVel = Vel:Length()
-
-	local VelDelta = NewVel - (self.oldVel or 0)
-
-	self.oldVel = NewVel
-
-	self._smDelta = self._smDelta + (VelDelta - self._smDelta) * FT * 3
-
-	local newFov = math.Clamp(self._smDelta * 10 * math.max( 1 - (NewVel / self.MaxVelocity), 0 ),-15,15)
-	newFov = (math.abs( newFov ) / 15) ^ 10 * self:Sign( newFov ) * 15
-
-	self._smFov = self._smFov + (newFov * math.max((90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90,-0.5) - self._smFov) * FT * 2.5
-
 	if pod == self:GetDriverSeat() then
 		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
 	end
 
-	return LVS:CalcView( self, ply, pos, angles,  fov + self._smFov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
 end
 
 
