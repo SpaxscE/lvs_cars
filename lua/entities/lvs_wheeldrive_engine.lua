@@ -58,8 +58,12 @@ function ENT:OnEngineActiveChanged( Active )
 	local sound = CreateSound( self, "lvs/vehicles/kuebelwagen/engine_mid.wav" )
 	sound:SetSoundLevel( 75 )
 	sound:PlayEx(0,100)
-
 	self._ActiveSounds[ 1 ] = sound
+
+	local sound = CreateSound( self, "acf_extra/vehiclefx/engines/flat4/vw.wav" )
+	sound:SetSoundLevel( 75 )
+	sound:PlayEx(0,100)
+	self._ActiveSounds[ 2 ] = sound
 end
 
 
@@ -68,6 +72,8 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local Throttle = vehicle:GetThrottle()
 	local Doppler = vehicle:CalcDoppler( ply )
+
+	local DrivingMe = ply:lvsGetVehicle() == vehicle
 
 	local T = CurTime()
 
@@ -79,23 +85,47 @@ function ENT:HandleEngineSounds( vehicle )
 	local VelStuff = MaxVel / NumGears
 
 	local CurGear = 1
+	local VelTheoretical = Vel
 
-	while Vel > VelStuff do
-		Vel = Vel - VelStuff
+	while (VelTheoretical > VelStuff) and CurGear< NumGears  do
+		VelTheoretical = VelTheoretical - VelStuff
+
 		CurGear = CurGear + 1
 	end
 
-	local Ratio = Vel / VelStuff
+	local Ratio = math.Clamp(Vel - (self._oldGear - 1) * VelStuff,0,VelStuff) / VelStuff
 
-	local PitchAdd = CurGear * 15
+	local PitchAdd = CurGear * (100 / NumGears * 0.6)
 
 	if self._oldGear ~= CurGear then
-		self._oldGear = CurGear
-		self._ShiftTime = T + 0.2
+
+		if (self._NextShift or 0) < T then
+			self._NextShift = T + 1
+
+			if (self._oldGear or 0) < CurGear then
+				self._ShiftTime = T + 0.2
+
+				vehicle:Test()
+			else
+				if CurGear <= 2 then
+					self._GoIdle = true
+				end
+			end
+
+			self._oldGear = CurGear
+		end
+	end
+
+	if Throttle ~= 0 then
+		self._GoIdle = nil
+	else
+		if CurGear == 1 and Throttle == 0 then
+			self._GoIdle = true
+		end
 	end
 
 	local Wobble = 0
-	if CurGear < 3 and Throttle <= 0.5 then
+	if CurGear < (1 + (NumGears - 1) * Throttle) then
 		Wobble = math.cos( T * (20 + CurGear * 10) * Throttle ) * math.max(1 -Ratio,0) * Throttle * 60
 	end
 
@@ -106,17 +136,30 @@ function ENT:HandleEngineSounds( vehicle )
 		Ratio = 0
 		Wobble = 0
 		Throttle = 0.1
-		FadeSpeed = 2
+		FadeSpeed = 3
 	end
 
 	local Pitch = 100 + PitchAdd + (100 - PitchAdd) * Ratio + Wobble
-	local Volume = 0.3 + 0.2 * Ratio + (0.2 * Ratio + 0.3) * Throttle
+
+	local Mul = DrivingMe and 1 or 0.5
+
+	local Volume = (0.3 + 0.2 * Ratio + (0.2 * Ratio + 0.3) * Throttle) * Mul
+
+	if self._GoIdle then
+		Pitch = 100
+		Volume = 0
+	end
 
 	for id, sound in pairs( self._ActiveSounds ) do
 		if not sound then continue end
-
-		sound:ChangeVolume( Volume, 0.15 )
-		sound:ChangePitch( Pitch, FadeSpeed )
+		if id == 1 then
+			sound:ChangeVolume( Volume, 0.15 )
+			sound:ChangePitch( Pitch, FadeSpeed )
+		else
+			local ASDF = self._GoIdle and 1 or 0
+			sound:ChangeVolume( ASDF, 0.25 )
+			sound:ChangePitch( 40, 0.15 )
+		end
 	end
 end
 
