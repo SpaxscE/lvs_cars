@@ -161,7 +161,7 @@ function ENT:HandleEngineSounds( vehicle )
 	local Vel = 0
 	local Wobble = 0
 
-	if Vel / wheelVel <= 0.8 then
+	if vehVel / wheelVel <= 0.8 then
 		Vel = wheelVel
 		Wobble = -1
 	else
