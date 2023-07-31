@@ -3,8 +3,11 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(-10,16,-1), Angle(0,-90,10) )
-	self:AddPassengerSeat( Vector(0,-16,8), Angle(0,-90,20) )
+
+
+
+	self:AddDriverSeat( Vector(-10,15,-1), Angle(0,-90,10) )
+	self:AddPassengerSeat( Vector(0,-15,8), Angle(0,-90,20) )
 
 	self:AddEngine( Vector(45,0,20) )
 
@@ -20,15 +23,15 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(56.5,29,11),
+				pos = Vector(56.5,30,10),
 				mdl = WheelModel,
-				mdl_ang = Angle(-90,180,90),
+				mdl_ang = Angle(-90,180,-90),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(56.5,-29,11),
+				pos = Vector(56.5,-30,10),
 				mdl = WheelModel,
-				mdl_ang = Angle(-90,0,90),
+				mdl_ang = Angle(-90,0,-90),
 			} ),
 		},
 		Suspension = {
@@ -51,15 +54,15 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-49.5,29,11),
+				pos = Vector(-56,30,7),
 				mdl = WheelModel,
-				mdl_ang = Angle(-90,180,90),
+				mdl_ang = Angle(-90,180,-90),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-49.5,-29,11),
+				pos = Vector(-56,-30,7),
 				mdl = WheelModel,
-				mdl_ang = Angle(-90,0,90),
+				mdl_ang = Angle(-90,0,-90),
 			} ),
 		},
 		Suspension = {
@@ -72,6 +75,8 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 end
+
+
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then

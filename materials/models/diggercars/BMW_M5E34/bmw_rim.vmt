@@ -14,9 +14,9 @@
 	"$phongexponent" 20
 
 	"$envmap" "env_cubemap"
-	"$envmaptint" "[0.4 0.4 0.4]"
+	"$envmaptint" "[0.3 0.3 0.3]"
 
-	"$colorfix" "{40 40 40}"
+	"$colorfix" "{140 140 140}"
 	"Proxies"
 	{
 		"Equals"
