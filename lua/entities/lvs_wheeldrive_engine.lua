@@ -155,27 +155,29 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local T = CurTime()
 
-	local Vel = vehicle:GetVelocity():Length()
+	local vehVel = vehicle:GetVelocity():Length()
 	local wheelVel = vehicle:GetWheelVelocity()
 
+	local Vel = 0
 	local Wobble = 0
 
 	if Vel / wheelVel <= 0.8 then
 		Vel = wheelVel
 		Wobble = -1
+	else
+		Vel = vehVel
 	end
-
-	local MaxVel = vehicle.MaxVelocity
 
 	local NumGears = vehicle.TransmissionGears
 
 	local VolumeValue = (DrivingMe and 1 or 0.5) * LVS.EngineVolume
-	local PitchValue = MaxVel / NumGears
+	local PitchValue = vehicle.MaxVelocity / NumGears
 
 	local DesiredGear = 1
-	local VelocityGeared = Vel
 
-	while (VelocityGeared > PitchValue) and DesiredGear< NumGears  do
+	local VelocityGeared = vehVel
+
+	while (VelocityGeared > PitchValue) and DesiredGear< NumGears do
 		VelocityGeared = VelocityGeared - PitchValue
 
 		DesiredGear = DesiredGear + 1
@@ -183,7 +185,8 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local CurrentGear = math.Clamp(self._CurGear or 1,1,NumGears)
 
-	local Ratio = math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0,PitchValue) / PitchValue
+	--local Ratio = math.max(Vel - (CurrentGear - 1) * PitchValue,0) / PitchValue
+	local Ratio = math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue
 
 	if self._CurGear ~= DesiredGear then
 		if (self._NextShift or 0) < T then
