@@ -14,12 +14,10 @@ ENT.DriverInActiveSound = "common/null.wav"
 DEFINE_BASECLASS( "lvs_base" )
 
 function ENT:PostInitialize( PObj )
+
 	PObj:SetMass( self.PhysicsMass )
 	PObj:EnableDrag( self.PhysicsDrag )
-
-	local Inertia = PObj:GetInertia()
-
-	PObj:SetInertia( Vector(Inertia.x * self.PhysicsInertia.x,Inertia.y * self.PhysicsInertia.y,Inertia.z * self.PhysicsInertia.z) )
+	PObj:SetInertia( self.PhysicsInertia )
 
 	BaseClass.PostInitialize( self, PObj )
 end
@@ -51,11 +49,11 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
 
-	local TorqueFactor = ent:GetTorqueFactor()
-
 	local ForceAngle = vector_origin
 
-	if self:GetBrake() then
+	local TorqueFactor = ent:GetTorqueFactor()
+
+	if self:GetBrake() > 0 then
 		if ent:IsRotationLocked() then
 			ForceAngle = vector_origin
 		else
@@ -63,31 +61,35 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 			local targetRPM = ent:VelToRPM( ForwardVel ) * 0.5
 
-			if math.abs( curRPM ) < self.WheelBrakeLockRPM then
+			if math.abs( curRPM ) < self.WheelBrakeLockupRPM then
 				ent:LockRotation()
 			else
-				ForceAngle = RotationAxis * (targetRPM - curRPM) * self.WheelBrakeForce * self.ForceAngleMultiplier * ent:GetBrakeFactor()
+				ForceAngle = RotationAxis * (targetRPM - curRPM) * self.WheelBrakeForce * ent:GetBrakeFactor() * self:GetBrake()
 			end
 		end
 	else
-		local MaxTorque = 1000 * self.TorqueMultiplier
-
-		local targetRPM = ent:VelToRPM( self.MaxVelocity )
-
-		local Torque = math.Clamp( (targetRPM - curRPM) * 0.5 * self.TorqueCurveMultiplier,-MaxTorque,MaxTorque) * self.WheelAccelerationForce * self.ForceAngleMultiplier * TorqueFactor * self:GetThrottle()
-
 		if ent:IsRotationLocked() then
 			ent:ReleaseRotation()
 		end
 
-		ForceAngle = RotationAxis * Torque
+		if TorqueFactor > 0 then
+			local targetRPM = ent:VelToRPM( self.MaxVelocity )
+
+			local powerRPM = math.min( self.EnginePower, targetRPM )
+
+			local powerCurve = (powerRPM + math.max(targetRPM - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPM * self:Sign( targetRPM - curRPM )
+
+			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * self:GetThrottle()
+
+			ForceAngle = RotationAxis * Torque
+		end
 	end
 
 	phys:Wake()
 
 	if not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
 
-	local ForceLinear = -self:GetUp() * (self.WheelDownForce + self.WheelDownForceAcceleration * TorqueFactor) * self.ForceLinearMultiplier
+	local ForceLinear = -self:GetUp() * (self.WheelDownForce + self.WheelDownForcePowered * TorqueFactor)
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

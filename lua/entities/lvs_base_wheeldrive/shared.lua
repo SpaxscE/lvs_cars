@@ -9,13 +9,10 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.MaxVelocity = 1000
+ENT.MaxVelocity = 1200
 
-ENT.ForceLinearMultiplier = 1
-ENT.ForceAngleMultiplier = 1
-
-ENT.TorqueMultiplier = 0.5
-ENT.TorqueCurveMultiplier = 0.75
+ENT.EnginePower = 25
+ENT.EngineTorque = 350
 
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
@@ -28,16 +25,19 @@ ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 0.9
 
-ENT.WheelBrakeLockRPM = 50
-ENT.WheelBrakeForce = 400
-ENT.WheelAccelerationForce = 100
-
-ENT.WheelDownForce = 1000
-ENT.WheelDownForceAcceleration = 1000
-
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
-ENT.PhysicsInertia = Vector(1.5,1.5,0.5)
+ENT.PhysicsInertia = Vector(1500,1500,750)
+
+ENT.WheelPhysicsDrag = false
+ENT.WheelPhysicsMass = 100
+ENT.WheelPhysicsInertia = Vector(10,10,10)
+
+ENT.WheelBrakeLockupRPM = 50
+ENT.WheelBrakeForce = 400
+
+ENT.WheelDownForce = 1000
+ENT.WheelDownForcePowered = 1000
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
@@ -45,7 +45,7 @@ function ENT:SetupDataTables()
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
 	self:AddDT( "Float", "NWMaxSteer" )
-	self:AddDT( "Bool", "Brake" )
+	self:AddDT( "Float", "Brake" )
 end
 
 function ENT:GetMaxSteerAngle()

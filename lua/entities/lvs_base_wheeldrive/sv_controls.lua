@@ -77,11 +77,17 @@ function ENT:CalcHandbrake( ply, cmd )
 end
 
 function ENT:CalcBrake( ply, cmd )
-	local KeyBrake = cmd:KeyDown( IN_BACK )
+	if not self:GetEngineActive() then self:SetBrake( 0 ) return end
 
-	if KeyBrake == self:GetBrake() then return end
+	local BrakeValue = cmd:KeyDown( IN_SPEED ) and 1 or 0.5
 
-	self:SetBrake( KeyBrake )
+	local Brake = cmd:KeyDown( IN_BACK ) and BrakeValue or 0
+
+	local Rate = FrameTime() * 3.5
+	local Cur = self:GetBrake()
+	local New = Cur + math.Clamp(Brake - Cur,-Rate,Rate)
+
+	self:SetBrake( New )
 end
 
 function ENT:StartCommand( ply, cmd )
