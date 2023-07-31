@@ -12,16 +12,23 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 3, "Toe" )
 
 	self:NetworkVar( "Angle", 0, "AlignmentAngle" )
+end
 
-	if SERVER then
-		self:SetCamber( 0 )
-		self:SetCaster( 0 )
-		self:SetToe( 0 )
-	end
+function ENT:VelToRPM( speed )
+	if not speed then return 0 end
+
+	return speed * 60 / math.pi / (self:GetRadius() * 2)
+end
+
+function ENT:RPMToVel( rpm )
+	if not rpm then return 0 end
+
+	return (math.pi * rpm * self:GetRadius() * 2) / 60
 end
 
 if SERVER then
 	AccessorFunc(ENT, "axle", "Axle", FORCE_NUMBER)
+	AccessorFunc(ENT, "rpm", "RPM", FORCE_NUMBER)
 
 	function ENT:Initialize()
 		self:SetUseType( SIMPLE_USE )
@@ -122,12 +129,6 @@ if SERVER then
 		self:PhysicsInitSphere( radius, "default_silent" )
 
 		self:SetRadius( radius )
-	end
-
-	function ENT:VelToRPM( speed )
-		if not speed then return 0 end
-
-		return speed * 60 / math.pi / (self:GetRadius() * 2)
 	end
 
 	function ENT:GetDirectionAngle()

@@ -40,6 +40,20 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 
 	if ent == self then
+		local Vel = self:GetVelocity():Length()
+
+		for _, wheel in pairs( self:GetWheels() ) do
+			if wheel:GetTorqueFactor() <= 0 then continue end
+
+			local wheelVel = wheel:RPMToVel( math.abs( wheel:GetRPM() or 0 ) )
+
+			if wheelVel > Vel then
+				Vel = wheelVel
+			end
+		end
+
+		self:SetWheelVelocity( Vel )
+
 		return vector_origin, vector_origin, SIM_NOTHING
 	end
 
@@ -48,6 +62,8 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local RotationAxis = ent:GetRotationAxis()
 
 	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
+
+	ent:SetRPM( curRPM )
 
 	local ForceAngle = vector_origin
 

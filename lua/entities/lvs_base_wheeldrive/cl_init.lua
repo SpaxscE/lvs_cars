@@ -3,12 +3,12 @@ include("sh_animations.lua")
 
 ENT.GroundEffectsMultiplier = 1.6
 
-function ENT:Test()
-	self._TextTime = CurTime() + 0.2
+function ENT:SuppressViewPunch( time )
+	self._viewpunch_supressed_time = CurTime() + (time or 0.2)
 end
 
-function ENT:GetTest()
-	return (self._TextTime or 0) > CurTime()
+function ENT:IsViewPunchSuppressed()
+	return (self._viewpunch_supressed_time or 0) > CurTime()
 end
 
 function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
@@ -23,17 +23,13 @@ function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
 	local Throttle = self:GetThrottle()
 	local Brake = self:GetBrake()
 
-	local Test = 10
-	if self:GetTest() then
-		Throttle = 0
-		Brake = 1
+	if self:IsViewPunchSuppressed() then
+		self._viewpunch_fov = self._viewpunch_fov and self._viewpunch_fov + (-VelPercentMaxSpeed * FovValue - self._viewpunch_fov) * RealFrameTime() or 0
+	else
+		local newFov =(1 - VelPercentMaxSpeed) * Throttle * FovValue - VelPercentMaxSpeed * Brake * FovValue
 
-		Test = 1
+		self._viewpunch_fov = self._viewpunch_fov and self._viewpunch_fov + (newFov - self._viewpunch_fov) * RealFrameTime() * 10 or 0
 	end
-
-	local newFov =(1 - VelPercentMaxSpeed) * Throttle * FovValue - VelPercentMaxSpeed * Brake * FovValue
-
-	self._viewpunch_fov = self._viewpunch_fov and self._viewpunch_fov + (newFov - self._viewpunch_fov) * RealFrameTime() * Test or 0
 
 	if pod == self:GetDriverSeat() then
 		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11

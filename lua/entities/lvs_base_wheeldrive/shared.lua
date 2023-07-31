@@ -14,6 +14,8 @@ ENT.MaxVelocity = 1200
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
 
+ENT.TransmissionGears = 4
+
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
 
@@ -44,8 +46,11 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
-	self:AddDT( "Float", "NWMaxSteer" )
 	self:AddDT( "Float", "Brake" )
+
+	self:AddDT( "Float", "NWMaxSteer" )
+
+	self:AddDT( "Float", "WheelVelocity" )
 end
 
 function ENT:GetMaxSteerAngle()
@@ -70,73 +75,13 @@ function ENT:GetMaxSteerAngle()
 	return Cur
 end
 
-ENT.FlyByAdvance = 0.5
-ENT.FlyBySound = "lvs/vehicles/bf109/flyby.wav" 
-ENT.DeathSound = "lvs/vehicles/generic/crash.wav"
-
 ENT.EngineSounds = {
 	{
-		sound = "^lvs/vehicles/bf109/dist.wav",
-		sound_int = "",
-		Pitch = 80,
-		PitchMin = 0,
-		PitchMax = 255,
-		PitchMul = 40,
-		FadeIn = 0.35,
-		FadeOut = 1,
-		FadeSpeed = 1.5,
-		UseDoppler = true,
-		VolumeMin = 0,
-		VolumeMax = 1,
-		SoundLevel = 110,
-	},
-	{
-		sound = "lvs/vehicles/bf109/engine_compressor.wav",
-		sound_int = "",
-		Pitch = 50,
-		PitchMin = 0,
-		PitchMax = 255,
-		PitchMul = 60,
-		FadeIn = 0.35,
-		FadeOut = 1,
-		FadeSpeed = 5,
-		UseDoppler = true,
-		VolumeMin = 0,
-		VolumeMax = 0.25,
-		SoundLevel = 120,
-	},
-	{
-		sound = "lvs/vehicles/bf109/engine_low.wav",
-		Pitch = 80,
-		PitchMin = 0,
-		PitchMax = 255,
-		PitchMul = 300,
-		FadeIn = 0,
-		FadeOut = 0.15,
-		FadeSpeed = 1.5,
-		UseDoppler = false,
-	},
-	{
-		sound = "lvs/vehicles/bf109/engine_mid.wav",
-		Pitch = 80,
-		PitchMin = 0,
-		PitchMax = 255,
-		PitchMul = 80,
-		FadeIn = 0.15,
-		FadeOut = 0.35,
-		FadeSpeed = 1.5,
-		UseDoppler = true,
-	},
-	{
-		sound = "lvs/vehicles/bf109/engine_high.wav",
-		sound_int = "lvs/vehicles/bf109/engine_high_int.wav",
-		Pitch = 50,
-		PitchMin = 0,
-		PitchMax = 255,
-		PitchMul = 60,
-		FadeIn = 0.35,
-		FadeOut = 1,
-		FadeSpeed = 1,
+		sound = "lvs/vehicles/kuebelwagen/engine_mid.wav",
+		--sound_int = "lvs/vehicles/kuebelwagen/engine_high.wav",
+		Pitch = 100,
+		Volume = 1,
+		SoundLevel = 75,
 		UseDoppler = true,
 	},
 }
