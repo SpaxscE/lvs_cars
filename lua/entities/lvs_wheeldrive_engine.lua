@@ -105,8 +105,8 @@ function ENT:HandleEngineSounds( vehicle )
 		PitchAdd = 0
 		Ratio = 0
 		Wobble = 0
-		Throttle = 0.2
-		FadeSpeed = 1.25
+		Throttle = 0.1
+		FadeSpeed = 2
 	end
 
 	local Pitch = 100 + PitchAdd + (100 - PitchAdd) * Ratio + Wobble
