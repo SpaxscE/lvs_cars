@@ -3,12 +3,34 @@ include("sh_animations.lua")
 
 ENT.GroundEffectsMultiplier = 1.6
 
+function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
+	local Vel = self:GetVelocity()
+	local VelLength = Vel:Length()
+	local VelPercentMaxSpeed = math.min( VelLength / 1000, 1 )
+
+	local direction = (90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90
+
+	local FovValue = math.min( VelPercentMaxSpeed ^ 2 * 100, 15 )
+
+	local newFov =(1 - VelPercentMaxSpeed) * self:GetThrottle() * FovValue - VelPercentMaxSpeed * self:GetBrake() * FovValue
+
+	self._viewpunch_fov = self._viewpunch_fov and self._viewpunch_fov + (newFov - self._viewpunch_fov) * RealFrameTime() * 10 or 0
+
+	if pod == self:GetDriverSeat() then
+		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
+	end
+
+	return self._viewpunch_fov * (90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90
+end
+
 function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 	if pod == self:GetDriverSeat() then
 		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
 	end
 
-	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+	local fovAdd = self:CalcViewPunch( ply, pos, angles, fov, pod )
+
+	return LVS:CalcView( self, ply, pos, angles,  fov + fovAdd, pod )
 end
 
 
