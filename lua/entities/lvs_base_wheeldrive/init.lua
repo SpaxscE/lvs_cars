@@ -40,7 +40,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 
 	if ent == self then
-		local Vel = self:GetVelocity():Length()
+		local Vel = 0
 
 		for _, wheel in pairs( self:GetWheels() ) do
 			if wheel:GetTorqueFactor() <= 0 then continue end
