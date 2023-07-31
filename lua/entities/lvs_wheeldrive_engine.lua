@@ -55,28 +55,68 @@ end
 function ENT:OnEngineActiveChanged( Active )
 	if not Active then self:StopSounds() return end
 
-	--PrintChat("runs")
+	local sound = CreateSound( self, "lvs/vehicles/kuebelwagen/engine_mid.wav" )
+	sound:SetSoundLevel( 75 )
+	sound:PlayEx(0,100)
 
-	if true then return end
+	self._ActiveSounds[ 1 ] = sound
+end
 
-	for id, data in pairs( self.EngineSounds ) do
-		if not isstring( data.sound ) then continue end
 
-		self.EngineSounds[ id ].Pitch = data.Pitch or 80
-		self.EngineSounds[ id ].PitchMin = data.PitchMin or 0
-		self.EngineSounds[ id ].PitchMax = data.PitchMax or 255
-		self.EngineSounds[ id ].PitchMul = data.PitchMul or 100
-		self.EngineSounds[ id ].UseDoppler = data.UseDoppler ~= false
-		self.EngineSounds[ id ].FadeIn = data.FadeIn or 0
-		self.EngineSounds[ id ].FadeOut = data.FadeOut or 1
-		self.EngineSounds[ id ].FadeSpeed = data.FadeSpeed or 1.5
-		self.EngineSounds[ id ].SoundLevel = data.SoundLevel or 85
+function ENT:HandleEngineSounds( vehicle )
+	local ply = LocalPlayer()
 
-		local sound = CreateSound( self, data.sound )
-		sound:SetSoundLevel( data.SoundLevel )
-		sound:PlayEx(0,100)
+	local Throttle = vehicle:GetThrottle()
+	local Doppler = vehicle:CalcDoppler( ply )
 
-		self._ActiveSounds[ id ] = sound
+	local T = CurTime()
+
+	local Vel = vehicle:GetVelocity():Length()
+	local MaxVel = vehicle.MaxVelocity
+
+	local NumGears = 4
+
+	local VelStuff = MaxVel / NumGears
+
+	local CurGear = 1
+
+	while Vel > VelStuff do
+		Vel = Vel - VelStuff
+		CurGear = CurGear + 1
+	end
+
+	local Ratio = Vel / VelStuff
+
+	local PitchAdd = CurGear * 15
+
+	if self._oldGear ~= CurGear then
+		self._oldGear = CurGear
+		self._ShiftTime = T + 0.2
+	end
+
+	local Wobble = 0
+	if CurGear < 3 and Throttle <= 0.5 then
+		Wobble = math.cos( T * (20 + CurGear * 10) * Throttle ) * math.max(1 -Ratio,0) * Throttle * 60
+	end
+
+	local FadeSpeed = 0.15
+
+	if (self._ShiftTime or 0) > T then
+		PitchAdd = 0
+		Ratio = 0
+		Wobble = 0
+		Throttle = 0.2
+		FadeSpeed = 1.25
+	end
+
+	local Pitch = 100 + PitchAdd + (100 - PitchAdd) * Ratio + Wobble
+	local Volume = 0.3 + 0.2 * Ratio + (0.2 * Ratio + 0.3) * Throttle
+
+	for id, sound in pairs( self._ActiveSounds ) do
+		if not sound then continue end
+
+		sound:ChangeVolume( Volume, 0.15 )
+		sound:ChangePitch( Pitch, FadeSpeed )
 	end
 end
 
@@ -95,9 +135,9 @@ function ENT:Think()
 		self:OnEngineActiveChanged( EngineActive )
 	end
 
-	--if EngineActive then
-	--	self:HandleEngineSounds( vehicle )
-	--end
+	if EngineActive then
+		self:HandleEngineSounds( vehicle )
+	end
 end
 
 function ENT:OnRemove()

@@ -77,8 +77,6 @@ function ENT:CalcHandbrake( ply, cmd )
 end
 
 function ENT:CalcBrake( ply, cmd )
-	if not self:GetEngineActive() then self:SetBrake( 0 ) return end
-
 	local BrakeValue = cmd:KeyDown( IN_SPEED ) and 1 or 0.5
 
 	local Brake = cmd:KeyDown( IN_BACK ) and BrakeValue or 0
