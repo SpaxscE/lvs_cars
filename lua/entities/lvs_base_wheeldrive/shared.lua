@@ -25,7 +25,7 @@ ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
 ENT.FastSteerDeactivationDriftAngle = 5
 
-ENT.SteerAssistDeadZoneAngle = 0
+ENT.SteerAssistDeadZoneAngle = 3
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 1
 

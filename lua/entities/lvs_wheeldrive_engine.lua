@@ -55,6 +55,32 @@ end
 function ENT:OnEngineActiveChanged( Active )
 	if not Active then self:StopSounds() return end
 
+	local ply = LocalPlayer()
+	local ViewPos = ply:GetViewEntity():GetPos()
+	local veh = ply:lvsGetVehicle()
+
+	local ActiveCarsInRange = 0
+
+	if IsValid( veh ) then
+		ActiveCarsInRange = 999
+	else
+		for _, ent in pairs( LVS:GetVehicles() ) do
+			if ent.Base ~= "lvs_base_wheeldrive" or not ent:GetEngineActive() then continue end
+
+			if ent:GetAI() then
+				ActiveCarsInRange = ActiveCarsInRange + 1
+
+				continue
+			end
+
+			if (ent:GetPos() - ViewPos):Length() > 1000 then continue end
+
+			ActiveCarsInRange = ActiveCarsInRange + 1
+		end
+	end
+
+	local DrivingMe = veh == self:GetBase() or ActiveCarsInRange <= 1
+
 	for id, data in pairs( self.EngineSounds ) do
 		if not isstring( data.sound ) then continue end
 
@@ -65,7 +91,7 @@ function ENT:OnEngineActiveChanged( Active )
 		self.EngineSounds[ id ].UseDoppler = data.UseDoppler ~= false
 		self.EngineSounds[ id ].SoundLevel = data.SoundLevel or 85
 
-		if data.sound_int and data.sound_int ~= data.sound then
+		if data.sound_int and data.sound_int ~= data.sound and DrivingMe then
 			local sound = CreateSound( self, data.sound )
 			sound:SetSoundLevel( data.SoundLevel )
 			sound:PlayEx(0,100)
@@ -86,11 +112,13 @@ function ENT:OnEngineActiveChanged( Active )
 				}
 			end
 		else
-			local sound = CreateSound( self, data.sound )
-			sound:SetSoundLevel( data.SoundLevel )
-			sound:PlayEx(0,100)
+			if DrivingMe or data.SoundLevel >= 90 then
+				local sound = CreateSound( self, data.sound )
+				sound:SetSoundLevel( data.SoundLevel )
+				sound:PlayEx(0,100)
 
-			self._ActiveSounds[ id ] = sound
+				self._ActiveSounds[ id ] = sound
+			end
 		end
 	end
 end
@@ -145,7 +173,6 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local NumGears = vehicle.TransGears
 
-	local VolumeValue = (DrivingMe and 1 or 0.5) * LVS.EngineVolume
 	local PitchValue = vehicle.MaxVelocity / NumGears
 
 	local DesiredGear = 1
@@ -169,6 +196,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 			if (self._CurGear or 0) < DesiredGear then
 				self._ShiftTime = T + vehicle.TransShiftSpeed
+				vehicle:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
 
 				vehicle:SuppressViewPunch( vehicle.TransShiftSpeed )
 			end
@@ -193,7 +221,7 @@ function ENT:HandleEngineSounds( vehicle )
 		Ratio = 0
 		Wobble = 0
 		Throttle = 0
-		FadeSpeed = 3
+		FadeSpeed = PlayIdleSound and 0.25 or 3
 	end
 
 	for id, sound in pairs( self._ActiveSounds ) do
@@ -204,7 +232,8 @@ function ENT:HandleEngineSounds( vehicle )
 		local Vol03 = data.Volume * 0.3
 		local Vol02 = data.Volume * 0.2
 
-		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue * self._smRPMVolume
+		--local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * LVS.EngineVolume * self._smRPMVolume
+		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * self._smRPMVolume
 
 		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * 0.6)
 
@@ -212,7 +241,8 @@ function ENT:HandleEngineSounds( vehicle )
 		local PitchMul = data.UseDoppler and Doppler or 1
 
 		if data.Type == 0 then
-			Volume = self._smIdleVolume * data.Volume * VolumeValue
+			--Volume = self._smIdleVolume * data.Volume * LVS.EngineVolume
+			Volume = self._smIdleVolume * data.Volume
 			Pitch = data.Pitch + data.PitchMul * Ratio
 		end
 
