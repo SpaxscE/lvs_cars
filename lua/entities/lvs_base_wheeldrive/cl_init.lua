@@ -1,8 +1,6 @@
 include("shared.lua")
 include("sh_animations.lua")
 
-ENT.GroundEffectsMultiplier = 1.6
-
 function ENT:SuppressViewPunch( time )
 	self._viewpunch_supressed_time = CurTime() + (time or 0.2)
 end

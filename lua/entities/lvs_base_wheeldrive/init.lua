@@ -57,7 +57,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		return vector_origin, vector_origin, SIM_NOTHING
 	end
 
-	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then return vector_origin, vector_origin, SIM_NOTHING end
+	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
 
 	local RotationAxis = ent:GetRotationAxis()
 

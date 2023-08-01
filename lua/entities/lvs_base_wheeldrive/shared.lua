@@ -14,7 +14,9 @@ ENT.MaxVelocity = 1200
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
 
-ENT.TransmissionGears = 4
+ENT.TransGears = 4
+ENT.TransMinGearHoldTime = 1
+ENT.TransShiftSpeed = 0.3
 
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
@@ -23,9 +25,9 @@ ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
 ENT.FastSteerDeactivationDriftAngle = 5
 
-ENT.SteerAssistDeadZoneAngle = 3
+ENT.SteerAssistDeadZoneAngle = 0
 ENT.SteerAssistMaxAngle = 15
-ENT.SteerAssistMultiplier = 0.9
+ENT.SteerAssistMultiplier = 1
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
@@ -77,10 +79,21 @@ end
 
 ENT.EngineSounds = {
 	{
+		sound = "lvs/vehicles/kuebelwagen/engine_low.wav",
+		Volume = 0.5,
+		Pitch = 85,
+		PitchMul = 25,
+		Type = 0,
+		SoundLevel = 75,
+		UseDoppler = true,
+	},
+	{
 		sound = "lvs/vehicles/kuebelwagen/engine_mid.wav",
 		--sound_int = "lvs/vehicles/kuebelwagen/engine_high.wav",
-		Pitch = 100,
 		Volume = 1,
+		Pitch = 100,
+		PitchMul = 100,
+		Type = 1,
 		SoundLevel = 75,
 		UseDoppler = true,
 	},
