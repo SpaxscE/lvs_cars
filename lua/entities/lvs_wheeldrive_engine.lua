@@ -180,7 +180,7 @@ function ENT:HandleEngineSounds( vehicle )
 	end
 
 	if Wobble == 0 and vehVel < vehicle.ForceLinearVelocity and CurrentGear < (1 + (NumGears - 1) * Throttle) then
-		Wobble = math.cos( T * (20 + CurrentGear * 10) * Throttle ) * math.max(1 - Ratio,0) * Throttle * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2
+		Wobble = math.cos( T * (20 + CurrentGear * 10) * Throttle * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * Throttle * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2
 	end
 
 	local FadeSpeed = 0.15
