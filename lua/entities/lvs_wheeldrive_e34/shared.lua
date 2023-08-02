@@ -11,12 +11,12 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/BMW_M5E34/e34.mdl"
 
-ENT.MaxVelocity = 1800
+ENT.MaxVelocity = 2200
 
-ENT.EnginePower = 500
+ENT.EnginePower = 750
 ENT.EngineTorque = 200
 
-ENT.TransGears = 6
+ENT.TransGears = 5
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 
@@ -25,7 +25,7 @@ ENT.WheelDownForcePowered = 2000
 
 ENT.EngineSounds = {
 	{
-		sound = "acf_extra/vehiclefx/engines/l6/E49_idle.wav",
+		sound = "lvs/vehicles/bmw_m5e34/engine_low.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -34,8 +34,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "acf_extra/vehiclefx/engines/l6/E49_EXT_onmid.wav",
-		--sound_int = "lvs/vehicles/kuebelwagen/engine_high.wav",
+		sound = "lvs/vehicles/bmw_m5e34/engine_mid.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,

@@ -174,6 +174,16 @@ if SERVER then
 
 		return self._brakeFactor
 	end
+
+	function ENT:PhysicsOnGround( PhysObj )
+		if not PhysObj then
+			PhysObj = self:GetPhysicsObject()
+		end
+
+		local EntLoad,_ = PhysObj:GetStress()
+
+		return EntLoad > 0
+	end
 end
 
 if CLIENT then

@@ -55,32 +55,6 @@ end
 function ENT:OnEngineActiveChanged( Active )
 	if not Active then self:StopSounds() return end
 
-	local ply = LocalPlayer()
-	local ViewPos = ply:GetViewEntity():GetPos()
-	local veh = ply:lvsGetVehicle()
-
-	local ActiveCarsInRange = 0
-
-	if IsValid( veh ) then
-		ActiveCarsInRange = 999
-	else
-		for _, ent in pairs( LVS:GetVehicles() ) do
-			if ent.Base ~= "lvs_base_wheeldrive" or not ent:GetEngineActive() then continue end
-
-			if ent:GetAI() then
-				ActiveCarsInRange = ActiveCarsInRange + 1
-
-				continue
-			end
-
-			if (ent:GetPos() - ViewPos):Length() > 1000 then continue end
-
-			ActiveCarsInRange = ActiveCarsInRange + 1
-		end
-	end
-
-	local DrivingMe = veh == self:GetBase() or ActiveCarsInRange <= 1
-
 	for id, data in pairs( self.EngineSounds ) do
 		if not isstring( data.sound ) then continue end
 
@@ -91,7 +65,7 @@ function ENT:OnEngineActiveChanged( Active )
 		self.EngineSounds[ id ].UseDoppler = data.UseDoppler ~= false
 		self.EngineSounds[ id ].SoundLevel = data.SoundLevel or 85
 
-		if data.sound_int and data.sound_int ~= data.sound and DrivingMe then
+		if data.sound_int and data.sound_int ~= data.sound then
 			local sound = CreateSound( self, data.sound )
 			sound:SetSoundLevel( data.SoundLevel )
 			sound:PlayEx(0,100)
@@ -112,13 +86,11 @@ function ENT:OnEngineActiveChanged( Active )
 				}
 			end
 		else
-			if DrivingMe or data.SoundLevel >= 90 then
-				local sound = CreateSound( self, data.sound )
-				sound:SetSoundLevel( data.SoundLevel )
-				sound:PlayEx(0,100)
+			local sound = CreateSound( self, data.sound )
+			sound:SetSoundLevel( data.SoundLevel )
+			sound:PlayEx(0,100)
 
-				self._ActiveSounds[ id ] = sound
-			end
+			self._ActiveSounds[ id ] = sound
 		end
 	end
 end
@@ -173,6 +145,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local NumGears = vehicle.TransGears
 
+	local VolumeValue = (DrivingMe and 1 or 0.25) * LVS.EngineVolume
 	local PitchValue = vehicle.MaxVelocity / NumGears
 
 	local DesiredGear = 1
@@ -187,7 +160,6 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local CurrentGear = math.Clamp(self._CurGear or 1,1,NumGears)
 
-	--local Ratio = math.max(Vel - (CurrentGear - 1) * PitchValue,0) / PitchValue
 	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + math.min(Throttle,0.5))
 
 	if self._CurGear ~= DesiredGear then
@@ -196,15 +168,15 @@ function ENT:HandleEngineSounds( vehicle )
 
 			if (self._CurGear or 0) < DesiredGear then
 				self._ShiftTime = T + vehicle.TransShiftSpeed
-				vehicle:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
-
-				vehicle:SuppressViewPunch( vehicle.TransShiftSpeed )
 			end
+
+			vehicle:OnChangeGear( (self._CurGear or 0), DesiredGear )
+
 			self._CurGear = DesiredGear
 		end
 	end
 
-	if Wobble == 0 and CurrentGear < (1 + (NumGears - 1) * Throttle) then
+	if Wobble == 0 and vehVel < vehicle.ForceLinearVelocity and CurrentGear < (1 + (NumGears - 1) * Throttle) then
 		Wobble = math.cos( T * (20 + CurrentGear * 10) * Throttle ) * math.max(1 - Ratio,0) * Throttle * 60 * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2
 	end
 
@@ -232,8 +204,7 @@ function ENT:HandleEngineSounds( vehicle )
 		local Vol03 = data.Volume * 0.3
 		local Vol02 = data.Volume * 0.2
 
-		--local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * LVS.EngineVolume * self._smRPMVolume
-		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * self._smRPMVolume
+		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue * self._smRPMVolume
 
 		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * 0.6)
 
@@ -241,8 +212,7 @@ function ENT:HandleEngineSounds( vehicle )
 		local PitchMul = data.UseDoppler and Doppler or 1
 
 		if data.Type == 0 then
-			--Volume = self._smIdleVolume * data.Volume * LVS.EngineVolume
-			Volume = self._smIdleVolume * data.Volume
+			Volume = self._smIdleVolume * data.Volume * VolumeValue
 			Pitch = data.Pitch + data.PitchMul * Ratio
 		end
 

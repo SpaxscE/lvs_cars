@@ -1,5 +1,6 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_flyby.lua" )
 AddCSLuaFile( "sh_animations.lua" )
 include("shared.lua")
 include("sh_animations.lua")
@@ -40,7 +41,9 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 
 	if ent == self then
-		local Vel = 0
+		local Vel = self:GetVelocity():Length()
+
+		self:SetWheelPhysics( Vel < self.ForceLinearVelocity or ent:GetBrake() ~= 0 or ent:IsHandbrakeActive() )
 
 		for _, wheel in pairs( self:GetWheels() ) do
 			if wheel:GetTorqueFactor() <= 0 then continue end
@@ -57,6 +60,54 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		return vector_origin, vector_origin, SIM_NOTHING
 	end
 
+	if self:GetWheelPhysics() then
+		return self:SimulateRotatingWheel( ent, phys, deltatime )
+	else
+		return self:SimulateSlidingWheel( ent, phys, deltatime )
+	end
+end
+
+function ENT:SimulateSlidingWheel( ent, phys, deltatime )
+	self:AlignWheel( ent )
+
+	local Vel = phys:GetVelocity()
+
+	local Forward = ent:GetDirectionAngle():Forward()
+	local Right = ent:GetDirectionAngle():Right()
+
+	local Fx = self:VectorSplitNormal( Forward, Vel )
+	local Fy = self:VectorSplitNormal( Right, Vel )
+
+	local OnGround = ent:PhysicsOnGround( phys ) and 1 or 0
+
+	local TorqueFactor = ent:GetTorqueFactor()
+
+	local MaxGrip = 1500 + self.WheelDownForce + self.WheelDownForcePowered * TorqueFactor
+
+	local ForceLinear = -Right * math.Clamp(Fy * 100,-MaxGrip,MaxGrip) * OnGround
+
+	if TorqueFactor > 0 then
+		local curRPM = ent:VelToRPM( Fx )
+		local targetRPM = ent:VelToRPM( self.MaxVelocity )
+
+		local powerRPM = math.min( self.EnginePower, targetRPM )
+
+		local powerCurve = (powerRPM + math.max(targetRPM - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPM * self:Sign( targetRPM - curRPM )
+
+		local Torque = powerCurve * math.deg(self.EngineTorque / ent:GetRadius()) * self.ForceLinearMultiplier  * TorqueFactor * self:GetThrottle()
+
+		ForceLinear = ForceLinear + Forward * Torque
+	end
+
+	local RotationAxis = ent:GetRotationAxis()
+	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
+	local targetRPM = ent:VelToRPM( Fx )
+	local ForceAngle =  RotationAxis * math.deg(targetRPM - curRPM) * self.ForceAngleMultiplier
+
+	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
+end
+
+function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
 
 	local RotationAxis = ent:GetRotationAxis()
