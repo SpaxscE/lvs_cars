@@ -10,6 +10,7 @@ ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
 ENT.MaxVelocity = 1200
+ENT.MaxVelocityReverse = 500
 
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
@@ -19,8 +20,10 @@ ENT.ForceLinearMultiplier = 1.25
 ENT.ForceAngleMultiplier = 1
 
 ENT.TransGears = 4
+ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
+ENT.TransWobble = 60
 
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10
@@ -57,6 +60,8 @@ function ENT:SetupDataTables()
 	self:AddDT( "Float", "NWMaxSteer" )
 
 	self:AddDT( "Float", "WheelVelocity" )
+
+	self:AddDT( "Bool", "Reverse" )
 end
 
 function ENT:GetMaxSteerAngle()
@@ -79,4 +84,12 @@ function ENT:GetMaxSteerAngle()
 	self:SetNWMaxSteer( Cur )
 
 	return Cur
+end
+
+function ENT:GetTargetVelocity()
+	if self:GetReverse() then
+		return -self.MaxVelocityReverse
+	end
+
+	return self.MaxVelocity
 end

@@ -88,7 +88,7 @@ function ENT:SimulateSlidingWheel( ent, phys, deltatime )
 
 	if TorqueFactor > 0 then
 		local curRPM = ent:VelToRPM( Fx )
-		local targetRPM = ent:VelToRPM( self.MaxVelocity )
+		local targetRPM = ent:VelToRPM( self:GetTargetVelocity() )
 
 		local powerRPM = math.min( self.EnginePower, targetRPM )
 
@@ -142,7 +142,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		end
 
 		if TorqueFactor > 0 then
-			local targetRPM = ent:VelToRPM( self.MaxVelocity )
+			local targetRPM = ent:VelToRPM( self:GetTargetVelocity() )
 
 			local powerRPM = math.min( self.EnginePower, targetRPM )
 

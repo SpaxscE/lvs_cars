@@ -1,7 +1,7 @@
 
 function ENT:CalcSteer( ply, cmd )
-	local KeyLeft = cmd:KeyDown( IN_MOVELEFT )
-	local KeyRight = cmd:KeyDown( IN_MOVERIGHT )
+	local KeyLeft = ply:lvsKeyDown( "CAR_STEER_LEFT" )
+	local KeyRight = ply:lvsKeyDown( "CAR_STEER_RIGHT" )
 
 	local MaxSteer = self:GetMaxSteerAngle()
 
@@ -57,9 +57,9 @@ end
 function ENT:CalcThrottle( ply, cmd )
 	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
 
-	local ThrottleValue = cmd:KeyDown( IN_SPEED ) and 1 or 0.5
+	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
 
-	local Throttle = cmd:KeyDown( IN_FORWARD ) and ThrottleValue or 0
+	local Throttle = ply:lvsKeyDown( "CAR_THROTTLE" ) and ThrottleValue or 0
 
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetThrottle()
@@ -69,7 +69,7 @@ function ENT:CalcThrottle( ply, cmd )
 end
 
 function ENT:CalcHandbrake( ply, cmd )
-	if cmd:KeyDown( IN_JUMP ) then
+	if ply:lvsKeyDown( "CAR_HANDBRAKE" ) then
 		self:EnableHandbrake()
 	else
 		self:ReleaseHandbrake()
@@ -77,9 +77,7 @@ function ENT:CalcHandbrake( ply, cmd )
 end
 
 function ENT:CalcBrake( ply, cmd )
-	local BrakeValue = cmd:KeyDown( IN_SPEED ) and 1 or 0.5
-
-	local Brake = cmd:KeyDown( IN_BACK ) and BrakeValue or 0
+	local Brake = ply:lvsKeyDown( "CAR_BRAKE" ) and 1 or 0
 
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetBrake()
@@ -95,4 +93,14 @@ function ENT:StartCommand( ply, cmd )
 	self:CalcThrottle( ply, cmd )
 	self:CalcHandbrake( ply, cmd )
 	self:CalcBrake( ply, cmd )
+
+	local walk = ply:lvsKeyDown( "CAR_REVERSE" )
+
+	if walk ~= self._oldwalk then
+		self._oldwalk = walk
+
+		if walk then
+			self:SetReverse( not self:GetReverse() )
+		end
+	end
 end
