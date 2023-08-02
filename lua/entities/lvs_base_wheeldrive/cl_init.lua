@@ -76,6 +76,10 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 
 	if not self:GetEngineActive() then
 		draw.SimpleText( "X" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	else
+		if self:GetReverse() then
+			draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		end
 	end
 
 	self:LVSDrawCircle( hX, hY, H * 0.35, math.min( Throttle, 1 ) )
