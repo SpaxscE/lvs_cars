@@ -104,6 +104,8 @@ function ENT:SimulateSlidingWheel( ent, phys, deltatime )
 	local targetRPM = ent:VelToRPM( Fx )
 	local ForceAngle =  RotationAxis * math.deg(targetRPM - curRPM) * self.ForceAngleMultiplier
 
+	ent:SetRPM( curRPM )
+
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end
 
