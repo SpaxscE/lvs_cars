@@ -61,7 +61,7 @@ function ENT:OnEngineActiveChanged( Active )
 		self.EngineSounds[ id ].Pitch = data.Pitch or 100
 		self.EngineSounds[ id ].PitchMul = data.PitchMul or 100
 		self.EngineSounds[ id ].Volume = data.Volume or 1
-		self.EngineSounds[ id ].Type = data.Type or 1
+		self.EngineSounds[ id ].SoundType = data.SoundType or LVS.SOUNDTYPE_NONE
 		self.EngineSounds[ id ].UseDoppler = data.UseDoppler ~= false
 		self.EngineSounds[ id ].SoundLevel = data.SoundLevel or 85
 
@@ -214,9 +214,19 @@ function ENT:HandleEngineSounds( vehicle )
 		local Pitch = data.Pitch + PitchAdd + (data.PitchMul - PitchAdd) * Ratio + Wobble
 		local PitchMul = data.UseDoppler and Doppler or 1
 
-		if data.Type == 0 then
-			Volume = self._smIdleVolume * data.Volume * VolumeValue
-			Pitch = data.Pitch + data.PitchMul * Ratio
+		if data.SoundType ~= LVS.SOUNDTYPE_NONE then
+			if data.SoundType == LVS.SOUNDTYPE_IDLE_ONLY then
+				Volume = self._smIdleVolume * data.Volume * VolumeValue
+				Pitch = data.Pitch + data.PitchMul * Ratio
+			end
+
+			if data.SoundType == LVS.SOUNDTYPE_REV_UP then
+				Volume = Throttle == 0 and 0 or Volume
+			end
+
+			if data.SoundType == LVS.SOUNDTYPE_REV_DOWN then
+				Volume =  Throttle == 0 and Volume or 0
+			end
 		end
 
 		if istable( sound ) then

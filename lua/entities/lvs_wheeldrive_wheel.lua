@@ -1,6 +1,8 @@
 
 AddCSLuaFile()
 
+ENT.PrintName = "Wheel"
+
 ENT.Type            = "anim"
 ENT.DoNotDuplicate = true
 

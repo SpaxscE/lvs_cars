@@ -17,6 +17,7 @@ ENT.EnginePower = 750
 ENT.EngineTorque = 200
 
 ENT.TransGears = 5
+ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 
@@ -25,21 +26,29 @@ ENT.WheelDownForcePowered = 2000
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/bmw_m5e34/engine_low.wav",
+		sound = "lvs/vehicles/bmw_m5e34/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
-		Type = 0,
 		SoundLevel = 75,
-		UseDoppler = true,
+		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/bmw_m5e34/engine_mid.wav",
+		sound = "lvs/vehicles/bmw_m5e34/eng_loop.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,
-		Type = 1,
 		SoundLevel = 75,
+		SoundType = LVS.SOUNDTYPE_REV_UP,
+		UseDoppler = true,
+	},
+	{
+		sound = "lvs/vehicles/bmw_m5e34/eng_revdown_loop.wav",
+		Volume = 1,
+		Pitch = 80,
+		PitchMul = 110,
+		SoundLevel = 75,
+		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
 	},
 }

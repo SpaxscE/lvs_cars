@@ -17,6 +17,7 @@ ENT.EnginePower = 25
 ENT.EngineTorque = 350
 
 ENT.TransGears = 4
+ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 
@@ -25,20 +26,18 @@ ENT.WheelDownForcePowered = 1000
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/kuebelwagen/engine_low.wav",
+		sound = "lvs/vehicles/kuebelwagen/eng_idle_loop.wav",
 		Volume = 0.5,
 		Pitch = 85,
 		PitchMul = 25,
-		Type = 0,
 		SoundLevel = 75,
-		UseDoppler = true,
+		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/kuebelwagen/engine_mid.wav",
+		sound = "lvs/vehicles/kuebelwagen/eng_loop.wav",
 		Volume = 1,
 		Pitch = 100,
 		PitchMul = 100,
-		Type = 1,
 		SoundLevel = 75,
 		UseDoppler = true,
 	},
