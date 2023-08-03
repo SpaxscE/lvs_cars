@@ -49,9 +49,10 @@ function ENT:CalcSteer( ply, cmd )
 
 	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or self.SteerSpeed)
 
-	local New = (Cur + math.Clamp(Diff,-Rate,Rate)) * MaxSteer
+	local New = (Cur + math.Clamp(Diff,-Rate,Rate))
 
-	self:SetSteer( New )
+	self:SetSteer( New * MaxSteer )
+	self:SetPoseParameter( "vehicle_steer", New  )
 end
 
 function ENT:CalcThrottle( ply, cmd )
