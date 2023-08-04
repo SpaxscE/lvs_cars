@@ -324,27 +324,3 @@ function ENT:WheelsOnGround()
 
 	return true
 end
-
-function ENT:SetWheelPhysics( enable )
-	if self._PhysicsEnabled == enable then return end
-
-	self._PhysicsEnabled = enable
-
-	if enable == true then
-		for _, ent in pairs( self:GetWheels() ) do
-			if not IsValid( ent ) then continue end
-
-			ent:GetPhysicsObject():SetMaterial("default_silent")
-		end
-	else
-		for _, ent in pairs( self:GetWheels() ) do
-			if not IsValid( ent ) then continue end
-
-			ent:GetPhysicsObject():SetMaterial("friction_00")
-		end
-	end
-end
-
-function ENT:GetWheelPhysics()
-	return self._PhysicsEnabled == true
-end

@@ -15,8 +15,6 @@ ENT.MaxVelocityReverse = 500
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
 
-ENT.ForceLinearVelocity = 1000
-ENT.ForceLinearMultiplier = 1.25
 ENT.ForceAngleMultiplier = 1
 
 ENT.TransGears = 4
@@ -43,7 +41,7 @@ ENT.PhysicsInertia = Vector(1500,1500,750)
 
 ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100
-ENT.WheelPhysicsInertia = Vector(10,10,10)
+ENT.WheelPhysicsInertia = Vector(10,8,10)
 
 ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400
