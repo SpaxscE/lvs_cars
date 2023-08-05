@@ -11,9 +11,9 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/DiggerCars/MB_W123/v2.mdl"
 
-ENT.MaxVelocity = 2200
+ENT.MaxVelocity = 2000
 
-ENT.EnginePower = 5
+ENT.EnginePower = 20
 ENT.EngineTorque = 300
 
 ENT.TransGears = 5
