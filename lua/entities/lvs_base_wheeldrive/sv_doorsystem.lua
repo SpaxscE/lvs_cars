@@ -32,7 +32,7 @@ end
 function ENT:AddDoorHandler( pos, poseparameter )
 	if not isvector( pos ) or not isstring( poseparameter ) then return end
 
-	local Handler = ents.Create( "lvs_wheeldrive_interaction_handler" )
+	local Handler = ents.Create( "lvs_wheeldriver_doorhandler" )
 
 	if not IsValid( Handler ) then
 		return
