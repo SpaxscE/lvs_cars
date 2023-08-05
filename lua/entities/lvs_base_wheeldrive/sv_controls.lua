@@ -33,9 +33,12 @@ function ENT:CalcSteer( ply, cmd )
 		if not KeyLeft and not KeyRight then
 			local Cur = self:GetSteer() / MaxSteer
 
-			local HelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
+			local MaxHelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
 
-			TargetValue = math.Clamp( -(self:AngleBetweenNormal( Right, VelNormal ) - 90) * self.SteerAssistMultiplier,-HelpAng,HelpAng) / MaxSteer
+			local Ang = self:AngleBetweenNormal( Right, VelNormal ) - 90
+			local HelpAng = ((math.abs( Ang ) / 90) ^ 3) * 90 * self:Sign( Ang )
+
+			TargetValue = math.Clamp( -HelpAng * self.SteerAssistMultiplier,-MaxHelpAng,MaxHelpAng) / MaxSteer
 		end
 	end
 

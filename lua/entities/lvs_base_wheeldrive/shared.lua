@@ -15,7 +15,8 @@ ENT.MaxVelocityReverse = 500
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
 
-ENT.ForceAngleMultiplier = 0.5
+ENT.ForceLinearMultiplier = 1
+ENT.ForceAngleMultiplier = 1
 
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
@@ -33,7 +34,7 @@ ENT.FastSteerDeactivationDriftAngle = 5
 
 ENT.SteerAssistDeadZoneAngle = 1
 ENT.SteerAssistMaxAngle = 15
-ENT.SteerAssistMultiplier = 0.75
+ENT.SteerAssistMultiplier = 1.5
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
@@ -46,7 +47,7 @@ ENT.WheelPhysicsInertia = Vector(10,8,10)
 ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400
 
-ENT.WheelDownForce = 500
+ENT.WheelDownForce = 250
 ENT.WheelDownForcePowered = 500
 
 function ENT:SetupDataTables()
