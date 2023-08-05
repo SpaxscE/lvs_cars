@@ -163,7 +163,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local CurrentGear = math.Clamp(self._CurGear or 1,1,NumGears)
 
-	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + math.min(Throttle,0.5))
+	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + (Throttle ^ 2) * 0.5)
 
 	if self._CurGear ~= DesiredGear then
 		if (self._NextShift or 0) < T then
@@ -179,8 +179,8 @@ function ENT:HandleEngineSounds( vehicle )
 		end
 	end
 
-	if Wobble == 0 and CurrentGear < (1 + (NumGears - 1) * Throttle) then
-		Wobble = math.cos( T * (20 + CurrentGear * 10) * Throttle * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * Throttle * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2
+	if Wobble == 0 and Throttle >= 0.75 and CurrentGear < math.floor( NumGears * 0.75 ) then
+		Wobble = (math.cos( T * (20 + CurrentGear * 10) * Throttle * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * Throttle * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2)
 	end
 
 	local FadeSpeed = 0.15
