@@ -34,8 +34,8 @@ ENT.FastSteerDeactivationDriftAngle = 7
 
 ENT.SteerAssistDeadZoneAngle = 1
 ENT.SteerAssistMaxAngle = 15
-ENT.SteerAssistExponent = 2
-ENT.SteerAssistMultiplier = 5
+ENT.SteerAssistExponent = 1.5
+ENT.SteerAssistMultiplier = 3
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
