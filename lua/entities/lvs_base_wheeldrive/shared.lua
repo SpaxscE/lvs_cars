@@ -37,7 +37,7 @@ ENT.SteerAssistMultiplier = 0.75
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
-ENT.PhysicsInertia = Vector(1500,1500,40)
+ENT.PhysicsInertia = Vector(1500,1500,500)
 
 ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100
