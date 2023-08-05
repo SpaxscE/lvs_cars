@@ -11,18 +11,15 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/DiggerCars/nissan_mk10/turbo.mdl"
 
-ENT.MaxVelocity = 2200
+ENT.MaxVelocity = 1800
 
 ENT.EnginePower = 600
-ENT.EngineTorque = 235
+ENT.EngineTorque = 100
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
-
-ENT.WheelDownForce = 500
-ENT.WheelDownForcePowered = 2000
 
 ENT.EngineSounds = {
 	{

@@ -131,7 +131,19 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	if not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
 
-	local ForceLinear = -self:GetUp() * (self.WheelDownForce + self.WheelDownForcePowered * TorqueFactor)
+	local Vel = phys:GetVelocity()
+
+	local ForwardAngle = ent:GetDirectionAngle()
+
+	local Forward = ForwardAngle:Forward()
+	local Right = ForwardAngle:Right()
+
+	local Fy = self:VectorSplitNormal( Right, Vel )
+	local Fx = self:VectorSplitNormal( Forward, Vel )
+
+	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor
+
+	ForceLinear = ForceLinear - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / self.WheelPhysicsDampingSpeed, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

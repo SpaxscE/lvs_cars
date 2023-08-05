@@ -26,7 +26,7 @@ ENT.TransWobble = 40
 ENT.TransWobbleFrequencyMultiplier = 1
 
 ENT.SteerSpeed = 3
-ENT.SteerReturnSpeed = 8
+ENT.SteerReturnSpeed = 10
 
 ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
@@ -39,18 +39,19 @@ ENT.SteerAssistMultiplier = 5
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
-ENT.PhysicsInertia = Vector(1500,1500,500)
-ENT.PhysicsDampingSpeed = 1000
+ENT.PhysicsInertia = Vector(800,800,800)
+ENT.PhysicsDampingSpeed = 4000
 
 ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100
-ENT.WheelPhysicsInertia = Vector(10,8,10)
+ENT.WheelPhysicsInertia = Vector(10,8,10) * 2.5
+ENT.WheelPhysicsDampingSpeed = 500
 
 ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400
 
-ENT.WheelDownForce = 250
-ENT.WheelDownForcePowered = 500
+ENT.WheelSideForce = 800
+ENT.WheelDownForce = 500
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
