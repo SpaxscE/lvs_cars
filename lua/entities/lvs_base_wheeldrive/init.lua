@@ -14,6 +14,19 @@ ENT.DriverInActiveSound = "common/null.wav"
 
 DEFINE_BASECLASS( "lvs_base" )
 
+local function SetMinimumAngularVelocityTo( new )
+	local tbl = physenv.GetPerformanceSettings()
+
+	if tbl.MaxAngularVelocity < new then
+		local OldAngVel = tbl.MaxAngularVelocity
+
+		tbl.MaxAngularVelocity = new
+		physenv.SetPerformanceSettings( tbl )
+
+		print("[LVS-Cars] Wheels require higher MaxAngularVelocity to perform correctly! Increasing! "..OldAngVel.." =>"..new)
+	end
+end
+
 function ENT:PostInitialize( PObj )
 
 	PObj:SetMass( self.PhysicsMass )
@@ -21,6 +34,8 @@ function ENT:PostInitialize( PObj )
 	PObj:SetInertia( self.PhysicsInertia )
 
 	BaseClass.PostInitialize( self, PObj )
+
+	SetMinimumAngularVelocityTo( 10000 )
 end
 
 function ENT:AlignView( ply )
