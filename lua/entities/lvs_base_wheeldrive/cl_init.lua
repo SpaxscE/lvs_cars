@@ -2,6 +2,14 @@ include("shared.lua")
 include("sh_animations.lua")
 include("cl_flyby.lua")
 
+function ENT:PreDraw()
+	return false
+end
+
+function ENT:PreDrawTranslucent()
+	return true
+end
+
 function ENT:OnChangeGear( oldGear, newGear )
 	self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
 
