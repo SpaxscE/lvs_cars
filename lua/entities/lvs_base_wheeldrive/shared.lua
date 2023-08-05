@@ -26,7 +26,7 @@ ENT.TransWobble = 40
 ENT.TransWobbleFrequencyMultiplier = 1
 
 ENT.SteerSpeed = 3
-ENT.SteerReturnSpeed = 6
+ENT.SteerReturnSpeed = 8
 
 ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
