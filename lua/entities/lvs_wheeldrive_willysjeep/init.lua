@@ -75,8 +75,8 @@ end
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_start.wav" )
+		self:EmitSound( "lvs/vehicles/willy/engine_start.wav" )
 	else
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_stop.wav" )
+		self:EmitSound( "lvs/vehicles/willy/engine_stop.wav" )
 	end
 end
