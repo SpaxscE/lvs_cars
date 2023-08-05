@@ -1,13 +1,8 @@
 "VertexlitGeneric"
 {
-
-	"$basetexturetransform" "center .5 .5 scale 50 50 rotate 0 translate 0 0"
-	"$basetexture" "models/DiggerCars/VAZ 2108 Sport/skin"
-	"$bumpmap" "models/DiggerCars/VAZ 2108 Sport/skin_normal"
-        "$detail"  "models/DiggerCars/VAZ 2108 Sport/skin"
-        "$detailblendfactor" "1"
-        "$detailtint" "{255 255 255}"
-        "$detailscale" 1
+	"$basetexturetransform" "center .5 .5 scale 40 40 rotate 0 translate 0 0"
+	"$basetexture" "models/DiggerCars/shared/skin"
+	"$bumpmap" "models/DiggerCars/shared/skin_normal"
 	"$nodecal" "1"
 	"$phong" 1
 	"$phongexponent" 5
@@ -34,4 +29,3 @@
 		}
 	}
 }
-
