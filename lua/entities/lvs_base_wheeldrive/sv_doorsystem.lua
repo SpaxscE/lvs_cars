@@ -17,7 +17,9 @@ function ENT:Use( ply )
 			if Door:IsOpen() then
 				Door:Close()
 
-				self:SetPassenger( ply )
+				if not ply:KeyDown( IN_SPEED ) then
+					self:SetPassenger( ply )
+				end
 			else
 				Door:Open()
 			end
