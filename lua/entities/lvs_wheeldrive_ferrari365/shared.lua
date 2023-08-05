@@ -21,13 +21,12 @@ ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 
-
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/ferrari_365/eng_idle_loop.wav",
 		Volume = 1,
-		Pitch = 85,
-		PitchMul = 25,
+		Pitch = 70,
+		PitchMul = 30,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
