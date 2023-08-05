@@ -30,15 +30,17 @@ ENT.SteerReturnSpeed = 8
 
 ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
-ENT.FastSteerDeactivationDriftAngle = 5
+ENT.FastSteerDeactivationDriftAngle = 7
 
 ENT.SteerAssistDeadZoneAngle = 1
 ENT.SteerAssistMaxAngle = 15
-ENT.SteerAssistMultiplier = 1.5
+ENT.SteerAssistExponent = 2
+ENT.SteerAssistMultiplier = 5
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
 ENT.PhysicsInertia = Vector(1500,1500,500)
+ENT.PhysicsDampingSpeed = 1000
 
 ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100

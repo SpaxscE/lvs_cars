@@ -70,9 +70,11 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		self:SetWheelVelocity( Vel )
 
-		if not self:WheelsOnGround() or math.abs( self:GetSteer() ) > self.SteerAssistDeadZoneAngle then return vector_origin, vector_origin, SIM_NOTHING end
+		if not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
 
-		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * 0.5 * self.ForceAngleMultiplier )
+		local F = math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 )
+
+		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * F * 0.5 * self.ForceAngleMultiplier )
 
 		return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
 	end
@@ -129,12 +131,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	if not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
 
-	local Right = ent:GetDirectionAngle():Right()
-	local Fy = self:VectorSplitNormal( Right, phys:GetVelocity() )
-
 	local ForceLinear = -self:GetUp() * (self.WheelDownForce + self.WheelDownForcePowered * TorqueFactor)
-
-	ForceLinear = ForceLinear - Right * Fy * 0.5 * self.ForceLinearMultiplier * (1 - math.abs( self:GetSteer() /  self:GetMaxSteerAngle())) ^ 2
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

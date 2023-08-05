@@ -36,7 +36,7 @@ function ENT:CalcSteer( ply, cmd )
 			local MaxHelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
 
 			local Ang = self:AngleBetweenNormal( Right, VelNormal ) - 90
-			local HelpAng = ((math.abs( Ang ) / 90) ^ 3) * 90 * self:Sign( Ang )
+			local HelpAng = ((math.abs( Ang ) / 90) ^ self.SteerAssistExponent) * 90 * self:Sign( Ang )
 
 			TargetValue = math.Clamp( -HelpAng * self.SteerAssistMultiplier,-MaxHelpAng,MaxHelpAng) / MaxSteer
 		end
