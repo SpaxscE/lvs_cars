@@ -8,7 +8,7 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	local WheelModel = "models/DiggerCars/nissan_mk10/wheel.mdl"
+	local WheelModel = "models/diggercars/nissan_mk10/wheel_steel.mdl"
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
