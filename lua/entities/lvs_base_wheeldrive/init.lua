@@ -27,7 +27,23 @@ local function SetMinimumAngularVelocityTo( new )
 	end
 end
 
+local function IsServerOK()
+
+	if GetConVar( "gmod_physiterations" ):GetInt() < 4 then
+		RunConsoleCommand("gmod_physiterations", "4")
+
+		return false
+	end
+
+	return true
+end
+
 function ENT:PostInitialize( PObj )
+
+	if not IsServerOK() then
+		self:Remove()
+		print("[LVS] ERROR COULDN'T INITIALIZE VEHICLE!")
+	end
 
 	PObj:SetMass( self.PhysicsMass )
 	PObj:EnableDrag( self.PhysicsDrag )
