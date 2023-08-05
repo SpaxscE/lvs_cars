@@ -37,7 +37,7 @@ ENT.SteerAssistMultiplier = 0.75
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
-ENT.PhysicsInertia = Vector(1500,1500,750)
+ENT.PhysicsInertia = Vector(1500,1500,40)
 
 ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100
@@ -46,8 +46,8 @@ ENT.WheelPhysicsInertia = Vector(10,8,10)
 ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400
 
-ENT.WheelDownForce = 1000
-ENT.WheelDownForcePowered = 1000
+ENT.WheelDownForce = 500
+ENT.WheelDownForcePowered = 500
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()

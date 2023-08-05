@@ -20,6 +20,3 @@ ENT.TransGears = 4
 ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
-
-ENT.WheelDownForce = 1000
-ENT.WheelDownForcePowered = 1000

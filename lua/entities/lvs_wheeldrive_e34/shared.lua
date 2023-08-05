@@ -21,9 +21,6 @@ ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 
-ENT.WheelDownForce = 500
-ENT.WheelDownForcePowered = 2000
-
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/bmw_m5e34/eng_idle_loop.wav",
