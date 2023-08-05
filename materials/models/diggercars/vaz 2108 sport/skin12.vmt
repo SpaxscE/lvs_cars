@@ -1,10 +1,7 @@
-"VertexlitGeneric"
+"VertexLitGeneric"
 {
-	"$basetexture" "models/DiggerCars/VAZ 2108 Sport/skin"
-        "$detail"  "models/DiggerCars/VAZ 2108 Sport/skin12"
-        "$detailblendmode" "2"
-        "$detailscale" "1"
-        "$detailtint" "{255 255 255}"
+	"$basetexture" "models/DiggerCars/VAZ 2108 Sport/skin12"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
         "$blendtintbybasealpha" 1
 
 	"$normalmapalphaenvmapmask" 1
@@ -21,18 +18,11 @@
 
 	"$colorfix" "{255 255 255}"
 	"Proxies"
-	Proxies
 	{
-		Equals
+		"Equals"
 		{
-			srcVar1	$color
-			resultVar	$phongtint
-		}
-		Add
-		{
-			srcVar1 $phongfix
-			srcVar2 $phongtint
-			resultVar $phongtint
+			srcVar1 $colorfix
+			resultVar	$color
 		}
 	}
 }
