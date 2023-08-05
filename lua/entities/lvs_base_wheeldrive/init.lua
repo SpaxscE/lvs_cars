@@ -141,9 +141,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	local Fy = self:VectorSplitNormal( Right, Vel )
 	local Fx = self:VectorSplitNormal( Forward, Vel )
 
-	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor
-
-	ForceLinear = ForceLinear - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / self.WheelPhysicsDampingSpeed, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
+	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / self.WheelPhysicsDampingSpeed, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

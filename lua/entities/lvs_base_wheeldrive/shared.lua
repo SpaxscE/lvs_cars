@@ -39,7 +39,7 @@ ENT.SteerAssistMultiplier = 5
 
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
-ENT.PhysicsInertia = Vector(800,800,800)
+ENT.PhysicsInertia = Vector(1500,1500,750)
 ENT.PhysicsDampingSpeed = 4000
 
 ENT.WheelPhysicsDrag = false
