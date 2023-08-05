@@ -128,7 +128,7 @@ if SERVER then
 			radius = math.max( radius.x, radius.y, radius.z )
 		end
 
-		self:PhysicsInitSphere( radius, "default_silent" )
+		self:PhysicsInitSphere( radius, "jeeptire" )
 
 		self:SetRadius( radius )
 	end
