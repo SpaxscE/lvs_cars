@@ -1,9 +1,7 @@
 "VertexLitGeneric"
 {
 	"$basetexture" "models/diggercars/Nissan_mk10/lights"
-	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$alphatest" "1"
-	"$allowalphatocoverage" "1"
+	"$bumpmap" "models/diggercars/Nissan_mk10/lights_nm"
 	"$halflambert" 1
 
 	"$phong" "1" 
@@ -24,6 +22,7 @@
 		}
 	}
 }
+
 
 
 
