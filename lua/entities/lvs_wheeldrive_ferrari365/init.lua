@@ -8,8 +8,8 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	self:AddDoorHandler( Vector(-13,55,27), 25, Angle(-60,0,0), Angle(0,0,0) )
-	self:AddDoorHandler( Vector(-13,-55,27), 26, Angle(60,0,0), Angle(0,0,0) )
+	self:AddDoorHandler( Vector(-13,55,27), "left_door" )
+	self:AddDoorHandler( Vector(-13,-55,27), "right_door" )
 
 	local WheelModel = "models/diggercars/ferrari_365/f365_wheel.mdl"
 

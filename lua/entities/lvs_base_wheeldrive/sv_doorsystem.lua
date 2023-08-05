@@ -2,24 +2,35 @@ DEFINE_BASECLASS( "lvs_base" )
 
 function ENT:Use( ply )
 	if istable( self._DoorHandlers ) then 
+		if not IsValid( ply ) then return end
+
+		if self:GetlvsLockedStatus() or (LVS.TeamPassenger:GetBool() and ((self:GetAITEAM() ~= ply:lvsGetAITeam()) and ply:lvsGetAITeam() ~= 0 and self:GetAITEAM() ~= 0)) then 
+
+			self:EmitSound( "doors/default_locked.wav" )
+
+			return
+		end
+
 		local HasDoor, Door = self:GetDoorHandler( ply:GetPos() )
 
 		if HasDoor then
 			if Door:IsOpen() then
 				Door:Close()
+
+				self:SetPassenger( ply )
 			else
 				Door:Open()
-
-				return
 			end
 		end
+
+		return
 	end
 
 	BaseClass.Use( self, ply )
 end
 
-function ENT:AddDoorHandler( pos, boneID, AngleOpen, AngleClosed )
-	if not isvector( pos ) or not isnumber( boneID ) or not isangle( AngleOpen ) or not isangle( AngleClosed ) then return end
+function ENT:AddDoorHandler( pos, poseparameter )
+	if not isvector( pos ) or not isstring( poseparameter ) then return end
 
 	local Handler = ents.Create( "lvs_wheeldrive_interaction_handler" )
 
@@ -33,9 +44,7 @@ function ENT:AddDoorHandler( pos, boneID, AngleOpen, AngleClosed )
 	Handler:Activate()
 	Handler:SetParent( self )
 	Handler:SetBase( self )
-	Handler:SetBoneID( boneID )
-	Handler:SetAngleOpen( AngleOpen )
-	Handler:SetAngleClosed( AngleClosed )
+	Handler:SetPoseName( poseparameter )
 
 	self:DeleteOnRemove( Handler )
 

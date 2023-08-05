@@ -8,14 +8,7 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Bool",0, "Active" )
 
-	self:NetworkVar( "Int",0, "BoneID" )
-
-	self:NetworkVar( "Angle", 0, "AngleOpen" )
-	self:NetworkVar( "Angle", 1, "AngleClosed" )
-
-	if SERVER then
-		self:SetBoneID( -1 )
-	end
+	self:NetworkVar( "String",0, "PoseName" )
 end
 
 if SERVER then
@@ -60,18 +53,14 @@ function ENT:Think()
 
 	if not IsValid( Base ) then return end
 
-	--local TargetAngle = self:GetActive() and self:GetAngleOpen() or self:GetAngleClosed()
-
 	local Target = self:GetActive() and 1 or 0
+	local poseName = self:GetPoseName()
 
-	self._smAngle = self._smAngle and self._smAngle + (Target - self._smAngle) * RealFrameTime() or 0
+	if poseName == "" then return end
 
-	local Mul1 = self._smAngle
-	local Mul2 = 1 - self._smAngle
+	self.sm_pp = self.sm_pp and self.sm_pp + (Target - self.sm_pp) * RealFrameTime() * 10 or 0
 
-	local Ang = self:GetAngleOpen() * Mul1 + self:GetAngleClosed() * Mul2
-
-	Base:ManipulateBoneAngles( self:GetBoneID(), Ang )
+	Base:SetPoseParameter( poseName, self.sm_pp ^ 2 )
 end
 
 function ENT:OnRemove()
