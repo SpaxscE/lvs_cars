@@ -7,6 +7,7 @@ include("sh_animations.lua")
 include("sv_controls.lua")
 include("sv_controls_handbrake.lua")
 include("sv_components.lua")
+include("sv_doorsystem.lua")
 include("sv_wheelsystem.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
