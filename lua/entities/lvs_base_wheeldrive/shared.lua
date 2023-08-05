@@ -15,7 +15,7 @@ ENT.MaxVelocityReverse = 500
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
 
-ENT.ForceAngleMultiplier = 1
+ENT.ForceAngleMultiplier = 0.5
 
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
@@ -31,7 +31,7 @@ ENT.FastSteerActiveVelocity = 500
 ENT.FastSteerAngleClamp = 10
 ENT.FastSteerDeactivationDriftAngle = 5
 
-ENT.SteerAssistDeadZoneAngle = 2
+ENT.SteerAssistDeadZoneAngle = 1
 ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistMultiplier = 0.75
 

@@ -70,9 +70,9 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		self:SetWheelVelocity( Vel )
 
-		if not self:WheelsOnGround() or self:GetSteer() == 0 then return vector_origin, vector_origin, SIM_NOTHING end
+		if not self:WheelsOnGround() or math.abs( self:GetSteer() ) <= self.SteerAssistDeadZoneAngle then return vector_origin, vector_origin, SIM_NOTHING end
 
-		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * 0.5 )
+		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * self.ForceAngleMultiplier )
 
 		return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
 	end

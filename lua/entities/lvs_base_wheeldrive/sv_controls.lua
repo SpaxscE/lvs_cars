@@ -30,14 +30,12 @@ function ENT:CalcSteer( ply, cmd )
 			MaxSteer = math.min( MaxSteer, self.FastSteerAngleClamp )
 		end
 
-		if DriftAngle > self.SteerAssistDeadZoneAngle then
-			if not KeyLeft and not KeyRight then
-				local Cur = self:GetSteer() / MaxSteer
+		if not KeyLeft and not KeyRight then
+			local Cur = self:GetSteer() / MaxSteer
 
-				local HelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
+			local HelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
 
-				TargetValue = math.Clamp( -(self:AngleBetweenNormal( Right, VelNormal ) - 90) * self.SteerAssistMultiplier,-HelpAng,HelpAng) / MaxSteer
-			end
+			TargetValue = math.Clamp( -(self:AngleBetweenNormal( Right, VelNormal ) - 90) * self.SteerAssistMultiplier,-HelpAng,HelpAng) / MaxSteer
 		end
 	end
 
