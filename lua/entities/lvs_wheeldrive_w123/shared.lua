@@ -14,7 +14,7 @@ ENT.MDL = "models/DiggerCars/MB_W123/v2.mdl"
 ENT.MaxVelocity = 2200
 
 ENT.EnginePower = 600
-ENT.EngineTorque = 100
+ENT.EngineTorque = 350
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1

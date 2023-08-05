@@ -14,7 +14,7 @@ ENT.MDL = "models/DiggerCars/nissan_mk10/turbo.mdl"
 ENT.MaxVelocity = 1800
 
 ENT.EnginePower = 600
-ENT.EngineTorque = 100
+ENT.EngineTorque = 235
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
