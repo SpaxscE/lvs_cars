@@ -89,9 +89,14 @@ if SERVER then
 	function ENT:OpenAndClose( ply )
 		self:Open( ply )
 
+		self._PreventClosing = true
+
 		timer.Simple(0.5, function()
 			if not IsValid( self ) then return end
+
 			self:Close( ply )
+
+			self._PreventClosing = false
 		end )
 	end
 
@@ -132,6 +137,8 @@ if SERVER then
 	end
 
 	function ENT:OnDriverChanged( oldDriver, newDriver, pod )
+		if self._PreventClosing then return end
+
 		if IsValid( newDriver ) then
 			if self:IsOpen() then
 				self:Close( newDriver )

@@ -23,8 +23,6 @@ function ENT:Use( ply )
 						return
 					end
 				end
-			else
-				return
 			end
 		end
 	end

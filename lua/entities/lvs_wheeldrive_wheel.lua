@@ -91,6 +91,11 @@ if SERVER then
 	end
 
 	function ENT:Use( ply )
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return end
+
+		base:Use( ply )
 	end
 
 	function ENT:Think()
