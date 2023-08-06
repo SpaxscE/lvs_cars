@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/BMW_M5E34/e34.mdl"
+ENT.MDL = "models/diggercars/BMW_M5E34/e34_2.mdl"
 
 ENT.MaxVelocity = 2000
 
