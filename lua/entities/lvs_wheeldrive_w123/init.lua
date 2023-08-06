@@ -38,6 +38,10 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Hood 02.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Hood 01.wav" )
 
+	local DoorHandler = self:AddDoorHandler( "fuel_cap", Vector(-50,-32.5,29.5), Angle(0,0,-30), Vector(-5,0,-5), Vector(5,5,5), Vector(-5,-5,-5), Vector(5,5,5) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+
 	local WheelModel = "models/DiggerCars/MB_W123/wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {
