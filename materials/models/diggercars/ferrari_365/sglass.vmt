@@ -1,0 +1,30 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/DiggerCars/ferrari_365/sglass"
+	"$bumpmap" "models\DiggerCars/ferrari_365/sglass_nm"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.5 0.5 0.5]"
+	"$normalmapalphaenvmapmask" "1"
+	"$envmapfresnel" "1.05"
+	"$phong" "1"
+	"$phongexponent" "250"
+	"$phongboost" "5"	
+	"$phongfresnelranges"	"[0.1 1 2]"
+	"$additive" "1"
+	"$rimlight" "1"												// To enable rim lighting (requires phong)
+	"$rimlightexponent" "1"										// Exponent for phong component of rim lighting	
+	"$rimlightboost" "1"	
+	"$colorfix" "{0 0 0}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
