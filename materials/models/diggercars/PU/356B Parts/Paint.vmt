@@ -1,0 +1,28 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/DiggerCars/PU/356B Parts/Paint"
+	"$nodecal" "0"
+	"$normalmapalphaenvmapmask" "1"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.1 0.1 0.1]"
+	"$phong" "1"
+	"$phongexponent" "220"
+	"$phongboost" "3"	
+	"$phongfresnelranges"	"[ 1 2 2 ]"
+	"$acolor" "{255 255 255}"
+	Proxies
+	{
+		Equals
+		{
+			srcVar1	$color
+			resultVar	$phongtint
+		}
+		Add
+		{
+			srcVar1 $phongfix
+			srcVar2 $phongtint
+			resultVar $phongtint
+		}
+	}
+}
+

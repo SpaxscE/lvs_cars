@@ -1,0 +1,19 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/DiggerCars/PU/356/Body"
+        "$blendtintbybasealpha" "models/DiggerCars/PU/356/BodyP_map"
+        "$blendtintcoloroverbase" "1"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$normalmapalphaenvmapmask" 1
+	"$nodecal" "1"
+	"$halflambert" 1
+	"$nocull" "1"
+	"$alphatest" "1"
+	"$phong" "1" 
+	"$phongboost" "1" 
+	"$phongfresnelranges" "[.3 .5 1]" 
+	"$phongexponent" 20
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.1 0.1 0.1]"
+	"$phongboost" "0.08" 
+}

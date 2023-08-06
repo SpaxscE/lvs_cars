@@ -1,0 +1,21 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/DiggerCars/PU/356B GS Carrera 2/dodge_diff_color"
+	"$bumpmap" "models/DiggerCars/PU/356B GS Carrera 2/dodge_diff_n2"
+        "$blendtintbybasealpha" 1
+        "$detail"  "detail/bm_paint_detail_01c"
+        "$detailscale" 5
+        "$detailblendfactor" ".6"
+
+	"$phong" "1"
+	"$phongexponent" "20"
+	"$phongboost" "0"
+	"$phongfresnelranges"	"[1 1.5 4]"
+	"$phongalbedotint" "1"
+        "$BasemapAlphaPhongMask" 1
+        "$phongexponenttexture" "models/DiggerCars/PU/356B GS Carrera 2/dodge_diff_color"
+
+        "$envmap" "env_cubemap"
+        "$envmaptint" "[.02 .02 .02]"
+        "$envmapfresnel" 1
+}
