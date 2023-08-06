@@ -11,18 +11,29 @@ function ENT:Use( ply )
 				local Pod = Handler:GetLinkedSeat()
 
 				if IsValid( Pod ) then
+					if LVS.CarDoorMode >= 2 and not Handler:IsOpen() then return end
+
 					if Handler:IsOpen() then
 						Handler:Close( ply )
 					else
 						Handler:OpenAndClose( ply )
 					end
 
-					if not ply:KeyDown( IN_WALK ) and not IsValid( Pod:GetDriver() ) then
-						ply:EnterVehicle( Pod )
+					if ply:KeyDown( IN_WALK ) then
+						
+						BaseClass.Use( self, ply )
 
 						return
+					else
+						if not IsValid( Pod:GetDriver() ) then
+							ply:EnterVehicle( Pod )
+						end
 					end
 				end
+			end
+
+			if LVS.CarDoorMode >= 1 then
+				return
 			end
 		end
 	end

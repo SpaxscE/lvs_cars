@@ -143,6 +143,16 @@ if SERVER then
 			if self:IsOpen() then
 				self:Close( newDriver )
 			end
+		else
+			timer.Simple( FrameTime() * 2, function()
+				if not IsValid( self ) or not IsValid( oldDriver ) or IsValid( self._Driver ) then return end
+
+				if oldDriver:lvsGetVehicle() == self:GetBase() then return end
+
+				if not self:IsOpen() then
+					self:OpenAndClose()
+				end
+			end )
 		end
 	end
 

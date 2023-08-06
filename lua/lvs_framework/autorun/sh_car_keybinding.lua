@@ -63,7 +63,16 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 	LVS.SOUNDTYPE_REV_DN = 3
 end )
 
-if SERVER then return end
+if SERVER then
+	LVS.cVar_cardoormode = CreateConVar( "lvs_cars_doormode", "0", {FCVAR_REPLICATED , FCVAR_ARCHIVE},"0 = no restrictions, 1 = allow entering from the doors only, 2 = allow entering from the doors only when the door is opened" )
+	LVS.CarDoorMode = LVS.cVar_cardoormode and LVS.cVar_cardoormode:GetInt() or 0
+
+	cvars.AddChangeCallback( "lvs_cars_doormode", function( convar, oldValue, newValue ) 
+		LVS.CarDoorMode = tonumber( newValue )
+	end)
+
+	return
+end
 
 local cvarDev = GetConVar( "developer" )
 LVS.CarsDeveloperEnabled = cvarDev and (cvarDev:GetInt() >= 1) or false
