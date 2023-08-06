@@ -28,6 +28,13 @@ if SERVER then
 	AccessorFunc(ENT, "soundopen", "SoundOpen", FORCE_STRING)
 	AccessorFunc(ENT, "soundclose", "SoundClose", FORCE_STRING)
 
+	AccessorFunc(ENT, "maxsopen", "MaxsOpen", FORCE_VECTOR)
+	AccessorFunc(ENT, "minsopen", "MinsOpen", FORCE_VECTOR)
+
+	AccessorFunc(ENT, "maxsclosed", "MaxsClosed", FORCE_VECTOR)
+	AccessorFunc(ENT, "minsclosed", "MinsClosed", FORCE_VECTOR)
+
+
 	util.AddNetworkString( "lvscar_player_interact" )
 
 	net.Receive( "lvscar_player_interact", function( length, ply )
@@ -110,6 +117,9 @@ if SERVER then
 		end
 
 		self:SetActive( true )
+		self:SetMins( self:GetMinsOpen() )
+		self:SetMaxs( self:GetMaxsOpen() )
+
 		self:OnOpen( ply )
 
 		local snd = self:GetSoundOpen()
@@ -123,6 +133,9 @@ if SERVER then
 		if not self:IsOpen() then return end
 
 		self:SetActive( false )
+		self:SetMins( self:GetMinsClosed() )
+		self:SetMaxs( self:GetMaxsClosed() )
+
 		self:OnClosed( ply )
 
 		local snd = self:GetSoundClose()
@@ -212,8 +225,6 @@ function ENT:DrawTranslucent()
 	local ply = LocalPlayer()
 
 	if not IsValid( ply ) or ply:InVehicle() or not ply:KeyDown( IN_SPEED ) then return end
-
-	if ply:GetEyeTrace().Entity ~= self:GetBase() then return end
 
 	local boxOrigin = self:GetPos()
 	local boxAngles = self:GetAngles()

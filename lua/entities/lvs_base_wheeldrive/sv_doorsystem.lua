@@ -11,7 +11,7 @@ function ENT:Use( ply )
 				local Pod = Handler:GetLinkedSeat()
 
 				if IsValid( Pod ) then
-					if LVS.CarDoorMode >= 2 and not Handler:IsOpen() then return end
+					if not Handler:IsOpen() then Handler:Open( ply ) return end
 
 					if Handler:IsOpen() then
 						Handler:Close( ply )
@@ -29,20 +29,28 @@ function ENT:Use( ply )
 							ply:EnterVehicle( Pod )
 						end
 					end
+				else
+					Handler:Use( ply )
 				end
 			end
 
-			if LVS.CarDoorMode >= 1 then
-				return
-			end
+			return
 		end
 	end
 
 	BaseClass.Use( self, ply )
 end
 
-function ENT:AddDoorHandler( pos, ang, mins, maxs, poseparameter )
+function ENT:AddDoorHandler( poseparameter, pos, ang, mins, maxs, openmins, openmaxs )
 	if not isvector( pos ) or not isangle( ang ) or not isvector( mins ) or not isvector( maxs ) or not isstring( poseparameter ) then return end
+
+	if not isvector( openmins ) then
+		openmins = mins
+	end
+
+	if not isvector( openmaxs ) then
+		openmaxs = maxs
+	end
 
 	local Handler = ents.Create( "lvs_wheeldrive_doorhandler" )
 
@@ -57,7 +65,13 @@ function ENT:AddDoorHandler( pos, ang, mins, maxs, poseparameter )
 	Handler:SetParent( self )
 	Handler:SetBase( self )
 	Handler:SetMins( mins )
+	Handler:SetMinsOpen( openmins )
+	Handler:SetMinsClosed( mins )
+
 	Handler:SetMaxs( maxs )
+	Handler:SetMaxsOpen( openmaxs )
+	Handler:SetMaxsClosed( maxs )
+
 	Handler:SetPoseName( poseparameter )
 
 	self:DeleteOnRemove( Handler )
