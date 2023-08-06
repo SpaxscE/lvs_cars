@@ -48,6 +48,10 @@ if SERVER then
 		self._LinkedSeat = ent
 	end
 
+	function ENT:GetLinkedSeat()
+		return self._LinkedSeat
+	end
+
 	function ENT:Initialize()	
 		self:SetMoveType( MOVETYPE_NONE )
 		self:SetSolid( SOLID_NONE )
@@ -91,24 +95,14 @@ if SERVER then
 		end )
 	end
 
-	function ENT:OnDriverChanged( oldDriver, newDriver, pod )
-		if IsValid( newDriver ) then
-			if self:IsOpen() then
-				self:Close( newDriver )
-			else
-				self:OpenAndClose( newDriver )
-			end
-		else
-			if self:IsOpen() then
-				self:Close( oldDriver )
-			else
-				self:OpenAndClose( oldDriver )
-			end
-		end
-	end
-
 	function ENT:Open( ply )
 		if self:IsOpen() then return end
+
+		if IsValid( self._LinkedSeat ) then
+			local Driver = self._LinkedSeat:GetDriver()
+
+			if IsValid( Driver ) and ply ~= Driver then return end
+		end
 
 		self:SetActive( true )
 		self:OnOpen( ply )
@@ -135,6 +129,14 @@ if SERVER then
 
 	function ENT:IsOpen()
 		return self:GetActive()
+	end
+
+	function ENT:OnDriverChanged( oldDriver, newDriver, pod )
+		if IsValid( newDriver ) then
+			if self:IsOpen() then
+				self:Close( newDriver )
+			end
+		end
 	end
 
 	function ENT:Think()
@@ -193,6 +195,8 @@ function ENT:DrawTranslucent()
 	local ply = LocalPlayer()
 
 	if not IsValid( ply ) or ply:InVehicle() or not ply:KeyDown( IN_SPEED ) then return end
+
+	if ply:GetEyeTrace().Entity ~= self:GetBase() then return end
 
 	local boxOrigin = self:GetPos()
 	local boxAngles = self:GetAngles()

@@ -4,6 +4,28 @@ function ENT:Use( ply )
 	if istable( self._DoorHandlers ) then
 		if ply:KeyDown( IN_SPEED ) then
 			return
+		else
+			local Handler = self:GetDoorHandler( ply )
+
+			if IsValid( Handler ) then
+				local Pod = Handler:GetLinkedSeat()
+
+				if IsValid( Pod ) then
+					if Handler:IsOpen() then
+						Handler:Close( ply )
+					else
+						Handler:OpenAndClose( ply )
+					end
+
+					if not ply:KeyDown( IN_WALK ) and not IsValid( Pod:GetDriver() ) then
+						ply:EnterVehicle( Pod )
+
+						return
+					end
+				end
+			else
+				return
+			end
 		end
 	end
 
@@ -42,20 +64,36 @@ function ENT:AddDoorHandler( pos, ang, mins, maxs, poseparameter )
 	return Handler
 end
 
-function ENT:GetDoorHandler( pos )
-	if not istable( self._DoorHandlers ) then return false end
+function ENT:GetDoorHandler( ply )
+	if not IsValid( ply ) or not istable( self._DoorHandlers ) then return NULL end
 
-	local radius = 50
+	local ShootPos = ply:GetShootPos()
+	local AimVector = ply:GetAimVector()
+
+	local radius = 99999999999
 	local target = NULL
 
-	for _, door in pairs( self._DoorHandlers ) do
-		local dist = (pos - door:GetPos()):Length()
+	for _, doorHandler in pairs( self._DoorHandlers ) do
+		if not IsValid( doorHandler ) then continue end
+
+		local boxOrigin = doorHandler:GetPos()
+		local boxAngles = doorHandler:GetAngles()
+		local boxMins = doorHandler:GetMins()
+		local boxMaxs = doorHandler:GetMaxs()
+
+		local HitPos, _, _ = util.IntersectRayWithOBB( ShootPos, AimVector * doorHandler.UseRange, boxOrigin, boxAngles, boxMins, boxMaxs )
+
+		local InRange = isvector( HitPos )
+
+		if not InRange then continue end
+
+		local dist = (ShootPos - HitPos):Length()
 
 		if dist < radius then
-			target = door
+			target = doorHandler
 			radius = dist
 		end
 	end
 
-	return IsValid( target ), target
+	return target
 end
