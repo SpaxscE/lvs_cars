@@ -62,3 +62,11 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 	LVS.SOUNDTYPE_REV_DOWN = 3
 	LVS.SOUNDTYPE_REV_DN = 3
 end )
+
+if SERVER then return end
+
+local cvarDev = GetConVar( "developer" )
+LVS.CarsDeveloperEnabled = cvarDev and (cvarDev:GetInt() >= 1) or false
+cvars.AddChangeCallback( "developer", function( convar, oldValue, newValue )
+	LVS.CarsDeveloperEnabled = tonumber( newValue ) >= 1
+end)

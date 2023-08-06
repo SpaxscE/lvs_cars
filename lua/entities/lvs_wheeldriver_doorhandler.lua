@@ -214,23 +214,25 @@ function ENT:DrawTranslucent()
 
 	local InRange = isvector( HitPos )
 
+	if InRange then
+		local Use = ply:KeyDown( IN_USE )
+
+		if self.old_Use ~= Use then
+			self.old_Use = Use
+
+			if Use then
+				net.Start( "lvscar_player_interact" )
+					net.WriteEntity( self )
+				net.SendToServer()
+			end
+		end
+	end
+
+	if not LVS.CarsDeveloperEnabled then return end
+
 	local Col = InRange and self.ColorSelect or self.ColorNormal
 
 	render.SetColorMaterial()
 	render.DrawBox( boxOrigin, boxAngles, boxMins, boxMaxs, Col )
 	render.DrawBox( boxOrigin, boxAngles, boxMaxs + self.OutlineThickness, boxMins - self.OutlineThickness, self.ColorTransBlack )
-
-	if not InRange then return end
-
-	local Use = ply:KeyDown( IN_USE )
-
-	if self.old_Use ~= Use then
-		self.old_Use = Use
-
-		if Use then
-			net.Start( "lvscar_player_interact" )
-				net.WriteEntity( self )
-			net.SendToServer()
-		end
-	end
 end
