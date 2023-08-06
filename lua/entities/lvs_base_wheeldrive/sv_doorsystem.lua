@@ -27,6 +27,7 @@ function ENT:Use( ply )
 					else
 						if not IsValid( Pod:GetDriver() ) then
 							ply:EnterVehicle( Pod )
+							self:AlignView( ply )
 						end
 					end
 				else

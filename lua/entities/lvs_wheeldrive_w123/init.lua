@@ -10,22 +10,22 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	local DoorHandler = self:AddDoorHandler( "left_door", Vector(25,32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-20,-12), Vector(20,40,12) )
+	local DoorHandler = self:AddDoorHandler( "left_door", Vector(25,32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-25,-12), Vector(20,40,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
 	DoorHandler:LinkToSeat( DriverSeat )
 
-	local DoorHandler = self:AddDoorHandler( "right_door", Vector(25,-32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-40,-12), Vector(20,20,12) )
+	local DoorHandler = self:AddDoorHandler( "right_door", Vector(25,-32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-40,-12), Vector(20,25,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat )
 
-	local DoorHandler = self:AddDoorHandler( "rear_left_door", Vector(-15,32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-20,-12), Vector(20,40,12) )
+	local DoorHandler = self:AddDoorHandler( "rear_left_door", Vector(-15,32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-25,-12), Vector(20,40,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat1 )
 
-	local DoorHandler = self:AddDoorHandler( "rear_right_door", Vector(-15,-32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-40,-12), Vector(20,20,12) )
+	local DoorHandler = self:AddDoorHandler( "rear_right_door", Vector(-15,-32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-40,-12), Vector(20,25,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat2 )
