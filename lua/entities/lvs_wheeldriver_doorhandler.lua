@@ -42,6 +42,12 @@ if SERVER then
 		ent:Use( ply, ply )
 	end)
 
+	function ENT:LinkToSeat( ent )
+		if not IsValid( ent ) or not ent:IsVehicle() then return end
+
+		self._LinkedSeat = ent
+	end
+
 	function ENT:Initialize()	
 		self:SetMoveType( MOVETYPE_NONE )
 		self:SetSolid( SOLID_NONE )
@@ -57,22 +63,55 @@ if SERVER then
 
 		if not IsValid( Base ) then return end
 
-		if Base:GetlvsLockedStatus() then
+		if Base:GetlvsLockedStatus() or (LVS.TeamPassenger:GetBool() and ((Base:GetAITEAM() ~= ply:lvsGetAITeam()) and ply:lvsGetAITeam() ~= 0 and Base:GetAITEAM() ~= 0)) then 
 			self:EmitSound( "doors/default_locked.wav" )
+
 			return
 		end
 
 		if self:IsOpen() then
-			self:Close()
+			self:Close( ply )
 		else
-			self:Open()
+			self:Open( ply )
 		end
 	end
 
-	function ENT:Open()
+	function ENT:OnOpen( ply )
+	end
+
+	function ENT:OnClosed( ply )
+	end
+
+	function ENT:OpenAndClose( ply )
+		self:Open( ply )
+
+		timer.Simple(0.5, function()
+			if not IsValid( self ) then return end
+			self:Close( ply )
+		end )
+	end
+
+	function ENT:OnDriverChanged( oldDriver, newDriver, pod )
+		if IsValid( newDriver ) then
+			if self:IsOpen() then
+				self:Close( newDriver )
+			else
+				self:OpenAndClose( newDriver )
+			end
+		else
+			if self:IsOpen() then
+				self:Close( oldDriver )
+			else
+				self:OpenAndClose( oldDriver )
+			end
+		end
+	end
+
+	function ENT:Open( ply )
 		if self:IsOpen() then return end
 
 		self:SetActive( true )
+		self:OnOpen( ply )
 
 		local snd = self:GetSoundOpen()
 
@@ -81,10 +120,11 @@ if SERVER then
 		self:EmitSound( snd )
 	end
 
-	function ENT:Close()
+	function ENT:Close( ply )
 		if not self:IsOpen() then return end
 
 		self:SetActive( false )
+		self:OnClosed( ply )
 
 		local snd = self:GetSoundClose()
 
@@ -98,7 +138,20 @@ if SERVER then
 	end
 
 	function ENT:Think()
-		return false
+		if IsValid( self._LinkedSeat ) then
+			local Driver = self._LinkedSeat:GetDriver()
+	
+			if self._Driver ~= Driver then
+			
+				self:OnDriverChanged( self._Driver, Driver, self._LinkedSeat )
+
+				self._Driver = Driver
+			end
+		end
+
+		self:NextThink( CurTime() + 0.25 )
+
+		return true
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
@@ -139,7 +192,7 @@ ENT.OutlineThickness = Vector(0.5,0.5,0.5)
 function ENT:DrawTranslucent()
 	local ply = LocalPlayer()
 
-	if not IsValid( ply ) or not ply:KeyDown( IN_SPEED ) then return end
+	if not IsValid( ply ) or ply:InVehicle() or not ply:KeyDown( IN_SPEED ) then return end
 
 	local boxOrigin = self:GetPos()
 	local boxAngles = self:GetAngles()
