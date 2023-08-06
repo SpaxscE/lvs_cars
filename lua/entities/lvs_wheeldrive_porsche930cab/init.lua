@@ -28,6 +28,7 @@ function ENT:OnSpawn( PObj )
 
 	local DoorHandler = self:AddDoorHandler( "roof", Vector(-15,0,45), Angle(-10,0,0), Vector(-40,-20,-5), Vector(20,20,5), Vector(-40,-20,-20), Vector(-10,20,5) )
 	DoorHandler:SetRate( 3 )
+	DoorHandler:SetRateExponent( 1 )
 
 	local WheelModel = "models/diggercars/porsche_930/wheel.mdl"
 

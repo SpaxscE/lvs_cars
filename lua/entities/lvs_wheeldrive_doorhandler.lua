@@ -18,9 +18,11 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Vector",1, "Maxs" )
 
 	self:NetworkVar( "Float",0, "Rate" )
+	self:NetworkVar( "Float",1, "RateExponent" )
 
 	if SERVER then
 		self:SetRate( 10 )
+		self:SetRateExponent( 2 )
 	end
 end
 
@@ -203,7 +205,7 @@ function ENT:Think()
 
 	self.sm_pp = self.sm_pp and self.sm_pp + (Target - self.sm_pp) * RealFrameTime() * self:GetRate() or 0
 
-	Base:SetPoseParameter( poseName, self.sm_pp ^ 2 )
+	Base:SetPoseParameter( poseName, self.sm_pp ^ self:GetRateExponent() )
 end
 
 function ENT:OnRemove()

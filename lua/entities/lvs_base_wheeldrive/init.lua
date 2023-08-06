@@ -53,6 +53,8 @@ function ENT:PostInitialize( PObj )
 	BaseClass.PostInitialize( self, PObj )
 
 	SetMinimumAngularVelocityTo( 10000 )
+
+	self:EnableHandbrake()
 end
 
 function ENT:AlignView( ply )
