@@ -9,22 +9,22 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(45,0,20) )
 
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(-10,32,24), Angle(0,0,0), Vector(-23,-6,-12), Vector(20,6,12), Vector(-23,-20,-12), Vector(20,40,12) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( DriverSeat )
 
 	local DoorHandler = self:AddDoorHandler( "right_door", Vector(-10,-32,24), Angle(0,0,0), Vector(-23,-6,-12), Vector(20,6,12), Vector(-23,-40,-12), Vector(20,20,12) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat )
 
 	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-73,0,35), Angle(-10,0,0), Vector(-15,-20,-3), Vector(15,20,3), Vector(-15,-20,-3), Vector(15,20,25) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Trunk Open 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_old_door_close.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_trunk_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/classiccar_door_close.wav" )
 
 	local DoorHandler = self:AddDoorHandler( "hood", Vector(50,0,35), Angle(5,0,0), Vector(-25,-30,-3), Vector(25,30,3), Vector(-25,-30,-3), Vector(25,30,50) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Hood 02.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Hood 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
 	local WheelModel = "models/diggercars/ferrari_365/f365_wheel.mdl"
 

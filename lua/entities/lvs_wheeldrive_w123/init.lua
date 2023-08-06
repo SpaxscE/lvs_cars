@@ -11,38 +11,38 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(45,0,20) )
 
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(25,32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-25,-12), Vector(20,40,12) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( DriverSeat )
 
 	local DoorHandler = self:AddDoorHandler( "right_door", Vector(25,-32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-40,-12), Vector(20,25,12) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat )
 
 	local DoorHandler = self:AddDoorHandler( "rear_left_door", Vector(-15,32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-25,-12), Vector(20,40,12) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat1 )
 
 	local DoorHandler = self:AddDoorHandler( "rear_right_door", Vector(-15,-32,20), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), Vector(-20,-40,-12), Vector(20,25,12) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat2 )
 
 	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-73,0,30), Angle(-5,0,0), Vector(-15,-25,-3), Vector(15,25,3), Vector(-15,-25,-3), Vector(15,25,25) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Trunk Open 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_old_door_close.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_trunk_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/classiccar_door_close.wav" )
 
 	local DoorHandler = self:AddDoorHandler( "hood", Vector(75,0,30), Angle(5,0,0), Vector(-25,-30,-20), Vector(25,30,3), Vector(-25,-30,-3), Vector(25,30,40) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Hood 02.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Hood 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
 	local DoorHandler = self:AddDoorHandler( "fuel_cap", Vector(-50,-32.5,29.5), Angle(0,0,-30), Vector(-5,0,-5), Vector(5,5,5), Vector(-5,-5,-5), Vector(5,5,5) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
-	local WheelModel = "models/DiggerCars/MB_W123/wheel.mdl"
+	local WheelModel = "models/diggercars/mb_w123/wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
