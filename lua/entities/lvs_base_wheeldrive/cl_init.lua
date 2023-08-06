@@ -3,11 +3,11 @@ include("sh_animations.lua")
 include("cl_flyby.lua")
 
 function ENT:PreDraw()
-	return false
+	return true
 end
 
 function ENT:PreDrawTranslucent()
-	return true
+	return false
 end
 
 function ENT:OnChangeGear( oldGear, newGear )

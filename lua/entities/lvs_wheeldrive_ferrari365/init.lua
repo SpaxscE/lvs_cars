@@ -8,8 +8,21 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	self:AddDoorHandler( Vector(-13,55,27), "left_door" )
-	self:AddDoorHandler( Vector(-13,-55,27), "right_door" )
+	local DoorHandler = self:AddDoorHandler( Vector(-10,32,24), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), "left_door" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+
+	local DoorHandler = self:AddDoorHandler( Vector(-10,-32,24), Angle(0,0,0), Vector(-20,-6,-12), Vector(20,6,12), "right_door" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+
+	local DoorHandler = self:AddDoorHandler( Vector(-73,0,35), Angle(-10,0,0), Vector(-15,-20,-3), Vector(15,20,3), "trunk" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Trunk Open 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_old_door_close.wav" )
+
+	local DoorHandler = self:AddDoorHandler( Vector(50,0,35), Angle(5,0,0), Vector(-25,-30,-3), Vector(25,30,3), "hood" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Hood 02.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Hood 01.wav" )
 
 	local WheelModel = "models/diggercars/ferrari_365/f365_wheel.mdl"
 

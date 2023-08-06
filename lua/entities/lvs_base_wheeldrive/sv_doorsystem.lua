@@ -1,38 +1,17 @@
 DEFINE_BASECLASS( "lvs_base" )
 
 function ENT:Use( ply )
-	if istable( self._DoorHandlers ) then 
-		if not IsValid( ply ) then return end
-
-		if self:GetlvsLockedStatus() or (LVS.TeamPassenger:GetBool() and ((self:GetAITEAM() ~= ply:lvsGetAITeam()) and ply:lvsGetAITeam() ~= 0 and self:GetAITEAM() ~= 0)) then 
-
-			self:EmitSound( "doors/default_locked.wav" )
-
+	if istable( self._DoorHandlers ) then
+		if ply:KeyDown( IN_SPEED ) then
 			return
 		end
-
-		local HasDoor, Door = self:GetDoorHandler( ply:GetPos() )
-
-		if HasDoor then
-			if Door:IsOpen() then
-				Door:Close()
-
-				if not ply:KeyDown( IN_SPEED ) then
-					self:SetPassenger( ply )
-				end
-			else
-				Door:Open()
-			end
-		end
-
-		return
 	end
 
 	BaseClass.Use( self, ply )
 end
 
-function ENT:AddDoorHandler( pos, poseparameter )
-	if not isvector( pos ) or not isstring( poseparameter ) then return end
+function ENT:AddDoorHandler( pos, ang, mins, maxs, poseparameter )
+	if not isvector( pos ) or not isangle( ang ) or not isvector( mins ) or not isvector( maxs ) or not isstring( poseparameter ) then return end
 
 	local Handler = ents.Create( "lvs_wheeldriver_doorhandler" )
 
@@ -41,11 +20,13 @@ function ENT:AddDoorHandler( pos, poseparameter )
 	end
 
 	Handler:SetPos( self:LocalToWorld( pos ) )
-	Handler:SetAngles( self:GetAngles() )
+	Handler:SetAngles( self:LocalToWorldAngles( ang ) )
 	Handler:Spawn()
 	Handler:Activate()
 	Handler:SetParent( self )
 	Handler:SetBase( self )
+	Handler:SetMins( mins )
+	Handler:SetMaxs( maxs )
 	Handler:SetPoseName( poseparameter )
 
 	self:DeleteOnRemove( Handler )
