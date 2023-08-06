@@ -58,7 +58,6 @@ function ENT:CreateSteerMaster( TargetEntity )
 	Master:SetColor( Color( 255, 255, 255, 0 ) ) 
 	Master:SetRenderMode( RENDERMODE_TRANSALPHA )
 	Master:DrawShadow( false )
-	Master:SetNoDraw( true )
 
 	Master.DoNotDuplicate = true
 

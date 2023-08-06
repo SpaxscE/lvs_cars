@@ -6,6 +6,8 @@ ENT.PrintName = "Wheel"
 ENT.Type            = "anim"
 ENT.DoNotDuplicate = true
 
+ENT.RenderGroup = RENDERGROUP_BOTH 
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "Radius")
 
@@ -13,7 +15,11 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 2, "Caster" )
 	self:NetworkVar( "Float", 3, "Toe" )
 
+	self:NetworkVar( "Float", 4, "RPM" )
+
 	self:NetworkVar( "Angle", 0, "AlignmentAngle" )
+
+	self:NetworkVar( "Entity", 0, "Base" )
 end
 
 function ENT:VelToRPM( speed )
@@ -30,7 +36,6 @@ end
 
 if SERVER then
 	AccessorFunc(ENT, "axle", "Axle", FORCE_NUMBER)
-	AccessorFunc(ENT, "rpm", "RPM", FORCE_NUMBER)
 
 	function ENT:Initialize()
 		self:SetUseType( SIMPLE_USE )
@@ -111,16 +116,8 @@ if SERVER then
 	function ENT:PhysicsCollide( data )
 	end
 
-	function ENT:SetBase( base )
-		self._Base = base
-	end
-
 	function ENT:SetMaster( master )
 		self._Master = master
-	end
-
-	function ENT:GetBase()
-		return self._Base
 	end
 
 	function ENT:GetMaster()
@@ -197,5 +194,61 @@ if CLIENT then
 	function ENT:Draw()
 		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 		self:DrawModel()
+	end
+
+	function ENT:DrawTranslucent()
+	end
+
+	ENT.DustEffectSurfaces = {
+		["sand"] = true,
+		["dirt"] = true,
+		["grass"] = true,
+	}
+
+	function ENT:Test()
+		local Base = self:GetBase()
+
+		if not IsValid( Base ) then return end
+
+		local Vel = self:GetVelocity()
+		local VelLength = Vel:Length()
+
+		local rpmTheoretical = self:VelToRPM( VelLength )
+		local rpm = math.abs( self:GetRPM() )
+
+		local WheelSlip = math.max( rpm - rpmTheoretical, 0 ) ^ 2 + math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 2 ) )
+
+		if WheelSlip < 500 then return end
+
+		local SkidValue = VelLength + WheelSlip
+
+		local Radius = self:GetRadius()
+		local StartPos = self:GetPos()
+		local EndPos = StartPos - Base:GetUp() * (Radius + 1)
+
+		local trace = util.TraceLine( {
+			start = StartPos,
+			endpos = EndPos,
+			filter = Base:GetCrosshairFilterEnts(),
+		} )
+
+		if not trace.Hit or not self.DustEffectSurfaces[ util.GetSurfacePropName( trace.SurfaceProps ) ] then return end
+
+		local Scale = math.min( 0.3 + (SkidValue - 100) / 4000, 1 ) ^ 2
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( trace.HitPos )
+		effectdata:SetEntity( Base )
+		effectdata:SetNormal( trace.HitNormal )
+		effectdata:SetMagnitude( Scale )
+		util.Effect( "lvs_physics_wheeldust", effectdata, true, true )
+	end
+
+	function ENT:Think()
+		self:SetNextClientThink( CurTime() + 0.05 )
+
+		self:Test()
+
+		return true
 	end
 end
