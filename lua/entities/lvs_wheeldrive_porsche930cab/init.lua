@@ -3,13 +3,31 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(-9.6,11.9,0), Angle(0,-90,8) )
-	self:AddPassengerSeat( Vector(5,-11.9,12), Angle(0,-90,28) )
+	local DriverSeat = self:AddDriverSeat( Vector(-9.6,11.9,0), Angle(0,-90,8) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(5,-11.9,12), Angle(0,-90,28) )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	self:AddDoorHandler( Vector(-13,55,27), "left_door" )
-	self:AddDoorHandler( Vector(-13,-55,27), "right_door" )
+	local DoorHandler = self:AddDoorHandler( "left_door", Vector(0,27,20), Angle(0,0,0), Vector(-23,-6,-12), Vector(20,6,12), Vector(-23,-20,-12), Vector(20,40,12) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:LinkToSeat( DriverSeat )
+
+	local DoorHandler = self:AddDoorHandler( "right_door", Vector(0,-27,20), Angle(0,0,0), Vector(-23,-6,-12), Vector(20,6,12), Vector(-23,-40,-12), Vector(20,20,12) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:LinkToSeat( PassengerSeat )
+
+	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-65,0,30), Angle(-30,0,0), Vector(-15,-20,-3), Vector(15,20,3), Vector(-15,-20,-3), Vector(15,20,25) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Trunk Open 01.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_old_door_close.wav" )
+
+	local DoorHandler = self:AddDoorHandler( "hood", Vector(50,0,25), Angle(7,0,0), Vector(-25,-30,-6), Vector(25,30,6), Vector(-25,-30,-3), Vector(25,30,40) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Hood 02.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Hood 01.wav" )
+
+	local DoorHandler = self:AddDoorHandler( "roof", Vector(-15,0,45), Angle(-10,0,0), Vector(-40,-20,-5), Vector(20,20,5), Vector(-40,-20,-20), Vector(-10,20,5) )
+	DoorHandler:SetRate( 3 )
 
 	local WheelModel = "models/diggercars/porsche_930/wheel.mdl"
 
@@ -54,13 +72,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-41.2,25.5,15),
+				pos = Vector(-41.2,25.5,13),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-41.2,-25.5,15),
+				pos = Vector(-41.2,-25.5,13),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
