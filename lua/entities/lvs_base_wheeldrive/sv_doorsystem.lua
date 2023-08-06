@@ -1,10 +1,24 @@
 DEFINE_BASECLASS( "lvs_base" )
 
+function ENT:IsUseAllowed( ply )
+	if not IsValid( ply ) then return false end
+
+	if self:GetlvsLockedStatus() or (LVS.TeamPassenger:GetBool() and ((self:GetAITEAM() ~= ply:lvsGetAITeam()) and ply:lvsGetAITeam() ~= 0 and self:GetAITEAM() ~= 0)) then 
+		self:EmitSound( "doors/default_locked.wav" )
+
+		return false
+	end
+
+	return true
+end
+
 function ENT:Use( ply )
 	if istable( self._DoorHandlers ) then
 		if ply:KeyDown( IN_SPEED ) then
 			return
 		else
+			if not self:IsUseAllowed( ply ) then return end
+
 			local Handler = self:GetDoorHandler( ply )
 
 			if IsValid( Handler ) then

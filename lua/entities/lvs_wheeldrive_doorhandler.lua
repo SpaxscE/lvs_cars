@@ -74,11 +74,7 @@ if SERVER then
 
 		if not IsValid( Base ) then return end
 
-		if Base:GetlvsLockedStatus() or (LVS.TeamPassenger:GetBool() and ((Base:GetAITEAM() ~= ply:lvsGetAITeam()) and ply:lvsGetAITeam() ~= 0 and Base:GetAITEAM() ~= 0)) then 
-			self:EmitSound( "doors/default_locked.wav" )
-
-			return
-		end
+		if not Base:IsUseAllowed( ply ) then return end
 
 		if self:IsOpen() then
 			self:Close( ply )
