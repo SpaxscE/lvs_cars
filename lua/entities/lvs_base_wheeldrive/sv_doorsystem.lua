@@ -13,7 +13,7 @@ function ENT:IsUseAllowed( ply )
 end
 
 function ENT:Use( ply )
-	if istable( self._DoorHandlers ) then
+	if istable( self._DoorHandlers ) and ply:GetMoveType() == MOVETYPE_WALK then
 		if ply:KeyDown( IN_SPEED ) then
 			return
 		else
