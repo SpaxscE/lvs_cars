@@ -10,16 +10,21 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "Radius")
+	self:NetworkVar( "Float", 1, "Width")
 
-	self:NetworkVar( "Float", 1, "Camber" )
-	self:NetworkVar( "Float", 2, "Caster" )
-	self:NetworkVar( "Float", 3, "Toe" )
+	self:NetworkVar( "Float", 2, "Camber" )
+	self:NetworkVar( "Float", 3, "Caster" )
+	self:NetworkVar( "Float", 4, "Toe" )
 
-	self:NetworkVar( "Float", 4, "RPM" )
+	self:NetworkVar( "Float", 5, "RPM" )
 
 	self:NetworkVar( "Angle", 0, "AlignmentAngle" )
 
 	self:NetworkVar( "Entity", 0, "Base" )
+
+	if SERVER then
+		self:SetWidth( 5 )
+	end
 end
 
 function ENT:VelToRPM( speed )
@@ -191,21 +196,211 @@ if SERVER then
 end
 
 if CLIENT then
-	function ENT:Draw()
-		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
-		self:DrawModel()
-	end
-
-	function ENT:DrawTranslucent()
-	end
-
 	ENT.DustEffectSurfaces = {
 		["sand"] = true,
 		["dirt"] = true,
 		["grass"] = true,
 	}
 
-	function ENT:Test()
+	ENT.SkidmarkTraceAdd = Vector(0,0,10)
+	ENT.SkidmarkDelay = 0.05
+	ENT.SkidmarkLifetime = 2
+	ENT.SkidmarkTexture = Material( "vgui/white" )
+	ENT.SkidmarkSurfaces = {
+		["concrete"] = true,
+		["tile"] = true,
+		["metal"] = true,
+		["boulder"] = true,
+	}
+
+	function ENT:Draw()
+		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
+		self:DrawModel()
+	end
+
+	function ENT:RenderSkidMarks()
+		local T = CurTime()
+
+		render.SetMaterial( self.SkidmarkTexture )
+
+		for id, skidmark in pairs( self:GetSkidMarks() ) do
+			local prev
+			local AmountDrawn = 0
+
+			for markID, data in pairs( skidmark.positions ) do
+				if not prev then
+
+					prev = data
+
+					continue
+				end
+
+				local Mul = math.Clamp( data.lifetime - CurTime(), 0, 1 ) ^ 2
+
+				if Mul > 0 then
+					AmountDrawn = AmountDrawn + 1
+					render.DrawQuad( data.p2, data.p1, prev.p1, prev.p2, Color( 0, 0, 0, 150 * Mul ) )
+				end
+
+				prev = data
+			end
+
+			if not skidmark.active and AmountDrawn == 0 then
+				self:RemoveSkidmark( id )
+			end
+		end
+	end
+
+	function ENT:GetSkidMarks()
+		if not istable( self._activeSkidMarks ) then
+			self._activeSkidMarks = {}
+		end
+
+		return self._activeSkidMarks
+	end
+
+	function ENT:DrawTranslucent()
+		self:RenderSkidMarks()
+	end
+
+	function ENT:StartSkidmark( pos )
+		if self._SkidMarkID or not LVS.ShowTraileffects then return end
+
+		local ID = 1
+		for _,_ in ipairs( self:GetSkidMarks() ) do
+			ID = ID + 1
+		end
+
+		self._activeSkidMarks[ ID ] = {
+			active = true,
+			startpos = pos + self.SkidmarkTraceAdd,
+			delay = CurTime() + self.SkidmarkDelay,
+			positions = {},
+		}
+
+		self._SkidMarkID = ID
+	end
+
+	function ENT:FinishSkidmark()
+		if not self._SkidMarkID then return end
+
+		self._activeSkidMarks[ self._SkidMarkID ].active = false
+
+		self._SkidMarkID = nil
+	end
+
+	function ENT:RemoveSkidmark( id )
+		if not id then return end
+
+		self._activeSkidMarks[ id ] = nil
+	end
+
+	function ENT:CalcSkidmark( trace, Filter )
+		local T = CurTime()
+		local CurActive = self:GetSkidMarks()[ self._SkidMarkID ]
+
+		if CurActive and CurActive.active then
+			if CurActive.delay < T then
+				CurActive.delay = T + self.SkidmarkDelay
+
+				local W = self:GetWidth()
+
+				local cur = trace.HitPos + self.SkidmarkTraceAdd
+
+				local prev = CurActive.positions[ #CurActive.positions ]
+
+				if not prev then
+					local sub = cur - CurActive.startpos
+
+					local L = sub:Length() * 0.5
+					local C = (cur + CurActive.startpos) * 0.5
+
+					local Ang = sub:Angle()
+					local Forward = Ang:Right()
+					local Right = Ang:Forward()
+
+					local p1 = C + Forward * W + Right * L
+					local p2 = C - Forward * W + Right * L
+
+					local t1 = util.TraceLine( { start = p1, endpos = p1 - Vector(0,0,100) } )
+					local t2 = util.TraceLine( { start = p2, endpos = p2 - Vector(0,0,100) } )
+
+					prev = {
+						px = CurActive.startpos,
+						p1 = t1.HitPos + t1.HitNormal,
+						p2 = t2.HitPos + t2.HitNormal,
+						lifetime = T + self.SkidmarkLifetime - self.SkidmarkDelay,
+					}
+				end
+
+				local sub = cur - prev.px
+
+				local L = sub:Length() * 0.5
+				local C = (cur + prev.px) * 0.5
+
+				local Ang = sub:Angle()
+				local Forward = Ang:Right()
+				local Right = Ang:Forward()
+
+				local p1 = C + Forward * W + Right * L
+				local p2 = C - Forward * W + Right * L
+
+				local t1 = util.TraceLine( { start = p1, endpos = p1 - self.SkidmarkTraceAdd, filter = Filter, } )
+				local t2 = util.TraceLine( { start = p2, endpos = p2 - self.SkidmarkTraceAdd, filter = Filter, } )
+
+				CurActive.positions[ #CurActive.positions + 1 ] = {
+					px = cur,
+					p1 = t1.HitPos + t1.HitNormal,
+					p2 = t2.HitPos + t2.HitNormal,
+					lifetime = T + self.SkidmarkLifetime,
+				}
+			end
+		end
+	end
+
+	function ENT:DoWheelEffects( SkidValue, trace, Base )
+		if not trace.Hit then self:FinishSkidmark() return end
+
+		local SurfacePropName = util.GetSurfacePropName( trace.SurfaceProps )
+
+		if self.SkidmarkSurfaces[ SurfacePropName ] then
+			self:StartSkidmark( trace.HitPos )
+			self:CalcSkidmark( trace, Base:GetCrosshairFilterEnts() )
+		else
+			self:FinishSkidmark()
+		end
+
+		if not LVS.ShowEffects then return end
+
+		if self.DustEffectSurfaces[ SurfacePropName ] then
+			local Scale = math.min( 0.3 + (SkidValue - 100) / 4000, 1 ) ^ 2
+
+			local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetEntity( Base )
+			effectdata:SetNormal( trace.HitNormal )
+			effectdata:SetMagnitude( Scale )
+			util.Effect( "lvs_physics_wheeldust", effectdata, true, true )
+		end
+	end
+
+	function ENT:StopWheelEffects()
+		if not self._DoingWheelFx then return end
+
+		self._DoingWheelFx = nil
+
+		self:FinishSkidmark()
+	end
+
+	function ENT:StartWheelEffects( SkidValue, trace, Base )
+		self:DoWheelEffects( SkidValue, trace, Base )
+
+		if self._DoingWheelFx then return end
+
+		self._DoingWheelFx = true
+	end
+
+	function ENT:CalcWheelEffects()
 		local Base = self:GetBase()
 
 		if not IsValid( Base ) then return end
@@ -218,7 +413,7 @@ if CLIENT then
 
 		local WheelSlip = math.max( rpm - rpmTheoretical, 0 ) ^ 2 + math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 2 ) )
 
-		if WheelSlip < 500 then return end
+		if WheelSlip < 500 then self:StopWheelEffects() return end
 
 		local SkidValue = VelLength + WheelSlip
 
@@ -232,23 +427,18 @@ if CLIENT then
 			filter = Base:GetCrosshairFilterEnts(),
 		} )
 
-		if not trace.Hit or not self.DustEffectSurfaces[ util.GetSurfacePropName( trace.SurfaceProps ) ] then return end
-
-		local Scale = math.min( 0.3 + (SkidValue - 100) / 4000, 1 ) ^ 2
-
-		local effectdata = EffectData()
-		effectdata:SetOrigin( trace.HitPos )
-		effectdata:SetEntity( Base )
-		effectdata:SetNormal( trace.HitNormal )
-		effectdata:SetMagnitude( Scale )
-		util.Effect( "lvs_physics_wheeldust", effectdata, true, true )
+		self:StartWheelEffects( SkidValue, trace, Base )
 	end
 
 	function ENT:Think()
 		self:SetNextClientThink( CurTime() + 0.05 )
 
-		self:Test()
+		self:CalcWheelEffects()
 
 		return true
+	end
+
+	function ENT:OnRemove()
+		self:StopWheelEffects()
 	end
 end
