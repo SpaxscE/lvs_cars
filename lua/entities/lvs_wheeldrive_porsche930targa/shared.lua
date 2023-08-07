@@ -21,6 +21,12 @@ ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 
+ENT.PhysicsMass = 700
+ENT.PhysicsInertia = Vector(1050,1050,525)
+
+ENT.WheelPhysicsMass = 150
+ENT.WheelPhysicsInertia = Vector(15,12,15)
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/ferrari_365/eng_idle_loop.wav",
