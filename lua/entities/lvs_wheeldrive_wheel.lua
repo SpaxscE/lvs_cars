@@ -224,7 +224,7 @@ if CLIENT then
 		self:DrawModel()
 	end
 
-	hook.Add("PostDrawOpaqueRenderables", "!!!!lvs_skidmarks", function( bDrawingDepth, bDrawingSkybox, isDraw3DSkybox )
+	hook.Add("PreDrawOpaqueRenderables", "!!!!lvs_skidmarks", function( bDrawingDepth, bDrawingSkybox, isDraw3DSkybox )
 		if isDraw3DSkybox then return end
 
 		for _, wheel in ipairs( ents.FindByClass("lvs_wheeldrive_wheel") ) do
@@ -274,6 +274,13 @@ if CLIENT then
 	end
 
 	function ENT:DrawTranslucent()
+		local T = CurTime()
+
+		if (self._NextFx or 0) > T then return end
+
+		self._NextFx = T + 0.05
+
+		self:CalcWheelEffects()
 	end
 
 	function ENT:StartSkidmark( pos )
@@ -454,11 +461,7 @@ if CLIENT then
 	end
 
 	function ENT:Think()
-		self:SetNextClientThink( CurTime() + 0.05 )
-
-		self:CalcWheelEffects()
-
-		return true
+		return false
 	end
 
 	function ENT:OnRemove()
