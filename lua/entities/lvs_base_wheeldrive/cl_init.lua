@@ -6,7 +6,165 @@ function ENT:PreDraw()
 	return false
 end
 
+local _curActive
+local _oldAttack
+
+local ActiveSkidMarks = {}
+local ourMat = Material( "vgui/white" )
+
+local function StartTrail( pos )
+	local ID = 1
+	for _,_ in ipairs( ActiveSkidMarks ) do
+		ID = ID + 1
+	end
+
+	PrintChat("start")
+
+	ActiveSkidMarks[ ID ] = {
+		active = true,
+		startpos = pos,
+		delay = CurTime() + 0.1,
+		positions = {},
+	}
+
+	return ID
+end
+
+local function FinishTrail( id )
+	if not id then return end
+
+	PrintChat("stop")
+
+	ActiveSkidMarks[ id ].active = false
+end
+
+local function RemoveTrail( id )
+	if not id then return end
+
+	PrintChat("removed "..id)
+	ActiveSkidMarks[ id ] = nil
+end
+
+local W = 6
+
+local function Test()
+	local ply = LocalPlayer()
+
+	if ply:KeyDown( IN_ATTACK2 ) then
+		if #ActiveSkidMarks > 0 then
+			table.Empty( ActiveSkidMarks )
+			PrintChat("remove")
+		end
+	end
+
+	local M1 = ply:KeyDown( IN_ATTACK )
+	local trace = ply:GetEyeTrace()
+
+	if _oldAttack ~= M1 then
+		_oldAttack = M1
+
+		if M1 then
+			_curActive = StartTrail( trace.HitPos + Vector(0,0,50) )
+		else
+			FinishTrail( _curActive )
+		end
+	end
+
+	if ActiveSkidMarks[ _curActive ] and ActiveSkidMarks[ _curActive ].active then
+		if ActiveSkidMarks[ _curActive ].delay < CurTime() then
+			PrintChat("get pos")
+
+			ActiveSkidMarks[ _curActive ].delay = CurTime() + 0.05
+
+			local cur = trace.HitPos + Vector(0,0,50)
+
+			local prev = ActiveSkidMarks[ _curActive ].positions[ #ActiveSkidMarks[ _curActive ].positions ]
+
+			if not prev then
+				local sub = cur - ActiveSkidMarks[ _curActive ].startpos
+
+				local L = sub:Length() * 0.5
+				local C = (cur + ActiveSkidMarks[ _curActive ].startpos) * 0.5
+
+				local Ang = sub:Angle()
+				local Forward = Ang:Right()
+				local Right = Ang:Forward()
+
+				local p1 = C + Forward * W + Right * L
+				local p2 = C - Forward * W + Right * L
+
+				local t1 = util.TraceLine( { start = p1, endpos = p1 - Vector(0,0,100) } )
+				local t2 = util.TraceLine( { start = p2, endpos = p2 - Vector(0,0,100) } )
+
+				prev = {
+					px = ActiveSkidMarks[ _curActive ].startpos,
+					p1 = t1.HitPos + t1.HitNormal,
+					p2 = t2.HitPos + t2.HitNormal,
+					lifetime = CurTime() + 1.95,
+				}
+			end
+
+			local sub = cur - prev.px
+
+			local L = sub:Length() * 0.5
+			local C = (cur + prev.px) * 0.5
+
+			local Ang = sub:Angle()
+			local Forward = Ang:Right()
+			local Right = Ang:Forward()
+
+			local p1 = C + Forward * W + Right * L
+			local p2 = C - Forward * W + Right * L
+
+			local t1 = util.TraceLine( { start = p1, endpos = p1 - Vector(0,0,100) } )
+			local t2 = util.TraceLine( { start = p2, endpos = p2 - Vector(0,0,100) } )
+
+			ActiveSkidMarks[ _curActive ].positions[ #ActiveSkidMarks[ _curActive ].positions + 1 ] = {
+				px = cur,
+				p1 = t1.HitPos + t1.HitNormal,
+				p2 = t2.HitPos + t2.HitNormal,
+				lifetime = CurTime() + 2,
+			}
+		end
+	end
+end
+
 function ENT:PreDrawTranslucent()
+	Test()
+
+	local T = CurTime()
+	render.SetMaterial( ourMat )
+
+	for id, skidmark in pairs( ActiveSkidMarks ) do
+		local prev
+		local AmountDrawn = 0
+
+		for markID, data in pairs( skidmark.positions ) do
+			if not prev then
+
+				prev = data
+
+				continue
+			end
+
+			local Mul = math.Clamp( data.lifetime - CurTime(), 0, 1 ) ^ 2
+
+			if Mul > 0 then
+				AmountDrawn = AmountDrawn + 1
+				render.DrawQuad( data.p2, data.p1, prev.p1, prev.p2, Color( 0, 0, 0, 150 * Mul ) )
+			end
+
+			--debugoverlay.Line( prev.p1, data.p1, 0.1 )
+			--debugoverlay.Line( prev.p2, data.p2, 0.1 )
+
+			prev = data
+		end
+
+		if not skidmark.active and AmountDrawn == 0 then
+			RemoveTrail( id )
+		end
+	end
+
 	return true
 end
 
