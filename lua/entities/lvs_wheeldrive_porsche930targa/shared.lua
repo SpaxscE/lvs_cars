@@ -11,7 +11,7 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/porsche_930/targa.mdl"
 
-ENT.MaxVelocity = 2600
+ENT.MaxVelocity = 2400
 
 ENT.EnginePower = 2000
 ENT.EngineTorque = 150
