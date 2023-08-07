@@ -43,8 +43,8 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetRateExponent( 3 )
 
 	local DoorHandler = self:AddDoorHandler( "fuel_cap", Vector(-74,-38,21), Angle(0,0,0), Vector(-5,0,-5), Vector(5,5,5), Vector(-5,-5,-5), Vector(5,5,5) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/Open Door Exterior 01.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/Close Door Exterior 01.wav" )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
 	local WheelModel = "models/diggercars/bmw_m5e34/e34_shit_wheel.mdl"
 
