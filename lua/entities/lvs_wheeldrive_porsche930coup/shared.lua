@@ -11,10 +11,10 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/porsche_930/coupe.mdl"
 
-ENT.MaxVelocity = 2400
+ENT.MaxVelocity = 2100
 
-ENT.EnginePower = 2000
-ENT.EngineTorque = 150
+ENT.EnginePower = 4000
+ENT.EngineTorque = 100
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
