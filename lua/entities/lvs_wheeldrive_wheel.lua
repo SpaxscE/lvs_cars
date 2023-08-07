@@ -198,14 +198,13 @@ end
 if CLIENT then
 	ENT.SkidmarkTraceAdd = Vector(0,0,10)
 	ENT.SkidmarkDelay = 0.05
-	ENT.SkidmarkLifetime = 1
+	ENT.SkidmarkLifetime = 10
 
 	ENT.SkidmarkTexture = Material( "vgui/white" )
 	ENT.SkidmarkRed = 0
 	ENT.SkidmarkGreen = 0
 	ENT.SkidmarkBlue = 0
 	ENT.SkidmarkAlpha = 150
-	ENT.SkidmarkAlphaFadeExponent = 2
 
 	ENT.SkidmarkSurfaces = {
 		["concrete"] = true,
@@ -221,11 +220,17 @@ if CLIENT then
 	}
 
 	function ENT:Draw()
-		self:RenderSkidMarks()
-
 		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 		self:DrawModel()
 	end
+
+	hook.Add("PostDrawOpaqueRenderables", "!!!!lvs_skidmarks", function( bDrawingDepth, bDrawingSkybox, isDraw3DSkybox )
+		if isDraw3DSkybox then return end
+
+		for _, wheel in ipairs( ents.FindByClass("lvs_wheeldrive_wheel") ) do
+			wheel:RenderSkidMarks()
+		end
+	end)
 
 	function ENT:RenderSkidMarks()
 		local T = CurTime()
@@ -244,7 +249,7 @@ if CLIENT then
 					continue
 				end
 
-				local Mul = math.max( data.lifetime - CurTime(), 0 ) / self.SkidmarkLifetime ^ self.SkidmarkAlphaFadeExponent
+				local Mul = math.max( data.lifetime - CurTime(), 0 ) / self.SkidmarkLifetime
 
 				if Mul > 0 then
 					AmountDrawn = AmountDrawn + 1
