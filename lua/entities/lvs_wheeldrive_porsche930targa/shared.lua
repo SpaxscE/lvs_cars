@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Porsche 911 Cabriolet (default)"
+ENT.PrintName = "Porsche 911 Targa (-10 0 25)"
 ENT.Author = "Digger"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/porsche_930/cab.mdl"
+ENT.MDL = "models/diggercars/porsche_930/targa.mdl"
 
 ENT.MaxVelocity = 2600
 
