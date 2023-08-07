@@ -372,8 +372,18 @@ if CLIENT then
 		local SurfacePropName = util.GetSurfacePropName( trace.SurfaceProps )
 
 		if self.SkidmarkSurfaces[ SurfacePropName ] then
-			self:StartSkidmark( trace.HitPos )
-			self:CalcSkidmark( trace, Base:GetCrosshairFilterEnts() )
+			local Scale = math.min( 0.3 + SkidValue / 4000, 1 ) ^ 2
+
+			if Scale > 0.7 then
+				self:StartSkidmark( trace.HitPos )
+				self:CalcSkidmark( trace, Base:GetCrosshairFilterEnts() )
+			end
+
+			local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetEntity( Base )
+			effectdata:SetNormal( trace.HitNormal )
+			util.Effect( "lvs_physics_wheelsmoke", effectdata, true, true )
 		else
 			self:FinishSkidmark()
 		end
