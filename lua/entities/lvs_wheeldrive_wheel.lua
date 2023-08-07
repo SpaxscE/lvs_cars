@@ -196,12 +196,6 @@ if SERVER then
 end
 
 if CLIENT then
-	ENT.DustEffectSurfaces = {
-		["sand"] = true,
-		["dirt"] = true,
-		["grass"] = true,
-	}
-
 	ENT.SkidmarkTraceAdd = Vector(0,0,10)
 	ENT.SkidmarkDelay = 0.05
 	ENT.SkidmarkLifetime = 1
@@ -218,6 +212,12 @@ if CLIENT then
 		["tile"] = true,
 		["metal"] = true,
 		["boulder"] = true,
+	}
+
+	ENT.DustEffectSurfaces = {
+		["sand"] = true,
+		["dirt"] = true,
+		["grass"] = true,
 	}
 
 	function ENT:Draw()
