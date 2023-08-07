@@ -151,7 +151,19 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local DesiredGear = 1
 
+	local subGeared = vehVel - (self._smVelGeared or 0)
 	local VelocityGeared = vehVel
+
+
+	--[[ workaround ]]-- TODO: Fix it properly
+	if vehicle:Sign( subGeared ) < 0 then
+		self._smVelGeared = (self._smVelGeared or 0) + subGeared * FT * 5
+		VelocityGeared = self._smVelGeared
+	else
+		self._smVelGeared = VelocityGeared 
+	end
+	--[[ workaround ]]--
+
 
 	while (VelocityGeared > PitchValue) and DesiredGear< NumGears do
 		VelocityGeared = VelocityGeared - PitchValue
