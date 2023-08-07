@@ -88,14 +88,7 @@ function ENT:CalcBrake( ply, cmd )
 	self:SetBrake( New )
 end
 
-function ENT:StartCommand( ply, cmd )
-	if self:GetDriver() ~= ply then return end
-
-	self:CalcSteer( ply, cmd )
-	self:CalcThrottle( ply, cmd )
-	self:CalcHandbrake( ply, cmd )
-	self:CalcBrake( ply, cmd )
-
+function ENT:CalcTransmission( ply, cmd )
 	local walk = ply:lvsKeyDown( "CAR_REVERSE" )
 
 	if walk ~= self._oldwalk then
@@ -105,4 +98,14 @@ function ENT:StartCommand( ply, cmd )
 			self:SetReverse( not self:GetReverse() )
 		end
 	end
+end
+
+function ENT:StartCommand( ply, cmd )
+	if self:GetDriver() ~= ply then return end
+
+	self:CalcSteer( ply, cmd )
+	self:CalcThrottle( ply, cmd )
+	self:CalcHandbrake( ply, cmd )
+	self:CalcBrake( ply, cmd )
+	self:CalcTransmission( ply, cmd )
 end
