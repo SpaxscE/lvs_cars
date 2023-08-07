@@ -2,7 +2,6 @@
 {
 	"$basetexture" "models/DiggerCars/PORSCHE_930Targa/Lights"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$nodecal" "1"
 	"$nocull" "1"
 	"$phong" "1" 
 	"$alphatest" "1"
