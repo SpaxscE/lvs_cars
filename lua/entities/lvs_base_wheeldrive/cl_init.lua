@@ -129,9 +129,7 @@ local function Test()
 	end
 end
 
-function ENT:PreDrawTranslucent()
-	Test()
-
+local function TestRender()
 	local T = CurTime()
 	render.SetMaterial( ourMat )
 
@@ -164,6 +162,11 @@ function ENT:PreDrawTranslucent()
 			RemoveTrail( id )
 		end
 	end
+end
+
+function ENT:PreDrawTranslucent()
+	--Test()
+	--TestRender()
 
 	return true
 end
