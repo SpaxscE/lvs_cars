@@ -89,6 +89,8 @@ function ENT:AddWheel( data )-- pos, ang, model )
 
 	Wheel:MakeSpherical( data.radius or -1 )
 
+	Wheel:SetWidth( data.width or 3 )
+
 	Wheel:SetCamber( data.camber or 0 )
 	Wheel:SetCaster( data.caster or 0 )
 	Wheel:SetToe( data.toe or 0 )
