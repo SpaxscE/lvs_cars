@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Porsche 911 Targa (-10 0 25)"
+ENT.PrintName = "Porsche 911 Targa (-25 0 22)"
 ENT.Author = "Digger"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"

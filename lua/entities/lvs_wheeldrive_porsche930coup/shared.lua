@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Porsche 911 Coupe (-35 0 22) "
+ENT.PrintName = "Porsche 911 Coupe (-30 0 22) "
 ENT.Author = "Digger"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
