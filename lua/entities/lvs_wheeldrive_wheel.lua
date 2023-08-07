@@ -386,7 +386,7 @@ if CLIENT then
 		if self.SkidmarkSurfaces[ SurfacePropName ] then
 			local Scale = math.min( 0.3 + SkidValue / 4000, 1 ) ^ 2
 
-			if Scale > 0.7 then
+			if Scale > 0.5 then
 				self:StartSkidmark( trace.HitPos )
 				self:CalcSkidmark( trace, Base:GetCrosshairFilterEnts() )
 			end
