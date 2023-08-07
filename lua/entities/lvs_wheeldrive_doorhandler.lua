@@ -66,7 +66,7 @@ if SERVER then
 		self:SetSolid( SOLID_NONE )
 		self:SetUseType( SIMPLE_USE )
 		self:DrawShadow( false )
-		debugoverlay.Cross( self:GetPos(), 50, 5, Color( 255, 223, 127 ) )
+		debugoverlay.Cross( self:GetPos(), 15, 5, Color( 255, 223, 127 ) )
 	end
 
 	function ENT:Use( ply )
