@@ -2,7 +2,6 @@
 {
 	"$basetexture" "models/DiggerCars/PORSCHE_930Targa/ext"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$nocull" "1"
 	"$phong" 1
 	"$phongexponent" 5
 	"$phongboost"	2
