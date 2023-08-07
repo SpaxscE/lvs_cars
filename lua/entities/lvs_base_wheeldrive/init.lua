@@ -57,6 +57,13 @@ function ENT:PostInitialize( PObj )
 	self:EnableHandbrake()
 end
 
+function ENT:Lock()
+	for _, Handler in pairs( self._DoorHandlers ) do
+		Handler:Close( ply )
+	end
+	BaseClass.Lock( self )
+end
+
 function ENT:AlignView( ply )
 	if not IsValid( ply ) then return end
 
