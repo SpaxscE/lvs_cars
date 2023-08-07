@@ -69,13 +69,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-41.2,26.5,11),
+				pos = Vector(-42.2,26.5,11),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-41.2,-26.5,11),
+				pos = Vector(-42.2,-26.5,11),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
