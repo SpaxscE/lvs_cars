@@ -23,7 +23,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity", 0, "Base" )
 
 	if SERVER then
-		self:SetWidth( 5 )
+		self:SetWidth( 3 )
 	end
 end
 
@@ -204,8 +204,15 @@ if CLIENT then
 
 	ENT.SkidmarkTraceAdd = Vector(0,0,10)
 	ENT.SkidmarkDelay = 0.05
-	ENT.SkidmarkLifetime = 2
+	ENT.SkidmarkLifetime = 1
+
 	ENT.SkidmarkTexture = Material( "vgui/white" )
+	ENT.SkidmarkRed = 0
+	ENT.SkidmarkGreen = 0
+	ENT.SkidmarkBlue = 0
+	ENT.SkidmarkAlpha = 150
+	ENT.SkidmarkAlphaFadeExponent = 2
+
 	ENT.SkidmarkSurfaces = {
 		["concrete"] = true,
 		["tile"] = true,
@@ -214,6 +221,8 @@ if CLIENT then
 	}
 
 	function ENT:Draw()
+		self:RenderSkidMarks()
+
 		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 		self:DrawModel()
 	end
@@ -235,11 +244,11 @@ if CLIENT then
 					continue
 				end
 
-				local Mul = math.Clamp( data.lifetime - CurTime(), 0, 1 ) ^ 2
+				local Mul = math.max( data.lifetime - CurTime(), 0 ) / self.SkidmarkLifetime ^ self.SkidmarkAlphaFadeExponent
 
 				if Mul > 0 then
 					AmountDrawn = AmountDrawn + 1
-					render.DrawQuad( data.p2, data.p1, prev.p1, prev.p2, Color( 0, 0, 0, 150 * Mul ) )
+					render.DrawQuad( data.p2, data.p1, prev.p1, prev.p2, Color( self.SkidmarkRed, self.SkidmarkGreen, self.SkidmarkBlue, math.min(255 * Mul,self.SkidmarkAlpha) ) )
 				end
 
 				prev = data
@@ -260,7 +269,6 @@ if CLIENT then
 	end
 
 	function ENT:DrawTranslucent()
-		self:RenderSkidMarks()
 	end
 
 	function ENT:StartSkidmark( pos )
@@ -322,8 +330,8 @@ if CLIENT then
 					local p1 = C + Forward * W + Right * L
 					local p2 = C - Forward * W + Right * L
 
-					local t1 = util.TraceLine( { start = p1, endpos = p1 - Vector(0,0,100) } )
-					local t2 = util.TraceLine( { start = p2, endpos = p2 - Vector(0,0,100) } )
+					local t1 = util.TraceLine( { start = p1, endpos = p1 - self.SkidmarkTraceAdd } )
+					local t2 = util.TraceLine( { start = p2, endpos = p2 - self.SkidmarkTraceAdd } )
 
 					prev = {
 						px = CurActive.startpos,
