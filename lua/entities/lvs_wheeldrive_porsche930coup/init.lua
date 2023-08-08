@@ -38,13 +38,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(47.2,25,17),
+				pos = Vector(47.2,26.5,16),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(47.2,-25,17),
+				pos = Vector(47.2,-26.5,16),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
@@ -69,24 +69,24 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-42.2,25,16),
+				pos = Vector(-42.2,25,12),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-42.2,-25,16),
+				pos = Vector(-42.2,-25,12),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
 		},
 		Suspension = {
-			Height = 16,
+			Height = 10,
 			MaxTravel = 7,
 			ControlArmLength = 25,
-			SpringConstant = 38000,
-			SpringDamping = 3800,
-			SpringRelativeDamping = 3800,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
 		},
 	} )
 end
