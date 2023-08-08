@@ -2,7 +2,7 @@
 {
 	"$basetexture" "models/DiggerCars/PORSCHE_930Targa/Lights"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$detail" "models/cs_italy/light_orange"
+	"$detail" "models/DiggerCars/PORSCHE_930Targa/lights_emission2"
 	"$detailscale" "1"
 	"$detailblendfactor" "0" //use this for emission strength
 	"$detailblendmode" "5"
