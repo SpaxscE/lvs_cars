@@ -92,10 +92,14 @@ function ENT:SubMaterialThink( base )
 	for typeid, typedata in pairs( data ) do
 		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
 
-		local Mul = self:GetTypeActivator( typedata.Trigger ) and 1 or 0
+		local Mul = self:GetTypeActivator( typedata.Trigger )
 
-		typedata.SubMaterial:SetFloat("$detailblendfactor", Mul )
-		base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..EntID)
+		typedata.SubMaterial:SetFloat("$detailblendfactor", Mul and 1 or 0 )
+
+		if typedata.SubMaterialValue ~= Mul then
+			data[typeid].SubMaterialValue = Mul
+			base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..EntID)
+		end
 	end
 end
 
