@@ -17,6 +17,8 @@ function EFFECT:Init( data )
 		RandomAng = math.random(0,360),
 	}
 
+	self.VecCol = (render.GetLightColor( Pos ) * 0.5 +Vector(0.5,0.5,0.5)) * 255
+
 	local emitter = Ent:GetParticleEmitter( Ent:GetPos() )
 	local Vel = Ent:GetVelocity():Length()
 
@@ -33,7 +35,7 @@ function EFFECT:Init( data )
 			particle:SetStartSize( self.Size * 0.2 )
 			particle:SetEndSize(  self.Size )
 			particle:SetRollDelta( math.Rand(-1,1) * 5 )
-			particle:SetColor( 255,255,255 )
+			particle:SetColor( self.VecCol.r, self.VecCol.g, self.VecCol.b )
 			particle:SetGravity( Vector( 0, 0, -600 ) )
 			particle:SetCollide( false )
 		end
@@ -49,7 +51,7 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
-	if self.Splash and self.LifeTime then
+	if self.Splash and self.LifeTime and self.VecCol then
 		local Scale = 1 - (self.DieTime - CurTime()) / self.LifeTime
 
 		local Alpha = math.max( 100 - 150 * Scale ^ 2, 0 )
@@ -60,7 +62,7 @@ function EFFECT:Render()
 
 		cam.Start3D2D( self.Splash.Pos, Angle(0,0,0), 1 )
 			surface.SetMaterial( self.Splash.Mat )
-			surface.SetDrawColor( 255, 255, 255 , Alpha )
+			surface.SetDrawColor( self.VecCol.r, self.VecCol.g, self.VecCol.b, Alpha )
 			surface.DrawTexturedRectRotated( 0, 0, Size, Size, self.Splash.RandomAng )
 		cam.End3D2D()
 	end
