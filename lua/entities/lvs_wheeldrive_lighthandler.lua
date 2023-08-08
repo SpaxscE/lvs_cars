@@ -100,9 +100,15 @@ function ENT:SubMaterialThink( base )
 end
 
 function ENT:GetTypeActivator( trigger )
-	if trigger == "mainlight" then return self:GetActive() end
+	if trigger == "main" then return self:GetActive() end
 
-	if trigger == "brakelight" then return self:GetBase():GetBrake() > 0 end
+	local base = self:GetBase()
+
+	if not IsValid( base ) then return false end
+
+	if trigger == "brake" then return base:GetBrake() > 0 end
+
+	if trigger == "reverse" then return base:GetReverse() end
 
 	return false
 end
