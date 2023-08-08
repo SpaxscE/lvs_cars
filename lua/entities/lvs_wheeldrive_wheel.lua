@@ -378,10 +378,26 @@ if CLIENT then
 		end
 	end
 
-	function ENT:DoWheelEffects( SkidValue, trace, Base )
+	function ENT:DoWheelEffects( Base, SkidValue, trace, traceWater )
 		if not trace.Hit then self:FinishSkidmark() return end
 
 		local SurfacePropName = util.GetSurfacePropName( trace.SurfaceProps )
+
+		if traceWater.Hit then
+			local Scale = math.min( 0.3 + (SkidValue - 100) / 4000, 1 ) ^ 2
+
+			local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetEntity( Base )
+			effectdata:SetNormal( trace.HitNormal )
+			effectdata:SetMagnitude( Scale )
+			effectdata:SetFlags( 1 )
+			util.Effect( "lvs_physics_wheeldust", effectdata, true, true )
+
+			self:FinishSkidmark()
+
+			return
+		end
 
 		if self.SkidmarkSurfaces[ SurfacePropName ] then
 			local Scale = math.min( 0.3 + SkidValue / 4000, 1 ) ^ 2
@@ -410,6 +426,7 @@ if CLIENT then
 			effectdata:SetEntity( Base )
 			effectdata:SetNormal( trace.HitNormal )
 			effectdata:SetMagnitude( Scale )
+			effectdata:SetFlags( 0 )
 			util.Effect( "lvs_physics_wheeldust", effectdata, true, true )
 		end
 	end
@@ -422,8 +439,8 @@ if CLIENT then
 		self:FinishSkidmark()
 	end
 
-	function ENT:StartWheelEffects( SkidValue, trace, Base )
-		self:DoWheelEffects( SkidValue, trace, Base )
+	function ENT:StartWheelEffects( Base, SkidValue, trace, traceWater )
+		self:DoWheelEffects( Base, SkidValue, trace, traceWater )
 
 		if self._DoingWheelFx then return end
 
@@ -441,15 +458,11 @@ if CLIENT then
 		local rpmTheoretical = self:VelToRPM( VelLength )
 		local rpm = math.abs( self:GetRPM() )
 
-		local WheelSlip = math.max( rpm - rpmTheoretical, 0 ) ^ 2 + math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 2 ) )
+		local Radius = Base:GetUp() * (self:GetRadius() + 1)
 
-		if WheelSlip < 500 then self:StopWheelEffects() return end
-
-		local SkidValue = VelLength + WheelSlip
-
-		local Radius = self:GetRadius()
-		local StartPos = self:GetPos()
-		local EndPos = StartPos - Base:GetUp() * (Radius + 1)
+		local Pos =  self:GetPos()
+		local StartPos = Pos + Radius
+		local EndPos = Pos - Radius
 
 		local trace = util.TraceLine( {
 			start = StartPos,
@@ -457,7 +470,36 @@ if CLIENT then
 			filter = Base:GetCrosshairFilterEnts(),
 		} )
 
-		self:StartWheelEffects( SkidValue, trace, Base )
+		local traceWater = util.TraceLine( {
+			start = StartPos,
+			endpos = EndPos,
+			filter = Base:GetCrosshairFilterEnts(),
+			mask = MASK_WATER,
+		} )
+
+		if traceWater.Hit and trace.HitPos.z < traceWater.HitPos.z then 
+			if rpm > 25 then
+				if traceWater.Fraction > 0 then
+					local effectdata = EffectData()
+						effectdata:SetOrigin( traceWater.HitPos )
+						effectdata:SetEntity( Base )
+						effectdata:SetMagnitude( self:BoundingRadius() )
+					util.Effect( "lvs_physics_wheelwatersplash", effectdata )
+
+					self:StopWheelEffects()
+
+					return
+				end
+			end
+		end
+
+		local WheelSlip = math.max( rpm - rpmTheoretical, 0 ) ^ 2 + math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 2 ) )
+
+		if WheelSlip < 500 then self:StopWheelEffects() return end
+
+		local SkidValue = VelLength + WheelSlip
+
+		self:StartWheelEffects( Base, SkidValue, trace, traceWater )
 	end
 
 	function ENT:Think()

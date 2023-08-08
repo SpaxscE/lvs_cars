@@ -32,6 +32,8 @@ function EFFECT:Init( data )
 	local dir = data:GetNormal()
 	local scale = data:GetMagnitude()
 
+	local underwarter = data:GetFlags() == 1
+
 	local emitter = ent:GetParticleEmitter( ent:GetPos() )
 
 	local VecCol = (render.GetLightColor( pos + dir ) * 0.5 + Vector(0.3,0.25,0.15)) * 255
@@ -56,18 +58,24 @@ function EFFECT:Init( data )
 	end
 
 	for i = 1, 5 do
-		local particle = emitter:Add( self.SmokeMat[ math.random(1,#self.SmokeMat) ] , pos )
+		local particle = emitter:Add( underwarter and "effects/splash4" or self.SmokeMat[ math.random(1,#self.SmokeMat) ] , pos )
 
 		if not particle then continue end
 
 		particle:SetVelocity( (dir * 50 * i + VectorRand() * 40) * scale )
 		particle:SetDieTime( (i / 8) * DieTime )
 		particle:SetAirResistance( 10 ) 
-		particle:SetStartAlpha( 255 )
+		particle:SetStartAlpha( underwarter and 100 or 255 )
 		particle:SetStartSize( 10 * scale )
 		particle:SetEndSize( 20 * i * scale )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+
+		if underwarter then
+			particle:SetColor( 255, 255, 255 )
+		else
+			particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		end
+
 		particle:SetGravity( Vector(0,0,-600) * scale )
 		particle:SetCollide( false )
 	end
