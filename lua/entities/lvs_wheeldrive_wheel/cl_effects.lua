@@ -39,7 +39,7 @@ function ENT:DoWheelEffects( Base, SkidValue, trace, traceWater )
 	if self.SkidmarkSurfaces[ SurfacePropName ] then
 		local Scale = math.min( 0.3 + SkidValue / 4000, 1 ) ^ 2
 
-		if Scale > 0.5 then
+		if Scale > 0.4 then
 			self:StartSkidmark( trace.HitPos )
 			self:CalcSkidmark( trace, Base:GetCrosshairFilterEnts() )
 		end
@@ -120,7 +120,7 @@ function ENT:CalcWheelEffects()
 		end
 	end
 
-	local WheelSlip = math.max( rpm - rpmTheoretical, 0 ) ^ 2 + math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 2 ) )
+	local WheelSlip = math.max( rpm - rpmTheoretical - 80, 0 ) ^ 2 + math.max( math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 4 ) ) - VelLength, 0 )
 
 	if WheelSlip < 500 then self:StopWheelEffects() return end
 
