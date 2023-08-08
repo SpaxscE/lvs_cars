@@ -28,7 +28,7 @@ end
 function ENT:Initialize()
 	local base = self:GetBase()
 
-	if not IsValid( base ) then
+	if not IsValid( base )then
 
 		timer.Simple( 1, function()
 			if not IsValid( self ) then return end
@@ -40,7 +40,6 @@ function ENT:Initialize()
 	end
 
 	self:InitializeLights( base )
-	self:InitializeSubMaterials( base )
 end
 
 function ENT:InitializeLights( base )
@@ -48,80 +47,88 @@ function ENT:InitializeLights( base )
 
 	if not istable( data ) then return end
 
-	for id, lightsdata in pairs( data.Main.Sprites ) do
+	for typeid, typedata in pairs( data ) do
+		if not typedata.Trigger then
+			data[typeid] = nil
+		end
 
-		data.Main.Sprites[ id ].PixVis = util.GetPixelVisibleHandle()
+		if typedata.SubMaterialID then
+			data[typeid].SubMaterial = self:CreateSubMaterial( typedata.SubMaterialID, typedata.Trigger )
+		end
 
-		data.Main.Sprites[ id ].mat = data.Main.Sprites[ id ].mat or Material( "sprites/light_ignorez" )
-		data.Main.Sprites[ id ].width = lightsdata.width or 50
-		data.Main.Sprites[ id ].height = lightsdata.height or 50
-		data.Main.Sprites[ id ].colorR = lightsdata.colorR or 255
-		data.Main.Sprites[ id ].colorG = lightsdata.colorG or 255
-		data.Main.Sprites[ id ].colorB = lightsdata.colorB or 255
-		data.Main.Sprites[ id ].colorA = lightsdata.colorA or 255
+		if not typedata.Sprites then continue end
+
+		for lightsid, lightsdata in pairs( typedata.Sprites ) do
+			data[typeid].Sprites[ lightsid ].PixVis = util.GetPixelVisibleHandle()
+			data[typeid].Sprites[ lightsid ].mat = lightsdata.mat or Material( "sprites/light_ignorez" )
+			data[typeid].Sprites[ lightsid ].width = lightsdata.width or 50
+			data[typeid].Sprites[ lightsid ].height = lightsdata.height or 50
+			data[typeid].Sprites[ lightsid ].colorR = lightsdata.colorR or 255
+			data[typeid].Sprites[ lightsid ].colorG = lightsdata.colorG or 255
+			data[typeid].Sprites[ lightsid ].colorB = lightsdata.colorB or 255
+			data[typeid].Sprites[ lightsid ].colorA = lightsdata.colorA or 255
+		end
 	end
 end
 
-function ENT:InitializeSubMaterials( base )
+function ENT:CreateSubMaterial( SubMaterialID, name )
+	local base = self:GetBase()
+
+	if not IsValid( base ) or not SubMaterialID then return end
+
+	local string_data = file.Read( "materials/"..base:GetMaterials()[ SubMaterialID + 1 ]..".vmt", "GAME" )
+
+	if not string_data then return end
+
+	return CreateMaterial( name..base:EntIndex(), "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
+end
+
+function ENT:SubMaterialThink( base )
+	local EntID = base:EntIndex() 
 	local data = base.Lights
 
 	if not istable( data ) then return end
 
-	local SubMaterialID = data.Main.SubMaterialID
+	for typeid, typedata in pairs( data ) do
+		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
 
-	if not SubMaterialID then return end
+		local Mul = self:GetTypeActivator( typedata.Trigger ) and 1 or 0
 
-	local Mat = base:GetMaterials()[ SubMaterialID + 1 ] 
-
-	local EntID = base:EntIndex()
-
-	local string_data = file.Read( "materials/"..Mat..".vmt", "GAME" )
-
-	if not string_data then return end
-
-	local data = util.KeyValuesToTable( string_data )
-
-	self.MainLights = CreateMaterial("lights"..EntID, "VertexLitGeneric", data )
-
-	PrintChat("runs")
-
-	base:SetSubMaterial( SubMaterialID, "!lights"..EntID )
+		typedata.SubMaterial:SetFloat("$detailblendfactor", Mul )
+		base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..EntID)
+	end
 end
 
-function ENT:GetMain()
-	return (self._smLights or 0)
-end
+function ENT:GetTypeActivator( trigger )
+	if trigger == "mainlight" then return self:GetActive() end
 
-function ENT:LightsThink()
-	local Target = self:GetActive() and 1 or 0
+	if trigger == "brakelight" then return self:GetBase():GetBrake() > 0 end
 
-	self._smLights = self:GetMain() + (Target - self:GetMain()) * RealFrameTime() * 25
-
-	if not self.MainLights then return end
-
-	self.MainLights:SetFloat("$detailblendfactor", self:GetMain() )
+	return false
 end
 
 function ENT:RenderLights( base, data )
-	local Mul = self:GetMain()
+	for _, typedata in pairs( data ) do
+		if not typedata.Sprites then continue end
 
-	if Mul <= 0.01 then return end
+		local Mul = self:GetTypeActivator( typedata.Trigger ) and 1 or 0
 
-	for id, lightsdata in pairs( data.Main.Sprites ) do
-		if not lightsdata.PixVis then
-			continue
+		for id, lightsdata in pairs( typedata.Sprites ) do
+			if not lightsdata.PixVis then
+				continue
+			end
+
+			local pos = base:LocalToWorld( lightsdata.pos )
+
+			local visible = util.PixelVisible( pos, 2, lightsdata.PixVis )
+
+			if not visible then continue end
+
+			if visible <= 0.1 then continue end
+
+			render.SetMaterial( lightsdata.mat )
+			render.DrawSprite( pos, lightsdata.width, lightsdata.height , Color(lightsdata.colorR,lightsdata.colorG,lightsdata.colorB,lightsdata.colorA*Mul*visible^2) )
 		end
-
-		local pos = base:LocalToWorld( lightsdata.pos )
-
-		local visible = util.PixelVisible( pos, 2, lightsdata.PixVis )
-
-		if not visible then continue end
-
-		if visible <= 0.1 then continue end
-
-		render.SetMaterial( lightsdata.mat )
-		render.DrawSprite( pos, lightsdata.width, lightsdata.height , Color(lightsdata.colorR,lightsdata.colorG,lightsdata.colorB,lightsdata.colorA*Mul*visible^2) )
 	end
 end
 
@@ -134,11 +141,7 @@ function ENT:Think()
 		return true
 	end
 
-	self:LightsThink()
-
-	self:SetNextClientThink( CurTime() )
-
-	return true
+	self:SubMaterialThink( base )
 end
 
 function ENT:OnRemove()

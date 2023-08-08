@@ -57,7 +57,8 @@ ENT.EngineSounds = {
 }
 
 ENT.Lights = {
-	Main = {
+	[1] = {
+		Trigger = "mainlight",
 		SubMaterialID = 19,
 		Sprites = {
 			[1] = {
@@ -70,13 +71,30 @@ ENT.Lights = {
 			},
 			[3] = {
 				pos = Vector(-79.87,18.54,19.11),
-				colorR = 255,
 				colorG = 0,
 				colorB = 0,
 				colorA = 150,
 			},
 			[4] = {
 				pos = Vector(-79.87,-18.54,19.11),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	},
+	[2] = {
+		Trigger = "brakelight",
+		SubMaterialID = 20,
+		Sprites = {
+			[1] = {
+				pos = Vector(-78.67,-14.75,18.92),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(-78.67,14.75,18.92),
 				colorG = 0,
 				colorB = 0,
 				colorA = 150,
