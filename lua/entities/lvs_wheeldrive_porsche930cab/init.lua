@@ -42,13 +42,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(47.2,26.5,14),
+				pos = Vector(47.2,27.5,16),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(47.2,-26.5,14),
+				pos = Vector(47.2,-27.5,16),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
@@ -73,13 +73,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-42.2,25.5,13),
+				pos = Vector(-42.2,26.5,12),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-42.2,-25.5,13),
+				pos = Vector(-42.2,-26.5,12),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
@@ -94,6 +94,7 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 end
+
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
