@@ -23,3 +23,22 @@ function ENT:AddEngine( pos )
 
 	return Engine
 end
+
+function ENT:AddLightHandler()
+	local LightHandler = ents.Create( "lvs_wheeldrive_lighthandler" )
+
+	if not IsValid( LightHandler ) then return end
+
+	LightHandler:SetPos( self:LocalToWorld( self:OBBCenter() ) )
+	LightHandler:SetAngles( self:GetAngles() )
+	LightHandler:Spawn()
+	LightHandler:Activate()
+	LightHandler:SetParent( self )
+	LightHandler:SetBase( self )
+
+	self:DeleteOnRemove( LightHandler )
+
+	self:TransferCPPI( LightHandler )
+
+	self:SetLightHandler( LightHandler )
+end

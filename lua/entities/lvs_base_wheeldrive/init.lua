@@ -50,6 +50,10 @@ function ENT:PostInitialize( PObj )
 	PObj:EnableDrag( self.PhysicsDrag )
 	PObj:SetInertia( self.PhysicsInertia )
 
+	if istable( self.Lights ) then
+		self:AddLightHandler()
+	end
+
 	BaseClass.PostInitialize( self, PObj )
 
 	SetMinimumAngularVelocityTo( 10000 )
