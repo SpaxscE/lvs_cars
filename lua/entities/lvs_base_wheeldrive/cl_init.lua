@@ -10,6 +10,17 @@ function ENT:PreDrawTranslucent()
 	return true
 end
 
+function ENT:PostDraw()
+end
+
+function ENT:PostDrawTranslucent()
+	local Handler = self:GetLightsHandler()
+
+	if not IsValid( Handler ) or not istable( self.Lights ) then return end
+
+	Handler:RenderLights( self, self.Lights )
+end
+
 function ENT:OnChangeGear( oldGear, newGear )
 	self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
 

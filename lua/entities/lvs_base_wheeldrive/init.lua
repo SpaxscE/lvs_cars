@@ -51,7 +51,7 @@ function ENT:PostInitialize( PObj )
 	PObj:SetInertia( self.PhysicsInertia )
 
 	if istable( self.Lights ) then
-		self:AddLightHandler()
+		self:AddLights()
 	end
 
 	BaseClass.PostInitialize( self, PObj )

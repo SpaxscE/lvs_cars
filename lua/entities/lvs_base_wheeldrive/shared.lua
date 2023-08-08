@@ -66,7 +66,7 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Bool", "Reverse" )
 
-	self:AddDT( "Entity", "LightHandler" )
+	self:AddDT( "Entity", "LightsHandler" )
 end
 
 function ENT:GetMaxSteerAngle()

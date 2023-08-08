@@ -94,9 +94,25 @@ function ENT:CalcTransmission( ply, cmd )
 	if walk ~= self._oldwalk then
 		self._oldwalk = walk
 
-		if walk then
-			self:SetReverse( not self:GetReverse() )
-		end
+		if not walk then return end
+
+		self:SetReverse( not self:GetReverse() )
+	end
+end
+
+function ENT:CalcLights( ply, cmd )
+	local LightsHandler = self:GetLightsHandler()
+
+	if not IsValid( LightsHandler ) then return end
+
+	local lights = ply:lvsKeyDown( "CAR_LIGHTS_TOGGLE" )
+
+	if lights ~= self._oldlights then
+		self._oldlights = lights
+
+		if not lights then return end
+
+		LightsHandler:SetActive( not LightsHandler:GetActive() )
 	end
 end
 
@@ -108,4 +124,5 @@ function ENT:StartCommand( ply, cmd )
 	self:CalcHandbrake( ply, cmd )
 	self:CalcBrake( ply, cmd )
 	self:CalcTransmission( ply, cmd )
+	self:CalcLights( ply, cmd )
 end

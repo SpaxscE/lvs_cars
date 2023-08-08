@@ -50,6 +50,13 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			default = "+moveright",
 			cmd = "lvs_car_turnright"
 		},
+		{
+			name = "CAR_LIGHTS_TOGGLE",
+			category = "LVS-Car",
+			name_menu = "Toggle Lights",
+			default = "phys_swap",
+			cmd = "lvs_car_toggle_lights"
+		},
 	}
 
 	for _, v in pairs( KEYS ) do

@@ -55,3 +55,32 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 }
+
+ENT.Lights = {
+	Main = {
+		SubMaterialID = 19,
+		Sprites = {
+			[1] = {
+				pos = Vector(70.35,24.27,25.07),
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(70.35,-24.27,25.07),
+				colorA = 150,
+			},
+			[3] = {
+				pos = Vector(-79.87,18.54,19.11),
+				colorR = 255,
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+			[4] = {
+				pos = Vector(-79.87,-18.54,19.11),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	}
+}

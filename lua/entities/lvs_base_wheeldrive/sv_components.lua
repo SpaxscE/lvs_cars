@@ -24,7 +24,9 @@ function ENT:AddEngine( pos )
 	return Engine
 end
 
-function ENT:AddLightHandler()
+function ENT:AddLights()
+	if IsValid( self:GetLightsHandler() ) then return end
+
 	local LightHandler = ents.Create( "lvs_wheeldrive_lighthandler" )
 
 	if not IsValid( LightHandler ) then return end
@@ -40,5 +42,5 @@ function ENT:AddLightHandler()
 
 	self:TransferCPPI( LightHandler )
 
-	self:SetLightHandler( LightHandler )
+	self:SetLightsHandler( LightHandler )
 end
