@@ -69,6 +69,8 @@ function ENT:InitializeLights( base )
 			data[typeid].Sprites[ lightsid ].colorA = lightsdata.colorA or 255
 		end
 	end
+
+	self.Enabled = true
 end
 
 function ENT:CreateSubMaterial( SubMaterialID, name )
@@ -118,6 +120,8 @@ function ENT:GetTypeActivator( trigger )
 end
 
 function ENT:RenderLights( base, data )
+	if not self.Enabled then return end
+
 	for _, typedata in pairs( data ) do
 		if not typedata.Sprites then continue end
 
@@ -145,7 +149,7 @@ end
 function ENT:Think()
 	local base = self:GetBase()
 
-	if not IsValid( base ) then
+	if not IsValid( base ) or not self.Enabled then
 		self:SetNextClientThink( CurTime() + 1 )
 
 		return true
