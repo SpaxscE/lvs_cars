@@ -1,6 +1,7 @@
 include("shared.lua")
 include("cl_effects.lua")
 include("cl_skidmarks.lua")
+include("cl_sounds.lua")
 
 function ENT:Draw()
 	self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
