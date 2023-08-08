@@ -4,7 +4,7 @@
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 	"$detail" "models/cs_italy/light_orange"
 	"$detailscale" "1"
-	"$detailblendfactor" "0" //use this for emission strength
+	"$detailblendfactor" "1" //use this for emission strength
 	"$detailblendmode" "5"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
