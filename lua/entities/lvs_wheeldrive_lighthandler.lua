@@ -82,11 +82,12 @@ function ENT:CreateSubMaterial( SubMaterialID, name )
 
 	if not string_data then return end
 
-	return CreateMaterial( name..base:EntIndex(), "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
+	return CreateMaterial( name..base:GetClass()..base:EntIndex(), "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
 end
 
 function ENT:SubMaterialThink( base )
-	local EntID = base:EntIndex() 
+	local EntID = base:EntIndex()
+	local Class = base:GetClass()
 	local data = base.Lights
 
 	if not istable( data ) then return end
@@ -100,7 +101,7 @@ function ENT:SubMaterialThink( base )
 
 		if typedata.SubMaterialValue ~= Mul then
 			data[typeid].SubMaterialValue = Mul
-			base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..EntID)
+			base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..Class..EntID)
 		end
 	end
 end
