@@ -52,7 +52,12 @@ if SERVER then
 	end)
 
 	function ENT:LinkToSeat( ent )
-		if not IsValid( ent ) or not ent:IsVehicle() then return end
+		if not IsValid( ent ) or not ent:IsVehicle() then
+
+			ErrorNoHalt( "[LVS] Couldn't link seat to doorsystem. Entity expected, got "..tostring( ent ).."\n" )
+
+			return
+		end
 
 		self._LinkedSeat = ent
 	end
