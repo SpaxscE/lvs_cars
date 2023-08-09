@@ -78,6 +78,10 @@ function ENT:InitializeLights( base )
 				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 1000
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
 				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or 60
+				data[typeid].ProjectedTextures[ projid ].colorR = projdata.colorR or 255
+				data[typeid].ProjectedTextures[ projid ].colorG = projdata.colorG or 255
+				data[typeid].ProjectedTextures[ projid ].colorB = projdata.colorB or 255
+				data[typeid].ProjectedTextures[ projid ].colorA = projdata.colorA or 255
 				data[typeid].ProjectedTextures[ projid ].color = Color( projdata.colorR or 255, projdata.colorG or 255, projdata.colorB or 255 )
 				data[typeid].ProjectedTextures[ projid ].brightness = projdata.brightness or 5
 				data[typeid].ProjectedTextures[ projid ].shadows = projdata.shadows == true
@@ -229,15 +233,28 @@ function ENT:CalcTypeActivators( base )
 	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
 end
 
+ENT.LightMaterial = Material( "effects/lvs/laat_spotlight" )
+
 function ENT:RenderLights( base, data )
 	if not self.Enabled then return end
 
 	for _, typedata in pairs( data ) do
-		if not typedata.Sprites then continue end
 
 		local mul = self:GetTypeActivator( typedata.Trigger )
 
 		if mul < 0.01 then continue end
+
+		if typedata.ProjectedTextures then
+			for projid, projdata in pairs( typedata.ProjectedTextures ) do
+				local pos = base:LocalToWorld( projdata.pos )
+				local dir = base:LocalToWorldAngles( projdata.ang ):Forward()
+	
+				render.SetMaterial( self.LightMaterial )
+				render.DrawBeam( pos, pos + dir * 100, 50, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, 1 ) )
+			end
+		end
+
+		if not typedata.Sprites then continue end
 
 		for id, lightsdata in pairs( typedata.Sprites ) do
 			if not lightsdata.PixVis then
