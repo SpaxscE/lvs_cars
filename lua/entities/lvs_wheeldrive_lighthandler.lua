@@ -75,7 +75,7 @@ function ENT:InitializeLights( base )
 				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
 				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or "effects/flashlight/soft"
-				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 2500
+				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 1500
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
 				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or 60
 				data[typeid].ProjectedTextures[ projid ].color = Color( projdata.colorR or 255, projdata.colorG or 255, projdata.colorB or 255 )
