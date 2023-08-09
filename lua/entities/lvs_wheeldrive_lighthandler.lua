@@ -200,11 +200,11 @@ function ENT:LightsThink( base )
 end
 
 function ENT:GetTypeActivator( trigger )
-	if trigger == "main" then return (self._smMain or 0) end
+	if trigger == "main" then return (self._smMain or 0) ^ 2 end
 
-	if trigger == "brake" then return (self._smBrake or 0) end
+	if trigger == "brake" then return (self._smBrake or 0) ^ 2  end
 
-	if trigger == "reverse" then return (self._smReverse or 0) end
+	if trigger == "reverse" then return (self._smReverse or 0) ^ 2 end
 
 	return 0
 end
@@ -222,7 +222,7 @@ function ENT:CalcTypeActivators( base )
 	local brake = base:GetBrake() > 0 and 1 or 0
 	local reverse = base:GetReverse() and 1 or 0
 
-	local Rate = RealFrameTime() * 15
+	local Rate = RealFrameTime() * 10
 
 	self._smMain = self._smMain + (main - self._smMain) * Rate
 	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
