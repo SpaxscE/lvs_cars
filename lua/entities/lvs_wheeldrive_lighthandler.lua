@@ -250,7 +250,7 @@ function ENT:RenderLights( base, data )
 				local dir = base:LocalToWorldAngles( projdata.ang ):Forward()
 	
 				render.SetMaterial( self.LightMaterial )
-				render.DrawBeam( pos, pos + dir * 100, 50, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, 1 ) )
+				render.DrawBeam( pos, pos + dir * 100, 50, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, projdata.brightness ) )
 			end
 		end
 
