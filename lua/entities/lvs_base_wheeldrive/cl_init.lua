@@ -3,7 +3,7 @@ include("sh_animations.lua")
 include("cl_flyby.lua")
 
 function ENT:PreDraw()
-	return false
+	return true
 end
 
 function ENT:PreDrawTranslucent()
