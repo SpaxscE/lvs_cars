@@ -1,7 +1,6 @@
 include("shared.lua")
 include("sh_animations.lua")
 include("cl_flyby.lua")
-include("cl_boneposeparemeter.lua")
 
 function ENT:PreDraw()
 	return true

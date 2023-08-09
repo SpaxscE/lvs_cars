@@ -1,14 +1,12 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_flyby.lua" )
-AddCSLuaFile( "cl_boneposeparemeter.lua" )
 AddCSLuaFile( "sh_animations.lua" )
 include("shared.lua")
 include("sh_animations.lua")
 include("sv_controls.lua")
 include("sv_controls_handbrake.lua")
 include("sv_components.lua")
-include("sv_doorsystem.lua")
 include("sv_wheelsystem.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
@@ -60,13 +58,6 @@ function ENT:PostInitialize( PObj )
 	SetMinimumAngularVelocityTo( 10000 )
 
 	self:EnableHandbrake()
-end
-
-function ENT:Lock()
-	for _, Handler in pairs( self._DoorHandlers ) do
-		Handler:Close( ply )
-	end
-	BaseClass.Lock( self )
 end
 
 function ENT:AlignView( ply )
