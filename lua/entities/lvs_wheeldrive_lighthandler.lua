@@ -74,7 +74,7 @@ function ENT:InitializeLights( base )
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
 				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
-				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or "effects/flashlight/headlight_lowbeam"
+				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or "effects/lvs/car_projectedtexture"
 				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 1000
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
 				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or 60
@@ -233,7 +233,7 @@ function ENT:CalcTypeActivators( base )
 	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
 end
 
-ENT.LightMaterial = Material( "effects/lvs/laat_spotlight" )
+ENT.LightMaterial = Material( "effects/lvs/car_spotlight" )
 
 function ENT:RenderLights( base, data )
 	if not self.Enabled then return end
