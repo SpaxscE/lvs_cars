@@ -75,7 +75,7 @@ function ENT:InitializeLights( base )
 				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
 				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or "effects/flashlight/soft"
-				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 1500
+				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 1000
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
 				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or 60
 				data[typeid].ProjectedTextures[ projid ].color = Color( projdata.colorR or 255, projdata.colorG or 255, projdata.colorB or 255 )
@@ -160,7 +160,8 @@ function ENT:LightsThink( base )
 
 	for typeid, typedata in pairs( data ) do
 
-		local active = self:GetTypeActivator( typedata.Trigger )
+		local mul = self:GetTypeActivator( typedata.Trigger )
+		local active = mul > 0.01
 
 		if typedata.ProjectedTextures then
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
@@ -170,6 +171,7 @@ function ENT:LightsThink( base )
 
 				if IsValid( proj ) then
 					if active then
+						proj:SetBrightness( projdata.brightness * mul ) 
 						proj:SetPos( base:LocalToWorld( projdata.pos ) )
 						proj:SetAngles( base:LocalToWorldAngles( projdata.ang ) )
 						proj:Update()
@@ -188,7 +190,7 @@ function ENT:LightsThink( base )
 
 		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
 
-		typedata.SubMaterial:SetFloat("$detailblendfactor", active and 1 or 0 )
+		typedata.SubMaterial:SetFloat("$detailblendfactor", mul )
 
 		if typedata.SubMaterialValue ~= active then
 			data[typeid].SubMaterialValue = active
@@ -198,17 +200,33 @@ function ENT:LightsThink( base )
 end
 
 function ENT:GetTypeActivator( trigger )
-	if trigger == "main" then return self:GetActive() end
+	if trigger == "main" then return (self._smMain or 0) end
 
+	if trigger == "brake" then return (self._smBrake or 0) end
+
+	if trigger == "reverse" then return (self._smReverse or 0) end
+
+	return 0
+end
+
+function ENT:CalcTypeActivators( base )
 	local base = self:GetBase()
 
-	if not IsValid( base ) then return false end
+	if not IsValid( base ) then return end
 
-	if trigger == "brake" then return base:GetBrake() > 0 end
+	self._smMain = self._smMain or 0
+	self._smBrake = self._smBrake or 0
+	self._smReverse = self._smReverse or 0
 
-	if trigger == "reverse" then return base:GetReverse() end
+	local main = self:GetActive() and 1 or 0
+	local brake = base:GetBrake() > 0 and 1 or 0
+	local reverse = base:GetReverse() and 1 or 0
 
-	return false
+	local Rate = RealFrameTime() * 15
+
+	self._smMain = self._smMain + (main - self._smMain) * Rate
+	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
+	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
 end
 
 function ENT:RenderLights( base, data )
@@ -217,7 +235,9 @@ function ENT:RenderLights( base, data )
 	for _, typedata in pairs( data ) do
 		if not typedata.Sprites then continue end
 
-		local Mul = self:GetTypeActivator( typedata.Trigger ) and 1 or 0
+		local mul = self:GetTypeActivator( typedata.Trigger )
+
+		if mul < 0.01 then continue end
 
 		for id, lightsdata in pairs( typedata.Sprites ) do
 			if not lightsdata.PixVis then
@@ -233,7 +253,7 @@ function ENT:RenderLights( base, data )
 			if visible <= 0.1 then continue end
 
 			render.SetMaterial( lightsdata.mat )
-			render.DrawSprite( pos, lightsdata.width, lightsdata.height , Color(lightsdata.colorR,lightsdata.colorG,lightsdata.colorB,lightsdata.colorA*Mul*visible^2) )
+			render.DrawSprite( pos, lightsdata.width, lightsdata.height , Color(lightsdata.colorR,lightsdata.colorG,lightsdata.colorB,lightsdata.colorA*mul*visible^2) )
 		end
 	end
 end
@@ -247,6 +267,7 @@ function ENT:Think()
 		return true
 	end
 
+	self:CalcTypeActivators( base )
 	self:LightsThink( base )
 end
 
