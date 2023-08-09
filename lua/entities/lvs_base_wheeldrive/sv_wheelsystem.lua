@@ -21,7 +21,7 @@ end
 function ENT:CreateSteerMaster( TargetEntity )
 	if not IsValid( TargetEntity ) then return end
 
-	local Master = ents.Create( "prop_physics" )
+	local Master = ents.Create( "lvs_wheeldrive_steerhandler" )
 
 	if not IsValid( Master ) then
 		self:Remove()
@@ -31,7 +31,6 @@ function ENT:CreateSteerMaster( TargetEntity )
 		return
 	end
 
-	Master:SetModel( "models/dav0r/hoverball.mdl" )
 	Master:SetPos( TargetEntity:GetPos() )
 	Master:SetAngles( Angle(0,90,0) )
 	Master:Spawn()
@@ -39,27 +38,6 @@ function ENT:CreateSteerMaster( TargetEntity )
 
 	self:DeleteOnRemove( Master )
 	self:TransferCPPI( Master )
-
-	local PhysObj = Master:GetPhysicsObject()
-
-	if not IsValid( PhysObj ) then
-		self:Remove()
-
-		print("LVS: Failed to create steermaster physics. Vehicle terminated.")
-
-		return
-	end
-
-	PhysObj:SetMass( 1 )
-	PhysObj:EnableMotion( false )
-	PhysObj:EnableDrag( false )
-
-	Master:SetNotSolid( true )
-	Master:SetColor( Color( 255, 255, 255, 0 ) ) 
-	Master:SetRenderMode( RENDERMODE_TRANSALPHA )
-	Master:DrawShadow( false )
-
-	Master.DoNotDuplicate = true
 
 	return Master
 end
