@@ -3,8 +3,8 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	local DriverSeat = self:AddDriverSeat( Vector(-9.6,11.9,0), Angle(0,-90,8) )
-	local PassengerSeat = self:AddPassengerSeat( Vector(5,-11.9,12), Angle(0,-90,28) )
+	local DriverSeat = self:AddDriverSeat( Vector(-12.6,11.9,0), Angle(0,-90,8) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(1,-11.9,12), Angle(0,-90,28) )
 
 	self:AddEngine( Vector(45,0,20) )
 
@@ -38,13 +38,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(47.2,26.5,16),
+				pos = Vector(47.2,27.5,16),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(47.2,-26.5,16),
+				pos = Vector(47.2,-27.5,16),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),
@@ -69,13 +69,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-42.2,25,12),
+				pos = Vector(-42.2,26.5,12),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-42.2,-25,12),
+				pos = Vector(-42.2,-26.5,12),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 			} ),

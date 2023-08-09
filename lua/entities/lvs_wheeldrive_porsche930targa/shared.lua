@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Porsche 911 Targa (-25 0 22)"
+ENT.PrintName = "Porsche 911 Targa"
 ENT.Author = "Digger"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -59,7 +59,7 @@ ENT.EngineSounds = {
 ENT.Lights = {
 	{
 		Trigger = "main",
-		SubMaterialID = 19,
+		SubMaterialID = 23,
 		Sprites = {
 			[1] = {
 				pos = Vector(70.35,24.27,25.07),
@@ -87,7 +87,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "brake",
-		SubMaterialID = 20,
+		SubMaterialID = 25,
 		Sprites = {
 			[1] = {
 				pos = Vector(-78.67,-14.75,18.92),
@@ -105,7 +105,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "reverse",
-		SubMaterialID = 21,
+		SubMaterialID = 26,
 		Sprites = {
 			[1] = {
 				pos = Vector(-77.8,-21.08,19.08),

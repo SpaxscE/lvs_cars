@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Porsche 911 Coupe (-30 0 22) "
+ENT.PrintName = "Porsche 911 Coupe"
 ENT.Author = "Digger"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -54,4 +54,69 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
 	},
+}
+
+ENT.Lights = {
+	{
+		Trigger = "main",
+		SubMaterialID = 23,
+		Sprites = {
+			[1] = {
+				pos = Vector(70.35,24.27,25.07),
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(70.35,-24.27,25.07),
+				colorA = 150,
+			},
+			[3] = {
+				pos = Vector(-79.87,18.54,19.11),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+			[4] = {
+				pos = Vector(-79.87,-18.54,19.11),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	},
+	{
+		Trigger = "brake",
+		SubMaterialID = 25,
+		Sprites = {
+			[1] = {
+				pos = Vector(-78.67,-14.75,18.92),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(-78.67,14.75,18.92),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	},
+	{
+		Trigger = "reverse",
+		SubMaterialID = 26,
+		Sprites = {
+			[1] = {
+				pos = Vector(-77.8,-21.08,19.08),
+				height = 25,
+				width = 25,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(-77.8,21.08,19.08),
+				height = 25,
+				width = 25,
+				colorA = 150,
+			},
+		}
+	}
 }

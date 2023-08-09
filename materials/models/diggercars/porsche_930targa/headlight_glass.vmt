@@ -1,0 +1,29 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/DiggerCars/shared/black"
+	"$bumpmap" "models/DiggerCars/PORSCHE_930Targa/Lights_nm"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[1 1 1]"
+	"$normalmapalphaenvmapmask" "1"
+	"$envmapfresnel" "1.05"
+	"$phong" "1"
+	"$phongexponent" "250"
+	"$phongboost" "50"	
+	"$phongfresnelranges"	"[0.1 1 2]"
+	"$additive" "1"
+	"$rimlight" "1"												// To enable rim lighting (requires phong)
+	"$rimlightexponent" "2"										// Exponent for phong component of rim lighting	
+	"$rimlightboost" "1"	
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+

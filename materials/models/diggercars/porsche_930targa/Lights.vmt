@@ -1,7 +1,7 @@
 "VertexLitGeneric"
 {
 	"$basetexture" "models/DiggerCars/PORSCHE_930Targa/Lights"
-	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$bumpmap" "models/DiggerCars/PORSCHE_930Targa/Lights_nm"
 	"$nocull" "1"
 	"$phong" "1" 
 	"$alphatest" "1"
