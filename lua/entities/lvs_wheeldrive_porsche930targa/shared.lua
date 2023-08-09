@@ -83,7 +83,21 @@ ENT.Lights = {
 				colorB = 0,
 				colorA = 150,
 			},
-		}
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(70.35,24.27,25.07),
+				ang = Angle(10,0,0),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(70.35,-24.27,25.07),
+				ang = Angle(10,0,0),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
 	},
 	{
 		Trigger = "brake",

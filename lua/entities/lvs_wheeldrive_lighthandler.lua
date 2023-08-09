@@ -56,17 +56,32 @@ function ENT:InitializeLights( base )
 			data[typeid].SubMaterial = self:CreateSubMaterial( typedata.SubMaterialID, typedata.Trigger )
 		end
 
-		if not typedata.Sprites then continue end
+		if typedata.Sprites then
+			for lightsid, lightsdata in pairs( typedata.Sprites ) do
+				data[typeid].Sprites[ lightsid ].PixVis = util.GetPixelVisibleHandle()
+				data[typeid].Sprites[ lightsid ].pos = lightsdata.pos or vector_origin
+				data[typeid].Sprites[ lightsid ].mat = lightsdata.mat or Material( "sprites/light_ignorez" )
+				data[typeid].Sprites[ lightsid ].width = lightsdata.width or 50
+				data[typeid].Sprites[ lightsid ].height = lightsdata.height or 50
+				data[typeid].Sprites[ lightsid ].colorR = lightsdata.colorR or 255
+				data[typeid].Sprites[ lightsid ].colorG = lightsdata.colorG or 255
+				data[typeid].Sprites[ lightsid ].colorB = lightsdata.colorB or 255
+				data[typeid].Sprites[ lightsid ].colorA = lightsdata.colorA or 255
+			end
+		end
 
-		for lightsid, lightsdata in pairs( typedata.Sprites ) do
-			data[typeid].Sprites[ lightsid ].PixVis = util.GetPixelVisibleHandle()
-			data[typeid].Sprites[ lightsid ].mat = lightsdata.mat or Material( "sprites/light_ignorez" )
-			data[typeid].Sprites[ lightsid ].width = lightsdata.width or 50
-			data[typeid].Sprites[ lightsid ].height = lightsdata.height or 50
-			data[typeid].Sprites[ lightsid ].colorR = lightsdata.colorR or 255
-			data[typeid].Sprites[ lightsid ].colorG = lightsdata.colorG or 255
-			data[typeid].Sprites[ lightsid ].colorB = lightsdata.colorB or 255
-			data[typeid].Sprites[ lightsid ].colorA = lightsdata.colorA or 255
+		if typedata.ProjectedTextures then
+			for projid, projdata in pairs( typedata.ProjectedTextures ) do
+				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
+				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
+				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or "effects/flashlight/soft"
+				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 2500
+				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
+				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or 60
+				data[typeid].ProjectedTextures[ projid ].color = Color( projdata.colorR or 255, projdata.colorG or 255, projdata.colorB or 255 )
+				data[typeid].ProjectedTextures[ projid ].brightness = projdata.brightness or 10
+				data[typeid].ProjectedTextures[ projid ].shadows = projdata.shadows == true
+			end
 		end
 	end
 
@@ -82,10 +97,61 @@ function ENT:CreateSubMaterial( SubMaterialID, name )
 
 	if not string_data then return end
 
-	return CreateMaterial( name..base:GetClass()..base:EntIndex(), "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
+	return CreateMaterial( name..SubMaterialID..base:GetClass()..base:EntIndex(), "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
 end
 
-function ENT:SubMaterialThink( base )
+function ENT:CreateProjectedTexture( id, mat, col, brightness, shadows, nearz, farz, fov )
+	local thelamp = ProjectedTexture()
+	thelamp:SetTexture( mat )
+	thelamp:SetColor( col )
+	thelamp:SetBrightness( brightness ) 
+	thelamp:SetEnableShadows( shadows ) 
+	thelamp:SetNearZ( nearz ) 
+	thelamp:SetFarZ( farz ) 
+	thelamp:SetFOV( fov )
+
+	if istable( self._ProjectedTextures ) then
+		if IsValid( self._ProjectedTextures[ id ] ) then
+			self._ProjectedTextures[ id ]:Remove()
+			self._ProjectedTextures[ id ] = nil
+		end
+	else
+		self._ProjectedTextures = {}
+	end
+
+	self._ProjectedTextures[ id ] = thelamp
+
+	return thelamp
+end
+
+function ENT:GetProjectedTexture( id )
+	if not id or not istable( self._ProjectedTextures ) then return end
+
+	return self._ProjectedTextures[ id ]
+end
+
+function ENT:RemoveProjectedTexture( id )
+	if not id or not istable( self._ProjectedTextures ) then return end
+
+	if IsValid( self._ProjectedTextures[ id ] ) then
+		self._ProjectedTextures[ id ]:Remove()
+		self._ProjectedTextures[ id ] = nil
+	end
+end
+
+function ENT:ClearProjectedTextures()
+	if not istable( self._ProjectedTextures ) then return end
+
+	for id, proj in pairs( self._ProjectedTextures ) do
+		if IsValid( proj ) then
+			proj:Remove()
+		end
+
+		self._ProjectedTextures[ id ] = nil
+	end
+end
+
+function ENT:LightsThink( base )
 	local EntID = base:EntIndex()
 	local Class = base:GetClass()
 	local data = base.Lights
@@ -93,15 +159,40 @@ function ENT:SubMaterialThink( base )
 	if not istable( data ) then return end
 
 	for typeid, typedata in pairs( data ) do
+
+		local active = self:GetTypeActivator( typedata.Trigger )
+
+		if typedata.ProjectedTextures then
+			for projid, projdata in pairs( typedata.ProjectedTextures ) do
+				local id = typeid.."-"..projid
+
+				local proj = self:GetProjectedTexture( id )
+
+				if IsValid( proj ) then
+					if active then
+						proj:SetPos( base:LocalToWorld( projdata.pos ) )
+						proj:SetAngles( base:LocalToWorldAngles( projdata.ang ) )
+						proj:Update()
+					else
+						self:RemoveProjectedTexture( id )
+					end
+				else
+					if active then
+						self:CreateProjectedTexture( id, projdata.mat, projdata.color, projdata.brightness, projdata.shadows, projdata.nearz, projdata.farz, projdata.fov )
+					else
+						self:RemoveProjectedTexture( id )
+					end
+				end
+			end
+		end
+
 		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
 
-		local Mul = self:GetTypeActivator( typedata.Trigger )
+		typedata.SubMaterial:SetFloat("$detailblendfactor", active and 1 or 0 )
 
-		typedata.SubMaterial:SetFloat("$detailblendfactor", Mul and 1 or 0 )
-
-		if typedata.SubMaterialValue ~= Mul then
-			data[typeid].SubMaterialValue = Mul
-			base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..Class..EntID)
+		if typedata.SubMaterialValue ~= active then
+			data[typeid].SubMaterialValue = active
+			base:SetSubMaterial(typedata.SubMaterialID, "!"..typedata.Trigger..typedata.SubMaterialID..Class..EntID)
 		end
 	end
 end
@@ -156,10 +247,11 @@ function ENT:Think()
 		return true
 	end
 
-	self:SubMaterialThink( base )
+	self:LightsThink( base )
 end
 
 function ENT:OnRemove()
+	self:ClearProjectedTextures()
 end
 
 function ENT:Draw()
