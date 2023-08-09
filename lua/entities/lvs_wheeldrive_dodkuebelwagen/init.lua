@@ -3,8 +3,10 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(-8,13.75,16.25), Angle(0,-95,-8) )
-	self:AddPassengerSeat( Vector(10,-13.75,20), Angle(0,-85,8) )
+	local DriverSeat = self:AddDriverSeat( Vector(-8,13.75,16.25), Angle(0,-95,-8) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(10,-13.75,20), Angle(0,-85,8) )
+	local PassengerSeat1 = self:AddPassengerSeat( Vector(-27,13.5,20), Angle(0,-90,8) )
+	local PassengerSeat2 = self:AddPassengerSeat( Vector(-27,-13.5,20), Angle(0,-90,8) )
 
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(10,21,35), Angle(0,0,0), Vector(-10,-3,-12), Vector(20,6,12), Vector(-10,-15,-12), Vector(20,30,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
