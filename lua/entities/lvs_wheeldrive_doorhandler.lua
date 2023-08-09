@@ -210,7 +210,13 @@ function ENT:Think()
 
 	self.sm_pp = self.sm_pp and self.sm_pp + (Target - self.sm_pp) * RealFrameTime() * self:GetRate() or 0
 
-	Base:SetPoseParameter( poseName, self.sm_pp ^ self:GetRateExponent() )
+	local value = self.sm_pp ^ self:GetRateExponent()
+
+	if string.StartsWith( poseName, "!" ) then
+		Base:SetBonePoseParameter( poseName, value )
+	else
+		Base:SetPoseParameter( poseName, value )
+	end
 end
 
 function ENT:OnRemove()

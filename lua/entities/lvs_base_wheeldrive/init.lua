@@ -1,6 +1,7 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_flyby.lua" )
+AddCSLuaFile( "cl_boneposeparemeter.lua" )
 AddCSLuaFile( "sh_animations.lua" )
 include("shared.lua")
 include("sh_animations.lua")
