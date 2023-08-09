@@ -112,6 +112,8 @@ function ENT:CalcLights( ply, cmd )
 
 		if not lights then return end
 
+		self:EmitSound( "buttons/lightswitch2.wav", 75, 80, 0.25)
+
 		LightsHandler:SetActive( not LightsHandler:GetActive() )
 	end
 end
