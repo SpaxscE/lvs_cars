@@ -105,6 +105,8 @@ function ENT:CreateSubMaterial( SubMaterialID, name )
 end
 
 function ENT:CreateProjectedTexture( id, mat, col, brightness, shadows, nearz, farz, fov )
+	if not mat then return end
+
 	local thelamp = ProjectedTexture()
 	thelamp:SetTexture( mat )
 	thelamp:SetColor( col )
@@ -210,6 +212,10 @@ function ENT:GetTypeActivator( trigger )
 
 	if trigger == "reverse" then return (self._smReverse or 0) ^ 2 end
 
+	if trigger == "turnleft" then return (self._smTurnLeft or 0) end
+
+	if trigger == "turnright" then return (self._smTurnRight or 0) end
+
 	return 0
 end
 
@@ -221,16 +227,25 @@ function ENT:CalcTypeActivators( base )
 	self._smMain = self._smMain or 0
 	self._smBrake = self._smBrake or 0
 	self._smReverse = self._smReverse or 0
+	self._smTurnLeft = self._smTurnLeft or 0
+	self._smTurnRight = self._smTurnRight or 0
 
 	local main = self:GetActive() and 1 or 0
 	local brake = base:GetBrake() > 0 and 1 or 0
 	local reverse = base:GetReverse() and 1 or 0
+
+	local Flasher = math.cos( CurTime() * 8 + self:EntIndex() * 1337 ) > 0
+
+	local turnleft = Flasher and 1 or 0
+	local turnright = Flasher and 1 or 0
 
 	local Rate = RealFrameTime() * 10
 
 	self._smMain = self._smMain + (main - self._smMain) * Rate
 	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
 	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
+	self._smTurnLeft = self._smTurnLeft + (turnleft - self._smTurnLeft) * Rate * 2
+	self._smTurnRight = self._smTurnRight + (turnright - self._smTurnRight) * Rate * 2
 end
 
 ENT.LightMaterial = Material( "effects/lvs/car_spotlight" )

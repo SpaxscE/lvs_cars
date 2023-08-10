@@ -123,3 +123,14 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 		draw.SimpleText( "+"..math.Round((Throttle - 1) * 100,0).."%" , "LVS_FONT",  hX, hY, Col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	end
 end
+
+LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 85,  220, 75, 220, 75, "CAR MENU",
+	function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
+		if not vehicle.LVSHudPaintCarMenu then return end
+		vehicle:LVSHudPaintCarMenu( X, Y, W, H, ScrX, ScrY, ply )
+	end
+)
+
+function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
+	if not ply:lvsKeyDown( "CAR_MENU" ) then return end
+end

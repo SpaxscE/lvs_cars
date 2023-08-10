@@ -136,5 +136,49 @@ ENT.Lights = {
 				colorA = 150,
 			},
 		}
-	}
+	},
+	{
+		Trigger = "turnright",
+		SubMaterialID = 18,
+		Sprites = {
+			[1] = {
+				width = 35,
+				height = 35,
+				pos = Vector(80.31,-24.86,16.22),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+			[2] = {
+				width = 40,
+				height = 40,
+				pos = Vector(-76.48,-24.44,19.07),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+		},
+	},
+	{
+		Trigger = "turnleft",
+		SubMaterialID = 20,
+		Sprites = {
+			[1] = {
+				width = 35,
+				height = 35,
+				pos = Vector(80.31,24.86,16.22),
+				colorG = 100,
+				colorB = 0,
+				colorA = 50,
+			},
+			[2] = {
+				width = 40,
+				height = 40,
+				pos = Vector(-76.48,24.44,19.07),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+		},
+	},
 }

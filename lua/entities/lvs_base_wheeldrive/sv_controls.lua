@@ -121,6 +121,8 @@ end
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
+	if ply:lvsKeyDown( "CAR_MENU" ) then return end
+
 	self:CalcSteer( ply, cmd )
 	self:CalcThrottle( ply, cmd )
 	self:CalcHandbrake( ply, cmd )

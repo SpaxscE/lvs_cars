@@ -57,6 +57,13 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			default = "phys_swap",
 			cmd = "lvs_car_toggle_lights"
 		},
+		{
+			name = "CAR_MENU",
+			category = "LVS-Car",
+			name_menu = "Open Car Menu",
+			default = "+zoom",
+			cmd = "lvs_car_menu"
+		},
 	}
 
 	for _, v in pairs( KEYS ) do
