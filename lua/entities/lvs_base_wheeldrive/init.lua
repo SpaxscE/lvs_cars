@@ -137,15 +137,18 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		end
 
 		if TorqueFactor > 0 then
-			local targetRPM = ent:VelToRPM( self:GetTargetVelocity() )
+			local desRPM = ent:VelToRPM( self:GetTargetVelocity() )
+			local targetRPM = math.abs( desRPM )
 
 			local powerRPM = math.min( self.EnginePower, targetRPM )
 
-			local powerCurve = (powerRPM + math.max(targetRPM - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPM * self:Sign( targetRPM - curRPM )
+			local powerCurve = (powerRPM + math.max( targetRPM - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPM * self:Sign( desRPM - curRPM )
 
 			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * self:GetThrottle()
 
-			ForceAngle = RotationAxis * Torque
+			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - 20, 0 ), 20 ) / 20) ^ 2
+
+			ForceAngle = RotationAxis * Torque * TorqueBoost
 		end
 	end
 
