@@ -49,3 +49,52 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 }
+
+ENT.Lights = {
+	{
+		Trigger = "main",
+		SubMaterialID = 13,
+		Sprites = {
+			[1] = {
+				pos = Vector(65.84,23.41,16.03),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(65.84,-23.41,16.03),
+				colorB = 200,
+				colorA = 150,
+			},
+			[3] = {
+				pos = Vector(-72.67,25.13,16.73),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+			[4] = {
+				pos = Vector(-72.67,-25.13,16.73),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	},
+	{
+		Trigger = "brake",
+		SubMaterialID = 18,
+		Sprites = {
+			[1] = {
+				pos = Vector(-70.63,25.11,20.39),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(-70.63,-25.11,20.39),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	},
+}

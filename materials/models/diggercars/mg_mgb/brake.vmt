@@ -1,0 +1,22 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/DiggerCars/MG_MGB/lights_lod0"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$detail" "models/DiggerCars/MG_MGB/lights_lod0_e"
+	"$detailscale" "1"
+	"$detailblendfactor" "0" //use this for emission strength
+	"$detailblendmode" "5"
+	"$phong" "1" 
+	"$phongboost" "0.08" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
