@@ -61,6 +61,7 @@ function ENT:StartTireSound( snd )
 	if self._ActiveTireSounds[ snd ] then return self._ActiveTireSounds[ snd ] end
 
 	local sound = CreateSound( self, self.TireSoundTypes[ snd ]  )
+	sound:SetSoundLevel( 80 )
 	sound:PlayEx(0,100)
 
 	self._ActiveTireSounds[ snd ] = sound
