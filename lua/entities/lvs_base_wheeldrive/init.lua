@@ -146,8 +146,16 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * self:GetThrottle()
 
-			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - 20, 0 ), 20 ) / 20) ^ 2
+			local BoostRPM = 0
 
+			if self:GetReverse() then
+				BoostRPM = ent:VelToRPM( self.MaxVelocityReverse / self.TransGearsReverse ) * 0.5
+			else
+				BoostRPM = ent:VelToRPM( self.MaxVelocity / self.TransGears ) * 0.5
+			end
+
+			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM)
+	
 			ForceAngle = RotationAxis * Torque * TorqueBoost
 		end
 	end

@@ -13,8 +13,8 @@ ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
 ENT.MaxVelocity = 1200
 
-ENT.EnginePower = 2.5
-ENT.EngineTorque = 275
+ENT.EnginePower = 25
+ENT.EngineTorque = 150
 
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
