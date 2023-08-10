@@ -7,18 +7,19 @@ function ENT:StopWheelEffects()
 	self:FinishSkidmark()
 end
 
-function ENT:StartWheelEffects( Base, SkidValue, trace, traceWater )
-	self:DoWheelEffects( Base, SkidValue, trace, traceWater )
+function ENT:StartWheelEffects( Base, trace, traceWater )
+	self:DoWheelEffects( Base, trace, traceWater )
 
 	if self._DoingWheelFx then return end
 
 	self._DoingWheelFx = true
 end
 
-function ENT:DoWheelEffects( Base, SkidValue, trace, traceWater )
+function ENT:DoWheelEffects( Base, trace, traceWater )
 	if not trace.Hit then self:FinishSkidmark() return end
 
 	local SurfacePropName = util.GetSurfacePropName( trace.SurfaceProps )
+	local SkidValue = self:GetSkid()
 
 	if traceWater.Hit then
 		local Scale = math.min( 0.3 + (SkidValue - 100) / 4000, 1 ) ^ 2
@@ -79,12 +80,6 @@ function ENT:CalcWheelEffects()
 
 	if not IsValid( Base ) then return end
 
-	local Vel = self:GetVelocity()
-	local VelLength = Vel:Length()
-
-	local rpmTheoretical = self:VelToRPM( VelLength )
-	local rpm = math.abs( self:GetRPM() )
-
 	local Radius = Base:GetUp() * (self:GetRadius() + 1)
 
 	local Pos =  self:GetPos()
@@ -104,8 +99,10 @@ function ENT:CalcWheelEffects()
 		mask = MASK_WATER,
 	} )
 
+	self:CalcWheelSounds( Base, trace, traceWater )
+
 	if traceWater.Hit and trace.HitPos.z < traceWater.HitPos.z then 
-		if rpm > 25 then
+		if math.abs( self:GetRPM() ) > 25 then
 			if traceWater.Fraction > 0 then
 				local effectdata = EffectData()
 					effectdata:SetOrigin( traceWater.HitPos )
@@ -120,11 +117,18 @@ function ENT:CalcWheelEffects()
 		end
 	end
 
-	local WheelSlip = math.max( rpm - rpmTheoretical - 80, 0 ) ^ 2 + math.max( math.abs( Base:VectorSplitNormal( self:GetForward(), Vel * 4 ) ) - VelLength, 0 )
+	if self:GetSlip() < 500 then self:StopWheelEffects() return end
 
-	if WheelSlip < 500 then self:StopWheelEffects() return end
+	self:StartWheelEffects( Base, trace, traceWater )
+end
 
-	local SkidValue = VelLength + WheelSlip
+function ENT:CalcWheelSounds( Base, trace, traceWater )
+	if not trace.Hit then return end
 
-	self:StartWheelEffects( Base, SkidValue, trace, traceWater )
+	if math.abs( self:GetRPM() ) > 10 then
+		local surface = self.DustEffectSurfaces[ util.GetSurfacePropName( trace.SurfaceProps ) ] and "_dirt" or ""
+		local snd_type = (self:GetSlip() > 500) and "skid" or "roll"
+
+		Base:DoTireSound( snd_type..surface )
+	end
 end

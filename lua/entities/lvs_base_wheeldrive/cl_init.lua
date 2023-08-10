@@ -1,6 +1,9 @@
 include("shared.lua")
 include("sh_animations.lua")
 include("cl_flyby.lua")
+include("cl_tiresounds.lua")
+
+DEFINE_BASECLASS( "lvs_base" )
 
 function ENT:PreDraw()
 	return true
@@ -11,6 +14,20 @@ function ENT:PreDrawTranslucent()
 end
 
 function ENT:PostDraw()
+end
+
+function ENT:Think()
+	if not self:IsInitialized() then return end
+
+	BaseClass.Think( self )
+
+	self:TireSoundThink()
+ end
+ 
+function ENT:OnRemove()
+	self:TireSoundRemove()
+
+	BaseClass.OnRemove( self )
 end
 
 function ENT:PostDrawTranslucent()
@@ -71,7 +88,6 @@ function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 
 	return LVS:CalcView( self, ply, pos, angles,  fov + fovAdd, pod )
 end
-
 
 ENT.IconEngine = Material( "lvs/engine.png" )
 
