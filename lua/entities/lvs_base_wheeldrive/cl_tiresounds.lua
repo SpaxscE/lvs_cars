@@ -8,6 +8,8 @@ ENT.TireSoundTypes = {
 	["skid_dirt"] = "lvs/vehicles/generic/wheel_skid_dirt.wav",
 	["skid_wet"] = "lvs/vehicles/generic/wheel_skid_wet.wav",
 }
+ENT.TireSoundLevelSkid = 90
+ENT.TireSoundLevelRoll = 80
 
 function ENT:TireSoundRemove()
 	for snd, _ in pairs( self.TireSoundTypes ) do
@@ -20,15 +22,20 @@ function ENT:TireSoundThink()
 		local T = self:GetTireSoundTime( snd )
 
 		if T > 0 then
-			local speed = math.max( self:GetVelocity():Length() , math.abs( self:GetWheelVelocity() ) )
+			local speed = self:GetVelocity():Length()
 
 			local sound = self:StartTireSound( snd )
+
+			if string.StartsWith( snd, "skid" ) then
+				local vel = speed
+				speed = math.max( math.abs( self:GetWheelVelocity() ) - vel, 0 ) * 5 + vel
+			end
 
 			local volume = math.min(speed / 1000,1) ^ 2 * T
 			local pitch = 100 + math.Clamp((speed - 400) / 200,0,155)
 
 			sound:ChangeVolume( volume, 0 )
-			sound:ChangePitch( pitch, 0 ) 
+			sound:ChangePitch( pitch, 0.5 ) 
 		else
 			self:StopTireSound( snd )
 		end
@@ -61,7 +68,7 @@ function ENT:StartTireSound( snd )
 	if self._ActiveTireSounds[ snd ] then return self._ActiveTireSounds[ snd ] end
 
 	local sound = CreateSound( self, self.TireSoundTypes[ snd ]  )
-	sound:SetSoundLevel( 85 )
+	sound:SetSoundLevel( string.StartsWith( snd, "skid" ) and self.TireSoundLevelSkid or self.TireSoundLevelRoll )
 	sound:PlayEx(0,100)
 
 	self._ActiveTireSounds[ snd ] = sound
