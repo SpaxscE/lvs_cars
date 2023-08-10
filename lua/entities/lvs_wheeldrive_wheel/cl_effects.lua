@@ -126,6 +126,12 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 	if not trace.Hit then return end
 
 	if math.abs( self:GetRPM() ) > 10 then
+		if traceWater.Hit then
+			Base:DoTireSound( "roll_wet" )
+
+			return
+		end
+
 		local surface = self.DustEffectSurfaces[ util.GetSurfacePropName( trace.SurfaceProps ) ] and "_dirt" or ""
 		local snd_type = (self:GetSlip() > 500) and "skid" or "roll"
 
