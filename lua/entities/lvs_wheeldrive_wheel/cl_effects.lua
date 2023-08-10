@@ -108,6 +108,7 @@ function ENT:CalcWheelEffects()
 					effectdata:SetOrigin( traceWater.HitPos )
 					effectdata:SetEntity( Base )
 					effectdata:SetMagnitude( self:BoundingRadius() )
+					effectdata:SetFlags( 0 )
 				util.Effect( "lvs_physics_wheelwatersplash", effectdata )
 
 				self:StopWheelEffects()
@@ -125,7 +126,7 @@ end
 function ENT:CalcWheelSounds( Base, trace, traceWater )
 	if not trace.Hit then return end
 
-	if math.abs( self:GetRPM() ) > 10 then
+	if math.abs( self:GetRPM() ) > 50 then
 		if traceWater.Hit then
 			Base:DoTireSound( "roll_wet" )
 
@@ -135,6 +136,31 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 		local surface = self.DustEffectSurfaces[ util.GetSurfacePropName( trace.SurfaceProps ) ] and "_dirt" or ""
 		local snd_type = (self:GetSlip() > 500) and "skid" or "roll"
 
+		if (istable( StormFox ) or istable( StormFox2 )) and surface ~= "_dirt" then
+			local Rain = false
+
+			if StormFox then
+				Rain = StormFox.IsRaining()
+			end
+
+			if StormFox2 then
+				Rain = StormFox2.Weather:IsRaining()
+			end
+
+			if Rain then
+				local effectdata = EffectData()
+					effectdata:SetOrigin( trace.HitPos )
+					effectdata:SetEntity( Base )
+					effectdata:SetMagnitude( self:BoundingRadius() )
+					effectdata:SetFlags( 1 )
+				util.Effect( "lvs_physics_wheelwatersplash", effectdata )
+
+				Base:DoTireSound( snd_type.."_wet" )
+
+				return
+			end
+		end
+	
 		Base:DoTireSound( snd_type..surface )
 	end
 end

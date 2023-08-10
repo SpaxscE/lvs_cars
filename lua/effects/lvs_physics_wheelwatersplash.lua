@@ -11,11 +11,18 @@ function EFFECT:Init( data )
 	self.LifeTime = 1
 	self.DieTime = CurTime() + self.LifeTime
 
-	self.Splash = {
-		Pos = Pos,
-		Mat = self.WaterWake,
-		RandomAng = math.random(0,360),
-	}
+	local RainFX = data:GetFlags() == 1
+
+	if RainFX then
+		self.Size = self.Size * 2
+
+	else
+		self.Splash = {
+			Pos = Pos,
+			Mat = self.WaterWake,
+			RandomAng = math.random(0,360),
+		}
+	end
 
 	self.VecCol = (render.GetLightColor( Pos ) * 0.25 + Vector(0.75,0.75,0.75)) * 255
 
@@ -30,7 +37,7 @@ function EFFECT:Init( data )
 			particle:SetVelocity( Vector(0,0,math.Clamp(Vel / 100,100,250)) )
 			particle:SetDieTime( 0.25 + math.min(Vel / 500,0.2) )
 			particle:SetAirResistance( 60 ) 
-			particle:SetStartAlpha( 150 )
+			particle:SetStartAlpha( RainFX and 5 or 150 )
 			particle:SetEndAlpha( 0 )
 			particle:SetStartSize( self.Size * 0.2 )
 			particle:SetEndSize(  self.Size )
@@ -51,19 +58,19 @@ function EFFECT:Think()
 end
 
 function EFFECT:Render()
-	if self.Splash and self.LifeTime and self.VecCol then
-		local Scale = 1 - (self.DieTime - CurTime()) / self.LifeTime
+	if not self.Splash or not self.LifeTime or not self.VecCol then return end
 
-		local Alpha = math.max( 100 - 150 * Scale ^ 2, 0 )
+	local Scale = 1 - (self.DieTime - CurTime()) / self.LifeTime
 
-		if Alpha <= 0 then return end
+	local Alpha = math.max( 100 - 150 * Scale ^ 2, 0 )
 
-		local Size = (self.Size + self.Size * Scale) * 1.5
+	if Alpha <= 0 then return end
 
-		cam.Start3D2D( self.Splash.Pos, Angle(0,0,0), 1 )
-			surface.SetMaterial( self.Splash.Mat )
-			surface.SetDrawColor( self.VecCol.r, self.VecCol.g, self.VecCol.b, Alpha )
-			surface.DrawTexturedRectRotated( 0, 0, Size, Size, self.Splash.RandomAng )
-		cam.End3D2D()
-	end
+	local Size = (self.Size + self.Size * Scale) * 1.5
+
+	cam.Start3D2D( self.Splash.Pos, Angle(0,0,0), 1 )
+		surface.SetMaterial( self.Splash.Mat )
+		surface.SetDrawColor( self.VecCol.r, self.VecCol.g, self.VecCol.b, Alpha )
+		surface.DrawTexturedRectRotated( 0, 0, Size, Size, self.Splash.RandomAng )
+	cam.End3D2D()
 end
