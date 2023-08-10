@@ -17,7 +17,7 @@ function EFFECT:Init( data )
 		RandomAng = math.random(0,360),
 	}
 
-	self.VecCol = (render.GetLightColor( Pos ) * 0.5 +Vector(0.5,0.5,0.5)) * 255
+	self.VecCol = (render.GetLightColor( Pos ) * 0.25 + Vector(0.75,0.75,0.75)) * 255
 
 	local emitter = Ent:GetParticleEmitter( Ent:GetPos() )
 	local Vel = Ent:GetVelocity():Length()
