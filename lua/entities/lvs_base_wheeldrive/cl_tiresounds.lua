@@ -61,11 +61,7 @@ function ENT:StartTireSound( snd )
 	if self._ActiveTireSounds[ snd ] then return self._ActiveTireSounds[ snd ] end
 
 	local sound = CreateSound( self, self.TireSoundTypes[ snd ]  )
-
-	if string.StartsWith( snd, "skid" ) then
-		sound:SetSoundLevel( 85 )
-	end
-
+	sound:SetSoundLevel( 85 )
 	sound:PlayEx(0,100)
 
 	self._ActiveTireSounds[ snd ] = sound
