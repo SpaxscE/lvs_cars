@@ -1,4 +1,35 @@
 
+function ENT:SteerTo( TargetValue, MaxSteer  )
+	local Cur = self:GetSteer() / MaxSteer
+	
+	local Diff = TargetValue - Cur
+
+	local Returning = (Diff > 0 and Cur < 0) or (Diff < 0 and Cur > 0)
+
+	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or self.SteerSpeed)
+
+	local New = (Cur + math.Clamp(Diff,-Rate,Rate))
+
+	self:SetSteer( New * MaxSteer )
+	self:SetPoseParameter( "vehicle_steer", New  )
+end
+
+function ENT:CalcMouseSteer( ply, cmd )
+	local pod = ply:GetVehicle()
+
+	local ang = self:GetAngles()
+	ang.y = pod:GetAngles().y + 90
+
+	local Forward = ang:Right()
+	local View = pod:WorldToLocalAngles( ply:EyeAngles() ):Forward()
+	
+	local a = (self:AngleBetweenNormal( View, Forward ) - 90) / 10
+
+	local b = math.min( math.abs( a ), 1 ) ^ 2 * self:Sign( a )
+
+	self:SteerTo( -b, self:GetMaxSteerAngle() )
+end
+
 function ENT:CalcSteer( ply, cmd )
 	local KeyLeft = ply:lvsKeyDown( "CAR_STEER_LEFT" )
 	local KeyRight = ply:lvsKeyDown( "CAR_STEER_RIGHT" )
@@ -42,18 +73,7 @@ function ENT:CalcSteer( ply, cmd )
 		end
 	end
 
-	local Cur = self:GetSteer() / MaxSteer
-
-	local Diff = TargetValue - Cur
-
-	local Returning = (Diff > 0 and Cur < 0) or (Diff < 0 and Cur > 0)
-
-	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or self.SteerSpeed)
-
-	local New = (Cur + math.Clamp(Diff,-Rate,Rate))
-
-	self:SetSteer( New * MaxSteer )
-	self:SetPoseParameter( "vehicle_steer", New  )
+	self:SteerTo( TargetValue, MaxSteer  )
 end
 
 function ENT:CalcThrottle( ply, cmd )
@@ -123,7 +143,12 @@ function ENT:StartCommand( ply, cmd )
 
 	if ply:lvsKeyDown( "CAR_MENU" ) then return end
 
-	self:CalcSteer( ply, cmd )
+	if ply:lvsMouseAim() then
+		self:CalcMouseSteer( ply, cmd )
+	else
+		self:CalcSteer( ply, cmd )
+	end
+
 	self:CalcThrottle( ply, cmd )
 	self:CalcHandbrake( ply, cmd )
 	self:CalcBrake( ply, cmd )
