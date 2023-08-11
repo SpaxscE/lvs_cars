@@ -57,6 +57,10 @@ function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
 	local VelLength = Vel:Length()
 	local VelPercentMaxSpeed = math.min( VelLength / 1000, 1 )
 
+	if ply:lvsMouseAim() then
+		angles = ply:EyeAngles()
+	end
+
 	local direction = (90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90
 
 	local FovValue = math.min( VelPercentMaxSpeed ^ 2 * 100, 15 )
@@ -77,16 +81,6 @@ function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
 	end
 
 	return self._viewpunch_fov * (90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90
-end
-
-function ENT:LVSCalcView( ply, pos, angles, fov, pod )
-	if pod == self:GetDriverSeat() then
-		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
-	end
-
-	local fovAdd = self:CalcViewPunch( ply, pos, angles, fov, pod )
-
-	return LVS:CalcView( self, ply, pos, angles,  fov + fovAdd, pod )
 end
 
 ENT.IconEngine = Material( "lvs/engine.png" )
@@ -133,4 +127,40 @@ LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 85,  220, 75, 220, 75, "CAR
 
 function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 	if not ply:lvsKeyDown( "CAR_MENU" ) then return end
+end
+
+
+function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
+	angles = ply:EyeAngles()
+	return LVS:CalcView( self, ply, pos, angles, fov, pod )
+end
+
+function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
+	return pos, angles, fov
+end
+
+function ENT:CalcViewDriver( ply, pos, angles, fov, pod )
+	pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
+
+	if ply:lvsMouseAim() then
+		return self:CalcViewMouseAim( ply, pos, angles, fov, pod )
+	else
+		return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+	end
+end
+
+function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles, fov, pod )
+end
+
+function ENT:LVSCalcView( ply, original_pos, original_angles, original_fov, pod )
+	local pos, angles, fov = self:CalcViewOverride( ply, original_pos, original_angles, original_fov, pod )
+
+	local new_fov = math.min( fov + self:CalcViewPunch( ply, pos, angles, fov, pod ), 180 )
+
+	if self:GetDriverSeat() == pod then
+		return self:CalcViewDriver( ply, pos, angles, new_fov, pod )
+	else
+		return self:CalcViewPassenger( ply, pos, angles, new_fov, pod )
+	end
 end
