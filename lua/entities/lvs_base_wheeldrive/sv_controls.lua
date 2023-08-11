@@ -15,6 +15,12 @@ function ENT:SteerTo( TargetValue, MaxSteer  )
 end
 
 function ENT:CalcMouseSteer( ply, cmd )
+	if ply:lvsKeyDown( "CAR_STEER_LEFT" ) or ply:lvsKeyDown( "CAR_STEER_RIGHT" ) or ply:lvsKeyDown( "FREELOOK" ) then
+		self:CalcSteer( ply, cmd )
+
+		return
+	end
+
 	local pod = ply:GetVehicle()
 
 	local ang = self:GetAngles()
@@ -23,11 +29,19 @@ function ENT:CalcMouseSteer( ply, cmd )
 	local Forward = ang:Right()
 	local View = pod:WorldToLocalAngles( ply:EyeAngles() ):Forward()
 	
-	local a = (self:AngleBetweenNormal( View, Forward ) - 90) / 10
+	local Reversed = false
 
-	local b = math.min( math.abs( a ), 1 ) ^ 2 * self:Sign( a )
+	if (self:AngleBetweenNormal( View, ang:Forward() ) > 90) then
+		Reversed = not self:GetReverse()
+	else
+		Reversed = self:GetReverse()
+	end
 
-	self:SteerTo( -b, self:GetMaxSteerAngle() )
+	local LocalAngSteer = (self:AngleBetweenNormal( View, ang:Right() ) - 90) / 20
+
+	local Steer = (math.min( math.abs( LocalAngSteer ), 1 ) ^ 2 * self:Sign( LocalAngSteer ))
+
+	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
 end
 
 function ENT:CalcSteer( ply, cmd )
