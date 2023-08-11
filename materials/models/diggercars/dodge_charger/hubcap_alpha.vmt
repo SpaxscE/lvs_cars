@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/DiggerCars/dodge_charger/interior_lod0"
+	"$basetexture" "models/DiggerCars/dodge_charger/hubcap_alpha"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 	"$alphatest" "1"
 	"$allowalphatocoverage" "1"
@@ -18,4 +18,7 @@
 		}
 	}
 }
+
+
+
 
