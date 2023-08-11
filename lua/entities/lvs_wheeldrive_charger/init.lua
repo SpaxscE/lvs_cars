@@ -26,7 +26,7 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
-	local WheelModel = "models/diggercars/PLY_Duster/wh.mdl"
+	local WheelModel = "models/diggercars/dodge_charger/wh.mdl"
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
