@@ -15,12 +15,6 @@ function ENT:SteerTo( TargetValue, MaxSteer  )
 end
 
 function ENT:CalcMouseSteer( ply, cmd )
-	if ply:lvsKeyDown( "CAR_STEER_LEFT" ) or ply:lvsKeyDown( "CAR_STEER_RIGHT" ) or ply:lvsKeyDown( "FREELOOK" ) then
-		self:CalcSteer( ply, cmd )
-
-		return
-	end
-
 	local pod = ply:GetVehicle()
 
 	local ang = self:GetAngles()
@@ -158,7 +152,11 @@ function ENT:StartCommand( ply, cmd )
 	if ply:lvsKeyDown( "CAR_MENU" ) then return end
 
 	if ply:lvsMouseAim() then
-		self:CalcMouseSteer( ply, cmd )
+		if ply:lvsKeyDown( "FREELOOK" ) then
+			self:CalcSteer( ply, cmd )
+		else
+			self:CalcMouseSteer( ply, cmd )
+		end
 	else
 		self:CalcSteer( ply, cmd )
 	end

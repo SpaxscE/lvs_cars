@@ -8,7 +8,8 @@ function ENT:CalcViewDriver( ply, pos, angles, fov, pod )
 
 	if ply:lvsMouseAim() then
 		angles = ply:EyeAngles()
-		return LVS:CalcView( self, ply, pos, angles, fov, pod )
+
+		return LVS:CalcView( self, ply, pos, angles,  fov, pod )
 	else
 		return LVS:CalcView( self, ply, pos, angles,  fov, pod )
 	end
