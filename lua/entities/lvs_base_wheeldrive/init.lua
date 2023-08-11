@@ -68,7 +68,16 @@ function ENT:AlignView( ply )
 
 	timer.Simple( 0, function()
 		if not IsValid( ply ) or not IsValid( self ) then return end
+
 		local Ang = Angle(0,90,0)
+
+		local pod = ply:GetVehicle()
+		local MouseAim = ply:lvsMouseAim() and self:GetDriver() == ply
+
+		if MouseAim and IsValid( pod ) then
+			Ang = pod:LocalToWorldAngles( Angle(0,90,0) )
+			Ang.r = 0
+		end
 
 		ply:SetEyeAngles( Ang )
 	end)
