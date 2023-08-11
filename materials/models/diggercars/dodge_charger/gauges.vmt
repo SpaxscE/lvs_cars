@@ -1,0 +1,27 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/DiggerCars/dodge_charger/gauges"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$detail" "models/DiggerCars/dodge_charger/gauges_e"
+	"$detailscale" "1"
+	"$detailblendfactor" "1"
+	"$detailblendmode" "5"
+	"$phong" "1" 
+	"$phongboost" "0.08" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
