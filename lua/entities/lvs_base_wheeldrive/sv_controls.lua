@@ -24,10 +24,7 @@ function ENT:CalcMouseSteer( ply, cmd )
 	local View = pod:WorldToLocalAngles( ply:EyeAngles() ):Forward()
 	
 	local Reversed = false
-
-	if (self:AngleBetweenNormal( View, ang:Forward() ) > 90) then
-		Reversed = not self:GetReverse()
-	else
+	if self:AngleBetweenNormal( View, ang:Forward() ) < 90 then
 		Reversed = self:GetReverse()
 	end
 
@@ -152,7 +149,7 @@ function ENT:StartCommand( ply, cmd )
 	if ply:lvsKeyDown( "CAR_MENU" ) then return end
 
 	if ply:lvsMouseAim() then
-		if ply:lvsKeyDown( "FREELOOK" ) then
+		if ply:lvsKeyDown( "FREELOOK" ) or ply:lvsKeyDown( "CAR_STEER_LEFT" ) or ply:lvsKeyDown( "CAR_STEER_RIGHT" ) then
 			self:CalcSteer( ply, cmd )
 		else
 			self:CalcMouseSteer( ply, cmd )
