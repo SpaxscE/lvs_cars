@@ -126,6 +126,11 @@ end
 function ENT:CalcWheelSounds( Base, trace, traceWater )
 	if not trace.Hit then return end
 
+	if trace.Entity == self then
+		Base.CrosshairFilterEnts = nil
+		return
+	end
+
 	if math.abs( self:GetRPM() ) > 50 then
 		if traceWater.Hit then
 			Base:DoTireSound( "roll_wet" )
