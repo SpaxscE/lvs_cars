@@ -127,7 +127,10 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 	if not trace.Hit then return end
 
 	if trace.Entity == self then
-		Base.CrosshairFilterEnts = nil
+		if istable( Base.CrosshairFilterEnts ) then
+			table.insert( Base.CrosshairFilterEnts, self )
+		end
+
 		return
 	end
 
