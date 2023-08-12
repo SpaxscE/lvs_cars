@@ -218,11 +218,13 @@ ENT.Lights = {
 		Sprites = {
 			[1] = {
 				pos = Vector(79.04,19.43,11.04),
-				colorA = 50,
+				colorB = 200,
+				colorA = 150,
 			},
 			[2] = {
 				pos = Vector(79.04,-19.43,11.04),
-				colorA = 50,
+				colorB = 200,
+				colorA = 150,
 			},
 		},
 	},
