@@ -89,6 +89,19 @@ function ENT:InitializeLights( base )
 				data[typeid].ProjectedTextures[ projid ].shadows = projdata.shadows == true
 			end
 		end
+
+		if typedata.DynamicLights then
+			for dLightid, dLightdata in pairs( typedata.DynamicLights ) do
+				data[typeid].DynamicLights[ dLightid ].pos = dLightdata.pos or vector_origin
+				data[typeid].DynamicLights[ dLightid ].colorR = dLightdata.colorR or 255
+				data[typeid].DynamicLights[ dLightid ].colorG = dLightdata.colorG or 255
+				data[typeid].DynamicLights[ dLightid ].colorB = dLightdata.colorB or 255
+				data[typeid].DynamicLights[ dLightid ].brightness = dLightdata.brightness or 0.1
+				data[typeid].DynamicLights[ dLightid ].decay = dLightdata.decay or 1000
+				data[typeid].DynamicLights[ dLightid ].size = dLightdata.size or 128
+				data[typeid].DynamicLights[ dLightid ].lifetime = dLightdata.lifetime or 0.1
+			end
+		end
 	end
 
 	self.Enabled = true
@@ -199,6 +212,25 @@ function ENT:LightsThink( base )
 						self:RemoveProjectedTexture( id )
 					end
 				end
+			end
+		end
+
+		if typedata.DynamicLights then
+			for dLightid, dLightdata in pairs( typedata.DynamicLights ) do
+				if not active then continue end
+
+				local dlight = DynamicLight( self:EntIndex() * 1000 + dLightid )
+
+				if not dlight then continue end
+
+				dlight.pos = base:LocalToWorld( dLightdata.pos )
+				dlight.r = dLightdata.colorR
+				dlight.g =dLightdata.colorG
+				dlight.b = dLightdata.colorB
+				dlight.brightness = dLightdata.brightness
+				dlight.decay = dLightdata.decay
+				dlight.size = dLightdata.size
+				dlight.dietime = CurTime() + dLightdata.lifetime
 			end
 		end
 
