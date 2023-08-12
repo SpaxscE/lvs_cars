@@ -393,7 +393,7 @@ function ENT:RenderLights( base, data )
 
 					if ang < 30 then
 						render.SetMaterial( self.SunMaterial )
-						render.DrawSprite( pos, 256, 128 , Color(45,45,45, (1 - (ang / 30)) * 255 ) )
+						render.DrawSprite( pos, 256, 256 , Color(255,255,255, (1 - (ang / 30)) * 255 ) )
 					end
 				end
 			end
