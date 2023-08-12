@@ -45,3 +45,7 @@ function ENT:OnChangeGear( oldGear, newGear )
 
 	self:SuppressViewPunch( self.TransShiftSpeed )
 end
+
+function ENT:GetTurnFlasher()
+	return math.cos( CurTime() * 8 + self:EntIndex() * 1337 ) > 0
+end
