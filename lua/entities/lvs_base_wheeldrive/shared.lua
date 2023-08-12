@@ -100,3 +100,23 @@ function ENT:GetTargetVelocity()
 
 	return self.MaxVelocity
 end
+
+function ENT:HasFogLights()
+	if not istable( self.Lights ) then return false end
+
+	local HasFog = false
+
+	for _, data in pairs( self.Lights ) do
+		if not istable( data ) then continue end
+
+		for id, typedata in pairs( data ) do
+			if id == "Trigger" and typedata == "fog" then
+				HasFog = true
+
+				break
+			end
+		end
+	end
+
+	return HasFog
+end

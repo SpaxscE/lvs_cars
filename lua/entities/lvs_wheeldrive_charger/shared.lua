@@ -66,22 +66,12 @@ ENT.Lights = {
 				colorA = 150,
 			},
 			[3] = {
-				pos = Vector(97.66,20.39,16.58),
-				colorB = 200,
-				colorA = 150,
-			},
-			[4] = {
-				pos = Vector(97.66,-20.39,16.58),
-				colorB = 200,
-				colorA = 150,
-			},
-			[5] = {
 				pos = Vector(-98.62,21.53,20.44),
 				colorG = 0,
 				colorB = 0,
 				colorA = 150,
 			},
-			[6] = {
+			[4] = {
 				pos = Vector(-98.62,-21.53,20.44),
 				colorG = 0,
 				colorB = 0,
@@ -98,6 +88,38 @@ ENT.Lights = {
 			},
 			[2] = {
 				pos = Vector(100,-20.39,16.58),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "high",
+		SubMaterialID = 24,
+		Sprites = {
+			[1] = {
+				pos = Vector(97.66,20.39,16.58),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(97.66,-20.39,16.58),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(97.66,20.39,16.58),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(97.66,-20.39,16.58),
 				ang = Angle(0,0,0),
 				colorB = 200,
 				colorA = 150,

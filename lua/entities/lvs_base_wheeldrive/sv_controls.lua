@@ -136,7 +136,7 @@ function ENT:CalcLights( ply, cmd )
 					LightsHandler:SetHighActive( not LightsHandler:GetHighActive() )
 				end
 			else
-				if (T - (self._LightsPressedTime or 0)) > 0.5 then
+				if self:HasFogLights() and (T - (self._LightsPressedTime or 0)) > 0.5 then
 					LightsHandler:SetFogActive( not LightsHandler:GetFogActive() )
 				else
 					LightsHandler:SetActive( true )

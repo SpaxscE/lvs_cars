@@ -5,9 +5,15 @@ ENT.DoNotDuplicate = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Entity",1, "DoorHandler" )
+
 	self:NetworkVar( "Bool",0, "Active" )
 	self:NetworkVar( "Bool",1, "HighActive" )
 	self:NetworkVar( "Bool",2, "FogActive" )
+
+	if SERVER then
+		self:NetworkVarNotify( "Active", self.OnActiveChanged )
+	end
 end
 
 if SERVER then
@@ -17,8 +23,38 @@ if SERVER then
 		self:DrawShadow( false )
 	end
 
+	function ENT:OnActiveChanged( name, old, new)
+		if new == old then return end
+
+		local DoorHandler = self:GetDoorHandler()
+
+		if not IsValid( DoorHandler ) then return end
+
+		if new then
+			if not DoorHandler:IsOpen() then
+				DoorHandler:Open()
+			end
+		else
+			if DoorHandler:IsOpen() then
+				DoorHandler:Close()
+			end
+		end
+	end
+
 	function ENT:Think()
-		return false
+		local DoorHandler = self:GetDoorHandler()
+
+		if not IsValid( DoorHandler ) then
+			self:NextThink( CurTime() + 1 )
+		else
+			self:NextThink( CurTime() )
+
+			if self:GetActive() and not DoorHandler:IsOpen() then
+				DoorHandler:Open()
+			end
+		end
+
+		return true
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
@@ -112,7 +148,11 @@ function ENT:CreateSubMaterial( SubMaterialID, name )
 
 	if not IsValid( base ) or not SubMaterialID then return end
 
-	local string_data = file.Read( "materials/"..base:GetMaterials()[ SubMaterialID + 1 ]..".vmt", "GAME" )
+	local mat = base:GetMaterials()[ SubMaterialID + 1 ]
+
+	if not mat then return end
+
+	local string_data = file.Read( "materials/"..mat..".vmt", "GAME" )
 
 	if not string_data then return end
 
@@ -180,7 +220,6 @@ function ENT:LightsThink( base )
 	if not istable( data ) then return end
 
 	for typeid, typedata in pairs( data ) do
-
 		local mul = self:GetTypeActivator( typedata.Trigger )
 		local active = mul > 0.01
 
@@ -299,13 +338,21 @@ function ENT:CalcTypeActivators( base )
 
 	local Rate = RealFrameTime() * 10
 
-	self._smMain = self._smMain + (main - self._smMain) * Rate
-	self._smHigh = self._smHigh + (high - self._smHigh) * Rate
 	self._smFog = self._smFog + (fog - self._smFog) * Rate
 	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
 	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
 	self._smTurnLeft = self._smTurnLeft + (turnleft - self._smTurnLeft) * Rate * 2
 	self._smTurnRight = self._smTurnRight + (turnright - self._smTurnRight) * Rate * 2
+
+	local DoorHandler = self:GetDoorHandler()
+	if IsValid( DoorHandler ) then
+		main = (DoorHandler.sm_pp or 0) >= 0.9 and main or 0
+		high = (DoorHandler.sm_pp or 0) >= 0.9 and high or 0
+	end
+
+	self._smMain = self._smMain + (main - self._smMain) * Rate
+	self._smHigh = self._smHigh + (high - self._smHigh) * Rate
+
 end
 
 ENT.LightMaterial = Material( "effects/lvs/car_spotlight" )
