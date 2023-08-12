@@ -34,7 +34,7 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	end
 end
 
-LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 230,  220, 220, 220, 220, "CAR MENU",
+LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 85,  220, 75, 220, 75, "CAR MENU",
 	function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
 		if not vehicle.LVSHudPaintCarMenu then return end
 		vehicle:LVSHudPaintCarMenu( X, Y, W, H, ScrX, ScrY, ply )
@@ -48,30 +48,45 @@ ENT.CarMenuLeft = Material( "lvs/carmenu_turnleft.png" )
 ENT.CarMenuRight = Material( "lvs/carmenu_turnRight.png" )
 
 function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
-	--if not ply:lvsKeyDown( "CAR_MENU" ) then return end
+	--local MenuOpen = ply:lvsKeyDown( "CAR_MENU" )
 
-	local size = 64
-	local dist = 0
+	--if MenuOpen then
+	--else
+	--	self._selectedThing = nil
+
+	--	return
+	--end
+
+	local size = 32
+	local dist = 5
 
 	local cX = X + w * 0.5
-	local cY = Y + h * 0.5
-
-	surface.SetDrawColor( 255, 255, 255, 255 )
+	local cY = Y + h - size * 0.5 - dist
+	local oz = 2
 
 	surface.SetMaterial( self.CarMenuDisable )
+	surface.SetDrawColor( 0, 0, 0, 150 )
+	surface.DrawTexturedRectRotated( cX + oz, cY + oz, size, size, 0 )
+	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRectRotated( cX, cY, size, size, 0 )
 
 	surface.SetMaterial( self.CarMenuLeft )
+	surface.SetDrawColor( 0, 0, 0, 200 )
+	surface.DrawTexturedRectRotated( cX - (size + dist) + oz, cY + oz, size, size, 0 )
+	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRectRotated( cX - (size + dist), cY, size, size, 0 )
 
 	surface.SetMaterial( self.CarMenuRight)
+	surface.SetDrawColor( 0, 0, 0, 200 )
+	surface.DrawTexturedRectRotated( cX + (size + dist) + oz, cY + oz, size, size, 0 )
+	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRectRotated( cX + (size + dist), cY, size, size, 0 )
-
+	
 	surface.SetMaterial( self.CarMenuHazard )
+	surface.SetDrawColor( 0, 0, 0, 200 )
+	surface.DrawTexturedRectRotated( cX + oz, cY - (size + dist) + oz, size, size, 0 )
+	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRectRotated( cX, cY - (size + dist), size, size, 0 )
-
-	surface.SetMaterial( self.CarMenuFog )
-	surface.DrawTexturedRectRotated( cX, cY + (size + dist), size, size, 0 )
 
 	--draw.SimpleText( "test centered" , "LVS_FONT",  X + w * 0.5, Y + h * 0.5, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 end
