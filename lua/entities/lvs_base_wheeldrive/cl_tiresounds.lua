@@ -45,8 +45,6 @@ end
 function ENT:DoTireSound( snd )
 	local ply = LocalPlayer()
 
-	if ply:lvsGetVehicle() ~= self and string.StartsWith( snd, "roll" ) then return end
-
 	if not istable( self._TireSounds ) then
 		self._TireSounds = {}
 	end
