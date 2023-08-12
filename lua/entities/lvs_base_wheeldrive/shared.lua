@@ -102,6 +102,8 @@ function ENT:GetTargetVelocity()
 end
 
 function ENT:HasFogLights()
+	if isbool( self._HasFogLights ) then return self._HasFogLights end
+
 	if not istable( self.Lights ) then return false end
 
 	local HasFog = false
@@ -118,5 +120,31 @@ function ENT:HasFogLights()
 		end
 	end
 
+	self._HasFogLights = HasFog
+
 	return HasFog
+end
+
+function ENT:HasTurnSignals()
+	if isbool( self._HasTurnSignals ) then return self._HasTurnSignals end
+
+	if not istable( self.Lights ) then return false end
+
+	local HasTurnSignals = false
+
+	for _, data in pairs( self.Lights ) do
+		if not istable( data ) then continue end
+
+		for id, typedata in pairs( data ) do
+			if id == "Trigger" and (typedata == "turnleft" or  typedata == "turnright") then
+				HasTurnSignals = true
+
+				break
+			end
+		end
+	end
+
+	self._HasTurnSignals = HasTurnSignals
+
+	return HasTurnSignals
 end

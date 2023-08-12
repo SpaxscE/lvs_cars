@@ -70,7 +70,7 @@ ENT.CarMenuRight = Material( "lvs/carmenu_turnRight.png" )
 function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 	if self:GetDriver() ~= ply then return end
 
-	local MenuOpen = ply:lvsKeyDown( "CAR_MENU" )
+	local MenuOpen = ply:lvsKeyDown( "CAR_MENU" ) and self:HasTurnSignals()
 
 	if MenuOpen then
 		if ply:lvsKeyDown( "CAR_THROTTLE" ) then

@@ -346,8 +346,8 @@ function ENT:CalcTypeActivators( base )
 
 	local DoorHandler = self:GetDoorHandler()
 	if IsValid( DoorHandler ) then
-		main = (DoorHandler.sm_pp or 0) >= 0.9 and main or 0
-		high = (DoorHandler.sm_pp or 0) >= 0.9 and high or 0
+		main = (DoorHandler.sm_pp or 0) >= 0.5 and main or 0
+		high = (DoorHandler.sm_pp or 0) >= 0.5 and high or 0
 	end
 
 	self._smMain = self._smMain + (main - self._smMain) * Rate
