@@ -1,15 +1,12 @@
-"VertexlitGeneric"
+"VertexLitGeneric"
 {
-	"$basetexture" "models/DiggerCars/NISSAN_BLUEBIRD910/0F_0_0"
+	"$basetexture" "models/diggercars/ferrari_365/generic_leather"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$decal" "1"
-	"$alphatest" "1"
-	"$allowalphatocoverage" "1"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
 	"$phongfresnelranges" "[1 1 1]" 
-	"$colorfix" "{255 255 255}"
+	"$colorfix" "{45 45 45}"
 	"Proxies"
 	{
 		"Equals"
@@ -19,4 +16,14 @@
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
 

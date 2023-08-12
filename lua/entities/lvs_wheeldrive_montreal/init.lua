@@ -3,34 +3,34 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	local DriverSeat = self:AddDriverSeat( Vector(-13.6,15,4), Angle(0,-90,8) )
-	local PassengerSeat = self:AddPassengerSeat( Vector(1,-15,16), Angle(0,-90,28) )
+	local DriverSeat = self:AddDriverSeat( Vector(-22,15,2), Angle(0,-90,8) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(-10,-15,13), Angle(0,-90,28) )
 
 	self:AddEngine( Vector(45,0,20) )
 
-	local DoorHandler = self:AddDoorHandler( "left_door", Vector(0,28,26), Angle(0,0,0), Vector(-20,-6,-16), Vector(28,6,8), Vector(-20,-20,-16), Vector(28,42,8) )
+	local DoorHandler = self:AddDoorHandler( "left_door", Vector(-20,31,28), Angle(0,0,0), Vector(-10,-6,-16), Vector(38,6,8), Vector(15,-20,-16), Vector(38,52,8) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( DriverSeat )
 
-	local DoorHandler = self:AddDoorHandler( "right_door", Vector(0,-28,26), Angle(0,0,0), Vector(-20,-6,-16), Vector(28,6,8), Vector(-20,-42,-16), Vector(28,20,8) )
+	local DoorHandler = self:AddDoorHandler( "right_door", Vector(-20,-31,28), Angle(0,0,0), Vector(-10,-6,-16), Vector(38,6,8), Vector(15,-52,-16), Vector(38,20,8) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat )
 
-	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-75,0,35), Angle(-8,0,0), Vector(-15,-30,-3), Vector(10,30,3), Vector(-15,-30,-3), Vector(10,30,20) )
+	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-60,0,40), Angle(-18,0,0), Vector(-20,-28,-3), Vector(10,28,3), Vector(-10,-28,-3), Vector(10,28,30) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_trunk_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/classiccar_door_close.wav" )
 
-	local DoorHandler = self:AddDoorHandler( "hood", Vector(65,0,30), Angle(5,0,0), Vector(-30,-30,-3), Vector(12,30,3), Vector(-30,-30,-3), Vector(12,30,40) )
+	local DoorHandler = self:AddDoorHandler( "hood", Vector(45,0,33), Angle(5,0,0), Vector(-20,-30,-3), Vector(39,30,3), Vector(20,-30,-3), Vector(39,30,50) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
-	local DoorHandler = self:AddDoorHandler( "fuel_cap", Vector(-69,-32.5,26.5), Angle(0,0,0), Vector(-5,0,-3), Vector(5,5,3), Vector(-5,-5,-3), Vector(5,5,3) )
+	local DoorHandler = self:AddDoorHandler( "fuel_cap", Vector(-74,-35.5,29), Angle(0,0,0), Vector(-5,0,-3), Vector(5,5,3), Vector(-5,-5,-3), Vector(5,5,3) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
-	local WheelModel = "models/diggercars/NISSAN_BLUEBIRD910/BLUEBIRD_wheel.mdl"
+	local WheelModel = "models/diggercars/alfa_montreal/monteral_wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
@@ -42,15 +42,15 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(50.6,28.22,13),
+				pos = Vector(47,30,11),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
+				mdl_ang = Angle(0,180,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(50.6,-28.22,13),
+				pos = Vector(47,-30,11),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
+				mdl_ang = Angle(0,0,0),
 			} ),
 		},
 		Suspension = {
@@ -73,15 +73,15 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-51,28.09,12),
+				pos = Vector(-53,30,14),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
+				mdl_ang = Angle(0,180,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-51,-28.09,12),
+				pos = Vector(-53,-30,14),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
+				mdl_ang = Angle(0,0,0),
 			} ),
 		},
 		Suspension = {
@@ -97,7 +97,7 @@ end
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_start.mp3" )
+		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_start.wav" )
 	else
 		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_stop.wav" )
 	end

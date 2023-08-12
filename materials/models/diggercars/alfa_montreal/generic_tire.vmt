@@ -1,10 +1,7 @@
 "VertexlitGeneric"
 {
-	"$basetexture" "models/DiggerCars/NISSAN_BLUEBIRD910/0F_0_0"
-	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$decal" "1"
-	"$alphatest" "1"
-	"$allowalphatocoverage" "1"
+	"$basetexture" "models/diggercars/alfa_montreal/generic_tire"
+	"$bumpmap" "models/DiggerCars/alfa_montreal/generic_tire_nm"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
@@ -19,4 +16,8 @@
 		}
 	}
 }
+
+
+
+
 

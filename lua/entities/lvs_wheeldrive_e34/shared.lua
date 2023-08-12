@@ -23,7 +23,7 @@ ENT.TransShiftSpeed = 0.3
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_idle_loop.wav",
+		sound = "lvs/vehicles/bmw_m5e34/engine_00824.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -31,7 +31,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_loop.wav",
+		sound = "lvs/vehicles/bmw_m5e34/engine_01450.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,
@@ -40,7 +40,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_revdown_loop.wav",
+		sound = "lvs/vehicles/bmw_m5e34/engine_01450.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,
