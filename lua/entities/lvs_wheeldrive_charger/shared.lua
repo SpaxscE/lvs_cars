@@ -11,12 +11,12 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/dodge_charger/charger.mdl"
 
-ENT.MaxVelocity = 2600
+ENT.MaxVelocity = 2400
 
-ENT.EnginePower = 1800
-ENT.EngineTorque = 100
+ENT.EnginePower = 600
+ENT.EngineTorque = 170
 
-ENT.TransGears = 4
+ENT.TransGears = 3
 ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
