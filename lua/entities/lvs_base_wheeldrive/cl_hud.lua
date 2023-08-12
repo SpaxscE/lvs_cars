@@ -34,13 +34,44 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	end
 end
 
-LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 85,  220, 75, 220, 75, "CAR MENU",
+LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 230,  220, 220, 220, 220, "CAR MENU",
 	function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
 		if not vehicle.LVSHudPaintCarMenu then return end
 		vehicle:LVSHudPaintCarMenu( X, Y, W, H, ScrX, ScrY, ply )
 	end
 )
 
+ENT.CarMenuDisable = Material( "lvs/carmenu_cross.png" )
+ENT.CarMenuFog = Material( "lvs/carmenu_fog.png" )
+ENT.CarMenuHazard = Material( "lvs/carmenu_hazard.png" )
+ENT.CarMenuLeft = Material( "lvs/carmenu_turnleft.png" )
+ENT.CarMenuRight = Material( "lvs/carmenu_turnRight.png" )
+
 function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
-	if not ply:lvsKeyDown( "CAR_MENU" ) then return end
+	--if not ply:lvsKeyDown( "CAR_MENU" ) then return end
+
+	local size = 64
+	local dist = 0
+
+	local cX = X + w * 0.5
+	local cY = Y + h * 0.5
+
+	surface.SetDrawColor( 255, 255, 255, 255 )
+
+	surface.SetMaterial( self.CarMenuDisable )
+	surface.DrawTexturedRectRotated( cX, cY, size, size, 0 )
+
+	surface.SetMaterial( self.CarMenuLeft )
+	surface.DrawTexturedRectRotated( cX - (size + dist), cY, size, size, 0 )
+
+	surface.SetMaterial( self.CarMenuRight)
+	surface.DrawTexturedRectRotated( cX + (size + dist), cY, size, size, 0 )
+
+	surface.SetMaterial( self.CarMenuHazard )
+	surface.DrawTexturedRectRotated( cX, cY - (size + dist), size, size, 0 )
+
+	surface.SetMaterial( self.CarMenuFog )
+	surface.DrawTexturedRectRotated( cX, cY + (size + dist), size, size, 0 )
+
+	--draw.SimpleText( "test centered" , "LVS_FONT",  X + w * 0.5, Y + h * 0.5, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 end
