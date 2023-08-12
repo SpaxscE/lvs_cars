@@ -36,16 +36,8 @@ ENT.EngineSounds = {
 		Pitch = 80,
 		PitchMul = 110,
 		SoundLevel = 75,
-		SoundType = LVS.SOUNDTYPE_REV_UP,
+		SoundType = LVS.SOUNDTYPE_NONE,
 		UseDoppler = true,
 	},
-	{
-		sound = "lvs/vehicles/bmw_m5e34/engine_01450.wav",
-		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
-		SoundLevel = 75,
-		SoundType = LVS.SOUNDTYPE_REV_DOWN,
-		UseDoppler = true,
-	},
+
 }
