@@ -80,14 +80,14 @@ ENT.Lights = {
 		},
 		ProjectedTextures = {
 			[1] = {
-				pos = Vector(100,20.39,16.58),
+				pos = Vector(97.66,27.7,16.51),
 				ang = Angle(0,0,0),
 				colorB = 200,
 				colorA = 150,
 				shadows = true,
 			},
 			[2] = {
-				pos = Vector(100,-20.39,16.58),
+				pos = Vector(97.66,-27.7,16.51),
 				ang = Angle(0,0,0),
 				colorB = 200,
 				colorA = 150,
