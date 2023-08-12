@@ -7,6 +7,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 	self:NetworkVar( "Bool",0, "Active" )
 	self:NetworkVar( "Bool",1, "HighActive" )
+	self:NetworkVar( "Bool",2, "FogActive" )
 end
 
 if SERVER then

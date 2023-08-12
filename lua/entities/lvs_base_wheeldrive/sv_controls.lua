@@ -1,19 +1,4 @@
 
-function ENT:SteerTo( TargetValue, MaxSteer  )
-	local Cur = self:GetSteer() / MaxSteer
-	
-	local Diff = TargetValue - Cur
-
-	local Returning = (Diff > 0 and Cur < 0) or (Diff < 0 and Cur > 0)
-
-	local Rate = FrameTime() * (Returning and self.SteerReturnSpeed or self.SteerSpeed)
-
-	local New = (Cur + math.Clamp(Diff,-Rate,Rate))
-
-	self:SetSteer( New * MaxSteer )
-	self:SetPoseParameter( "vehicle_steer", New  )
-end
-
 function ENT:CalcMouseSteer( ply, cmd )
 	local pod = ply:GetVehicle()
 
@@ -150,7 +135,11 @@ function ENT:CalcLights( ply, cmd )
 					LightsHandler:SetHighActive( not LightsHandler:GetHighActive() )
 				end
 			else
-				LightsHandler:SetActive( true )
+				if (T - (self._LightsPressedTime or 0)) > 0.5 then
+					LightsHandler:SetFogActive( not LightsHandler:GetFogActive() )
+				else
+					LightsHandler:SetActive( true )
+				end
 			end
 		end
 

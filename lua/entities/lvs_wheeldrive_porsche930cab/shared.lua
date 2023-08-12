@@ -55,6 +55,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 }
+
 ENT.Lights = {
 	{
 		Trigger = "main",
@@ -80,6 +81,37 @@ ENT.Lights = {
 				pos = Vector(-79.87,-18.54,19.11),
 				colorG = 0,
 				colorB = 0,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(70.35,24.27,25.07),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(70.35,-24.27,25.07),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "high",
+		Sprites = {
+			[1] = {
+				pos = Vector(70.35,24.27,25.07),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(70.35,-24.27,25.07),
+				colorB = 200,
 				colorA = 150,
 			},
 		},
@@ -135,5 +167,50 @@ ENT.Lights = {
 				colorA = 150,
 			},
 		}
-	}
+	},
+		{
+		Trigger = "turnright",
+		SubMaterialID = 18,
+		Sprites = {
+			[1] = {
+				width = 35,
+				height = 35,
+				pos = Vector(80.31,-24.86,16.22),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+			[2] = {
+				width = 40,
+				height = 40,
+				pos = Vector(-76.48,-24.44,19.07),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+		},
+	},
+	{
+		Trigger = "turnleft",
+		SubMaterialID = 20,
+		Sprites = {
+			[1] = {
+				width = 35,
+				height = 35,
+				pos = Vector(80.31,24.86,16.22),
+				colorG = 100,
+				colorB = 0,
+				colorA = 50,
+			},
+			[2] = {
+				width = 40,
+				height = 40,
+				pos = Vector(-76.48,24.44,19.07),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+		},
+	},
 }
+
