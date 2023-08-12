@@ -1,0 +1,23 @@
+VertexLitGeneric
+{
+	$basetexture				"models/DiggerCars/shared/grille1_alpha.vtf"
+	$allowalphatocoverage		1
+	$alphatest					1
+	$halflambert				1
+	$normalmapalphaenvmapmask	1
+	"$alphatest" "1"
+	$color2						"[1 1 1]"
+	$bumpmap				"models/DiggerCars/shared/grille1_nrm.vtf"
+	$envmap						env_cubemap
+	$envmapsaturation			0.5
+	$envmaptint 				"[.5 .5 .5]"
+
+	Proxies
+	{
+		Equals
+		{
+			srcVar1				$color2
+			resultVar			$color
+		}
+	}
+}
