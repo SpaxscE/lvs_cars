@@ -423,19 +423,17 @@ function ENT:RenderLights( base, data )
 
 				local ang = base:AngleBetweenNormal( dir, aimdir )
 
-				local RGB = 255 * AmbientLightMul * mul
-	
 				if ang < 20 then
 					local Alpha = 1 - (ang / 20) * 255
 					render.SetMaterial( self.LensFlare2 )
-					render.DrawSprite( pos, 512, 512, Color(RGB,RGB,RGB, Alpha * visible) )
+					render.DrawSprite( pos, 512, 512, Color( projdata.colorR * mul * AmbientLightMul, projdata.colorG * mul * AmbientLightMul, projdata.colorB * mul * AmbientLightMul, Alpha * visible) )
 				end
 				if ang < 10 then
-					RGB = RGB * 0.2
+					local RGB = 30 * AmbientLightMul * mul
 					local Scale = 1 - (ang / 10)
 					local Alpha = Scale * 255 * math.Rand(0.8,1.2) * visible
-					local ScaleX = 1024 * math.Rand(0.99,1.01)
-					local ScaleY = 1024 * math.Rand(0.99,1.01)
+					local ScaleX = 1024 * math.Rand(0.98,1.02)
+					local ScaleY = 1024 * math.Rand(0.98,1.02)
 
 					render.SetMaterial( self.LensFlare1 )
 					render.DrawSprite( pos, ScaleX, ScaleY, Color(RGB,RGB,RGB,Alpha) )
