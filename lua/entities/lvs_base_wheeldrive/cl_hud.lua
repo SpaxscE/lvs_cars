@@ -59,6 +59,8 @@ local function DrawTexturedRect( X, Y, size, selected )
 	surface.DrawTexturedRectRotated( X, Y, size, size, 0 )
 end
 
+ENT.CarMenuHighbeam = Material( "lvs/carmenu_highbeam.png" )
+ENT.CarMenuLowbeam = Material( "lvs/carmenu_lowbeam.png" )
 ENT.CarMenuDisable = Material( "lvs/carmenu_cross.png" )
 ENT.CarMenuFog = Material( "lvs/carmenu_fog.png" )
 ENT.CarMenuHazard = Material( "lvs/carmenu_hazard.png" )
@@ -101,15 +103,34 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 			self._oldSelectedMode = nil
 		end
 
-		local TurnMode = self:GetTurnMode()
-
-		if TurnMode == 0 then return end
-
 		local size = 32
 		local dist = 5
 
 		local cX = X + w * 0.5
 		local cY = Y + h - size * 0.5 - dist
+
+		local LightsHandler = self:GetLightsHandler()
+
+		if IsValid( LightsHandler ) then
+			if LightsHandler:GetActive() then
+				if LightsHandler:GetHighActive() then
+					surface.SetMaterial( self.CarMenuHighbeam )
+					DrawTexturedRect( cX, cY, size, Color(0,255,255,255) )
+				else
+					surface.SetMaterial( self.CarMenuLowbeam )
+					DrawTexturedRect( cX, cY, size, Color(0,255,0,255) )
+				end
+			end
+
+			if LightsHandler:GetFogActive() then
+				surface.SetMaterial( self.CarMenuFog )
+				DrawTexturedRect( cX, cY - (size + dist), size, Color(255,100,0,255) )
+			end
+		end
+
+		local TurnMode = self:GetTurnMode()
+
+		if TurnMode == 0 then return end
 
 		local Alpha = self:GetTurnFlasher() and 255 or 0
 
@@ -119,7 +140,7 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 		end
 
 		if TurnMode == 2 or TurnMode == 3 then
-			surface.SetMaterial( self.CarMenuRight)
+			surface.SetMaterial( self.CarMenuRight )
 			DrawTexturedRect( cX + (size + dist), cY, size, Color(0,255,157,Alpha) )
 		end
 

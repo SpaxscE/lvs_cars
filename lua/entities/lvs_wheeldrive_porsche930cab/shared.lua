@@ -212,5 +212,19 @@ ENT.Lights = {
 			},
 		},
 	},
+	{
+		Trigger = "fog",
+		SubMaterialID = 24,
+		Sprites = {
+			[1] = {
+				pos = Vector(79.04,19.43,11.04),
+				colorA = 50,
+			},
+			[2] = {
+				pos = Vector(79.04,-19.43,11.04),
+				colorA = 50,
+			},
+		},
+	},
 }
 

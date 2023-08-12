@@ -218,6 +218,8 @@ function ENT:GetTypeActivator( trigger )
 
 	if trigger == "high" then return (self._smHigh or 0) ^ 2 end
 
+	if trigger == "fog" then return (self._smFog or 0) ^ 2 end
+
 	if trigger == "brake" then return (self._smBrake or 0) ^ 2  end
 
 	if trigger == "reverse" then return (self._smReverse or 0) ^ 2 end
@@ -245,6 +247,7 @@ function ENT:CalcTypeActivators( base )
 
 	self._smMain = self._smMain or 0
 	self._smHigh = self._smHigh or 0
+	self._smFog = self._smFog or 0
 	self._smBrake = self._smBrake or 0
 	self._smReverse = self._smReverse or 0
 	self._smTurnLeft = self._smTurnLeft or 0
@@ -252,6 +255,7 @@ function ENT:CalcTypeActivators( base )
 
 	local main = self:GetActive() and 1 or 0
 	local high = self:GetHighActive() and 1 or 0
+	local fog = self:GetFogActive() and 1 or 0
 	local brake = base:GetBrake() > 0 and 1 or 0
 	local reverse = base:GetReverse() and 1 or 0
 
@@ -265,6 +269,7 @@ function ENT:CalcTypeActivators( base )
 
 	self._smMain = self._smMain + (main - self._smMain) * Rate
 	self._smHigh = self._smHigh + (high - self._smHigh) * Rate
+	self._smFog = self._smFog + (fog - self._smFog) * Rate
 	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
 	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
 	self._smTurnLeft = self._smTurnLeft + (turnleft - self._smTurnLeft) * Rate * 2
