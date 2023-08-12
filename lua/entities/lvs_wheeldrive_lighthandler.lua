@@ -6,6 +6,7 @@ ENT.DoNotDuplicate = true
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 	self:NetworkVar( "Bool",0, "Active" )
+	self:NetworkVar( "Bool",1, "HighActive" )
 end
 
 if SERVER then
@@ -74,16 +75,16 @@ function ENT:InitializeLights( base )
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
 				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
-				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or "effects/lvs/car_projectedtexture"
-				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or 1000
+				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or (typedata.Trigger == "high" and "effects/flashlight/soft" or "effects/lvs/car_projectedtexture")
+				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or (typedata.Trigger == "high" and 2500 or 1000)
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
-				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or 60
+				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or (typedata.Trigger == "high" and 90 or 60)
 				data[typeid].ProjectedTextures[ projid ].colorR = projdata.colorR or 255
 				data[typeid].ProjectedTextures[ projid ].colorG = projdata.colorG or 255
 				data[typeid].ProjectedTextures[ projid ].colorB = projdata.colorB or 255
 				data[typeid].ProjectedTextures[ projid ].colorA = projdata.colorA or 255
 				data[typeid].ProjectedTextures[ projid ].color = Color( projdata.colorR or 255, projdata.colorG or 255, projdata.colorB or 255 )
-				data[typeid].ProjectedTextures[ projid ].brightness = projdata.brightness or 5
+				data[typeid].ProjectedTextures[ projid ].brightness = projdata.brightness or (typedata.Trigger == "high" and 5 or 5)
 				data[typeid].ProjectedTextures[ projid ].shadows = projdata.shadows == true
 			end
 		end
@@ -169,6 +170,12 @@ function ENT:LightsThink( base )
 		local mul = self:GetTypeActivator( typedata.Trigger )
 		local active = mul > 0.01
 
+		if typedata.Trigger == "main" then
+			if self:GetHighActive() then
+				active = false
+			end
+		end
+
 		if typedata.ProjectedTextures then
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
 				local id = typeid.."-"..projid
@@ -208,6 +215,8 @@ end
 function ENT:GetTypeActivator( trigger )
 	if trigger == "main" then return (self._smMain or 0) ^ 2 end
 
+	if trigger == "high" then return (self._smHigh or 0) ^ 2 end
+
 	if trigger == "brake" then return (self._smBrake or 0) ^ 2  end
 
 	if trigger == "reverse" then return (self._smReverse or 0) ^ 2 end
@@ -234,12 +243,14 @@ function ENT:CalcTypeActivators( base )
 	if not IsValid( base ) then return end
 
 	self._smMain = self._smMain or 0
+	self._smHigh = self._smHigh or 0
 	self._smBrake = self._smBrake or 0
 	self._smReverse = self._smReverse or 0
 	self._smTurnLeft = self._smTurnLeft or 0
 	self._smTurnRight = self._smTurnRight or 0
 
 	local main = self:GetActive() and 1 or 0
+	local high = self:GetHighActive() and 1 or 0
 	local brake = base:GetBrake() > 0 and 1 or 0
 	local reverse = base:GetReverse() and 1 or 0
 
@@ -252,6 +263,7 @@ function ENT:CalcTypeActivators( base )
 	local Rate = RealFrameTime() * 10
 
 	self._smMain = self._smMain + (main - self._smMain) * Rate
+	self._smHigh = self._smHigh + (high - self._smHigh) * Rate
 	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
 	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
 	self._smTurnLeft = self._smTurnLeft + (turnleft - self._smTurnLeft) * Rate * 2

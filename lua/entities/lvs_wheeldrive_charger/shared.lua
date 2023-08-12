@@ -53,7 +53,7 @@ ENT.EngineSounds = {
 ENT.Lights = {
 	{
 		Trigger = "main",
-		SubMaterialID = 21,
+		SubMaterialID = 23,
 		Sprites = {
 			[1] = {
 				pos = Vector(98.77,27.7,16.51),

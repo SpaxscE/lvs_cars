@@ -132,14 +132,29 @@ function ENT:CalcLights( ply, cmd )
 
 	local lights = ply:lvsKeyDown( "CAR_LIGHTS_TOGGLE" )
 
+	local T = CurTime()
+
 	if lights ~= self._oldlights then
+		if not isbool( self._oldlights ) then self._oldlights = lights return end
+
+		if lights then
+			self._LightsPressedTime = T
+		else
+			self:EmitSound( "buttons/lightswitch2.wav", 75, 80, 0.25)
+
+			if LightsHandler:GetActive() then
+				if (T - (self._LightsPressedTime or 0)) > 0.5 then
+					LightsHandler:SetActive( false )
+					LightsHandler:SetHighActive( false )
+				else
+					LightsHandler:SetHighActive( not LightsHandler:GetHighActive() )
+				end
+			else
+				LightsHandler:SetActive( true )
+			end
+		end
+
 		self._oldlights = lights
-
-		if not lights then return end
-
-		self:EmitSound( "buttons/lightswitch2.wav", 75, 80, 0.25)
-
-		LightsHandler:SetActive( not LightsHandler:GetActive() )
 	end
 end
 

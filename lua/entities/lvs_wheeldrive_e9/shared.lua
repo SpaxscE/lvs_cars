@@ -96,6 +96,38 @@ ENT.Lights = {
 		},
 	},
 	{
+		Trigger = "high",
+		SubMaterialID = 16,
+		Sprites = {
+			[1] = {
+				pos = Vector(85.65,-18.09,15.71),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(85.65,18.09,15.71),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(85.65,-18.09,15.71),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(85.65,18.09,15.71),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
 		Trigger = "brake",
 		SubMaterialID = 9,
 		Sprites = {
