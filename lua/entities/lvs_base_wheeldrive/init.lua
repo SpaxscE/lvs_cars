@@ -83,6 +83,34 @@ function ENT:AlignView( ply )
 	end)
 end
 
+--[[
+function ENT:OnCollision( data, physobj )
+	if data.Speed > 60 and data.DeltaTime > 0.2 then
+		local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
+
+		if VelDif > 1500 then
+			for k, v in pairs( self:GetWheels() ) do
+				local Sub = v:GetPos() - data.HitPos
+
+				local Up = self:GetForward()
+				local Forward = v:GetMaster():GetRight()
+
+				if Sub:Length() < 75 then
+					local newToe = self:AngleBetweenNormal( data.HitNormal, Forward ) - 90
+					local newCam = self:AngleBetweenNormal( data.HitNormal, Up ) - 90
+
+					v:SetToe( math.Clamp( newToe, -10, 10 ) )
+					v:SetCamber( math.Clamp( newCam, -10, 10 ) )
+				end
+
+			end
+		end
+	end
+
+	return false
+end
+]]
+
 function ENT:TakeCollisionDamage( damage, attacker )
 end
 
