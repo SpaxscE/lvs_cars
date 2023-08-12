@@ -40,6 +40,24 @@ LVS:AddHudEditor( "CarMenu",  ScrW() - 690, ScrH() - 85,  220, 75, 220, 75, "CAR
 		vehicle:LVSHudPaintCarMenu( X, Y, W, H, ScrX, ScrY, ply )
 	end
 )
+local function DrawTexturedRect( X, Y, size, selected )
+	local oz = 2
+
+	surface.SetDrawColor( 0, 0, 0, 150 )
+	surface.DrawTexturedRectRotated( X + oz, Y + oz, size, size, 0 )
+
+	if IsColor( selected ) then
+		surface.SetDrawColor( selected.r, selected.g, selected.b, selected.a )
+	else
+		if selected then
+			surface.SetDrawColor( 255, 255, 255, 255 )
+		else
+			surface.SetDrawColor( 150, 150, 150, 150 )
+		end
+	end
+
+	surface.DrawTexturedRectRotated( X, Y, size, size, 0 )
+end
 
 ENT.CarMenuDisable = Material( "lvs/carmenu_cross.png" )
 ENT.CarMenuFog = Material( "lvs/carmenu_fog.png" )
@@ -48,45 +66,83 @@ ENT.CarMenuLeft = Material( "lvs/carmenu_turnleft.png" )
 ENT.CarMenuRight = Material( "lvs/carmenu_turnRight.png" )
 
 function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
-	--local MenuOpen = ply:lvsKeyDown( "CAR_MENU" )
+	if self:GetDriver() ~= ply then return end
 
-	--if MenuOpen then
-	--else
-	--	self._selectedThing = nil
+	local MenuOpen = ply:lvsKeyDown( "CAR_MENU" )
 
-	--	return
-	--end
+	if MenuOpen then
+		if ply:lvsKeyDown( "CAR_THROTTLE" ) then
+			self._SelectedMode = 3
+		end
+		if ply:lvsKeyDown( "CAR_BRAKE" ) then
+			self._SelectedMode = 0
+		end
+		if ply:lvsKeyDown( "CAR_STEER_LEFT" ) then
+			self._SelectedMode = 1
+		end
+		if ply:lvsKeyDown( "CAR_STEER_RIGHT" ) then
+			self._SelectedMode = 2
+		end
+
+		if self._oldSelectedMode ~= self._SelectedMode then
+			self._oldSelectedMode = self._SelectedMode
+
+			self:EmitSound("buttons/lightswitch2.wav",75,120,0.25)
+		end
+	else
+		if self._oldSelectedMode and isnumber( self._SelectedMode ) then
+			self:EmitSound("buttons/lightswitch2.wav",75,100,0.25)
+
+			net.Start( "lvs_car_turnsignal" )
+				net.WriteInt( self._SelectedMode, 4 )
+			net.SendToServer()
+
+			self._SelectedMode = 0
+			self._oldSelectedMode = nil
+		end
+
+		local TurnMode = self:GetTurnMode()
+
+		if TurnMode == 0 then return end
+
+		local size = 32
+		local dist = 5
+
+		local cX = X + w * 0.5
+		local cY = Y + h - size * 0.5 - dist
+
+		local Alpha = self:GetTurnFlasher() and 255 or 0
+
+		if TurnMode == 1 or TurnMode == 3 then
+			surface.SetMaterial( self.CarMenuLeft )
+			DrawTexturedRect( cX - (size + dist), cY, size, Color(0,255,157,Alpha) )
+		end
+
+		if TurnMode == 2 or TurnMode == 3 then
+			surface.SetMaterial( self.CarMenuRight)
+			DrawTexturedRect( cX + (size + dist), cY, size, Color(0,255,157,Alpha) )
+		end
+
+		return
+	end
+
+	local SelectedThing = self._SelectedMode or 0
 
 	local size = 32
 	local dist = 5
 
 	local cX = X + w * 0.5
 	local cY = Y + h - size * 0.5 - dist
-	local oz = 2
 
 	surface.SetMaterial( self.CarMenuDisable )
-	surface.SetDrawColor( 0, 0, 0, 150 )
-	surface.DrawTexturedRectRotated( cX + oz, cY + oz, size, size, 0 )
-	surface.SetDrawColor( 255, 255, 255, 255 )
-	surface.DrawTexturedRectRotated( cX, cY, size, size, 0 )
+	DrawTexturedRect( cX, cY, size, SelectedThing == 0 )
 
 	surface.SetMaterial( self.CarMenuLeft )
-	surface.SetDrawColor( 0, 0, 0, 200 )
-	surface.DrawTexturedRectRotated( cX - (size + dist) + oz, cY + oz, size, size, 0 )
-	surface.SetDrawColor( 255, 255, 255, 255 )
-	surface.DrawTexturedRectRotated( cX - (size + dist), cY, size, size, 0 )
+	DrawTexturedRect( cX - (size + dist), cY, size, SelectedThing == 1 )
 
 	surface.SetMaterial( self.CarMenuRight)
-	surface.SetDrawColor( 0, 0, 0, 200 )
-	surface.DrawTexturedRectRotated( cX + (size + dist) + oz, cY + oz, size, size, 0 )
-	surface.SetDrawColor( 255, 255, 255, 255 )
-	surface.DrawTexturedRectRotated( cX + (size + dist), cY, size, size, 0 )
-	
-	surface.SetMaterial( self.CarMenuHazard )
-	surface.SetDrawColor( 0, 0, 0, 200 )
-	surface.DrawTexturedRectRotated( cX + oz, cY - (size + dist) + oz, size, size, 0 )
-	surface.SetDrawColor( 255, 255, 255, 255 )
-	surface.DrawTexturedRectRotated( cX, cY - (size + dist), size, size, 0 )
+	DrawTexturedRect( cX + (size + dist), cY, size, SelectedThing == 2 )
 
-	--draw.SimpleText( "test centered" , "LVS_FONT",  X + w * 0.5, Y + h * 0.5, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	surface.SetMaterial( self.CarMenuHazard )
+	DrawTexturedRect( cX, cY - (size + dist), size, SelectedThing == 3 )
 end

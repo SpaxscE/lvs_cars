@@ -76,3 +76,17 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 	LVS.SOUNDTYPE_REV_DOWN = 3
 	LVS.SOUNDTYPE_REV_DN = 3
 end )
+
+if SERVER then
+	util.AddNetworkString( "lvs_car_turnsignal" )
+
+	net.Receive( "lvs_car_turnsignal", function( len, ply )
+		if not IsValid( ply ) then return end
+
+		local veh = ply:lvsGetVehicle()
+
+		if not IsValid( veh ) or veh:GetDriver() ~= ply then return end
+
+		veh:SetTurnMode( net.ReadInt( 4 ) )
+	end )
+end

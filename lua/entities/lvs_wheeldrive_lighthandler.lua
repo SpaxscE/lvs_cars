@@ -219,6 +219,15 @@ function ENT:GetTypeActivator( trigger )
 	return 0
 end
 
+local Left = {
+	[1] = true,
+	[3] = true,
+}
+local Right = {
+	[2] = true,
+	[3] = true,
+}
+
 function ENT:CalcTypeActivators( base )
 	local base = self:GetBase()
 
@@ -234,10 +243,11 @@ function ENT:CalcTypeActivators( base )
 	local brake = base:GetBrake() > 0 and 1 or 0
 	local reverse = base:GetReverse() and 1 or 0
 
-	local Flasher = math.cos( CurTime() * 8 + self:EntIndex() * 1337 ) > 0
+	local Flasher = base:GetTurnFlasher()
+	local TurnMode = base:GetTurnMode()
 
-	local turnleft = Flasher and 1 or 0
-	local turnright = Flasher and 1 or 0
+	local turnleft = (Left[ TurnMode ] and Flasher) and 1 or 0
+	local turnright = (Right[ TurnMode ] and Flasher) and 1 or 0
 
 	local Rate = RealFrameTime() * 10
 

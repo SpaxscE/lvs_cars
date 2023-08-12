@@ -64,6 +64,8 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Float", "WheelVelocity" )
 
+	self:AddDT( "Int", "TurnMode" )
+
 	self:AddDT( "Bool", "Reverse" )
 
 	self:AddDT( "Entity", "LightsHandler" )
