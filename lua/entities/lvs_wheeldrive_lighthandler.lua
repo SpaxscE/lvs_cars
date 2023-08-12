@@ -110,6 +110,9 @@ function ENT:InitializeLights( base )
 
 		if typedata.ProjectedTextures then
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
+				if typedata.Trigger == "high" then
+					data[typeid].ProjectedTextures[ projid ].PixVis = util.GetPixelVisibleHandle()
+				end
 				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
 				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or (typedata.Trigger == "high" and "effects/flashlight/soft" or "effects/lvs/car_projectedtexture")
@@ -355,22 +358,44 @@ function ENT:CalcTypeActivators( base )
 
 end
 
-ENT.SunMaterial = Material( "effects/lvs/car_lensflare" )
+ENT.LensFlare1 = Material( "effects/lvs/car_lensflare" )
+ENT.LensFlare2 = Material( "sprites/light_ignorez" )
 ENT.LightMaterial = Material( "effects/lvs/car_spotlight" )
 
-function ENT:RenderLights( base, data )
-	if not self.Enabled then return end
+function ENT:GetAmbientLight( base )
+	local T = CurTime()
+	local FT = RealFrameTime()
+	local ply = LocalPlayer()
 
-	local ply = LocalPlayer():GetViewEntity()
-
-	if not IsValid( ply ) then return end
+	if not IsValid( ply ) then return 0, vector_origin end
 
 	local plyPos = ply:GetShootPos()
 
 	local ViewEnt = ply:GetViewEntity()
-	if IsValid( ViewEnt  ) then
+
+	if IsValid( ViewEnt ) and ViewEnt ~= ply then
 		plyPos = ViewEnt:GetPos()
 	end
+
+	if (self._NextLightCheck or 0) > T then return (self._AmbientLightMul or 0), plyPos end
+
+	local LightVeh = render.GetLightColor( base:LocalToWorld( base:OBBCenter() ) )
+	local LightPlayer = render.GetLightColor( plyPos )
+	local AmbientLightMul =  (1 - math.min( LightVeh:Dot( LightPlayer ) * 200, 1 )) ^ 2
+
+	self._NextLightCheck = T + FT
+
+	if not self._AmbientLightMul then
+		self._AmbientLightMul = 0
+	end
+
+	self._AmbientLightMul = self._AmbientLightMul and self._AmbientLightMul + (AmbientLightMul - self._AmbientLightMul) * FT or 0
+
+	return self._AmbientLightMul, plyPos
+end
+
+function ENT:RenderLights( base, data )
+	if not self.Enabled then return end
 
 	for _, typedata in pairs( data ) do
 
@@ -386,15 +411,34 @@ function ENT:RenderLights( base, data )
 				render.SetMaterial( self.LightMaterial )
 				render.DrawBeam( pos, pos + dir * 100, 50, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, projdata.brightness ) )
 
-				if typedata.Trigger == "high" then
-					local aimdir = (plyPos - pos):GetNormalized()
+				if not projdata.PixVis then continue end
 
-					local ang = base:AngleBetweenNormal( dir, aimdir )
+				local AmbientLightMul, plyPos = self:GetAmbientLight( base )
+	
+				local visible = util.PixelVisible( pos, 1, projdata.PixVis ) * mul
 
-					if ang < 30 then
-						render.SetMaterial( self.SunMaterial )
-						render.DrawSprite( pos, 256, 256 , Color(255,255,255, (1 - (ang / 30)) * 255 ) )
-					end
+				if not visible or visible == 0 then continue end
+
+				local aimdir = (plyPos - pos):GetNormalized()
+
+				local ang = base:AngleBetweenNormal( dir, aimdir )
+
+				local RGB = 255 * AmbientLightMul * mul
+	
+				if ang < 20 then
+					local Alpha = 1 - (ang / 20) * 255
+					render.SetMaterial( self.LensFlare2 )
+					render.DrawSprite( pos, 512, 512, Color(RGB,RGB,RGB, Alpha * visible) )
+				end
+				if ang < 10 then
+					RGB = RGB * 0.2
+					local Scale = 1 - (ang / 10)
+					local Alpha = Scale * 255 * math.Rand(0.8,1.2) * visible
+					local ScaleX = 1024 * math.Rand(0.99,1.01)
+					local ScaleY = 1024 * math.Rand(0.99,1.01)
+
+					render.SetMaterial( self.LensFlare1 )
+					render.DrawSprite( pos, ScaleX, ScaleY, Color(RGB,RGB,RGB,Alpha) )
 				end
 			end
 		end
