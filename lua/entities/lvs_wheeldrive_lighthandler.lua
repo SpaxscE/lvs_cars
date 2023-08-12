@@ -113,9 +113,9 @@ function ENT:InitializeLights( base )
 				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
 				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or (typedata.Trigger == "high" and "effects/flashlight/soft" or "effects/lvs/car_projectedtexture")
-				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or (typedata.Trigger == "high" and 2500 or 1000)
+				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or (typedata.Trigger == "high" and 6000 or 1000)
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 75
-				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or (typedata.Trigger == "high" and 90 or 60)
+				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or (typedata.Trigger == "high" and 40 or 60)
 				data[typeid].ProjectedTextures[ projid ].colorR = projdata.colorR or 255
 				data[typeid].ProjectedTextures[ projid ].colorG = projdata.colorG or 255
 				data[typeid].ProjectedTextures[ projid ].colorB = projdata.colorB or 255
@@ -355,10 +355,22 @@ function ENT:CalcTypeActivators( base )
 
 end
 
+ENT.SunMaterial = Material( "effects/lvs/car_lensflare" )
 ENT.LightMaterial = Material( "effects/lvs/car_spotlight" )
 
 function ENT:RenderLights( base, data )
 	if not self.Enabled then return end
+
+	local ply = LocalPlayer():GetViewEntity()
+
+	if not IsValid( ply ) then return end
+
+	local plyPos = ply:GetShootPos()
+
+	local ViewEnt = ply:GetViewEntity()
+	if IsValid( ViewEnt  ) then
+		plyPos = ViewEnt:GetPos()
+	end
 
 	for _, typedata in pairs( data ) do
 
@@ -373,6 +385,17 @@ function ENT:RenderLights( base, data )
 	
 				render.SetMaterial( self.LightMaterial )
 				render.DrawBeam( pos, pos + dir * 100, 50, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, projdata.brightness ) )
+
+				if typedata.Trigger == "high" then
+					local aimdir = (plyPos - pos):GetNormalized()
+
+					local ang = base:AngleBetweenNormal( dir, aimdir )
+
+					if ang < 30 then
+						render.SetMaterial( self.SunMaterial )
+						render.DrawSprite( pos, 256, 128 , Color(45,45,45, (1 - (ang / 30)) * 255 ) )
+					end
+				end
 			end
 		end
 
