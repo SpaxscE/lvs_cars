@@ -15,8 +15,10 @@ ENT.MaxVelocity = 2400
 
 ENT.EnginePower = 600
 ENT.EngineTorque = 170
+ENT.EngineIdleRPM = 750
+ENT.EngineMaxRPM = 5000
 
-ENT.TransGears = 3
+ENT.TransGears = 4
 ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
