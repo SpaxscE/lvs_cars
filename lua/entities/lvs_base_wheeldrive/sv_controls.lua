@@ -128,12 +128,18 @@ function ENT:CalcLights( ply, cmd )
 			self:EmitSound( "buttons/lightswitch2.wav", 75, 80, 0.25)
 
 			if LightsHandler:GetActive() then
-				if (T - (self._LightsPressedTime or 0)) > 0.25 then
+				if self:HasHighBeams() then
+					if (T - (self._LightsPressedTime or 0)) > 0.25 then
+						LightsHandler:SetActive( false )
+						LightsHandler:SetHighActive( false )
+						LightsHandler:SetFogActive( false )
+					else
+						LightsHandler:SetHighActive( not LightsHandler:GetHighActive() )
+					end
+				else
 					LightsHandler:SetActive( false )
 					LightsHandler:SetHighActive( false )
 					LightsHandler:SetFogActive( false )
-				else
-					LightsHandler:SetHighActive( not LightsHandler:GetHighActive() )
 				end
 			else
 				if self:HasFogLights() and (T - (self._LightsPressedTime or T)) > 0.5 then

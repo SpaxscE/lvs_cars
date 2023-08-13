@@ -101,6 +101,30 @@ function ENT:GetTargetVelocity()
 	return self.MaxVelocity
 end
 
+function ENT:HasHighBeams()
+	if isbool( self._HasHighBeams ) then return self._HasHighBeams end
+
+	if not istable( self.Lights ) then return false end
+
+	local HasHigh = false
+
+	for _, data in pairs( self.Lights ) do
+		if not istable( data ) then continue end
+
+		for id, typedata in pairs( data ) do
+			if id == "Trigger" and typedata == "high" then
+				HasHigh = true
+
+				break
+			end
+		end
+	end
+
+	self._HasHighBeams = HasHigh
+
+	return HasHigh
+end
+
 function ENT:HasFogLights()
 	if isbool( self._HasFogLights ) then return self._HasFogLights end
 
