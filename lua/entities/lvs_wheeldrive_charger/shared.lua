@@ -57,8 +57,8 @@ ENT.Lights = {
 		Sprites = {
 			{ pos = Vector(98.77,27.7,16.51), colorB = 200, colorA = 150 },
 			{ pos = Vector(98.77,-27.7,16.51), colorB = 200, colorA = 150 },
-			{ pos = Vector(-102,9.5,20.5), colorG = 0, colorB = 0, colorA = 105 },
-			{ pos = Vector(-102,-9.5,20.5), colorG = 0, colorB = 0, colorA = 105 },
+			{ pos = Vector(-102,9.5,20.5), colorG = 0, colorB = 0, colorA = 80 },
+			{ pos = Vector(-102,-9.5,20.5), colorG = 0, colorB = 0, colorA = 80 },
 		},
 		ProjectedTextures = {
 			{ pos = Vector(97.66,27.7,16.51), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
@@ -78,7 +78,7 @@ ENT.Lights = {
 		},
 	},
 	{
-		Trigger = "main+brake",
+		Trigger = "main+brake+turnleft",
 		SubMaterialID = 25,
 		Sprites = {
 			{ pos = Vector(-102,17.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
@@ -86,12 +86,34 @@ ENT.Lights = {
 		},
 	},
 	{
-		Trigger = "main+brake",
+		Trigger = "main+brake+turnright",
 		SubMaterialID = 27,
 		Sprites = {
 			{ pos = Vector(-102,-17.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
 			{ pos = Vector(-102,-25.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
 		},
+	},
+	{
+		Trigger = "turnright",
+		SubMaterialID = 12,
+		Sprites = {
+			{ width = 40, height = 40, pos = Vector(99.23,-24.9,5.96), colorG = 100, colorB = 0, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "turnleft",
+		SubMaterialID = 11,
+		Sprites = {
+			{ width = 40, height = 40, pos = Vector(99.23,24.9,5.96), colorG = 100, colorB = 0, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "reverse",
+		SubMaterialID = 24,
+		Sprites = {
+			{ pos = Vector(-102.14,-15.04,8.9), height = 25, width = 25, colorA = 50 },
+			{ pos = Vector(-102.14,15.04,8.9), height = 25, width = 25, colorA = 50 },
+		}
 	},
 }
 
