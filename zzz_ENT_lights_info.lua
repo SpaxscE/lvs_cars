@@ -14,7 +14,7 @@ ENT.Lights = {
 						"fog"
 ]]
 
-		--SubMaterialID = 1, -- link this trigger to submaterial ID 1 for use with the blend-supmaterial system
+		--SubMaterialID = 1, -- link this trigger to submaterial ID 1 for use with the blend-submaterial system
 
 --[[
 		Sprites = { -- add sprites
