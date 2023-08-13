@@ -165,7 +165,7 @@ function ENT:HasTurnSignals()
 		if not istable( data ) then continue end
 
 		for id, typedata in pairs( data ) do
-			if id == "Trigger" and (typedata == "turnleft" or  typedata == "turnright") then
+			if id == "Trigger" and (typedata == "turnleft" or  typedata == "turnright" or typedata == "main+brake+turnleft" or typedata == "main+brake+turnright") then
 				HasTurnSignals = true
 
 				break
