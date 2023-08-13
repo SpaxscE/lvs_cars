@@ -9,11 +9,17 @@ function ENT:FlyByThink()
 
 	if not IsValid( ply ) then return end
 
-	if ply:lvsGetVehicle() == self then self.OldApproaching = false return end
+	local veh = ply:lvsGetVehicle()
+
+	if veh == self then self.OldApproaching = false return end
 
 	local ViewEnt = ply:GetViewEntity()
 
 	if not IsValid( ViewEnt ) then return end
+
+	if IsValid( veh ) and ViewEnt == ply then
+		ViewEnt = veh
+	end
 
 	local Time = CurTime()
 
@@ -29,7 +35,7 @@ function ENT:FlyByThink()
 	local ToPlayer = Sub:GetNormalized()
 	local VelDir = Vel:GetNormalized()
 
-	local ApproachAngle = math.deg( math.acos( math.Clamp( ToPlayer:Dot( VelDir ) ,-1,1) ) )
+	local ApproachAngle = self:AngleBetweenNormal( ToPlayer, VelDir  )
 
 	local Approaching = ApproachAngle < 80
 
