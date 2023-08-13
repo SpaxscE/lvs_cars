@@ -5,12 +5,14 @@ AddCSLuaFile( "cl_camera.lua" )
 AddCSLuaFile( "cl_hud.lua" )
 AddCSLuaFile( "cl_tiresounds.lua" )
 AddCSLuaFile( "sh_animations.lua" )
+AddCSLuaFile( "sh_camera_eyetrace.lua" )
 include("shared.lua")
 include("sh_animations.lua")
 include("sv_controls.lua")
 include("sv_controls_handbrake.lua")
 include("sv_components.lua")
 include("sv_wheelsystem.lua")
+include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
@@ -48,15 +50,15 @@ function ENT:PostInitialize( PObj )
 		print("[LVS] ERROR COULDN'T INITIALIZE VEHICLE!")
 	end
 
-	PObj:SetMass( self.PhysicsMass )
-	PObj:EnableDrag( self.PhysicsDrag )
-	PObj:SetInertia( self.PhysicsInertia )
-
 	if istable( self.Lights ) then
 		self:AddLights()
 	end
 
 	BaseClass.PostInitialize( self, PObj )
+
+	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
+	PObj:EnableDrag( self.PhysicsDrag )
+	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
 	SetMinimumAngularVelocityTo( 10000 )
 

@@ -40,6 +40,8 @@ ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistExponent = 1.5
 ENT.SteerAssistMultiplier = 3
 
+ENT.PhysicsWeightScale = 1
+
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
 ENT.PhysicsInertia = Vector(1500,1500,750)
@@ -74,6 +76,8 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "LightsHandler" )
+
+	self:AddDT( "Vector", "AIAimVector" )
 end
 
 function ENT:GetMaxSteerAngle()

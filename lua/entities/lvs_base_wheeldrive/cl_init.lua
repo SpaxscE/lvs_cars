@@ -1,5 +1,6 @@
 include("shared.lua")
 include("sh_animations.lua")
+include("sh_camera_eyetrace.lua")
 include("cl_flyby.lua")
 include("cl_tiresounds.lua")
 include("cl_camera.lua")

@@ -86,8 +86,8 @@ function ENT:AddWheel( data )-- pos, ang, model )
 		return
 	end
 
-	PhysObj:SetMass( self.WheelPhysicsMass )
-	PhysObj:SetInertia( self.WheelPhysicsInertia )
+	PhysObj:SetMass( self.WheelPhysicsMass * self.PhysicsWeightScale )
+	PhysObj:SetInertia( self.WheelPhysicsInertia * self.PhysicsWeightScale )
 	PhysObj:EnableDrag( self.WheelPhysicsDrag )
 
 	local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
