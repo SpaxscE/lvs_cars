@@ -348,7 +348,11 @@ function ENT:CalcTypeActivators( base )
 
 	self:LerpActivator( "main", main, Rate )
 
-	self:LerpActivator( "main+brake", main * 0.5 + brake * 0.5, Rate )
+	if main >= 0.5 then
+		self:LerpActivator( "main+brake", main * 0.75 + brake * 1.25, Rate )
+	else
+		self:LerpActivator( "main+brake", brake, Rate )
+	end
 
 	self:LerpActivator( "high", high, Rate )
 end
