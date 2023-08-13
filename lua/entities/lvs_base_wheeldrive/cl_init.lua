@@ -13,7 +13,7 @@ function ENT:QuickLerp( name, target, rate )
 
 	if not self[ name ] then self[ name ] = 0 end
 
-	self[ name ] = self[ name ] + (target - self[ name ]) * RealFrameTime() * (rate or 5)
+	self[ name ] = self[ name ] + (target - self[ name ]) * RealFrameTime() * (rate or 10)
 
 	return self[ name ]
 end
@@ -26,15 +26,15 @@ function ENT:CalcPoseParameters()
 	local clutch = 0
 	local throttle = self:GetThrottle()
 	local engine = self:GetEngine()
-	local handbrake = self:QuickLerp( "handbrake", self:GetNWHandBrake() and 1 or 0, 10 )
+	local handbrake = self:QuickLerp( "handbrake", self:GetNWHandBrake() and 1 or 0 )
 
 	if IsValid( engine ) then
-		rpm = engine:GetRPM()
+		rpm = self:QuickLerp( "rpm", engine:GetRPM() )
 		gear = engine:GetGear()
 
 		local ClutchActive = engine:GetClutch()
 
-		clutch = self:QuickLerp( "clutch", ClutchActive and 1 or 0, 10 )
+		clutch = self:QuickLerp( "clutch", ClutchActive and 1 or 0 )
 
 		if ClutchActive then
 			throttle = math.max( throttle - clutch, 0 )
