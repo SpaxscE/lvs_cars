@@ -11,11 +11,12 @@ ENT.Lights = {
 						"reverse"
 						"turnright"
 						"turnleft"
-						"fog"]]
+						"fog"
+]]
 
 		--SubMaterialID = 1, -- link this trigger to submaterial ID 1 for use with the blend-supmaterial system
 
-		--[[
+--[[
 		Sprites = { -- add sprites
 			{ pos = Vector(79.02,19.17,25.57) }, -- minimum requires a pos, everything else is optional and will use default values when not set.
 
