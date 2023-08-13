@@ -61,171 +61,67 @@ ENT.Lights = {
 		Trigger = "main",
 		SubMaterialID = 22,
 		Sprites = {
-			[1] = {
-				pos = Vector(70.35,24.27,25.07),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(70.35,-24.27,25.07),
-				colorB = 200,
-				colorA = 150,
-			},
-			[3] = {
-				pos = Vector(-79.87,18.54,19.11),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-			[4] = {
-				pos = Vector(-79.87,-18.54,19.11),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
+			{ pos = Vector(-79.87,18.54,19.11), colorG = 0, colorB = 0, colorA = 150 },
+			{ pos = Vector(-79.87,-18.54,19.11), colorG = 0, colorB = 0, colorA = 150 },
 		},
 		ProjectedTextures = {
-			[1] = {
-				pos = Vector(70.35,24.27,25.07),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(70.35,-24.27,25.07),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
+			{ pos = Vector(70.35,24.27,25.07), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+			{ pos = Vector(70.35,-24.27,25.07), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
 		},
 	},
 	{
 		Trigger = "high",
-		Sprites = {
-			[1] = {
-				pos = Vector(70.35,24.27,25.07),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(70.35,-24.27,25.07),
-				colorB = 200,
-				colorA = 150,
-			},
-		},
 		ProjectedTextures = {
-			[1] = {
-				pos = Vector(70.35,24.27,25.07),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(70.35,-24.27,25.07),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
+			{ pos = Vector(70.35,24.27,25.07), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+			{ pos = Vector(70.35,-24.27,25.07), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+		},
+	},
+	{
+		Trigger = "main+high",
+		--SubMaterialID = 22,
+		Sprites = {
+			{ pos = Vector(70.35,24.27,25.07), colorB = 200, colorA = 150 },
+			{ pos = Vector(70.35,-24.27,25.07), colorB = 200, colorA = 150 },
 		},
 	},
 	{
 		Trigger = "brake",
 		SubMaterialID = 25,
 		Sprites = {
-			[1] = {
-				pos = Vector(-78.67,-14.75,18.92),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(-78.67,14.75,18.92),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
+			{ pos = Vector(-78.67,-14.75,18.92), colorG = 0, colorB = 0, colorA = 150 },
+			{ pos = Vector(-78.67,14.75,18.92), colorG = 0, colorB = 0, colorA = 150 },
 		}
 	},
 	{
 		Trigger = "reverse",
 		SubMaterialID = 26,
 		Sprites = {
-			[1] = {
-				pos = Vector(-77.8,-21.08,19.08),
-				height = 25,
-				width = 25,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(-77.8,21.08,19.08),
-				height = 25,
-				width = 25,
-				colorA = 150,
-			},
+			{ pos = Vector(-77.8,-21.08,19.08), height = 25, width = 25, colorA = 150 },
+			{ pos = Vector(-77.8,21.08,19.08), height = 25, width = 25, colorA = 150 },
 		}
 	},
 		{
 		Trigger = "turnright",
 		SubMaterialID = 18,
 		Sprites = {
-			[1] = {
-				width = 35,
-				height = 35,
-				pos = Vector(80.31,-24.86,16.22),
-				colorG = 100,
-				colorB = 0,
-				colorA = 150,
-			},
-			[2] = {
-				width = 40,
-				height = 40,
-				pos = Vector(-76.48,-24.44,19.07),
-				colorG = 100,
-				colorB = 0,
-				colorA = 150,
-			},
+			{ width = 35, height = 35, pos = Vector(80.31,-24.86,16.22), colorG = 100, colorB = 0, colorA = 150 },
+			{ width = 40, height = 40, pos = Vector(-76.48,-24.44,19.07), colorG = 100, colorB = 0, colorA = 150 },
 		},
 	},
 	{
 		Trigger = "turnleft",
 		SubMaterialID = 20,
 		Sprites = {
-			[1] = {
-				width = 35,
-				height = 35,
-				pos = Vector(80.31,24.86,16.22),
-				colorG = 100,
-				colorB = 0,
-				colorA = 50,
-			},
-			[2] = {
-				width = 40,
-				height = 40,
-				pos = Vector(-76.48,24.44,19.07),
-				colorG = 100,
-				colorB = 0,
-				colorA = 150,
-			},
+			{ width = 35, height = 35, pos = Vector(80.31,24.86,16.22), colorG = 100, colorB = 0, colorA = 50 },
+			{ width = 40, height = 40, pos = Vector(-76.48,24.44,19.07), colorG = 100, colorB = 0, colorA = 150 },
 		},
 	},
 	{
 		Trigger = "fog",
 		SubMaterialID = 24,
 		Sprites = {
-			[1] = {
-				pos = Vector(79.04,19.43,11.04),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(79.04,-19.43,11.04),
-				colorB = 200,
-				colorA = 150,
-			},
+			{ pos = Vector(79.04,19.43,11.04), colorB = 200, colorA = 150 },
+			{ pos = Vector(79.04,-19.43,11.04), colorB = 200,colorA = 150 },
 		},
 	},
 }
