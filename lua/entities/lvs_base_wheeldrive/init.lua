@@ -219,7 +219,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end
 
-function ENT:SteerTo( TargetValue, MaxSteer  )
+function ENT:SteerTo( TargetValue, MaxSteer )
 	local Cur = self:GetSteer() / MaxSteer
 	
 	local Diff = TargetValue - Cur

@@ -374,9 +374,16 @@ function ENT:DamageFX( vehicle )
 
 	self.nextDFX = T + 0.05
 
-	local effectdata = EffectData()
-		effectdata:SetOrigin( self:GetPos() )
-		effectdata:SetEntity( vehicle )
-	util.Effect( "lvs_engine_blacksmoke", effectdata )
+	if HP > MaxHP * 0.25 then
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetEntity( vehicle )
+		util.Effect( "lvs_carengine_smoke", effectdata )
+	else
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetEntity( vehicle )
+		util.Effect( "lvs_carengine_fire", effectdata )
+	end
 end
 
