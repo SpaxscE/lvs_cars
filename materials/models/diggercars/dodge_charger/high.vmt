@@ -4,7 +4,7 @@
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 	"$halflambert" 1
 
-	"$detail" "models/DiggerCars/dodge_charger/lights_lod0"
+	"$detail" "models/DiggerCars/dodge_charger/lights_e"
 	"$detailscale" "1"
 	"$detailblendfactor" "0" //use this for emission strength
 	"$detailblendmode" "5"
