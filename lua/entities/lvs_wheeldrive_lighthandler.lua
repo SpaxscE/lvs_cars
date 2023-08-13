@@ -354,6 +354,8 @@ function ENT:CalcTypeActivators( base )
 		self:LerpActivator( "main+brake", brake, Rate )
 	end
 
+	self:LerpActivator( "main+high", main * 0.75 + high * 1.25, Rate )
+
 	self:LerpActivator( "high", high, Rate )
 end
 
