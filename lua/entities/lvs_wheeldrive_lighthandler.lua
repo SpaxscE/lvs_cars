@@ -287,22 +287,22 @@ function ENT:LightsThink( base )
 	end
 end
 
-function ENT:GetTypeActivator( trigger )
-	if trigger == "main" then return (self._smMain or 0) ^ 2 end
+function ENT:LerpActivator( name, target, rate )
+	name =  "_sm"..name
 
-	if trigger == "high" then return (self._smHigh or 0) ^ 2 end
+	if not self[ name ] then self[ name ] = 0 end
 
-	if trigger == "fog" then return (self._smFog or 0) ^ 2 end
+	if not rate then rate = 10 end
 
-	if trigger == "brake" then return (self._smBrake or 0) ^ 2  end
+	self[ name ] = self[ name ] + (target - self[ name ]) * rate
 
-	if trigger == "reverse" then return (self._smReverse or 0) ^ 2 end
+	return self[ name ]
+end
 
-	if trigger == "turnleft" then return (self._smTurnLeft or 0) end
+function ENT:GetTypeActivator( name )
+	if not self[ "_sm"..name ] then return 0 end
 
-	if trigger == "turnright" then return (self._smTurnRight or 0) end
-
-	return 0
+	return self[ "_sm"..name ] ^ 2
 end
 
 local Left = {
@@ -319,14 +319,6 @@ function ENT:CalcTypeActivators( base )
 
 	if not IsValid( base ) then return end
 
-	self._smMain = self._smMain or 0
-	self._smHigh = self._smHigh or 0
-	self._smFog = self._smFog or 0
-	self._smBrake = self._smBrake or 0
-	self._smReverse = self._smReverse or 0
-	self._smTurnLeft = self._smTurnLeft or 0
-	self._smTurnRight = self._smTurnRight or 0
-
 	local main = self:GetActive() and 1 or 0
 	local high = self:GetHighActive() and 1 or 0
 	local fog = self:GetFogActive() and 1 or 0
@@ -341,11 +333,12 @@ function ENT:CalcTypeActivators( base )
 
 	local Rate = RealFrameTime() * 10
 
-	self._smFog = self._smFog + (fog - self._smFog) * Rate
-	self._smBrake = self._smBrake + (brake - self._smBrake) * Rate
-	self._smReverse = self._smReverse + (reverse - self._smReverse) * Rate
-	self._smTurnLeft = self._smTurnLeft + (turnleft - self._smTurnLeft) * Rate * 2
-	self._smTurnRight = self._smTurnRight + (turnright - self._smTurnRight) * Rate * 2
+	self:LerpActivator( "fog", fog, Rate )
+	self:LerpActivator( "brake", brake, Rate )
+	self:LerpActivator( "reverse", reverse, Rate )
+	self:LerpActivator( "turnleft", turnleft, Rate * 2 )
+	self:LerpActivator( "turnright", turnright, Rate * 2 )
+
 
 	local DoorHandler = self:GetDoorHandler()
 	if IsValid( DoorHandler ) then
@@ -353,15 +346,16 @@ function ENT:CalcTypeActivators( base )
 		high = (DoorHandler.sm_pp or 0) >= 0.5 and high or 0
 	end
 
-	self._smMain = self._smMain + (main - self._smMain) * Rate
-	self._smHigh = self._smHigh + (high - self._smHigh) * Rate
+	self:LerpActivator( "main", main, Rate )
 
+	self:LerpActivator( "main+brake", main * 0.5 + brake * 0.5, Rate )
+
+	self:LerpActivator( "high", high, Rate )
 end
 
 ENT.LensFlare1 = Material( "effects/lvs/car_lensflare" )
 ENT.LensFlare2 = Material( "sprites/light_ignorez" )
 ENT.LightMaterial = Material( "effects/lvs/car_spotlight" )
-
 function ENT:GetAmbientLight( base )
 	local T = CurTime()
 	local FT = RealFrameTime()

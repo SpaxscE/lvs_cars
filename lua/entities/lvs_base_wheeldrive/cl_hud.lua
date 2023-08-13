@@ -73,10 +73,10 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 	local MenuOpen = ply:lvsKeyDown( "CAR_MENU" ) and self:HasTurnSignals()
 
 	if MenuOpen then
-		if ply:lvsKeyDown( "CAR_THROTTLE" ) then
+		if ply:lvsKeyDown( "CAR_BRAKE" ) then
 			self._SelectedMode = 3
 		end
-		if ply:lvsKeyDown( "CAR_BRAKE" ) then
+		if ply:lvsKeyDown( "CAR_THROTTLE" ) then
 			self._SelectedMode = 0
 		end
 		if ply:lvsKeyDown( "CAR_STEER_LEFT" ) then
@@ -156,7 +156,7 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 	local cY = Y + h - size * 0.5 - dist
 
 	surface.SetMaterial( self.CarMenuDisable )
-	DrawTexturedRect( cX, cY, size, SelectedThing == 0 )
+	DrawTexturedRect( cX, cY - (size + dist), size, SelectedThing == 0 )
 
 	surface.SetMaterial( self.CarMenuLeft )
 	DrawTexturedRect( cX - (size + dist), cY, size, SelectedThing == 1 )
@@ -165,5 +165,5 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 	DrawTexturedRect( cX + (size + dist), cY, size, SelectedThing == 2 )
 
 	surface.SetMaterial( self.CarMenuHazard )
-	DrawTexturedRect( cX, cY - (size + dist), size, SelectedThing == 3 )
+	DrawTexturedRect( cX, cY, size, SelectedThing == 3 )
 end
