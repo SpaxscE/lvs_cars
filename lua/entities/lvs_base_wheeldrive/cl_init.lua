@@ -45,10 +45,6 @@ function ENT:CalcPoseParameters()
 	self:InvalidateBoneCache()
 end
 
-function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear )
-	self:SetPoseParameter( "vehicle_steer", steer )
-end
-
 function ENT:PreDraw()
 	return true
 end
@@ -67,7 +63,12 @@ function ENT:Think()
 
 	self:TireSoundThink()
 
-	self:CalcPoseParameters()
+	if isfunction( self.UpdatePoseParameters ) then
+		self:CalcPoseParameters()
+	else
+		self:SetPoseParameter( "vehicle_steer", self:GetSteer() /  self:GetMaxSteerAngle() )
+		self:InvalidateBoneCache()
+	end
  end
  
 function ENT:OnRemove()
