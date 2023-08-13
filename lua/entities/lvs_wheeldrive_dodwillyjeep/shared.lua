@@ -13,7 +13,7 @@ ENT.MDL = "models/diggercars/willys/willys.mdl"
 
 ENT.MaxVelocity = 1200
 
-ENT.EnginePower = 25
+ENT.EnginePower = 50
 ENT.EngineTorque = 150
 
 ENT.TransGears = 4
