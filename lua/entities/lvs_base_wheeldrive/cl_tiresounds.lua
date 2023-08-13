@@ -8,8 +8,8 @@ ENT.TireSoundTypes = {
 	["skid_dirt"] = "lvs/vehicles/generic/wheel_skid_dirt.wav",
 	["skid_wet"] = "lvs/vehicles/generic/wheel_skid_wet.wav",
 }
-ENT.TireSoundLevelSkid = 90
-ENT.TireSoundLevelRoll = 80
+ENT.TireSoundLevelSkid = 85
+ENT.TireSoundLevelRoll = 75
 
 function ENT:TireSoundRemove()
 	for snd, _ in pairs( self.TireSoundTypes ) do

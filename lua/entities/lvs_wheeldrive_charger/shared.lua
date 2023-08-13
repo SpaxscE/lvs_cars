@@ -53,78 +53,45 @@ ENT.EngineSounds = {
 ENT.Lights = {
 	{
 		Trigger = "main",
-		SubMaterialID = 23,
+		SubMaterialID = 26,
 		Sprites = {
-			[1] = {
-				pos = Vector(98.77,27.7,16.51),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(98.77,-27.7,16.51),
-				colorB = 200,
-				colorA = 150,
-			},
-			[3] = {
-				pos = Vector(-98.62,21.53,20.44),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-			[4] = {
-				pos = Vector(-98.62,-21.53,20.44),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
+			{ pos = Vector(98.77,27.7,16.51), colorB = 200, colorA = 150 },
+			{ pos = Vector(98.77,-27.7,16.51), colorB = 200, colorA = 150 },
+			{ pos = Vector(-102,9.5,20.5), colorG = 0, colorB = 0, colorA = 105 },
+			{ pos = Vector(-102,-9.5,20.5), colorG = 0, colorB = 0, colorA = 105 },
 		},
 		ProjectedTextures = {
-			[1] = {
-				pos = Vector(97.66,27.7,16.51),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(97.66,-27.7,16.51),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
+			{ pos = Vector(97.66,27.7,16.51), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+			{ pos = Vector(97.66,-27.7,16.51), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
 		},
 	},
 	{
 		Trigger = "high",
-		SubMaterialID = 24,
+		SubMaterialID = 28,
 		Sprites = {
-			[1] = {
-				pos = Vector(97.66,20.39,16.58),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(97.66,-20.39,16.58),
-				colorB = 200,
-				colorA = 150,
-			},
+			{ pos = Vector(97.66,20.39,16.58), colorB = 200, colorA = 150 },
+			{ pos = Vector(97.66,-20.39,16.58), colorB = 200, colorA = 150 },
 		},
 		ProjectedTextures = {
-			[1] = {
-				pos = Vector(97.66,20.39,16.58),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(97.66,-20.39,16.58),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
+			{ pos = Vector(97.66,20.39,16.58), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+			{ pos = Vector(97.66,-20.39,16.58), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+		},
+	},
+	{
+		Trigger = "main+brake",
+		SubMaterialID = 25,
+		Sprites = {
+			{ pos = Vector(-102,17.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
+			{ pos = Vector(-102,25.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "main+brake",
+		SubMaterialID = 27,
+		Sprites = {
+			{ pos = Vector(-102,-17.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
+			{ pos = Vector(-102,-25.5,20.5), colorG = 0, colorB = 0, colorA = 150 },
 		},
 	},
 }
+
