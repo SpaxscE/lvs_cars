@@ -53,15 +53,15 @@ ENT.EngineSounds = {
 ENT.Lights = {
 	{
 		Trigger = "main",
-		SubMaterialID = 15,
+		SubMaterialID = 14,
 		Sprites = {
 			[1] = {
-				pos = Vector(82.14,17.08,23.37),
+				pos = Vector(80.15,24.22,23.03),
 				colorB = 200,
 				colorA = 150,
 			},
 			[2] = {
-				pos = Vector(82.14,-17.08,23.37),
+				pos = Vector(80.15,-24.22,23.03),
 				colorB = 200,
 				colorA = 150,
 			},
@@ -80,14 +80,46 @@ ENT.Lights = {
 		},
 		ProjectedTextures = {
 			[1] = {
-				pos = Vector(80.35,24.27,25.07),
+				pos = Vector(80.15,24.22,23.03),
 				ang = Angle(0,0,0),
 				colorB = 200,
 				colorA = 150,
 				shadows = true,
 			},
 			[2] = {
-				pos = Vector(80.35,-24.27,25.07),
+				pos = Vector(80.15,-24.22,23.03),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "high",
+		SubMaterialID = 27,
+		Sprites = {
+			[1] = {
+				pos = Vector(82.14,17.08,23.37),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(82.14,-17.08,23.37),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(82.14,17.08,23.37),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(82.14,-17.08,23.37),
 				ang = Angle(0,0,0),
 				colorB = 200,
 				colorA = 150,
@@ -97,7 +129,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "brake",
-		SubMaterialID = 24,
+		SubMaterialID = 23,
 		Sprites = {
 			[1] = {
 				pos = Vector(-90.1,23.75,26.99),
@@ -115,7 +147,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "reverse",
-		SubMaterialID = 25,
+		SubMaterialID = 24,
 		Sprites = {
 			[1] = {
 				pos = Vector(-90.46,15.6,24.87),
@@ -151,6 +183,14 @@ ENT.Lights = {
 				colorB = 0,
 				colorA = 150,
 			},
+			[3] = {
+				width = 35,
+				height = 35,
+				pos = Vector(84.03,-21.24,16.29),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
 		},
 	},
 	{
@@ -169,6 +209,14 @@ ENT.Lights = {
 				width = 40,
 				height = 40,
 				pos = Vector(-90.01,23.25,24.85),
+				colorG = 100,
+				colorB = 0,
+				colorA = 150,
+			},
+			[3] = {
+				width = 35,
+				height = 35,
+				pos = Vector(84.03,21.24,16.29),
 				colorG = 100,
 				colorB = 0,
 				colorA = 150,

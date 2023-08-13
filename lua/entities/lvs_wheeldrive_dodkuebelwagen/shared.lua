@@ -67,7 +67,54 @@ ENT.Lights = {
 				colorB = 0,
 				colorA = 150,
 			},
-		}
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(70.57,25.1,33.49),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(70.57,-25.1,33.49),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "high",
+		Sprites = {
+			[1] = {
+				pos = Vector(70.57,25.1,33.49),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(70.57,-25.1,33.49),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(70.57,25.1,33.49),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(70.57,-25.1,33.49),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
 	},
 	{
 		Trigger = "brake",
@@ -86,5 +133,16 @@ ENT.Lights = {
 				colorA = 150,
 			},
 		}
+	},
+	{
+		Trigger = "fog",
+		SubMaterialID = 3,
+		Sprites = {
+			[1] = {
+				pos = Vector(33.15,-25.63,48.61),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
 	},
 }
