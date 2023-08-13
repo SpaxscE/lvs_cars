@@ -339,7 +339,6 @@ function ENT:CalcTypeActivators( base )
 	self:LerpActivator( "turnleft", turnleft, Rate * 2 )
 	self:LerpActivator( "turnright", turnright, Rate * 2 )
 
-
 	local DoorHandler = self:GetDoorHandler()
 	if IsValid( DoorHandler ) then
 		main = (DoorHandler.sm_pp or 0) >= 0.5 and main or 0
