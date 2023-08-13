@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/blu/sherman/sherman_tank"
+	"$bumpmap" "models/blu/sherman/sherman_tank_normal"
+}
