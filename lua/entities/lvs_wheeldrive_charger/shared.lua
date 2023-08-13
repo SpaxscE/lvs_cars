@@ -95,14 +95,14 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "turnright",
-		SubMaterialID = 12,
+		SubMaterialID = 23,
 		Sprites = {
 			{ width = 40, height = 40, pos = Vector(99.23,-24.9,5.96), colorG = 100, colorB = 0, colorA = 150 },
 		},
 	},
 	{
 		Trigger = "turnleft",
-		SubMaterialID = 11,
+		SubMaterialID = 22,
 		Sprites = {
 			{ width = 40, height = 40, pos = Vector(99.23,24.9,5.96), colorG = 100, colorB = 0, colorA = 150 },
 		},
@@ -111,8 +111,8 @@ ENT.Lights = {
 		Trigger = "reverse",
 		SubMaterialID = 24,
 		Sprites = {
-			{ pos = Vector(-102.14,-15.04,8.9), height = 25, width = 25, colorA = 50 },
-			{ pos = Vector(-102.14,15.04,8.9), height = 25, width = 25, colorA = 50 },
+			{ pos = Vector(-102.14,-15.04,8.9), height = 25, width = 25, colorA = 150 },
+			{ pos = Vector(-102.14,15.04,8.9), height = 25, width = 25, colorA = 150 },
 		}
 	},
 }
