@@ -68,6 +68,7 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Bool", "Reverse" )
 
+	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "LightsHandler" )
 end
 

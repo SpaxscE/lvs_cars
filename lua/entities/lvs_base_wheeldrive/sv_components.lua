@@ -1,5 +1,7 @@
 
 function ENT:AddEngine( pos )
+	if IsValid( self:GetEngine() ) then return end
+
 	local Engine = ents.Create( "lvs_wheeldrive_engine" )
 
 	if not IsValid( Engine ) then
@@ -16,6 +18,8 @@ function ENT:AddEngine( pos )
 	Engine:Activate()
 	Engine:SetParent( self )
 	Engine:SetBase( self )
+
+	self:SetEngine( Engine )
 
 	self:DeleteOnRemove( Engine )
 
