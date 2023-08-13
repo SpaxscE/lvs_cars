@@ -2,6 +2,8 @@
 function ENT:EnableHandbrake()
 	if self:IsHandbrakeActive() then return end
 
+	self:SetNWHandBrake( true )
+
 	self._HandbrakeEnabled = true
 
 	for _, Wheel in pairs( self:GetWheels() ) do
@@ -15,6 +17,8 @@ end
 
 function ENT:ReleaseHandbrake()
 	if not self:IsHandbrakeActive() then return end
+
+	self:SetNWHandBrake( false )
 
 	self._HandbrakeEnabled = nil
 

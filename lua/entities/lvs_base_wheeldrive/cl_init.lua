@@ -7,6 +7,48 @@ include("cl_hud.lua")
 
 DEFINE_BASECLASS( "lvs_base" )
 
+
+function ENT:QuickLerp( name, target, rate )
+	name =  "_smValue"..name
+
+	if not self[ name ] then self[ name ] = 0 end
+
+	self[ name ] = self[ name ] + (target - self[ name ]) * RealFrameTime() * (rate or 5)
+
+	return self[ name ]
+end
+
+function ENT:CalcPoseParameters()
+	local steer = self:GetSteer() /  self:GetMaxSteerAngle()
+	local kmh = math.Round( self:GetVelocity():Length() * 0.09144, 0 )
+	local rpm = 0
+	local gear = 1
+	local clutch = 0
+	local throttle = self:GetThrottle()
+	local engine = self:GetEngine()
+	local handbrake = self:QuickLerp( "handbrake", self:GetNWHandBrake() and 1 or 0, 10 )
+
+	if IsValid( engine ) then
+		rpm = engine:GetRPM()
+		gear = engine:GetGear()
+
+		local ClutchActive = engine:GetClutch()
+
+		clutch = self:QuickLerp( "clutch", ClutchActive and 1 or 0, 10 )
+
+		if ClutchActive then
+			throttle = math.max( throttle - clutch, 0 )
+		end
+	end
+
+	self:UpdatePoseParameters( steer, self:QuickLerp( "kmh", kmh ), rpm, throttle, self:GetBrake(), handbrake, clutch, (self:GetReverse() and -gear or gear) )
+	self:InvalidateBoneCache()
+end
+
+function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear )
+	self:SetPoseParameter( "vehicle_steer", steer )
+end
+
 function ENT:PreDraw()
 	return true
 end
@@ -24,6 +66,8 @@ function ENT:Think()
 	BaseClass.Think( self )
 
 	self:TireSoundThink()
+
+	self:CalcPoseParameters()
  end
  
 function ENT:OnRemove()

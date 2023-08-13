@@ -95,6 +95,26 @@ function ENT:OnEngineActiveChanged( Active )
 	end
 end
 
+function ENT:SetGear( newgear )
+	self._CurGear = newgear
+end
+
+function ENT:GetGear()
+	return (self._CurGear or 1)
+end
+
+function ENT:SetRPM( rpm )
+	self._CurRPM = rpm
+end
+
+function ENT:GetRPM()
+	return (self._CurRPM or 0)
+end
+
+function ENT:GetClutch()
+	return self._ClutchActive == true
+end
+
 function ENT:HandleEngineSounds( vehicle )
 	local ply = LocalPlayer()
 	local pod = ply:GetVehicle()
@@ -173,22 +193,22 @@ function ENT:HandleEngineSounds( vehicle )
 
 	DesiredGear = math.Clamp( DesiredGear, 1, Reverse and vehicle.TransGearsReverse or NumGears )
 
-	local CurrentGear = math.Clamp(self._CurGear or 1,1,NumGears)
+	local CurrentGear = math.Clamp(self:GetGear(),1,NumGears)
 
 	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + (Throttle ^ 2) * 0.5)
 
-	if self._CurGear ~= DesiredGear then
+	if CurrentGear ~= DesiredGear then
 		if (self._NextShift or 0) < T then
 			self._NextShift = T + vehicle.TransMinGearHoldTime
 
-			if (self._CurGear or 0) < DesiredGear then
+			if CurrentGear < DesiredGear then
 				self._ShiftTime = T + vehicle.TransShiftSpeed
 				self._WobbleTime = T + vehicle.TransWobbleTime
 			end
 
-			vehicle:OnChangeGear( (self._CurGear or 0), DesiredGear )
+			vehicle:OnChangeGear( CurrentGear, DesiredGear )
 
-			self._CurGear = DesiredGear
+			self:SetGear( DesiredGear )
 		end
 	end
 
@@ -203,7 +223,7 @@ function ENT:HandleEngineSounds( vehicle )
 			end
 		end
 
-		if Wobble == 0 and CurrentGear < math.floor( NumGears * 0.75 ) then
+		if Wobble == 0 then
 			local Mul = math.Clamp( (self._WobbleTime or 0) - T, 0, 1 )
 
 			Wobble = (math.cos( T * (20 + CurrentGear * 10) * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2) * Mul 
@@ -211,8 +231,8 @@ function ENT:HandleEngineSounds( vehicle )
 	end
 
 	local FadeSpeed = 0.15
-
 	local PlayIdleSound = CurrentGear == 1 and Throttle == 0 and Ratio < 0.5
+	local rpmSet = false
 	local rpmRate = PlayIdleSound and 1 or 5
 
 	self._smIdleVolume = self._smIdleVolume and self._smIdleVolume + ((PlayIdleSound and 1 or 0) - self._smIdleVolume) * FT or 0
@@ -224,6 +244,9 @@ function ENT:HandleEngineSounds( vehicle )
 		Wobble = 0
 		Throttle = 0
 		FadeSpeed = PlayIdleSound and 0.25 or 3
+		self._ClutchActive = true
+	else
+		self._ClutchActive = false
 	end
 
 	for id, sound in pairs( self._ActiveSounds ) do
@@ -281,6 +304,27 @@ function ENT:HandleEngineSounds( vehicle )
 		else
 			sound:ChangePitch( math.Clamp( Pitch * PitchMul, 0, 255 ), FadeSpeed )
 			sound:ChangeVolume( Volume, 0.15 )
+		end
+
+		if rpmSet then continue end
+
+		if PlayIdleSound then self:SetRPM( vehicle.EngineIdleRPM ) rpmSet = true continue end
+
+		if data.SoundType == LVS.SOUNDTYPE_IDLE_ONLY then continue end
+
+		if istable( sound ) then
+			if sound.int then
+				rpmSet = true
+				self:SetRPM( ((sound.int:GetPitch() - data.Pitch) / data.PitchMul) * vehicle.EngineMaxRPM )
+			else
+				if not sound.ext then continue end
+
+				rpmSet = true
+				self:SetRPM( ((sound.ext:GetPitch() - data.Pitch) / data.PitchMul) * vehicle.EngineMaxRPM )
+			end
+		else
+			rpmSet = true
+			self:SetRPM( ((sound:GetPitch() - data.Pitch) / data.PitchMul) * vehicle.EngineMaxRPM )
 		end
 	end
 end

@@ -14,6 +14,8 @@ ENT.MaxVelocityReverse = 500
 
 ENT.EnginePower = 25
 ENT.EngineTorque = 350
+ENT.EngineIdleRPM = 1000
+ENT.EngineMaxRPM = 6000
 
 ENT.ForceLinearMultiplier = 1
 ENT.ForceAngleMultiplier = 1
@@ -68,6 +70,7 @@ function ENT:SetupDataTables()
 	self:AddDT( "Int", "TurnMode" )
 
 	self:AddDT( "Bool", "Reverse" )
+	self:AddDT( "Bool", "NWHandBrake" )
 
 	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "LightsHandler" )
