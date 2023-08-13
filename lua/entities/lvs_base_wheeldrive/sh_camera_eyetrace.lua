@@ -26,13 +26,13 @@ function ENT:GetAimVector()
 		return self:GetAIAimVector()
 	end
 
-	local Driver = self:GetDriver()
-
-	if not IsValid( Driver ) then return self:GetForward() end
-
 	local pod = self:GetDriverSeat()
 
-	if not IsValid( pod ) then return Driver:EyeAngles():Forward() end
+	if not IsValid( pod ) then return self:Forward() end
+
+	local Driver = self:GetDriver()
+
+	if not IsValid( Driver ) then return pod:GetForward() end
 
 	if Driver:lvsMouseAim() then
 		if SERVER then
