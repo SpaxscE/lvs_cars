@@ -183,6 +183,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 			if (self._CurGear or 0) < DesiredGear then
 				self._ShiftTime = T + vehicle.TransShiftSpeed
+				self._WobbleTime = T + vehicle.TransWobbleTime
 			end
 
 			vehicle:OnChangeGear( (self._CurGear or 0), DesiredGear )
@@ -191,8 +192,22 @@ function ENT:HandleEngineSounds( vehicle )
 		end
 	end
 
-	if Wobble == 0 and Throttle >= 0.75 and CurrentGear < math.floor( NumGears * 0.75 ) then
-		Wobble = (math.cos( T * (20 + CurrentGear * 10) * Throttle * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * Throttle * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2)
+	if Throttle > 0.5 then
+		local FullThrottle = Throttle >= 0.99
+
+		if self._oldFullThrottle ~= FullThrottle then
+			self._oldFullThrottle = FullThrottle
+
+			if FullThrottle then
+				self._WobbleTime = T + vehicle.TransWobbleTime
+			end
+		end
+
+		if Wobble == 0 and CurrentGear < math.floor( NumGears * 0.75 ) then
+			local Mul = math.Clamp( (self._WobbleTime or 0) - T, 0, 1 )
+
+			Wobble = (math.cos( T * (20 + CurrentGear * 10) * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2) * Mul 
+		end
 	end
 
 	local FadeSpeed = 0.15
