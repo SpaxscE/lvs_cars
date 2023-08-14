@@ -1,11 +1,11 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/diggercars/BMW_M5E34/lights_lod0"
+	"$basetexture" "models/diggercars/BMW_M5E34/interior_lod0"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 
-	"$detail" "models/diggercars/BMW_M5E34/lights_lod0_e"
+	"$detail" "models/diggercars/BMW_M5E34/interior_lod0"
 	"$detailscale" "1"
-	"$detailblendfactor" "0"
+	"$detailblendfactor" "1"
 	"$detailblendmode" "5"
 
 	"$halflambert" 1
