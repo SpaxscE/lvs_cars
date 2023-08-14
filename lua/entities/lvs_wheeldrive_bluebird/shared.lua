@@ -23,29 +23,20 @@ ENT.TransShiftSpeed = 0.3
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/mercedes_w123/eng_idle_loop.wav",
+		sound = "lvs/vehicles/i4/i4_idle_1.wav",
 		Volume = 1,
-		Pitch = 85,
+		Pitch = 35,
 		PitchMul = 25,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/mercedes_w123/eng_loop.wav",
+		sound = "lvs/vehicles/i4/i4_idle_2.wav",
 		Volume = 1,
-		Pitch = 80,
+		Pitch = 40,
 		PitchMul = 110,
 		SoundLevel = 75,
-		SoundType = LVS.SOUNDTYPE_REV_UP,
-		UseDoppler = true,
-	},
-	{
-		sound = "lvs/vehicles/mercedes_w123/eng_revdown_loop.wav",
-		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
-		SoundLevel = 75,
-		SoundType = LVS.SOUNDTYPE_REV_DOWN,
+		SoundType = LVS.SOUNDTYPE_NONE,
 		UseDoppler = true,
 	},
 }

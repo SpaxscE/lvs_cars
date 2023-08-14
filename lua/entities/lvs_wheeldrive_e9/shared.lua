@@ -23,7 +23,7 @@ ENT.TransShiftSpeed = 0.3
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/dodge_charger/engine_00791.wav",
+		sound = "lvs/vehicles/bmw_m5e34/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -31,21 +31,12 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/dodge_charger/engine_02021.wav",
+		sound = "lvs/vehicles/bmw_m5e34/engine_01450.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 90,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
-		UseDoppler = true,
-	},
-	{
-		sound = "lvs/vehicles/dodge_charger/engine_01835.wav",
-		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
-		SoundLevel = 75,
-		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
 	},
 }
