@@ -8,7 +8,6 @@ include("cl_hud.lua")
 
 DEFINE_BASECLASS( "lvs_base" )
 
-
 function ENT:QuickLerp( name, target, rate )
 	name =  "_smValue"..name
 
