@@ -3,8 +3,8 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	local DriverSeat = self:AddDriverSeat( Vector(-2,15.5,-3), Angle(0,-90,8) )
-	local PassengerSeat = self:AddPassengerSeat( Vector(9,-15,9), Angle(0,-90,28) )
+	local DriverSeat = self:AddDriverSeat( Vector(-7,15.5,-3), Angle(0,-90,8) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(4,-15,9), Angle(0,-90,28) )
 
 	self:AddEngine( Vector(65,0,23) )
 

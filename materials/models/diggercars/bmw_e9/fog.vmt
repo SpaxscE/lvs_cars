@@ -8,8 +8,6 @@
 	"$detailblendfactor" "0"
 	"$detailblendmode" "5"
 
-	"$alphatest" "1"
-	"$allowalphatocoverage" "1"
 	"$halflambert" 1
 
 	"$phong" "1" 

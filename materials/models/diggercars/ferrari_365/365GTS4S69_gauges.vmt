@@ -2,6 +2,12 @@
 {
 	"$basetexture" "models/diggercars/ferrari_365/365GTS4S69_gauges"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+
+	"$detail" "models/DiggerCars/ferrari_365/365GTS4S69_gauges_e"
+	"$detailscale" "1"
+	"$detailblendfactor" "1"
+	"$detailblendmode" "5"
+
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3

@@ -1,0 +1,31 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/DiggerCars/shared/black"
+	"$basetexture" "models/diggercars/bmw_m5e34/headlight_glass_nm"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.4 0.4 0.4]"
+	"$normalmapalphaenvmapmask" "1"
+	"$envmapfresnel" "1"
+	"$phong" "1"
+	"$phongexponent" "2"
+	"$phongboost" "0.05"	
+	"$phongfresnelranges"	"[0.1 1 2]"
+	"$additive" "1"
+	"$rimlight" "1"
+	"$rimlightexponent" "2"	
+	"$rimlightboost" "1"	
+	"$colorfix" "{5 5 5}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+

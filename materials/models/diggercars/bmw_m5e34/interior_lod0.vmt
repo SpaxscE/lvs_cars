@@ -1,19 +1,22 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/DiggerCars/BMW_M5E34/interior_lod0"
-	"$nodecal" "1"	
-	"$nocull" "1"
+	"$basetexture" "models/diggercars/BMW_M5E34/lights_lod0"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 
-	"$phong" "1" 
-	"$phongboost" "0.02" 
-	"$phongexponent" 3
-	"$phongfresnelranges" "[1 1 1]" 
-
-	"$detail" "models/DiggerCars/BMW_M5E34/interior_lod0"
+	"$detail" "models/diggercars/BMW_M5E34/lights_lod0_e"
 	"$detailscale" "1"
-	"$detailblendfactor" "1"
+	"$detailblendfactor" "0"
 	"$detailblendmode" "5"
 
+	"$halflambert" 1
+
+	"$phong" "1" 
+	"$phongboost" "1" 
+	"$phongfresnelranges" "[.3 .5 1]" 
+	"$phongexponent" 20
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.1 0.1 0.1]"
 	"$colorfix" "{255 255 255}"
 	"Proxies"
 	{
@@ -24,3 +27,10 @@
 		}
 	}
 }
+
+
+
+
+
+
+
