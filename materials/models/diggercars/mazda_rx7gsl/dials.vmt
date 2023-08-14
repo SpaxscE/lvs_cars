@@ -1,0 +1,28 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/DiggerCars/mazda_rx7gsl/dials"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+
+	"$detail" "models/diggercars/mazda_rx7gsl/dials"
+	"$detailscale" "1"
+	"$detailblendfactor" "0"
+	"$detailblendmode" "5"
+
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+
+	"$phong" "1" 
+	"$phongboost" "0.08" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
