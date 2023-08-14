@@ -13,8 +13,8 @@ ENT.MDL = "models/hunter/plates/plate1x2.mdl"
 
 ENT.PhysicsWeightScale = 2
 
-ENT.MaxVelocity = 800
-ENT.MaxVelocityReverse = 800
+ENT.MaxVelocity = 400
+ENT.MaxVelocityReverse = 400
 
 ENT.EnginePower = 0
 ENT.EngineTorque = 1000
