@@ -7,23 +7,22 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(-16.1,-81.68,47.25) )
 
-	local WheelModelBig = "models/props_vehicles/tire001b_truck.mdl"
-	local WheelModelSmall = "models/props_vehicles/tire001c_car.mdl"
+	local WheelModel = "models/props_vehicles/tire001c_car.mdl"
 
 	self:DefineAxle( {
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
-			SteerAngle = 30,
+			SteerAngle = 35,
 			TorqueFactor = 0.1,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { hide = false, pos = Vector(100,-45,45), mdl = WheelModelBig, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(100,45,45), mdl = WheelModelBig, mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(60,-45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(60,45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(100,-42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(100,42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(60,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(60,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},
 		Suspension = {
 			Height = 20,
@@ -35,6 +34,13 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 
+	
+	local DriveWheelFL = self:AddWheel( { hide = true, pos = Vector(0,42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } )
+	local DriveWheelFR = self:AddWheel( { hide = true, pos = Vector(0,-42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } )
+
+	self:SetDriveWheelFL( DriveWheelFL )
+	self:SetDriveWheelFR( DriveWheelFR )
+
 	self:DefineAxle( {
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
@@ -44,10 +50,10 @@ function ENT:OnSpawn( PObj )
 			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { hide = false, pos = Vector(30,-45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(30,45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(0,-45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(0,45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(30,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(30,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			DriveWheelFL,
+			DriveWheelFR,
 		},
 		Suspension = {
 			Height = 20,
@@ -63,16 +69,16 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_REAR,
-			SteerAngle = 30,
+			SteerAngle = 35,
 			TorqueFactor = 0.1,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { hide = false, pos = Vector(-60,-45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(-60,45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(-30,-45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = false, pos = Vector(-30,45,35), mdl = WheelModelSmall, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-60,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-60,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-30,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-30,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},
 		Suspension = {
 			Height = 20,
@@ -83,4 +89,10 @@ function ENT:OnSpawn( PObj )
 			SpringRelativeDamping = 2000,
 		},
 	} )
+end
+
+function ENT:OnEngineActiveChanged( Active )
+	if Active then
+		self:EmitSound( "lvs/vehicles/sherman/engine_start.wav" )
+	end
 end
