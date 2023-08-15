@@ -1,0 +1,34 @@
+"VertexlitGeneric"
+{
+	"$basetexturetransform" "center .5 .5 scale 64 64 rotate 0 translate 0 0"
+	"$basetexture" "models/diggercars/BMW_M5E34/leather1"
+	"$bumpmap" "models/diggercars/BMW_M5E34/leather1_nm"
+
+
+        "$detail"  "models/DiggerCars/mazda_miata/int"
+        "$detailblendfactor" "1"
+        "$detailtint" "{255 255 255}"
+        "$detailscale" 1
+
+	"$phong" "1" 
+	"$phongboost" "0.01" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{205 205 205}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
+

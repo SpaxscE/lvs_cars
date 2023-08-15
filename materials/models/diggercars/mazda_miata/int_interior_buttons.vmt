@@ -1,0 +1,32 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/diggercars/mazda_miata/int_decals"
+	"$bumpmap" "models/DiggerCars/mazda_miata/int_decals_nm"
+
+	"$detail" "models/diggercars/mazda_miata/int_decals"
+	"$detailscale" "1"
+	"$detailblendfactor" "1"
+	"$detailblendmode" "5"
+
+	"$phong" "1" 
+	"$phongboost" "0.08" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
+
