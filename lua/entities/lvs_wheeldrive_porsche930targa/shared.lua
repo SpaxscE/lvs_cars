@@ -18,8 +18,6 @@ ENT.EngineTorque = 100
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
-ENT.TransMinGearHoldTime = 1
-ENT.TransShiftSpeed = 0.3
 
 ENT.PhysicsMass = 700
 ENT.PhysicsInertia = Vector(1050,1050,525)

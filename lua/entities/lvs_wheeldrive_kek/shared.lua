@@ -18,8 +18,6 @@ ENT.EngineTorque = 50
 
 ENT.TransGears = 3
 ENT.TransGearsReverse = 1
-ENT.TransMinGearHoldTime = 1
-ENT.TransShiftSpeed = 1
 
 ENT.EngineSounds = {
 	{
