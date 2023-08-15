@@ -157,6 +157,8 @@ end
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
+	self:SetPhysicsAttacker( ply, 1 )
+
 	if ply:lvsKeyDown( "CAR_MENU" ) then return end
 
 	if ply:lvsMouseAim() then
