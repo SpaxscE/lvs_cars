@@ -475,6 +475,10 @@ function ENT:RenderLights( base, data )
 				continue
 			end
 
+			if istable( lightsdata.bodygroup ) then
+				if not base:BodygroupIsValid( lightsdata.bodygroup.name, lightsdata.bodygroup.active ) then continue end
+			end
+
 			local pos = base:LocalToWorld( lightsdata.pos )
 
 			local visible = util.PixelVisible( pos, 2, lightsdata.PixVis )

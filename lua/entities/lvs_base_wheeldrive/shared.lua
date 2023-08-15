@@ -182,12 +182,37 @@ function ENT:HasTurnSignals()
 	return HasTurnSignals
 end
 
-function ENT:BodyGroupIsValid( bodygroups )
-	for index, groups in pairs( bodygroups ) do
-		local mygroup = self:GetBodygroup( index )
-		for g_index = 1, table.Count( groups ) do
-			if mygroup == groups[g_index] then return true end
+function ENT:BodygroupIsValid( name, groups )
+	if not name or not istable( groups ) then return false end
+
+	local id = -1
+
+	if self._StoredBodyGroups then
+		if self._StoredBodyGroups[ name ] then
+			id = self._StoredBodyGroups[ name ]
 		end
+	else
+		self._StoredBodyGroups = {}
+	end
+
+	if id == -1 then
+		for _, data in pairs( self:GetBodyGroups() ) do
+			if data.name == name then
+				id = data.id
+
+				break
+			end
+		end
+	end
+
+	if id == -1 then return false end
+
+	self._StoredBodyGroups[ name ] = id
+
+	local cur = self:GetBodygroup( id )
+
+	for _, active in pairs( groups ) do
+		if cur == active then return true end
 	end
 
 	return false

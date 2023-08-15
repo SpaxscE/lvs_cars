@@ -180,8 +180,8 @@ ENT.Lights = {
 		Trigger = "fog",
 		SubMaterialID = 9,
 		Sprites = {
-			{ pos = Vector(89.55,-17.48,5.9), colorB = 200, colorA = 150 },
-			{ pos = Vector(89.55,17.48,5.9), colorB = 200, colorA = 150 },
+			{ pos = Vector(89.55,-17.48,5.9), colorB = 200, colorA = 150, bodygroup = { name = "Foglight", active = { 0 } }, },
+			{ pos = Vector(89.55,17.48,5.9), colorB = 200, colorA = 150, bodygroup = { name = "Foglight", active = { 0 } }, },
 			{ pos = Vector(-90.05,10.46,15.85), colorG = 0, colorB = 0, colorA = 150 },
 		},
 	},
