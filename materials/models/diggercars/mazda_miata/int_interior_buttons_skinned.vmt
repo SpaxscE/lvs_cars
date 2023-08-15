@@ -2,7 +2,7 @@
 {
 	"$basetexture" "models/diggercars/mazda_miata/int_decals"
 	"$bumpmap" "models/diggercars/mazda_miata/int_decals_nm"
-
+	"$decal" "1"
 
 	"$alphatest" "1"
 	"$allowalphatocoverage" "1"
