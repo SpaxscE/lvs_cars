@@ -22,7 +22,7 @@ function EFFECT:Init( data )
 	local Pos = data:GetOrigin()
 	local Ent = data:GetEntity()
 
-	self.LifeTime = 0.5
+	self.LifeTime = 0.6
 	self.DieTime = CurTime() + self.LifeTime
 
 	if not IsValid( Ent ) then return end
@@ -64,9 +64,12 @@ function EFFECT:Think()
 
 	if self.DieTime < CurTime() then return false end
 
+	self:SetPos( self.Ent:LocalToWorld( self.Pos ) )
+
 	return true
 end
 
+EFFECT.GlowMat = Material( "sprites/light_glow02_add" )
 EFFECT.FireMat = {
 	[1] = Material( "effects/lvs_base/flamelet1" ),
 	[2] = Material( "effects/lvs_base/flamelet2" ),
@@ -80,12 +83,18 @@ function EFFECT:Render()
 	if not IsValid( self.Ent ) or not self.Pos then return end
 
 	local Scale = (self.DieTime - CurTime()) / self.LifeTime
+
+	local Pos = self.Ent:LocalToWorld( self.Pos )
+
 	local InvScale = 1 - Scale
+
+	render.SetMaterial( self.GlowMat )
+	render.DrawSprite( Pos + Vector(0,0,InvScale ^ 2 * 10), 100 * InvScale, 100 * InvScale, Color( 255, 150, 75, 255) )
 
 	local Num = #self.FireMat - math.Clamp(math.ceil( Scale * #self.FireMat ) - 1,0, #self.FireMat - 1)
 
 	local Size = (10 + 25 * Scale) * self.RandomSize
 
 	render.SetMaterial( self.FireMat[ Num ] )
-	render.DrawSprite( self.Ent:LocalToWorld( self.Pos ) + Vector(0,0,InvScale ^ 2 * 25), Size, Size, Color( 255, 255, 255, 255) )
+	render.DrawSprite( Pos + Vector(0,0,InvScale ^ 2 * 25), Size, Size, Color( 255, 255, 255, 255) )
 end
