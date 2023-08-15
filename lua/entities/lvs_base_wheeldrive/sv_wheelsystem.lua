@@ -65,6 +65,8 @@ function ENT:AddWheel( data )-- pos, ang, model )
 
 	Wheel:SetAlignmentAngle( data.mdl_ang or Angle(0,0,0) )
 
+	Wheel:SetHideModel( data.hide == true )
+
 	Wheel:MakeSpherical( data.radius or -1 )
 
 	Wheel:SetWidth( data.width or 3 )

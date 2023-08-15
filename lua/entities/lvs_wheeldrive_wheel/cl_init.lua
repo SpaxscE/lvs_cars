@@ -3,6 +3,8 @@ include("cl_effects.lua")
 include("cl_skidmarks.lua")
 
 function ENT:Draw()
+	if self:GetHideModel() then return end
+
 	self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 	self:DrawModel()
 end

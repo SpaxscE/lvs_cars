@@ -20,6 +20,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Entity", 0, "Base" )
 
+	self:NetworkVar( "Bool", 0, "HideModel" )
+
 	if SERVER then
 		self:SetWidth( 3 )
 	end

@@ -39,6 +39,8 @@ function ENT:MakeSpherical( radius )
 	self:PhysicsInitSphere( radius, "jeeptire" )
 
 	self:SetRadius( radius )
+
+	self:DrawShadow( not self:GetHideModel() )
 end
 
 function ENT:PhysicsOnGround( PhysObj )

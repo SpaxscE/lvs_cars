@@ -16,12 +16,13 @@ function ENT:OnSpawn( PObj )
 			SteerAngle = 30,
 			TorqueFactor = 0.1,
 			BrakeFactor = 1,
+			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { pos = Vector(-45,80,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { pos = Vector(45,80,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { pos = Vector(-45,40,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { pos = Vector(45,40,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-45,80,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(45,80,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-45,40,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(45,40,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},
 		Suspension = {
 			Height = 20,
@@ -42,8 +43,8 @@ function ENT:OnSpawn( PObj )
 			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { pos = Vector(-45,0,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { pos = Vector(45,0,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-45,0,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(45,0,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},
 		Suspension = {
 			Height = 20,
@@ -62,12 +63,13 @@ function ENT:OnSpawn( PObj )
 			SteerAngle = 30,
 			TorqueFactor = 0.1,
 			BrakeFactor = 1,
+			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { pos = Vector(-45,-80,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { pos = Vector(45,-80,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { pos = Vector(-45,-40,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { pos = Vector(45,-40,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-45,-80,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(45,-80,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-45,-40,-10), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(45,-40,-10), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},
 		Suspension = {
 			Height = 20,
