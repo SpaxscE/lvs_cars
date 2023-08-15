@@ -352,6 +352,7 @@ function ENT:Think()
 
 	if EngineActive then
 		self:HandleEngineSounds( vehicle )
+		self:ExhaustFX( vehicle )
 	end
 end
 
@@ -363,6 +364,27 @@ function ENT:Draw()
 end
 
 function ENT:DrawTranslucent()
+end
+
+function ENT:ExhaustFX( vehicle )
+	if not istable( vehicle.ExhaustPositions ) then return end
+
+	local T = CurTime()
+
+	if (self.nextEFX or 0) > T then return end
+
+	self.nextEFX = T + 0.1
+
+	local Throttle = vehicle:GetThrottle()
+
+	for _, data in ipairs( vehicle.ExhaustPositions ) do
+		local effectdata = EffectData()
+			effectdata:SetOrigin( vehicle:LocalToWorld( data.pos ) )
+			effectdata:SetNormal( vehicle:LocalToWorldAngles( data.ang ):Forward() )
+			effectdata:SetMagnitude( Throttle )
+			effectdata:SetEntity( vehicle )
+		util.Effect( "lvs_exhaust", effectdata )
+	end
 end
 
 function ENT:DamageFX( vehicle )
