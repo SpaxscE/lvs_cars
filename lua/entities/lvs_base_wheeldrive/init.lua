@@ -85,34 +85,6 @@ function ENT:AlignView( ply )
 	end)
 end
 
---[[
-function ENT:OnCollision( data, physobj )
-	if data.Speed > 60 and data.DeltaTime > 0.2 then
-		local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
-
-		if VelDif > 1500 then
-			for k, v in pairs( self:GetWheels() ) do
-				local Sub = v:GetPos() - data.HitPos
-
-				local Up = self:GetForward()
-				local Forward = v:GetMaster():GetRight()
-
-				if Sub:Length() < 75 then
-					local newToe = self:AngleBetweenNormal( data.HitNormal, Forward ) - 90
-					local newCam = self:AngleBetweenNormal( data.HitNormal, Up ) - 90
-
-					v:SetToe( math.Clamp( newToe, -10, 10 ) )
-					v:SetCamber( math.Clamp( newCam, -10, 10 ) )
-				end
-
-			end
-		end
-	end
-
-	return false
-end
-]]
-
 function ENT:TakeCollisionDamage( damage, attacker )
 end
 
@@ -179,12 +151,12 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		end
 
 		if TorqueFactor > 0 then
-			local desRPM = ent:VelToRPM( self:GetTargetVelocity() )
-			local targetRPM = math.abs( desRPM )
+			local targetRPM = ent:VelToRPM( self:GetTargetVelocity() )
+			local targetRPMabs = math.abs( targetRPM )
 
-			local powerRPM = math.min( self.EnginePower, targetRPM )
+			local powerRPM = math.min( self.EnginePower, targetRPMabs )
 
-			local powerCurve = (powerRPM + math.max( targetRPM - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPM * self:Sign( desRPM - curRPM )
+			local powerCurve = (powerRPM + math.max( targetRPMabs - powerRPM,0) * self:Sign( targetRPM ) - math.max(math.abs(curRPM) - powerRPM,0) * self:Sign( curRPM) ) / targetRPMabs
 
 			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * self:GetThrottle()
 
