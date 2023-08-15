@@ -63,9 +63,5 @@ function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
 		self._viewpunch_fov = self._viewpunch_fov and self._viewpunch_fov + (newFov - self._viewpunch_fov) * RealFrameTime() * 10 or 0
 	end
 
-	if pod == self:GetDriverSeat() then
-		pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
-	end
-
 	return self._viewpunch_fov * (90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90
 end
