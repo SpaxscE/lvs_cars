@@ -22,7 +22,14 @@ function EFFECT:Init( data )
 	local Pos = data:GetOrigin()
 	local Ent = data:GetEntity()
 
+	self.LifeTime = 0.5
+	self.DieTime = CurTime() + self.LifeTime
+
 	if not IsValid( Ent ) then return end
+
+	self.Ent = Ent
+	self.Pos = Ent:WorldToLocal( Pos + VectorRand() * 8 )
+	self.RandomSize = math.Rand( 0.8, 1.6 )
 
 	local emitter = Ent:GetParticleEmitter( Pos )
 
@@ -50,45 +57,35 @@ function EFFECT:Init( data )
 			particle:SetBounce( 0 )
 		end
 	end
-
-	local Scale = math.Rand(0.5,1.5)
-	local Dir = Ent:GetUp()
-	local particle = emitter:Add( "effects/lvs_base/fire", Pos )
-
-	if particle then
-		particle:SetVelocity( Dir * 70 )
-		particle:SetDieTime( 0.2 )
-		particle:SetAirResistance( 0 ) 
-		particle:SetStartAlpha( 255 )
-		particle:SetStartSize( 10 + 18 * Scale )
-		particle:SetEndSize( 10 )
-		particle:SetRoll( math.Rand(-1,1) * 180 )
-		particle:SetColor( 255,255,255 )
-		particle:SetGravity( Vector( 0, 0, 100 ) )
-		particle:SetCollide( false )
-	end
-
-	for i = 1, 3 do
-		local particle = emitter:Add( "effects/lvs_base/flamelet"..math.random(1,5), Pos )
-		
-		if particle then
-			particle:SetVelocity( Dir * 25 * i )
-			particle:SetDieTime( 0.2 )
-			particle:SetAirResistance( 0 ) 
-			particle:SetStartAlpha( 255 )
-			particle:SetStartSize( (5 + 5 * Scale) - i )
-			particle:SetEndSize( 10 )
-			particle:SetRoll( math.Rand(-1,1) * 180 )
-			particle:SetColor( 255,255,255 )
-			particle:SetGravity( Vector( 0, 0, 100 ) )
-			particle:SetCollide( false )
-		end
-	end
 end
 
 function EFFECT:Think()
-	return false
+	if not IsValid( self.Ent ) then return false end
+
+	if self.DieTime < CurTime() then return false end
+
+	return true
 end
 
+EFFECT.FireMat = {
+	[1] = Material( "effects/lvs_base/flamelet1" ),
+	[2] = Material( "effects/lvs_base/flamelet2" ),
+	[3] = Material( "effects/lvs_base/flamelet3" ),
+	[4] = Material( "effects/lvs_base/flamelet4" ),
+	[5] = Material( "effects/lvs_base/flamelet5" ),
+	[6] = Material( "effects/lvs_base/fire" ),
+}
+
 function EFFECT:Render()
+	if not IsValid( self.Ent ) or not self.Pos then return end
+
+	local Scale = (self.DieTime - CurTime()) / self.LifeTime
+	local InvScale = 1 - Scale
+
+	local Num = #self.FireMat - math.Clamp(math.ceil( Scale * #self.FireMat ) - 1,0, #self.FireMat - 1)
+
+	local Size = (10 + 25 * Scale) * self.RandomSize
+
+	render.SetMaterial( self.FireMat[ Num ] )
+	render.DrawSprite( self.Ent:LocalToWorld( self.Pos ) + Vector(0,0,InvScale ^ 2 * 25), Size, Size, Color( 255, 255, 255, 255) )
 end
