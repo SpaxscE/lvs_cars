@@ -60,7 +60,7 @@ function ENT:PostInitialize( PObj )
 	PObj:EnableDrag( self.PhysicsDrag )
 	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
-	SetMinimumAngularVelocityTo( 10000 )
+	SetMinimumAngularVelocityTo( 24000 )
 
 	self:EnableHandbrake()
 end
