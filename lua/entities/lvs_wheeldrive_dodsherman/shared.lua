@@ -1,15 +1,15 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Conscript APC Tank test"
-ENT.Author = "Digger"
+ENT.PrintName = "DOD:S Sherman Tank"
+ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/hunter/plates/plate1x2.mdl"
+ENT.MDL = "models/blu/tanks/sherman.mdl"
 
 ENT.PhysicsWeightScale = 2
 

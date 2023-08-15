@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "Kuebelwagen"
+ENT.PrintName = "DOD:S Kuebelwagen"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
