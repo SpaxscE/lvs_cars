@@ -181,3 +181,14 @@ function ENT:HasTurnSignals()
 
 	return HasTurnSignals
 end
+
+function ENT:BodyGroupIsValid( bodygroups )
+	for index, groups in pairs( bodygroups ) do
+		local mygroup = self:GetBodygroup( index )
+		for g_index = 1, table.Count( groups ) do
+			if mygroup == groups[g_index] then return true end
+		end
+	end
+
+	return false
+end
