@@ -7,7 +7,7 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
 
-	local HideWheel = true
+	local HideWheel = false
 	local WheelModel = "models/props_vehicles/tire001c_car.mdl"
 	local WheelModelCorner = "models/props_vehicles/tire001b_truck.mdl"
 
@@ -38,11 +38,31 @@ function ENT:OnSpawn( PObj )
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
 			SteerAngle = 25,
-			TorqueFactor = 0.16,
+			TorqueFactor = 0.35,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
-		Wheels = { R1, L1, R2, L2 },
+		Wheels = { R1, L1 },
+		Suspension = {
+			Height = 20,
+			MaxTravel = 15,
+			ControlArmLength = 150,
+			SpringConstant = 20000,
+			SpringDamping = 1000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
+
+	self:DefineAxle( {
+		Axle = {
+			ForwardAngle = Angle(0,0,0),
+			SteerType = LVS.WHEEL_STEER_FRONT,
+			SteerAngle = 20,
+			TorqueFactor = 0.1,
+			BrakeFactor = 1,
+			UseHandbrake = true,
+		},
+		Wheels = { R2, L2 },
 		Suspension = {
 			Height = 20,
 			MaxTravel = 15,
@@ -57,7 +77,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 0.16,
+			TorqueFactor = 0.075,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
@@ -76,12 +96,32 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_REAR,
-			SteerAngle = 25,
-			TorqueFactor = 0.16,
+			SteerAngle = 20,
+			TorqueFactor = 0.075,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
-		Wheels = { R6, L6, R5, L5 },
+		Wheels = { R5, L5 },
+		Suspension = {
+			Height = 20,
+			MaxTravel = 15,
+			ControlArmLength = 150,
+			SpringConstant = 20000,
+			SpringDamping = 1000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
+
+	self:DefineAxle( {
+		Axle = {
+			ForwardAngle = Angle(0,0,0),
+			SteerType = LVS.WHEEL_STEER_REAR,
+			SteerAngle = 25,
+			TorqueFactor = 0.35,
+			BrakeFactor = 1,
+			UseHandbrake = true,
+		},
+		Wheels = { R6, L6 },
 		Suspension = {
 			Height = 20,
 			MaxTravel = 15,
