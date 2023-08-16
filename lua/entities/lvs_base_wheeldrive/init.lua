@@ -34,7 +34,7 @@ end
 
 local function IsServerOK()
 
-	if GetConVar( "gmod_physiterations" ):GetInt() < 4 then
+	if GetConVar( "gmod_physiterations" ):GetInt() ~= 4 then
 		RunConsoleCommand("gmod_physiterations", "4")
 
 		return false
