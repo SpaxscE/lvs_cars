@@ -279,6 +279,8 @@ function ENT:AlignWheel( Wheel )
 
 	local ID = Wheel:GetAxle()
 
+	if not ID then return false end
+
 	local Axle = self:GetAxleData( ID )
 
 	local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )

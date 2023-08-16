@@ -7,23 +7,42 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
 
+	local HideWheel = false
 	local WheelModel = "models/props_vehicles/tire001c_car.mdl"
+	local WheelModelCorner = "models/props_vehicles/tire001b_truck.mdl"
+
+	local L1 = self:AddWheel( { hide = HideWheel, pos = Vector(100,42,45), mdl = WheelModelCorner } )
+	local L2 = self:AddWheel( { hide = HideWheel, pos = Vector(60,42,35), mdl = WheelModel } )
+	local L3 = self:AddWheel( { hide = HideWheel, pos = Vector(30,42,35), mdl = WheelModel } )
+	local L4 = self:AddWheel( { hide = HideWheel, pos = Vector(0,42,35), mdl = WheelModel } )
+	local L5 = self:AddWheel( { hide = HideWheel, pos = Vector(-30,42,30), mdl = WheelModel } )
+	local L6 = self:AddWheel( { hide = HideWheel, pos = Vector(-80,42,45), mdl = WheelModelCorner } )
+
+	self:CreateWheelChain( {L1, L6} )
+	self:CreateWheelChain( {L2, L3, L4, L5} )
+	self:SetDriveWheelFL( L4 )
+
+	local R1 = self:AddWheel( { hide = HideWheel, pos = Vector(100,-42,45), mdl = WheelModelCorner } )
+	local R2 = self:AddWheel( { hide = HideWheel, pos = Vector(60,-42,35), mdl = WheelModel } )
+	local R3 = self:AddWheel( { hide = HideWheel, pos = Vector(30,-42,35), mdl = WheelModel } )
+	local R4 = self:AddWheel( { hide = HideWheel, pos = Vector(0,-42,35), mdl = WheelModel } )
+	local R5 = self:AddWheel( { hide = HideWheel, pos = Vector(-30,-42,30), mdl = WheelModel } )
+	local R6 = self:AddWheel( { hide = HideWheel, pos = Vector(-80,-42,45), mdl = WheelModelCorner } )
+
+	self:CreateWheelChain( {R1, R6} )
+	self:CreateWheelChain( {R2, R3, R4, R5} )
+	self:SetDriveWheelFR( R4 )
 
 	self:DefineAxle( {
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
 			SteerAngle = 25,
-			TorqueFactor = 0.1,
+			TorqueFactor = 0.16,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
-		Wheels = {
-			self:AddWheel( { hide = true, pos = Vector(100,-42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(100,42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(60,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(60,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
-		},
+		Wheels = { R1, L1, R2, L2 },
 		Suspension = {
 			Height = 20,
 			MaxTravel = 15,
@@ -34,27 +53,15 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 
-	
-	local DriveWheelFL = self:AddWheel( { hide = true, pos = Vector(0,42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } )
-	local DriveWheelFR = self:AddWheel( { hide = true, pos = Vector(0,-42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } )
-
-	self:SetDriveWheelFL( DriveWheelFL )
-	self:SetDriveWheelFR( DriveWheelFR )
-
 	self:DefineAxle( {
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 0.25,
+			TorqueFactor = 0.16,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
-		Wheels = {
-			self:AddWheel( { hide = true, pos = Vector(30,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(30,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
-			DriveWheelFL,
-			DriveWheelFR,
-		},
+		Wheels = { R3, L3, L4, R4 },
 		Suspension = {
 			Height = 20,
 			MaxTravel = 15,
@@ -70,16 +77,11 @@ function ENT:OnSpawn( PObj )
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_REAR,
 			SteerAngle = 25,
-			TorqueFactor = 0.1,
+			TorqueFactor = 0.16,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
-		Wheels = {
-			self:AddWheel( { hide = true, pos = Vector(-80,-42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-80,42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-30,-42,30), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-30,42,30), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
-		},
+		Wheels = { R6, L6, R5, L5 },
 		Suspension = {
 			Height = 20,
 			MaxTravel = 15,
