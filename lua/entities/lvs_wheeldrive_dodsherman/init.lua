@@ -5,7 +5,7 @@ include("shared.lua")
 function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,0,50), Angle(0,-90,0) )
 
-	self:AddEngine( Vector(-16.1,-81.68,47.25) )
+	self:AddEngine( Vector(-79.66,0,72.21) )
 
 	local WheelModel = "models/props_vehicles/tire001c_car.mdl"
 
@@ -45,7 +45,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 0.1,
+			TorqueFactor = 0.25,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
@@ -75,8 +75,8 @@ function ENT:OnSpawn( PObj )
 			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { hide = true, pos = Vector(-60,-42,32), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-60,42,32), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-80,-42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-80,42,45), mdl = "models/props_vehicles/tire001b_truck.mdl", mdl_ang = Angle(0,0,0) } ),
 			self:AddWheel( { hide = true, pos = Vector(-30,-42,30), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
 			self:AddWheel( { hide = true, pos = Vector(-30,42,30), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},

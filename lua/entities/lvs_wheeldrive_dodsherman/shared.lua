@@ -11,12 +11,15 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/tanks/sherman.mdl"
 
-ENT.SteerSpeed = 2.5
-ENT.SteerReturnSpeed = 5
+ENT.AITEAM = 2
 
-ENT.FastSteerActiveVelocity = 300
+ENT.MaxHealth = 2700
 
-ENT.PhysicsWeightScale = 2
+ENT.SteerSpeed = 1
+ENT.SteerReturnSpeed = 2
+
+ENT.PhysicsWeightScale = 3
+ENT.PhysicsDampingSpeed = 500
 
 ENT.MaxVelocity = 450
 ENT.MaxVelocityReverse = 450
