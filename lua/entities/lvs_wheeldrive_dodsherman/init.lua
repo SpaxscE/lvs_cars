@@ -13,7 +13,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
-			SteerAngle = 35,
+			SteerAngle = 25,
 			TorqueFactor = 0.1,
 			BrakeFactor = 1,
 			UseHandbrake = true,
@@ -69,7 +69,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_REAR,
-			SteerAngle = 35,
+			SteerAngle = 25,
 			TorqueFactor = 0.1,
 			BrakeFactor = 1,
 			UseHandbrake = true,
