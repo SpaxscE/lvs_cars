@@ -7,7 +7,7 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
 
-	local HideWheel = false
+	local HideWheel = true
 	local WheelModel = "models/props_vehicles/tire001c_car.mdl"
 	local WheelModelCorner = "models/props_vehicles/tire001b_truck.mdl"
 
