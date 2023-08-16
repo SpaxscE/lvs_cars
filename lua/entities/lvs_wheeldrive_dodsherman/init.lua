@@ -75,10 +75,10 @@ function ENT:OnSpawn( PObj )
 			UseHandbrake = true,
 		},
 		Wheels = {
-			self:AddWheel( { hide = true, pos = Vector(-60,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-60,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-30,-42,35), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
-			self:AddWheel( { hide = true, pos = Vector(-30,42,35), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-60,-42,32), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-60,42,32), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-30,-42,30), mdl = WheelModel, mdl_ang = Angle(0,180,0) } ),
+			self:AddWheel( { hide = true, pos = Vector(-30,42,30), mdl = WheelModel, mdl_ang = Angle(0,0,0) } ),
 		},
 		Suspension = {
 			Height = 20,

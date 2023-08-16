@@ -34,9 +34,7 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		} )
 		local Dist = (pos - trace.HitPos):Length() - 30
 
-		local target = 12 - Dist
-
-		self:SetPoseParameter(sherman_susdata[i].poseparameter, self:QuickLerp( "suspension_"..sherman_susdata[i].attachment, target, 50 ) )
+		self:SetPoseParameter(sherman_susdata[i].poseparameter, 12 - Dist )
 	end
 
 	local DriveWheelFL = self:GetDriveWheelFL()
@@ -44,6 +42,10 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r
 
 		self:SetPoseParameter("spin_wheels_left", -rotation )
+
+		local Scroll = self:GetRotationDelta( "scroll_left", rotation ) * 0.004
+
+		self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/track_sherman", Vector(0,Scroll,0) ) )
 	end
 
 	local DriveWheelFR = self:GetDriveWheelFR()
@@ -51,5 +53,9 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		local rotation = self:WorldToLocalAngles( DriveWheelFR:GetAngles() ).r
 
 		self:SetPoseParameter("spin_wheels_right", -rotation )
+
+		local Scroll = self:GetRotationDelta( "scroll_right", rotation ) * 0.004
+
+		self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/track_sherman", Vector(0,Scroll,0) ) )
 	end
 end
