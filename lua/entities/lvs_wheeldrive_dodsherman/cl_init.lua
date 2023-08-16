@@ -42,7 +42,7 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r
 		local scroll = self:CalcScroll( "scroll_left", rotation )
 
-		self:SetPoseParameter("spin_wheels_left", -scroll * 1.252 )
+		self:SetPoseParameter("spin_wheels_left", scroll * 1.252 )
 		self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/track_sherman", Vector(0,scroll * 0.004,0) ) )
 	end
 
