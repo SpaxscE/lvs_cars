@@ -15,7 +15,6 @@ ENT.SteerSpeed = 2.5
 ENT.SteerReturnSpeed = 5
 
 ENT.FastSteerActiveVelocity = 300
-ENT.FastSteerAngleClamp = 7
 
 ENT.PhysicsWeightScale = 2
 
