@@ -13,59 +13,9 @@ function ENT:QuickLerp( name, target, rate )
 
 	if not self[ name ] then self[ name ] = 0 end
 
-	self[ name ] = self[ name ] + (target - self[ name ]) * RealFrameTime() * (rate or 10)
+	self[ name ] = self[ name ] + (target - self[ name ]) * FrameTime() * (rate or 10)
 
 	return self[ name ]
-end
-
-function ENT:GetRotationDelta( name, rot )
-	name =  "_deltaAng"..name
-
-	if not self[ name ] then self[ name ] = Angle(0,0,0) end
-
-	local ang = Angle(0,0,rot)
-	local cur = ang:Right()
-	local old = self[ name ]:Up()
-
-	local delta = self:AngleBetweenNormal( cur, old ) - 90
-
-	self[ name ] = ang
-
-	return delta
-end
-
-function ENT:ScrollTexture( name, material, pos )
-	if not isstring( name ) or not isstring( material ) or not isvector( pos ) then return "" end
-
-	local id = self:EntIndex()
-	local class = self:GetClass()
-
-	local texture_name = class.."_["..id.."]_"..name
-
-	if istable( self._StoredScrollTextures ) then
-		if self._StoredScrollTextures[ texture_name ] then
-			self._StoredScrollTextures[ texture_name ].mat:SetVector("$translate", self._StoredScrollTextures[ texture_name ].pos )
-
-			self._StoredScrollTextures[ texture_name ].pos = self._StoredScrollTextures[ texture_name ].pos + pos
-
-			if self._StoredScrollTextures[ texture_name ].pos:LengthSqr() > 2500000000 then
-				self._StoredScrollTextures[ texture_name ].pos = Vector(0,0,0)
-			end
-
-			return "!"..texture_name
-		end
-	else
-		self._StoredScrollTextures = {}
-	end
-
-	local mat = CreateMaterial(texture_name, "VertexLitGeneric", { ["$basetexture"] = "models/blu/track_sherman", ["$alphatest"] = "1", ["$translate"] = "[0.0 0.0 0.0]", ["Proxies"] = { ["TextureTransform"] = { ["translateVar"] = "$translate", ["centerVar"]    = "$center",["resultVar"]    = "$basetexturetransform", } } } )
-
-	self._StoredScrollTextures[ texture_name ] = {
-		mat = mat,
-		pos = pos,
-	}
-
-	return "!"..texture_name
 end
 
 function ENT:CalcPoseParameters()

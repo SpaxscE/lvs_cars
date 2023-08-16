@@ -251,7 +251,8 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local Limiter = constraint.Rope(self,Wheel,0,0,self:WorldToLocal( Pos - Up * height * 0.5 - Right * LimiterLength), Vector(0,0,0),LimiterRopeLength, 0, 0, RopeSize,"cable/cable2", false )
 	Limiter.DoNotDuplicate = true
 
-	P1 = Wheel:GetPos() + Up * height * 2
+	P1 = Wheel:GetPos() + Up * (height * 2 + maxtravel * 2)
+
 	local Elastic = constraint.Elastic( Wheel, self, 0, 0, Vector(0,0,0), self:WorldToLocal( P1 ), constant, damping, rdamping,"cable/cable2", RopeSize, false ) 
 	Elastic.DoNotDuplicate = true
 	debugoverlay.SweptBox( P1, P2,- Vector(0,1,1), Vector(0,1,1), (P1 - P2):Angle(), 5, Color( 255, 255, 0 ), true )

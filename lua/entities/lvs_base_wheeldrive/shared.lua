@@ -25,7 +25,7 @@ ENT.TransGearsReverse = 1
 ENT.TransMinGearHoldTime = 1
 ENT.TransShiftSpeed = 0.3
 ENT.TransWobble = 40
-ENT.TransWobbleTime = 2
+ENT.TransWobbleTime = 1.5
 ENT.TransWobbleFrequencyMultiplier = 1
 
 ENT.SteerSpeed = 3

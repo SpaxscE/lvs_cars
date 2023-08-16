@@ -150,15 +150,19 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			ent:ReleaseRotation()
 		end
 
-		if TorqueFactor > 0 then
-			local targetRPM = ent:VelToRPM( self:GetTargetVelocity() )
+		local Throttle = self:GetThrottle()
+
+		if TorqueFactor > 0 and Throttle > 0 then
+			local targetVelocity = self:GetTargetVelocity()
+
+			local targetRPM = ent:VelToRPM( targetVelocity )
 			local targetRPMabs = math.abs( targetRPM )
 
 			local powerRPM = math.min( self.EnginePower, targetRPMabs )
 
-			local powerCurve = (powerRPM + math.max( targetRPMabs - powerRPM,0) * self:Sign( targetRPM ) - math.max(math.abs(curRPM) - powerRPM,0) * self:Sign( curRPM) ) / targetRPMabs
+			local powerCurve = (powerRPM + math.max( targetRPMabs - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPMabs * self:Sign( targetRPM - curRPM )
 
-			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * self:GetThrottle()
+			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle
 
 			local BoostRPM = 0
 
@@ -169,8 +173,18 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 
 			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM)
-	
-			ForceAngle = RotationAxis * Torque * TorqueBoost
+
+			local curVelocity = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
+
+			if targetVelocity >= 0 then
+				if curVelocity < targetVelocity then
+					ForceAngle = RotationAxis * Torque * TorqueBoost
+				end
+			else
+				if curVelocity > targetVelocity then
+					ForceAngle = RotationAxis * Torque * TorqueBoost
+				end
+			end
 		end
 	end
 

@@ -16,7 +16,7 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		[3] = 10,
 		[4] = 12,
 		[5] = 15,
-		[5] = 17,
+		[6] = 17,
 	}
 
 	self:SetPoseParameter( "gear",  self:QuickLerp( "gear", (GearIDtoPose[ gear ] or 1) ) )

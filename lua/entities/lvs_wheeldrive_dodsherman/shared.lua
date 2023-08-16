@@ -1,5 +1,5 @@
 
-ENT.Base = "lvs_base_wheeldrive"
+ENT.Base = "lvs_tank_wheeldrive"
 
 ENT.PrintName = "DOD:S Sherman Tank"
 ENT.Author = "Luna"
@@ -14,12 +14,6 @@ ENT.MDL = "models/blu/tanks/sherman.mdl"
 ENT.AITEAM = 2
 
 ENT.MaxHealth = 2700
-
-ENT.SteerSpeed = 1
-ENT.SteerReturnSpeed = 2
-
-ENT.PhysicsWeightScale = 3
-ENT.PhysicsDampingSpeed = 500
 
 ENT.MaxVelocity = 450
 ENT.MaxVelocityReverse = 450

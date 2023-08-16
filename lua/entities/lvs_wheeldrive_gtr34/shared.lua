@@ -11,9 +11,9 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/nissan_skyline_gtr34/gtr.mdl"
 
-ENT.MaxVelocity = 3700
+ENT.MaxVelocity = 2750
 
-ENT.EnginePower = 1900
+ENT.EnginePower = 1700
 ENT.EngineTorque = 190
 
 ENT.TransGears = 6
