@@ -14,7 +14,7 @@ include("sv_components.lua")
 include("sv_wheelsystem.lua")
 include("sh_camera_eyetrace.lua")
 
-ENT.FireTrailScale = 0.5
+ENT.FireTrailScale = 0.35
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
