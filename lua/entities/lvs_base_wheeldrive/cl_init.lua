@@ -50,7 +50,7 @@ function ENT:PreDraw()
 end
 
 function ENT:PreDrawTranslucent()
-	return true
+	return self:GetHP() > self:GetMaxHP()  * 0.5
 end
 
 function ENT:PostDraw()

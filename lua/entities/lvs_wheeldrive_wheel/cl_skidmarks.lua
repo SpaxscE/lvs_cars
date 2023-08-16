@@ -31,7 +31,7 @@ function ENT:GetSkidMarks()
 end
 
 function ENT:StartSkidmark( pos )
-	if self._SkidMarkID or not LVS.ShowTraileffects then return end
+	if self:GetWidth() <= 0 or self._SkidMarkID or not LVS.ShowTraileffects then return end
 
 	local ID = 1
 	for _,_ in ipairs( self:GetSkidMarks() ) do

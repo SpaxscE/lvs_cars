@@ -14,6 +14,8 @@ include("sv_components.lua")
 include("sv_wheelsystem.lua")
 include("sh_camera_eyetrace.lua")
 
+ENT.FireTrailScale = 0.5
+
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
@@ -120,6 +122,8 @@ end
 
 function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
+
+	if self:IsDestroyed() then self:EnableHandbrake() return vector_origin, vector_origin, SIM_NOTHING end
 
 	local RotationAxis = ent:GetRotationAxis()
 

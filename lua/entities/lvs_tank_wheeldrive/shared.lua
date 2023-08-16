@@ -15,14 +15,19 @@ ENT.SteerSpeed = 2
 ENT.SteerReturnSpeed = 4
 
 ENT.PhysicsWeightScale = 2
-ENT.PhysicsDampingSpeed = 500
+ENT.PhysicsDampingSpeed = 1000
 ENT.PhysicsInertia = Vector(6000,6000,1500)
 
 ENT.MaxVelocity = 450
 ENT.MaxVelocityReverse = 450
 
-ENT.EnginePower = 0
-ENT.EngineTorque = 750
+ENT.EnginePower = 200
+ENT.EngineTorque = 200
+
+ENT.TransMinGearHoldTime = 0.5
+ENT.TransShiftSpeed = 0.2
 
 ENT.TransGears = 2
 ENT.TransGearsReverse = 2
+
+ENT.WheelDownForce = 2000
