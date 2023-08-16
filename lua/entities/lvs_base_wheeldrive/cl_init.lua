@@ -86,7 +86,11 @@ function ENT:PostDrawTranslucent()
 end
 
 function ENT:OnChangeGear( oldGear, newGear )
-	self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
+	if self:GetHP() < self:GetMaxHP() * 0.5 and oldGear > newGear then
+		self:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
+	else
+		self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
+	end
 
 	self:SuppressViewPunch( self.TransShiftSpeed )
 end
