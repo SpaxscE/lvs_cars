@@ -6,9 +6,7 @@ function ENT:OnSpawn( PObj )
 	local DriverSeat = self:AddDriverSeat( Vector(-12,-15.2,2), Angle(0,-90,10) )
 	local PassengerSeat = self:AddPassengerSeat( Vector(-2,15.2,12), Angle(0,-90,20) )
 
-	self:AddEngine( Vector(45,0,20) )
-
-	self:AddEngine( Vector(45,0,20) )
+	self:AddEngine( Vector(65,0,20) )
 
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(0,31,26), Angle(0,0,0), Vector(-25,-6,-16), Vector(32,6,8), Vector(-25,-20,-16), Vector(32,42,8) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )

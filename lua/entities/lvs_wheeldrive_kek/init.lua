@@ -5,7 +5,7 @@ include("shared.lua")
 function ENT:OnSpawn( PObj )
 	local DriverSeat = self:AddDriverSeat( Vector(-6,0,0), Angle(0,-90,8) )
 
-	self:AddEngine( Vector(45,0,20) )
+	self:AddEngine( Vector(45,0,30) )
 
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(-6,20,24), Angle(0,0,0), Vector(-7,-6,-12), Vector(20,6,12), Vector(-7,-12,-12), Vector(20,20,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )

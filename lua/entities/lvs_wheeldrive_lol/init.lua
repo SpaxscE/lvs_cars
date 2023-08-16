@@ -6,7 +6,7 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(-12.6,11.5,0), Angle(0,-90,8) )
 	self:AddPassengerSeat( Vector(4,-11,10), Angle(0,-90,28) )
 
-	self:AddEngine( Vector(45,0,20) )
+	self:AddEngine( Vector(45,0,25) )
 
 	local WheelModel = "models/diggercars/PU/356 Coupe/wheel.mdl"
 
