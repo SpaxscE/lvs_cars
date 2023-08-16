@@ -28,6 +28,11 @@ function ENT:OnRemove()
 end
 
 function ENT:OnTakeDamage( dmginfo )
+	local base = self:GetBase()
+
+	if not IsValid( base ) then return end
+
+	base:OnTakeDamage( dmginfo )
 end
 
 function ENT:MakeSpherical( radius )
