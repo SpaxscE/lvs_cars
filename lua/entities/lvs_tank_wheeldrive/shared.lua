@@ -11,8 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.MaxHealth = 4000
 
-ENT.SteerSpeed = 1
-ENT.SteerReturnSpeed = 2
+ENT.SteerSpeed = 2
+ENT.SteerReturnSpeed = 4
 
 ENT.PhysicsWeightScale = 2
 ENT.PhysicsDampingSpeed = 500

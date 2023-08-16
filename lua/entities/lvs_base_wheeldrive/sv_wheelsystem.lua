@@ -65,7 +65,9 @@ function ENT:AddWheel( data )-- pos, ang, model )
 
 	Wheel:SetAlignmentAngle( data.mdl_ang or Angle(0,0,0) )
 
-	Wheel:SetHideModel( data.hide == true )
+	if GetConVar( "developer" ):GetInt() ~= 1 then
+		Wheel:SetHideModel( data.hide == true )
+	end
 
 	Wheel:MakeSpherical( data.radius or -1 )
 
