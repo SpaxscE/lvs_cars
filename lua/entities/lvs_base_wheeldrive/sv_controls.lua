@@ -13,9 +13,9 @@ function ENT:CalcMouseSteer( ply, cmd )
 		Reversed = self:GetReverse()
 	end
 
-	local LocalAngSteer = (self:AngleBetweenNormal( View, ang:Right() ) - 90) / 20
+	local LocalAngSteer = (self:AngleBetweenNormal( View, ang:Right() ) - 90) / self.MouseSteerAngle
 
-	local Steer = (math.min( math.abs( LocalAngSteer ), 1 ) ^ 2 * self:Sign( LocalAngSteer ))
+	local Steer = (math.min( math.abs( LocalAngSteer ), 1 ) ^ self.MouseSteerExponent * self:Sign( LocalAngSteer ))
 
 	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
 end
