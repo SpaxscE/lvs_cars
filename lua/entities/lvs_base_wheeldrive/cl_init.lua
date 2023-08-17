@@ -85,9 +85,27 @@ function ENT:PostDrawTranslucent()
 	Handler:RenderLights( self, self.Lights )
 end
 
+function ENT:DoExhaustBackFire()
+	if not istable( self.ExhaustPositions ) then return end
+
+	for _, data in ipairs( self.ExhaustPositions ) do
+		if math.random(1,2) == 2 then continue end
+
+		timer.Simple( math.Rand(0.5,1), function()
+			local effectdata = EffectData()
+				effectdata:SetOrigin( data.pos )
+				effectdata:SetAngles( data.ang )
+				effectdata:SetEntity( self )
+			util.Effect( "lvs_carexhaust_backfire", effectdata )
+		end )
+	end
+end
+
 function ENT:OnChangeGear( oldGear, newGear )
 	if self:GetHP() < self:GetMaxHP() * 0.5 and oldGear > newGear then
 		self:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
+
+		self:DoExhaustBackFire()
 	else
 		self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
 	end
