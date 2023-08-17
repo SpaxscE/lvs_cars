@@ -225,3 +225,21 @@ function ENT:SteerTo( TargetValue, MaxSteer )
 	self:SetSteer( New * MaxSteer )
 	self:SetPoseParameter( "vehicle_steer", New  )
 end
+
+
+function ENT:OnDriverChanged( Old, New, VehicleIsActive )
+	if VehicleIsActive then return end
+
+	if self:GetBrake() > 0 then
+		self:SetBrake( 0 )
+		self:EnableHandbrake()
+	end
+
+	self:SetReverse( false )
+
+	local LightsHandler = self:GetLightsHandler()
+
+	if not IsValid( LightsHandler ) then return end
+
+	LightsHandler:SetHighActive( false )
+end

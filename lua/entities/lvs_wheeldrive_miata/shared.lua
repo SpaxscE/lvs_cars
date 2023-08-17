@@ -15,8 +15,8 @@ ENT.MaxVelocity = 2300
 
 ENT.EnginePower = 1800
 ENT.EngineTorque = 100
-ENT.EngineIdleRPM = 600
-ENT.EngineMaxRPM = 8000
+ENT.EngineIdleRPM = 800
+ENT.EngineMaxRPM = 7000
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
@@ -61,8 +61,8 @@ ENT.Lights = {
 	{
 		Trigger = "main",
 		ProjectedTextures = {
-			{ pos = Vector(65.4,19.66,30.22), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
-			{ pos = Vector(65.4,-19.66,30.22), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },
+			{ pos = Vector(65.4,19.66,30.22), ang = Angle(7,0,0), colorB = 200, colorA = 150, shadows = true },
+			{ pos = Vector(65.4,-19.66,30.22), ang = Angle(7,0,0), colorB = 200, colorA = 150, shadows = true },
 		},
 	},
 	{

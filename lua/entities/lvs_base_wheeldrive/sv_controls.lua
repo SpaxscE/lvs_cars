@@ -129,7 +129,7 @@ function ENT:CalcLights( ply, cmd )
 
 			if LightsHandler:GetActive() then
 				if self:HasHighBeams() then
-					if (T - (self._LightsPressedTime or 0)) > 0.25 then
+					if (T - (self._LightsPressedTime or 0)) > 0.5 then
 						LightsHandler:SetActive( false )
 						LightsHandler:SetHighActive( false )
 						LightsHandler:SetFogActive( false )

@@ -26,10 +26,11 @@ function ENT:CalcPoseParameters()
 	local clutch = 0
 	local throttle = self:GetThrottle()
 	local engine = self:GetEngine()
+	local engineActive = self:GetEngineActive()
 	local handbrake = self:QuickLerp( "handbrake", self:GetNWHandBrake() and 1 or 0 )
 
 	if IsValid( engine ) then
-		rpm = self:QuickLerp( "rpm", engine:GetRPM() )
+		rpm = self:QuickLerp( "rpm", engineActive and engine:GetRPM() or 0 )
 		gear = engine:GetGear()
 
 		local ClutchActive = engine:GetClutch()
@@ -41,7 +42,9 @@ function ENT:CalcPoseParameters()
 		end
 	end
 
-	self:UpdatePoseParameters( steer, self:QuickLerp( "kmh", kmh ), rpm, throttle, self:GetBrake(), handbrake, clutch, (self:GetReverse() and -gear or gear) )
+	local temperature = self:QuickLerp( "temp", self:QuickLerp( "base_temp", engineActive and 0.5 or 0, 0.025 + throttle * 0.1 ) + (1 - self:GetHP() / self:GetMaxHP()) ^ 2 * 1.25, 0.5 )
+
+	self:UpdatePoseParameters( steer, self:QuickLerp( "kmh", kmh ), rpm, throttle, self:GetBrake(), handbrake, clutch, (self:GetReverse() and -gear or gear), temperature )
 	self:InvalidateBoneCache()
 end
 
