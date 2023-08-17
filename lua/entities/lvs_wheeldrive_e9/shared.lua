@@ -15,6 +15,8 @@ ENT.MaxVelocity = 2600
 
 ENT.EnginePower = 1800
 ENT.EngineTorque = 100
+ENT.EngineIdleRPM = 660
+ENT.EngineMaxRPM = 8000
 
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
@@ -37,6 +39,13 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
 	},
+}
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-91.56,23.47,4.98),
+		ang = Angle(45,180,0),
+	}
 }
 
 ENT.Lights = {

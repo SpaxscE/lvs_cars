@@ -15,6 +15,8 @@ ENT.MaxVelocity = 2750
 
 ENT.EnginePower = 1700
 ENT.EngineTorque = 190
+ENT.EngineIdleRPM = 600
+ENT.EngineMaxRPM = 10000
 
 ENT.TransGears = 6
 ENT.TransGearsReverse = 1
@@ -23,7 +25,7 @@ ENT.WheelPhysicsMass = 120
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/skyline/rb26_4_ex_idle.wav",
+		sound = "lvs/vehicles/skyline/idle.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -31,7 +33,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/skyline/rb26_high.wav",
+		sound = "lvs/vehicles/skyline/high.wav",
 		Volume = 1,
 		Pitch = 50,
 		PitchMul = 75,
@@ -40,10 +42,10 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/skyline/rb26_in_2_onmid.wav",
+		sound = "lvs/vehicles/skyline/mid.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
+		Pitch = 50,
+		PitchMul = 80,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,

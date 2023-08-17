@@ -27,7 +27,7 @@ ENT.WheelPhysicsInertia = Vector(15,12,15)
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/ferrari_365/eng_idle_loop.wav",
+		sound = "lvs/vehicles/boxer6/0900rpm.wav",
 		Volume = 1,
 		Pitch = 70,
 		PitchMul = 30,
@@ -35,16 +35,16 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/ferrari_365/eng_loop.wav",
+		sound = "lvs/vehicles/boxer6/911s_onmid.wav",
 		Volume = 1,
 		Pitch = 80,
-		PitchMul = 110,
+		PitchMul = 50,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/ferrari_365/eng_revdown_loop.wav",
+		sound = "lvs/vehicles/boxer6/911s_onverylow.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,
@@ -52,6 +52,13 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
 	},
+}
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-78.97,23.61,8.38),
+		ang = Angle(19.03,160.83,0.28),
+	}
 }
 
 ENT.Lights = {

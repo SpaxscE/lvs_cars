@@ -48,6 +48,13 @@ ENT.EngineSounds = {
 	},
 }
 
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-75.13,13.86,4.25),
+		ang = Angle(30,180,0),
+	}
+}
+
 ENT.Lights = {
 	{
 		Trigger = "main",

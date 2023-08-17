@@ -15,6 +15,8 @@ ENT.MaxVelocity = 2000
 
 ENT.EnginePower = 500
 ENT.EngineTorque = 140
+ENT.EngineIdleRPM = 660
+ENT.EngineMaxRPM = 8000
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
@@ -40,6 +42,16 @@ ENT.EngineSounds = {
 
 }
 
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-97.46,21.75,6.67),
+		ang = Angle(45,180,0),
+	},
+	{
+		pos = Vector(-97.37,25.12,6.79),
+		ang = Angle(45,180,0),
+	}
+}
 
 ENT.Lights = {
 	{

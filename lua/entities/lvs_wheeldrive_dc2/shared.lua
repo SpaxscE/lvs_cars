@@ -11,19 +11,28 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/DiggerCars/HONDA_INTEGRA_DC2/dc2.mdl"
 
-ENT.MaxVelocity = 2000
+ENT.MaxVelocity = 2400
 
-ENT.EnginePower = 500
-ENT.EngineTorque = 140
+ENT.EnginePower = 800
+ENT.EngineTorque = 160
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 8500
+ENT.EngineIdleRPM = 600
+ENT.EngineMaxRPM = 10000
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-87.35,-16.18,12.93),
+		ang = Angle(0,180,0),
+	}
+}
+
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_idle_loop.wav",
+		sound = "lvs/vehicles/miata/idle.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -31,19 +40,19 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_loop.wav",
+		sound = "lvs/vehicles/miata/rev.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
+		Pitch = 60,
+		PitchMul = 90,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_revdown_loop.wav",
+		sound = "lvs/vehicles/miata/low.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
+		Pitch = 70,
+		PitchMul = 90,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,

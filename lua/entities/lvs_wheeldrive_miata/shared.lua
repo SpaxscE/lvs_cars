@@ -11,17 +11,19 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/mazda_miata/miata.mdl"
 
-ENT.MaxVelocity = 2600
+ENT.MaxVelocity = 2300
 
 ENT.EnginePower = 1800
 ENT.EngineTorque = 100
+ENT.EngineIdleRPM = 600
+ENT.EngineMaxRPM = 8000
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/mercedes_w123/eng_idle_loop.wav",
+		sound = "lvs/vehicles/miata/idle.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -29,23 +31,30 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/mercedes_w123/eng_loop.wav",
+		sound = "lvs/vehicles/miata/rev.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
+		Pitch = 60,
+		PitchMul = 90,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/mercedes_w123/eng_revdown_loop.wav",
+		sound = "lvs/vehicles/miata/low.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
+		Pitch = 70,
+		PitchMul = 90,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
 	},
+}
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-74.54,-19.54,11.03),
+		ang = Angle(0,180,0),
+	}
 }
 
 ENT.Lights = {
