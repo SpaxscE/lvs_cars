@@ -53,7 +53,7 @@ function ENT:PreDraw()
 end
 
 function ENT:PreDrawTranslucent()
-	return self:GetHP() > self:GetMaxHP()  * 0.5
+	return true
 end
 
 function ENT:PostDraw()
@@ -92,7 +92,7 @@ function ENT:DoExhaustBackFire()
 	if not istable( self.ExhaustPositions ) then return end
 
 	for _, data in ipairs( self.ExhaustPositions ) do
-		if math.random(1,2) == 2 then continue end
+		if math.random( 1, math.floor( #self.ExhaustPositions * 0.75 ) ) ~= 1 then continue end
 
 		timer.Simple( math.Rand(0.5,1), function()
 			local effectdata = EffectData()
@@ -100,6 +100,16 @@ function ENT:DoExhaustBackFire()
 				effectdata:SetAngles( data.ang )
 				effectdata:SetEntity( self )
 			util.Effect( "lvs_carexhaust_backfire", effectdata )
+		end )
+	end
+end
+
+function ENT:OnEngineStallBroken()
+	for i = 0,math.random(3,6) do
+		timer.Simple( math.Rand(0,1.5) , function()
+			if not IsValid( self ) then return end
+
+			self:DoExhaustBackFire()
 		end )
 	end
 end

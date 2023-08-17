@@ -16,7 +16,7 @@ ENT.MaxVelocity = 2100
 ENT.EnginePower = 1800
 ENT.EngineTorque = 100
 
-ENT.TransGears = 4
+ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 
 ENT.EngineSounds = {

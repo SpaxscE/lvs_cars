@@ -79,6 +79,7 @@ end )
 
 if SERVER then
 	util.AddNetworkString( "lvs_car_turnsignal" )
+	util.AddNetworkString( "lvs_car_break" )
 
 	net.Receive( "lvs_car_turnsignal", function( len, ply )
 		if not IsValid( ply ) then return end
@@ -89,4 +90,13 @@ if SERVER then
 
 		veh:SetTurnMode( net.ReadInt( 4 ) )
 	end )
+
+else
+	net.Receive("lvs_car_break", function()
+		local ent = net.ReadEntity()
+
+		if not IsValid( ent ) or not isfunction( ent.OnEngineStallBroken ) then return end
+
+		ent:OnEngineStallBroken()
+	end)
 end

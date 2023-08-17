@@ -22,12 +22,14 @@ EFFECT.SmokeMat = {
 function EFFECT:Init( data )
 	local Pos = data:GetOrigin()
 	local Ent = data:GetEntity()
+	local Mag = data:GetMagnitude()
 
-	self.LifeTime = 1
+	self.LifeTime = 0.5 + Mag * 0.5
 	self.DieTime = CurTime() + self.LifeTime
 
 	if not IsValid( Ent ) then return end
 
+	self.Mag = Mag
 	self.Ent = Ent
 	self.Pos = Ent:WorldToLocal( Pos + VectorRand() * 15 )
 	self.RandomSize = math.Rand( 0.8, 1.6 )
@@ -59,10 +61,12 @@ function EFFECT:RenderSmoke()
 
 	local Num = #self.SmokeMat - math.Clamp(math.ceil( Scale * #self.SmokeMat ) - 1,0, #self.SmokeMat - 1)
 
-	local C = 20 + 30 * self.RandomSize
+	local A = (50 + 100 * (1 - self.Mag)) * Scale
+	local C = (20 + 30 * self.RandomSize * self.Mag)
+
 	local Size = (25 + 30 * InvScale) * self.RandomSize
-	local Offset = (self.Vel * InvScale ^ 2) * 0.1
+	local Offset = (self.Vel * InvScale ^ 2) * 0.15
 
 	render.SetMaterial( self.SmokeMat[ Num ] )
-	render.DrawSprite( Pos + Vector(0,0,InvScale ^ 2 * (20 + self.Vel:Length() / 50) * self.RandomSize) - Offset, Size, Size, Color( C, C, C, 50 * Scale) )
+	render.DrawSprite( Pos + Vector(0,0,InvScale ^ 2 * (20 + self.Vel:Length() / 25) * self.RandomSize) - Offset, Size, Size, Color( C, C, C, A ) )
 end

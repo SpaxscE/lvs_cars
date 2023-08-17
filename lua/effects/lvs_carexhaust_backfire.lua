@@ -37,8 +37,21 @@ function EFFECT:Init( data )
 
 	self:SetPos( Pos )
 
+	local dlight = DynamicLight( self.Ent:EntIndex() * math.random(1,4), true )
+	if dlight then
+		dlight.pos = Pos
+		dlight.r = 255
+		dlight.g = 180
+		dlight.b = 100
+		dlight.brightness = 1
+		dlight.Decay = 2000
+		dlight.Size = 300
+		dlight.DieTime = CurTime() + 0.2
+	end
+
 	sound.Play( "lvs/vehicles/generic/ex_backfire_damaged_"..math.Round(math.random(1,3),1)..".ogg", Pos, 75, 100, 1 )
 
+	local vel = self.Ent:GetVelocity()
 	local dir = self.Ent:LocalToWorldAngles( self.Ang ):Forward()
 	local emitter = ParticleEmitter( Pos, false )
 
@@ -48,7 +61,7 @@ function EFFECT:Init( data )
 
 			if not particle then continue end
 
-			particle:SetVelocity( dir * 100 + VectorRand() * 100 )
+			particle:SetVelocity( vel + dir * 100 + VectorRand() * 100 )
 			particle:SetDieTime( math.Rand(0.2,0.4) )
 			particle:SetStartAlpha( 0 )
 			particle:SetEndAlpha( 25 )
@@ -93,11 +106,6 @@ function EFFECT:RenderSmoke()
 	local Pos = self.Ent:LocalToWorld( self.Pos )
 	local Ang = self.Ent:LocalToWorldAngles( self.Ang )
 
-	local C = 20
-	local Size = (10 + 50 * InvScale)
-
-	if not self.Mat then return end
-
 	local FlameSize = 40 * Scale ^ 2
 	render.SetMaterial( self.FireMat )
 	for i = 1, 4 do
@@ -107,6 +115,11 @@ function EFFECT:RenderSmoke()
 	local GlowSize = 80 * Scale ^ 2
 	render.SetMaterial( self.GlowMat )
 	render.DrawSprite( Pos + Ang:Forward() * InvScale * 10, GlowSize, GlowSize, Color(255* InvScale, 150* InvScale,75* InvScale,255* InvScale) )
+
+	if not self.Mat then return end
+
+	local C = 40
+	local Size = (20 + 50 * InvScale)
 
 	render.SetMaterial( self.Mat )
 	render.DrawSprite( Pos + Ang:Forward() * InvScale * 40, Size, Size, Color( C, C, C, 255 * Scale) )

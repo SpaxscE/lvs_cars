@@ -9,6 +9,8 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
+ENT.MaxHealth = 400
+
 ENT.MaxVelocity = 1200
 ENT.MaxVelocityReverse = 500
 

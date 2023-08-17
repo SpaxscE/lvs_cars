@@ -19,6 +19,10 @@ function ENT:OnTakeDamage( dmginfo )
 	if self:GetEngineActive() and self:GetHP() <= self:GetMaxHP() * 0.25 then
 		self:SetThrottle( 0 )
 		self:StopEngine()
+
+		net.Start( "lvs_car_break" )
+			net.WriteEntity( self )
+		net.Broadcast()
 	end
 end
 
