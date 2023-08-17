@@ -12,9 +12,8 @@ include("sv_controls.lua")
 include("sv_controls_handbrake.lua")
 include("sv_components.lua")
 include("sv_wheelsystem.lua")
+include("sv_damage.lua")
 include("sh_camera_eyetrace.lua")
-
-ENT.FireTrailScale = 0.35
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
@@ -85,9 +84,6 @@ function ENT:AlignView( ply )
 
 		ply:SetEyeAngles( Ang )
 	end)
-end
-
-function ENT:TakeCollisionDamage( damage, attacker )
 end
 
 function ENT:PhysicsSimulate( phys, deltatime )
@@ -225,7 +221,6 @@ function ENT:SteerTo( TargetValue, MaxSteer )
 	self:SetSteer( New * MaxSteer )
 	self:SetPoseParameter( "vehicle_steer", New  )
 end
-
 
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	if VehicleIsActive then return end
