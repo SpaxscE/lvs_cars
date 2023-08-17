@@ -102,7 +102,7 @@ function ENT:DoExhaustBackFire()
 end
 
 function ENT:OnChangeGear( oldGear, newGear )
-	if self:GetHP() < self:GetMaxHP() * 0.5 and oldGear > newGear then
+	if self:GetHP() < self:GetMaxHP() * 0.5 and oldGear > newGear and math.random(1,2) == 1 then
 		self:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
 
 		self:DoExhaustBackFire()

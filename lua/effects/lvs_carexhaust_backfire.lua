@@ -37,7 +37,7 @@ function EFFECT:Init( data )
 
 	self:SetPos( Pos )
 
-	sound.Play( "lvs/vehicles/generic/ex_backfire_damaged_"..math.Round(math.random(1,3),1)..".ogg", Pos, 85, 100, 0.5 )
+	sound.Play( "lvs/vehicles/generic/ex_backfire_damaged_"..math.Round(math.random(1,3),1)..".ogg", Pos, 85, 100, 0.3 )
 
 	local dir = self.Ent:LocalToWorldAngles( self.Ang ):Forward()
 	local emitter = ParticleEmitter( Pos, false )
