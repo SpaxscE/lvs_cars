@@ -98,7 +98,7 @@ function EFFECT:RenderSmoke()
 
 	if not self.Mat then return end
 
-	local FlameSize = 20 * Scale ^ 2
+	local FlameSize = 40 * Scale ^ 2
 	render.SetMaterial( self.FireMat )
 	for i = 1, 4 do
 		render.DrawSprite( Pos + Ang:Forward() * InvScale * 5 + VectorRand() * 2, FlameSize, FlameSize, Color( 255, 255, 255, 255 * InvScale) )
