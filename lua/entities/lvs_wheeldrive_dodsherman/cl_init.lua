@@ -9,6 +9,7 @@ ENT.TireSoundTypes = {
 	["skid_wet"] = "common/null.wav",
 }
 
+local sherman_trackhull = Vector(20,20,20)
 local sherman_susdata = {}
 for i = 1,6 do
 	sherman_susdata[i] = { 
@@ -27,12 +28,14 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	for i, v in pairs( sherman_susdata ) do
 		local pos = self:GetAttachment( self:LookupAttachment( sherman_susdata[i].attachment ) ).Pos
 
-		local trace = util.TraceLine( {
+		local trace = util.TraceHull( {
 			start = pos,
 			endpos = pos + self:GetUp() * - 100,
 			filter = self:GetCrosshairFilterEnts(),
+			mins = -sherman_trackhull,
+			maxs = sherman_trackhull,
 		} )
-		local Dist = (pos - trace.HitPos):Length() - 30
+		local Dist = (pos - trace.HitPos):Length() - (30 - sherman_trackhull.z)
 
 		self:SetPoseParameter(sherman_susdata[i].poseparameter, self:QuickLerp( sherman_susdata[i].poseparameter, 12 - Dist, 25 ) )
 	end

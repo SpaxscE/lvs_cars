@@ -4,7 +4,12 @@ ENT.Type            = "anim"
 ENT.DoNotDuplicate = true
 
 function ENT:SetupDataTables()
-	--self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Float",0, "Fuel" )
+
+	if SERVER then
+		self:SetFuel( 100 )
+	end
 end
 
 if SERVER then
