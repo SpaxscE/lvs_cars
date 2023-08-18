@@ -309,10 +309,10 @@ function ENT:WheelsOnGround()
 	for _, ent in pairs( self:GetWheels() ) do
 		if not IsValid( ent ) then continue end
 
-		if not ent:PhysicsOnGround() then
-			return false
+		if ent:PhysicsOnGround() then
+			return true
 		end
 	end
 
-	return true
+	return false
 end

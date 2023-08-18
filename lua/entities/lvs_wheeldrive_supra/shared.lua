@@ -21,8 +21,6 @@ ENT.EngineMaxRPM = 8500
 ENT.TransGears = 6
 ENT.TransGearsReverse = 1
 
-ENT.WheelPhysicsMass = 120
-
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/supra/idle.wav",
