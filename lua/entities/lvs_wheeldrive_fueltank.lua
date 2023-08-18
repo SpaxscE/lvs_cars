@@ -52,7 +52,7 @@ if SERVER then
 
 			if not IsValid( engine ) then return end
 
-			engine:EmitSound("vehicles/jetski/jetski_no_gas_start.wav")
+			engine:EmitSound("vehicles/jetski/jetski_off.wav")
 		end
 	end
 
@@ -69,7 +69,4 @@ function ENT:OnRemove()
 end
 
 function ENT:Draw()
-end
-
-function ENT:DrawTranslucent()
 end

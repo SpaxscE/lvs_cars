@@ -238,3 +238,11 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 
 	LightsHandler:SetHighActive( false )
 end
+
+function ENT:OnRefueled()
+	local FuelTank = self:GetFuelTank()
+
+	if not IsValid( FuelTank ) then return end
+
+	FuelTank:EmitSound( "vehicles/jetski/jetski_no_gas_start.wav" )
+end
