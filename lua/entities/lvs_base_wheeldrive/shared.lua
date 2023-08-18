@@ -81,6 +81,7 @@ function ENT:SetupDataTables()
 	self:AddDT( "Bool", "NWHandBrake" )
 
 	self:AddDT( "Entity", "Engine" )
+	self:AddDT( "Entity", "FuelTank" )
 	self:AddDT( "Entity", "LightsHandler" )
 
 	self:AddDT( "Vector", "AIAimVector" )

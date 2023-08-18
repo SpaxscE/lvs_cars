@@ -1,8 +1,10 @@
 include("shared.lua")
 
-function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature )
+function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel )
 	self:SetPoseParameter( "vehicle_steer", steer )
 	self:SetPoseParameter( "tacho_gauge", engine_rpm / 9000 )
+	self:SetPoseParameter( "temp_gauge", temperature )
+	self:SetPoseParameter( "fuel_gauge", fuel )
 	self:SetPoseParameter( "vehicle_gauge", speed_kmh / 210 )
 	self:SetPoseParameter( "throttle_pedal", throttle )
 	self:SetPoseParameter( "brake_pedal", brake )

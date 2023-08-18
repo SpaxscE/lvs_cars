@@ -28,6 +28,37 @@ function ENT:AddEngine( pos )
 	return Engine
 end
 
+function ENT:AddFuelTank( pos, tanksize, fueltype )
+	if IsValid( self:GetFuelTank() ) then return end
+
+	local FuelTank = ents.Create( "lvs_wheeldrive_fueltank" )
+
+	if not IsValid( FuelTank ) then
+		self:Remove()
+
+		print("LVS: Failed to create fueltank entity. Vehicle terminated.")
+
+		return
+	end
+
+	FuelTank:SetPos( self:LocalToWorld( pos ) )
+	FuelTank:SetAngles( self:GetAngles() )
+	FuelTank:Spawn()
+	FuelTank:Activate()
+	FuelTank:SetParent( self )
+	FuelTank:SetBase( self )
+	FuelTank:SetSize( tanksize or 600 )
+	FuelTank:SetFuelType( fueltype or 0 )
+
+	self:SetFuelTank( FuelTank )
+
+	self:DeleteOnRemove( FuelTank )
+
+	self:TransferCPPI( FuelTank )
+
+	return FuelTank
+end
+
 function ENT:AddLights()
 	if IsValid( self:GetLightsHandler() ) then return end
 

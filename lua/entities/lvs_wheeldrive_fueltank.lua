@@ -5,10 +5,14 @@ ENT.DoNotDuplicate = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Entity",1, "DoorHandler" )
 	self:NetworkVar( "Float",0, "Fuel" )
+	self:NetworkVar( "Float",1, "Size" )
+	self:NetworkVar( "Int",0, "FuelType" )
 
 	if SERVER then
-		self:SetFuel( 100 )
+		self:SetFuel( 1 )
+		self:NetworkVarNotify( "Fuel", self.OnFuelChanged )
 	end
 end
 
@@ -20,10 +24,36 @@ if SERVER then
 	end
 
 	function ENT:Think()
-		return false
+		self:NextThink( CurTime() + 1 )
+
+		local base = self:GetBase()
+
+		if IsValid( base ) and base:GetEngineActive() then
+			self:SetFuel( self:GetFuel() - (1 / self:GetSize()) * base:GetThrottle() ^ 2 )
+		end
+
+		return true
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
+	end
+
+	function ENT:OnFuelChanged( name, old, new)
+		if new == old then return end
+
+		if new <= 0 then
+			local base = self:GetBase()
+
+			if not IsValid( base ) then return end
+
+			base:ShutDownEngine()
+
+			local engine = base:GetEngine()
+
+			if not IsValid( engine ) then return end
+
+			engine:EmitSound("vehicles/jetski/jetski_no_gas_start.wav")
+		end
 	end
 
 	return

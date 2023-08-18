@@ -75,6 +75,10 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 	LVS.SOUNDTYPE_REV_UP = 2
 	LVS.SOUNDTYPE_REV_DOWN = 3
 	LVS.SOUNDTYPE_REV_DN = 3
+
+	LVS.FUELTYPE_PETROL = 0
+	LVS.FUELTYPE_DIESEL = 1
+	LVS.FUELTYPE_ELECTRIC = 2
 end )
 
 if SERVER then
