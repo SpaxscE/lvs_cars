@@ -21,6 +21,7 @@ if SERVER then
 		self:SetMoveType( MOVETYPE_NONE )
 		self:SetSolid( SOLID_NONE )
 		self:DrawShadow( false )
+		debugoverlay.Cross( self:GetPos(), 20, 5, Color( 255, 93, 0 ) )
 	end
 
 	function ENT:Think()
