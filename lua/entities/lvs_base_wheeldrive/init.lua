@@ -219,7 +219,7 @@ function ENT:SteerTo( TargetValue, MaxSteer )
 	local New = (Cur + math.Clamp(Diff,-Rate,Rate))
 
 	self:SetSteer( New * MaxSteer )
-	self:SetPoseParameter( "vehicle_steer", New  )
+	self:UpdatePoseParameters( New )
 end
 
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
