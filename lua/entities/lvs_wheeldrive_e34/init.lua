@@ -53,7 +53,7 @@ function ENT:OnSpawn( PObj )
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
 			SteerAngle = 30,
-			TorqueFactor = 0,
+			TorqueFactor = 0.36,
 			BrakeFactor = 1,
 		},
 		Wheels = {
@@ -70,12 +70,12 @@ function ENT:OnSpawn( PObj )
 			} ),
 		},
 		Suspension = {
-			Height = 10,
+			Height = 13,
 			MaxTravel = 7,
 			ControlArmLength = 25,
-			SpringConstant = 20000,
-			SpringDamping = 2000,
-			SpringRelativeDamping = 2000,
+			SpringConstant = 23000,
+			SpringDamping = 2300,
+			SpringRelativeDamping = 2300,
 		},
 	} )
 
@@ -83,7 +83,7 @@ function ENT:OnSpawn( PObj )
 		Axle = {
 			ForwardAngle = Angle(0,0,0),
 			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 1,
+			TorqueFactor = 0.64,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
@@ -101,7 +101,7 @@ function ENT:OnSpawn( PObj )
 			} ),
 		},
 		Suspension = {
-			Height = 10,
+			Height = 11,
 			MaxTravel = 7,
 			ControlArmLength = 25,
 			SpringConstant = 20000,

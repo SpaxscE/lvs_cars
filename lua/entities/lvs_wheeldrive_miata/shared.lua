@@ -14,7 +14,7 @@ ENT.MDL = "models/diggercars/mazda_miata/miata.mdl"
 ENT.MaxVelocity = 2300
 
 ENT.EnginePower = 1800
-ENT.EngineTorque = 100
+ENT.EngineTorque = 93
 ENT.EngineIdleRPM = 800
 ENT.EngineMaxRPM = 7000
 

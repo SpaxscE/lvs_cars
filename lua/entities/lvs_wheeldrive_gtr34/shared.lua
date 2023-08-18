@@ -14,7 +14,7 @@ ENT.MDL = "models/diggercars/nissan_skyline_gtr34/gtr.mdl"
 ENT.MaxVelocity = 2750
 
 ENT.EnginePower = 1700
-ENT.EngineTorque = 190
+ENT.EngineTorque = 160
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 8500
 

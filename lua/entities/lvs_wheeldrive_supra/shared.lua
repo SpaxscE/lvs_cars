@@ -11,10 +11,10 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/toyota_supra/supra.mdl"
 
-ENT.MaxVelocity = 2750
+ENT.MaxVelocity = 2650
 
-ENT.EnginePower = 1700
-ENT.EngineTorque = 190
+ENT.EnginePower = 1600
+ENT.EngineTorque = 160
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 8500
 
