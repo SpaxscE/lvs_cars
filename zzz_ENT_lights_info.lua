@@ -23,7 +23,7 @@ ENT.Lights = {
 			
 			{ -- full list of variables:
 				pos = Vector(0,0,0),
-				mat = Material( "sprites/light_ignorez" ),
+				mat = "sprites/light_ignorez",
 				width = 50,
 				height = 50,
 				colorR = 255,
