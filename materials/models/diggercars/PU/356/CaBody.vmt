@@ -1,6 +1,0 @@
-"VertexLitGeneric"
-{
-	"$basetexture" "models/DiggerCars/PU/356/CaBodyP_map"
-        "$blendtintbybasealpha"
-        "$blendtintcoloroverbase" "1"
-}
