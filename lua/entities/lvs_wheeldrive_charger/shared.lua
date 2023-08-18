@@ -92,16 +92,16 @@ ENT.Lights = {
 		Trigger = "main+brake+turnleft",
 		SubMaterialID = 26,
 		Sprites = {
-			{ pos = Vector(-102,18,20), width = 80, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = Material( "sprites/lvs/glow_smooth" ) },
-			{ pos = Vector(-102,26,20), width = 60, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = Material( "sprites/lvs/glow_smooth" ) },
+			{ pos = Vector(-102,18,20), width = 80, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = "sprites/lvs/glow_smooth" },
+			{ pos = Vector(-102,26,20), width = 60, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = "sprites/lvs/glow_smooth" },
 		},
 	},
 	{
 		Trigger = "main+brake+turnright",
 		SubMaterialID = 27,
 		Sprites = {
-			{ pos = Vector(-102,-18,20), width = 80, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = Material( "sprites/lvs/glow_smooth" ) },
-			{ pos = Vector(-102,-26,20), width = 60, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = Material( "sprites/lvs/glow_smooth" ) },
+			{ pos = Vector(-102,-18,20), width = 80, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = "sprites/lvs/glow_smooth" },
+			{ pos = Vector(-102,-26,20), width = 60, height = 50, colorG = 0, colorB = 0, colorA = 150, mat = "sprites/lvs/glow_smooth" },
 		},
 	},
 	{

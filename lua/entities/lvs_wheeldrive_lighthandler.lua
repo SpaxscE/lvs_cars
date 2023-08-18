@@ -98,7 +98,7 @@ function ENT:InitializeLights( base )
 			for lightsid, lightsdata in pairs( typedata.Sprites ) do
 				data[typeid].Sprites[ lightsid ].PixVis = util.GetPixelVisibleHandle()
 				data[typeid].Sprites[ lightsid ].pos = lightsdata.pos or vector_origin
-				data[typeid].Sprites[ lightsid ].mat = lightsdata.mat or Material( "sprites/light_ignorez" )
+				data[typeid].Sprites[ lightsid ].mat = isstring( lightsdata.mat ) and Material( lightsdata.mat ) or Material( "sprites/light_ignorez" )
 				data[typeid].Sprites[ lightsid ].width = lightsdata.width or 50
 				data[typeid].Sprites[ lightsid ].height = lightsdata.height or 50
 				data[typeid].Sprites[ lightsid ].colorR = lightsdata.colorR or 255
