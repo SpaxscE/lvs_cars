@@ -487,6 +487,8 @@ function ENT:RenderLights( base, data )
 
 			if visible <= 0.1 then continue end
 
+			if isstring( lightsdata.mat ) then self:InitializeLights( base ) break end
+
 			render.SetMaterial( lightsdata.mat )
 			render.DrawSprite( pos, lightsdata.width, lightsdata.height , Color(lightsdata.colorR,lightsdata.colorG,lightsdata.colorB,lightsdata.colorA*mul*visible^2) )
 		end
