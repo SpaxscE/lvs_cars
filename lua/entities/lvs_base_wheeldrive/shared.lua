@@ -50,6 +50,7 @@ ENT.PhysicsWeightScale = 1
 ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
 ENT.PhysicsInertia = Vector(1500,1500,750)
+ENT.PhysicsDampingMultiplier = 1
 ENT.PhysicsDampingSpeed = 4000
 
 ENT.WheelPhysicsDrag = false
