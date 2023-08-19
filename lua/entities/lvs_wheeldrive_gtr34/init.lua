@@ -9,6 +9,8 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(62,0,35) )
 	self:AddTurboCharger()
 
+	self:AddFuelTank( Vector(-70,0,25), 600, LVS.FUELTYPE_PETROL )
+
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(-15,29,29), Angle(0,0,0), Vector(-8,-6,-16), Vector(46,6,8), Vector(0,-20,-16), Vector(46,52,8) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/skyline/door_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/skyline/door_close.wav" )
