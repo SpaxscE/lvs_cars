@@ -1,0 +1,21 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/DiggerCars/PORSCHE_930Targa/Lights"
+	"$bumpmap" "models/DiggerCars/PORSCHE_930Targa/Lights_nm"
+	"$nocull" "1"
+	"$phong" "1" 
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$phongboost" "0.08" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
