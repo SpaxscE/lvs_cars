@@ -25,8 +25,8 @@ ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/bmw_m5e34/eng_idle_loop.wav",
 		Volume = 1,
-		Pitch = 85,
-		PitchMul = 25,
+		Pitch = 80,
+		PitchMul = 70,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
@@ -40,7 +40,7 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/bmw_m5e34/eng_revdown_loop",
+		sound = "lvs/vehicles/bmw_m5e34/eng_revdown_loop.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,

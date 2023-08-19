@@ -76,9 +76,9 @@ function ENT:OnSpawn( PObj )
 			Height = 13,
 			MaxTravel = 7,
 			ControlArmLength = 25,
-			SpringConstant = 23000,
-			SpringDamping = 2300,
-			SpringRelativeDamping = 2300,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
 		},
 	} )
 
