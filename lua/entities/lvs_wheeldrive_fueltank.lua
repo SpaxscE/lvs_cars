@@ -3,12 +3,6 @@ AddCSLuaFile()
 ENT.Type            = "anim"
 ENT.DoNotDuplicate = true
 
-ENT.MaxHealth = 100
-
-function ENT:GetMaxHP()
-	return self.MaxHealth
-end
-
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 	self:NetworkVar( "Entity",1, "DoorHandler" )
@@ -16,13 +10,15 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Float",0, "Fuel" )
 	self:NetworkVar( "Float",1, "Size" )
 	self:NetworkVar( "Float",2, "HP" )
+	self:NetworkVar( "Float",3, "MaxHP" )
 
 	self:NetworkVar( "Int",0, "FuelType" )
 
 	self:NetworkVar( "Bool",0, "Destroyed" )
 
 	if SERVER then
-		self:SetHP( self:GetMaxHP() )
+		self:SetMaxHP( 100 )
+		self:SetHP( 100 )
 		self:SetFuel( 1 )
 		self:NetworkVarNotify( "Fuel", self.OnFuelChanged )
 	end
@@ -34,6 +30,11 @@ if SERVER then
 		self:SetSolid( SOLID_NONE )
 		self:DrawShadow( false )
 		debugoverlay.Cross( self:GetPos(), 20, 5, Color( 255, 93, 0 ) )
+	end
+
+	function ENT:ExtinguishAndRepair()
+		self:SetHP( self:GetMaxHP() )
+		self:SetDestroyed( false )
 	end
 
 	function ENT:Think()
@@ -51,8 +52,7 @@ if SERVER then
 
 				self:SetFuel( math.max( self:GetFuel() - 0.001, 0 ) )
 			else
-				self:SetHP( self:GetMaxHP() )
-				self:SetDestroyed( false )
+				self:Repair()
 			end
 		else
 			local base = self:GetBase()

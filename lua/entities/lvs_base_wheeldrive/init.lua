@@ -246,3 +246,11 @@ function ENT:OnRefueled()
 
 	FuelTank:EmitSound( "vehicles/jetski/jetski_no_gas_start.wav" )
 end
+
+function ENT:OnMaintenance()
+	local FuelTank = self:GetFuelTank()
+
+	if not IsValid( FuelTank ) then return end
+
+	FuelTank:ExtinguishAndRepair()
+end
