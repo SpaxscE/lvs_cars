@@ -252,3 +252,9 @@ function ENT:OnMaintenance()
 
 	FuelTank:ExtinguishAndRepair()
 end
+
+function ENT:OnSuperCharged( enable )
+end
+
+function ENT:OnTurboCharged( enable )
+end

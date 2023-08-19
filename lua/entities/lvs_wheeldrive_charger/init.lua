@@ -109,3 +109,15 @@ function ENT:OnEngineActiveChanged( Active )
 		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_stop.wav" )
 	end
 end
+
+function ENT:OnSuperCharged( enable )
+	if enable then
+		self:SetBodygroup(10,1)
+		self:SetBodygroup(2,3)
+	else
+		self:SetBodygroup(10,0)
+		self:SetBodygroup(2,0)
+	end
+end
+
+

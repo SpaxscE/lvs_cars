@@ -50,7 +50,17 @@ if SERVER then
 
 		self:SetBase( ent )
 
+		ent:OnTurboCharged( true )
+
 		ent.TurboEnt = self
+	end
+
+	function ENT:OnRemove()
+		local base = self:GetBase()
+
+		if not IsValid( base ) or base.ExplodedAlready then return end
+
+		base:OnTurboCharged( false )
 	end
 
 	return
@@ -59,12 +69,87 @@ end
 function ENT:Initialize()
 end
 
+function ENT:OnEngineActiveChanged( Active )
+	if Active then
+		self:StartSounds()
+	else
+		self:StopSounds()
+	end
+end
+
+function ENT:StartSounds()
+	if self.snd then return end
+
+	self.snd = CreateSound( self, "lvs/vehicles/generic/turbo_loop.wav" )
+	self.snd:PlayEx(0,100)
+end
+
+function ENT:StopSounds()
+	if not self.snd then return end
+
+	self.snd:Stop()
+	self.snd = nil
+end
+
+function ENT:HandleSounds( vehicle, engine )
+	if not self.snd then return end
+
+	if not self.TurboRPM then
+		self.TurboRPM = 0
+	end
+
+	local FT = FrameTime()
+
+	local throttle = engine:GetClutch() and 0 or vehicle:GetThrottle()
+
+	local volume = math.Clamp(((self.TurboRPM - 300) / 150),0,1) * 0.5
+	local pitch = math.min(self.TurboRPM / 3,100)
+
+	if throttle == 0 and (self.TurboRPM > 350) then
+		self:EmitSound("lvs/vehicles/generic/turbo_blowoff"..math.random(1,2)..".wav", 75, 100, volume * LVS.EngineVolume)
+		self.TurboRPM = 0
+	end
+
+	local rpm = engine:GetRPM()
+	local maxRPM = vehicle.EngineMaxRPM
+
+	local ply = LocalPlayer()
+	local doppler = vehicle:CalcDoppler( ply )
+
+	self.TurboRPM = self.TurboRPM + math.Clamp(math.min(rpm / maxRPM,1) * 600 * (0.75 + 0.25 * throttle) - self.TurboRPM,-100 * FT,500 * FT)
+
+	self.snd:ChangeVolume( volume * LVS.EngineVolume )
+	self.snd:ChangePitch( pitch * doppler )
+end
+
 function ENT:Think()
+	local vehicle = self:GetBase()
+
+	if not IsValid( vehicle ) then return end
+
+	local EngineActive = vehicle:GetEngineActive()
+
+	if self._oldEnActive ~= EngineActive then
+		self._oldEnActive = EngineActive
+
+		self:OnEngineActiveChanged( EngineActive )
+	end
+
+	if EngineActive then
+		local engine = vehicle:GetEngine()
+
+		if not IsValid( engine ) then return end
+
+		self:HandleSounds( vehicle, engine )
+	end
 end
 
 function ENT:OnRemove()
+	self:StopSounds()
 end
 
 function ENT:Draw()
+	if IsValid( self:GetBase() ) then return end
+
 	self:DrawModel()
 end
