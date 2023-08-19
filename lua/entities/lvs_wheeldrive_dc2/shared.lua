@@ -17,8 +17,6 @@ ENT.EnginePower = 800
 ENT.EngineTorque = 117
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 8500
-ENT.EngineIdleRPM = 600
-ENT.EngineMaxRPM = 10000
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
@@ -32,7 +30,7 @@ ENT.ExhaustPositions = {
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/miata/idle.wav",
+		sound = "lvs/vehicles/miata/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -40,7 +38,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/miata/rev.wav",
+		sound = "lvs/vehicles/miata/eng_loop.wav",
 		Volume = 1,
 		Pitch = 60,
 		PitchMul = 90,
@@ -49,9 +47,9 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/miata/low.wav",
+		sound = "lvs/vehicles/miata/eng_revdown_loop.wav",
 		Volume = 1,
-		Pitch = 70,
+		Pitch = 60,
 		PitchMul = 90,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
