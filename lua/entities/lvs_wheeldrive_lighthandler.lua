@@ -117,7 +117,7 @@ function ENT:InitializeLights( base )
 				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
 				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or (typedata.Trigger == "high" and "effects/flashlight/soft" or "effects/lvs/car_projectedtexture")
 				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or (typedata.Trigger == "high" and 6000 or 1000)
-				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 25
+				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 65
 				data[typeid].ProjectedTextures[ projid ].fov = projdata.fov or (typedata.Trigger == "high" and 40 or 60)
 				data[typeid].ProjectedTextures[ projid ].colorR = projdata.colorR or 255
 				data[typeid].ProjectedTextures[ projid ].colorG = projdata.colorG or 255
