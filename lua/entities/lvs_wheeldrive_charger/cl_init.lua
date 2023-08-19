@@ -19,4 +19,8 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	}
 
 	self:SetPoseParameter( "gear",  self:QuickLerp( "gear", (GearIDtoPose[ gear ] or 1) ) )
+
+	self:SetPoseParameter( "hour", os.date( "%H" ) )
+	self:SetPoseParameter( "minute", os.date( "%M" ) )
+	self:SetPoseParameter( "second", os.date( "%S" ) )
 end
