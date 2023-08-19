@@ -27,7 +27,7 @@ ENT.WheelPhysicsInertia = Vector(15,12,15)
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/boxer6/0900rpm.wav",
+		sound = "lvs/vehicles/boxer6/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 70,
 		PitchMul = 30,
@@ -35,7 +35,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/boxer6/911s_onmid.wav",
+		sound = "lvs/vehicles/boxer6/eng_loop.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 50,
@@ -44,10 +44,10 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/boxer6/911s_onverylow.wav",
+		sound = "lvs/vehicles/boxer6/eng_revdown_loop.wav",
 		Volume = 1,
 		Pitch = 80,
-		PitchMul = 110,
+		PitchMul = 50,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
