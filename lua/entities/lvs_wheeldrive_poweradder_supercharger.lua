@@ -69,18 +69,18 @@ end
 function ENT:Initialize()
 end
 
-function ENT:OnEngineActiveChanged( Active )
+function ENT:OnEngineActiveChanged( Active, soundname )
 	if Active then
-		self:StartSounds()
+		self:StartSounds( soundname )
 	else
 		self:StopSounds()
 	end
 end
 
-function ENT:StartSounds()
+function ENT:StartSounds( soundname )
 	if self.snd then return end
 
-	self.snd = CreateSound( self, "lvs/vehicles/generic/supercharger_loop.wav" )
+	self.snd = CreateSound( self, soundname )
 	self.snd:PlayEx(0,100)
 end
 
@@ -115,7 +115,7 @@ function ENT:Think()
 	if self._oldEnActive ~= EngineActive then
 		self._oldEnActive = EngineActive
 
-		self:OnEngineActiveChanged( EngineActive )
+		self:OnEngineActiveChanged( EngineActive, vehicle.SuperChargerSound )
 	end
 
 	if EngineActive then

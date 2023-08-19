@@ -19,9 +19,6 @@ include("sh_camera_eyetrace.lua")
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
 
-ENT.AllowSuperCharger = true
-ENT.AllowTurbo = true
-
 DEFINE_BASECLASS( "lvs_base" )
 
 local function SetMinimumAngularVelocityTo( new )
