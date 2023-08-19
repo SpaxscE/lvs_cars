@@ -35,6 +35,8 @@ function ENT:OnSpawn( PObj )
 		LightsHandler:SetDoorHandler( DoorHandler )
 	end
 
+	self:AddFuelTank( Vector(-86,0,19.5), 600, LVS.FUELTYPE_PETROL )
+
 	local WheelModel = "models/diggercars/dodge_charger/wh.mdl"
 
 	local FrontAxle = self:DefineAxle( {
