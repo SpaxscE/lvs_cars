@@ -36,7 +36,7 @@ ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/gene
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/skyline/idle.wav",
+		sound = "lvs/vehicles/skyline/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -44,7 +44,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/skyline/high.wav",
+		sound = "lvs/vehicles/skyline/eng_loop.wav",
 		Volume = 1,
 		Pitch = 50,
 		PitchMul = 75,
@@ -53,10 +53,10 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/skyline/mid.wav",
+		sound = "lvs/vehicles/skyline/eng_revdown_loop.wav",
 		Volume = 1,
 		Pitch = 50,
-		PitchMul = 80,
+		PitchMul = 75,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
