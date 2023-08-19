@@ -20,20 +20,32 @@ end
 
 function ENT:CalcPoseParameters()
 	local steer = self:GetSteer() /  self:GetMaxSteerAngle()
+
 	local kmh = math.Round( self:GetVelocity():Length() * 0.09144, 0 )
+
+	local lights = self:GetLightsHandler()
+	local ammeter = 0.5
+
 	local rpm = 0
+	local oil = 0.25
+
 	local gear = 1
 	local clutch = 0
+
 	local throttle = self:GetThrottle()
+
 	local engine = self:GetEngine()
 	local engineActive = self:GetEngineActive()
+
 	local fuel = 1
 	local fueltank = self:GetFuelTank()
+
 	local handbrake = self:QuickLerp( "handbrake", self:GetNWHandBrake() and 1 or 0 )
 
 	if IsValid( engine ) then
 		rpm = self:QuickLerp( "rpm", engineActive and engine:GetRPM() or 0 )
 		gear = engine:GetGear()
+		oil = self:QuickLerp( "oil", engineActive and math.min( 0.2 + (rpm / self.EngineMaxRPM) * 1.25, 1 ) or 0, 0.1 ) ^ 2
 
 		local ClutchActive = engine:GetClutch()
 
@@ -44,13 +56,24 @@ function ENT:CalcPoseParameters()
 		end
 	end
 
+	if IsValid( lights ) then
+		local Available = 0.5 + (rpm / self.EngineMaxRPM) * 0.25
+
+		local Use1 = lights:GetActive() and 0.1 or 0
+		local Use2 = lights:GetHighActive() and 0.15 or 0
+		local Use3 = lights:GetFogActive() and 0.05 or 0
+		local Use4 = (self:GetTurnMode() ~= 0 and  self:GetTurnFlasher()) and 0.03 or 0
+
+		ammeter = self:QuickLerp( "ammeter", math.max( Available - Use1 - Use2 - Use3 - Use4, 0 ), math.Rand(1,10) )
+	end
+
 	if IsValid( fueltank ) then
 		fuel = self:QuickLerp( "fuel", fueltank:GetFuel() )
 	end
 
 	local temperature = self:QuickLerp( "temp", self:QuickLerp( "base_temp", engineActive and 0.5 or 0, 0.025 + throttle * 0.1 ) + (1 - self:GetHP() / self:GetMaxHP()) ^ 2 * 1.25, 0.5 )
 
-	self:UpdatePoseParameters( steer, self:QuickLerp( "kmh", kmh ), rpm, throttle, self:GetBrake(), handbrake, clutch, (self:GetReverse() and -gear or gear), temperature, fuel )
+	self:UpdatePoseParameters( steer, self:QuickLerp( "kmh", kmh ), rpm, throttle, self:GetBrake(), handbrake, clutch, (self:GetReverse() and -gear or gear), temperature, fuel, oil, ammeter )
 	self:InvalidateBoneCache()
 end
 
