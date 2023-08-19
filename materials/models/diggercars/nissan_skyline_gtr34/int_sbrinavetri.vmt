@@ -1,0 +1,26 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/diggercars/nissan_skyline_gtr34/INT_Sbrinavetri"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$phongboost" "0.08" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
