@@ -5,7 +5,7 @@ ENT.Type            = "anim"
 ENT.PrintName = "Gas Pump"
 ENT.Author = "Luna"
 ENT.Information = "Refills Fuel Tanks"
-ENT.Category = "[LVS]"
+ENT.Category = "[LVS] - Cars - Items"
 
 ENT.Spawnable		= true
 ENT.AdminOnly		= false
