@@ -13,7 +13,7 @@ ENT.MDL = "models/diggercars/dodge_charger/charger.mdl"
 
 ENT.MaxVelocity = 2100
 
-ENT.EnginePower = 1300
+ENT.EnginePower = 1200
 ENT.EngineTorque = 135
 ENT.EngineIdleRPM = 750
 ENT.EngineMaxRPM = 5000
@@ -34,7 +34,7 @@ ENT.EngineSounds = {
 		sound = "lvs/vehicles/dodge_charger/eng_loop.wav",
 		Volume = 1,
 		Pitch = 60,
-		PitchMul = 90,
+		PitchMul = 110,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
@@ -43,7 +43,7 @@ ENT.EngineSounds = {
 		sound = "lvs/vehicles/dodge_charger/eng_revdown_loop.wav",
 		Volume = 1,
 		Pitch = 60,
-		PitchMul = 90,
+		PitchMul = 110,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
