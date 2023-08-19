@@ -28,7 +28,7 @@ function ENT:GetAimVector()
 
 	local pod = self:GetDriverSeat()
 
-	if not IsValid( pod ) then return self:Forward() end
+	if not IsValid( pod ) then return self:GetForward() end
 
 	local Driver = self:GetDriver()
 

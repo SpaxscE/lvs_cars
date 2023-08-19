@@ -356,8 +356,44 @@ function ENT:Think()
 	end
 end
 
+function ENT:RemoveFireSound()
+	if self.FireBurnSND then
+		self.FireBurnSND:Stop()
+		self.FireBurnSND = nil
+	end
+
+	self.ShouldStopFire = nil
+end
+
+function ENT:StopFireSound()
+	if self.ShouldStopFire or not self.FireBurnSND then return end
+
+	self.ShouldStopFire = true
+
+	self:EmitSound("ambient/fire/mtov_flame2.wav")
+
+	self.FireBurnSND:ChangeVolume( 0, 0.5 )
+
+	timer.Simple( 1, function()
+		if not IsValid( self ) then return end
+
+		self:RemoveFireSound()
+	end )
+end
+
+function ENT:StartFireSound()
+	if self.ShouldStopFire or self.FireBurnSND then return end
+
+	self.FireBurnSND = CreateSound( self, "ambient/fire/firebig.wav" )
+	self.FireBurnSND:PlayEx(0,100)
+	self.FireBurnSND:ChangeVolume( LVS.EngineVolume, 1 )
+
+	self:EmitSound("ambient/fire/ignite.wav")
+end
+
 function ENT:OnRemove()
 	self:StopSounds()
+	self:RemoveFireSound()
 end
 
 function ENT:Draw()
@@ -392,7 +428,15 @@ function ENT:DamageFX( vehicle )
 	local HP = vehicle:GetHP()
 	local MaxHP = vehicle:GetMaxHP() 
 
-	if HP <= 0 or HP > MaxHP * 0.5 or (self.nextDFX or 0) > T then return end
+	if HP <= 0 or HP > MaxHP * 0.5 then self:StopFireSound() return end
+
+	if HP > MaxHP * 0.25 then
+		self:StopFireSound()
+	else
+		self:StartFireSound()
+	end
+
+	if (self.nextDFX or 0) > T then return end
 
 	self.nextDFX = T + 0.05
 

@@ -118,7 +118,7 @@ function EFFECT:RenderFire()
 	local InvScale = 1 - Scale
 
 	render.SetMaterial( self.GlowMat )
-	render.DrawSprite( Pos + Vector(0,0,InvScale ^ 2 * 10), 150 * InvScale, 150 * InvScale, Color( 255, 150, 75, 255) )
+	render.DrawSprite( Pos + Vector(0,0,InvScale ^ 2 * 10), 100 * InvScale, 100 * InvScale, Color( 255, 150, 75, 255) )
 
 	local Num = #self.FireMat - math.Clamp(math.ceil( Scale * #self.FireMat ) - 1,0, #self.FireMat - 1)
 
