@@ -18,6 +18,9 @@ function ENT:IsEngineStartAllowed()
 end
 
 function ENT:OnTakeDamage( dmginfo )
+	self.LastAttacker = dmginfo:GetAttacker() 
+	self.LastInflictor = dmginfo:GetInflictor()
+
 	BaseClass.OnTakeDamage( self, dmginfo )
 
 	if self:GetEngineActive() and self:GetHP() <= self:GetMaxHP() * 0.25 then
@@ -101,4 +104,10 @@ end
 
 function ENT:OnExploded()
 	self:Ignite( 30 )
+
+	local PhysObj = self:GetPhysicsObject()
+
+	if not IsValid( PhysObj ) then return end
+
+	PhysObj:SetVelocity( self:GetVelocity() + Vector(math.random(-5,5),math.random(-5,5),math.random(150,250)) )
 end

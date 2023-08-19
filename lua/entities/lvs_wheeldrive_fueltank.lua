@@ -46,12 +46,14 @@ if SERVER then
 			if not IsValid( Base ) then return end
 
 			if self:GetFuel() > 0 then
-				self:NextThink( CurTime() + 0.1 )
+				local dmg = DamageInfo()
+				dmg:SetDamage( 10 )
+				dmg:SetAttacker( Base.LastAttacker or game.GetWorld() )
+				dmg:SetInflictor( Base.LastInflictor or game.GetWorld() )
+				dmg:SetDamageType( DMG_BURN )
+				Base:TakeDamageInfo( dmg )
 
-				Base:TakeDamage( 0.99 )
-
-				self:SetFuel( math.max( self:GetFuel() - 0.001, 0 ) )
-
+				self:SetFuel( math.max( self:GetFuel() - 0.01, 0 ) )
 			else
 				self:SetDestroyed( false )
 			end

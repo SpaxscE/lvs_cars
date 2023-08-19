@@ -62,6 +62,8 @@ function ENT:AddFuelTank( pos, tanksize, fueltype )
 		mins = Vector(-15,-15,-5),
 		maxs =  Vector(15,15,5),
 		Callback = function( tbl, ent, dmginfo )
+			if not IsValid( FuelTank ) then return end
+
 			FuelTank:OnTakeDamage( dmginfo )
 		end
 	} )
