@@ -95,8 +95,6 @@ function ENT:Explode()
 
 	self:StopMotionController()
 
-	self:SetlvsReady( false )
-
 	self.DoNotDuplicate = true
 
 	self:OnExploded()
