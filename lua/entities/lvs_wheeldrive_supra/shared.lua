@@ -16,14 +16,14 @@ ENT.MaxVelocity = 2650
 ENT.EnginePower = 1600
 ENT.EngineTorque = 160
 ENT.EngineIdleRPM = 1000
-ENT.EngineMaxRPM = 8500
+ENT.EngineMaxRPM = 7000
 
 ENT.TransGears = 6
 ENT.TransGearsReverse = 1
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/supra/idle.wav",
+		sound = "lvs/vehicles/supra/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 45,
 		PitchMul = 25,
@@ -31,7 +31,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/supra/high.wav",
+		sound = "lvs/vehicles/supra/eng_loop.wav",
 		Volume = 1,
 		Pitch = 40,
 		PitchMul = 65,
@@ -40,10 +40,10 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/supra/low.wav",
+		sound = "lvs/vehicles/supra/eng_revdown_loop.wav",
 		Volume = 1,
-		Pitch = 50,
-		PitchMul = 80,
+		Pitch = 40,
+		PitchMul = 65,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
