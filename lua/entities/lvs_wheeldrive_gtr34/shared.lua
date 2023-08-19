@@ -23,6 +23,17 @@ ENT.TransGearsReverse = 1
 
 ENT.WheelPhysicsMass = 120
 
+--[[
+--edit sounds here @digger
+
+ENT.AllowSuperCharger = true
+ENT.SuperChargerSound = "lvs/vehicles/generic/supercharger_loop.wav"
+
+ENT.AllowTurbo = true
+ENT.TurboSound = "lvs/vehicles/generic/turbo_loop.wav"
+ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff1.wav"}
+]]
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/skyline/idle.wav",
