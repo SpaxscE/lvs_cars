@@ -37,8 +37,8 @@ ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/boxer6/eng_loop.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 50,
+		Pitch = 50,
+		PitchMul = 80,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
@@ -46,8 +46,8 @@ ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/boxer6/eng_revdown_loop.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 50,
+		Pitch = 50,
+		PitchMul = 80,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
