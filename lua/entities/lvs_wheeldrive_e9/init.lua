@@ -16,6 +16,9 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
+	local FuelTank = self:AddFuelTank( Vector(-75,0,12), 600, LVS.FUELTYPE_PETROL )
+	--FuelTank:SetDoorHandler( FuelCap )
+
 	local WheelModel = "models/diggercars/bmw_e9/e9_wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {

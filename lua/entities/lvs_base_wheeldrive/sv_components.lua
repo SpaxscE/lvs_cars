@@ -56,6 +56,16 @@ function ENT:AddFuelTank( pos, tanksize, fueltype )
 
 	self:TransferCPPI( FuelTank )
 
+	self:AddDS( {
+		pos = pos,
+		ang = Angle(0,0,0),
+		mins = Vector(-15,-15,-5),
+		maxs =  Vector(15,15,5),
+		Callback = function( tbl, ent, dmginfo )
+			FuelTank:OnTakeDamage( dmginfo )
+		end
+	} )
+
 	return FuelTank
 end
 

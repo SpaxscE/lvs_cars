@@ -4,6 +4,8 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	self:SetPoseParameter( "vehicle_steer", steer )
 	self:SetPoseParameter( "tacho_gauge", engine_rpm / 8000 )
 	self:SetPoseParameter( "vehicle_gauge", speed_kmh / 310 )
+	self:SetPoseParameter( "temp_gauge", temperature )
+	self:SetPoseParameter( "fuel_gauge", fuel )
 	self:SetPoseParameter( "throttle_pedal", throttle )
 	self:SetPoseParameter( "brake_pedal", brake )
 	self:SetPoseParameter( "handbrake_pedal", handbrake )
