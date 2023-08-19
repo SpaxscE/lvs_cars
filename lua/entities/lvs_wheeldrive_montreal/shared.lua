@@ -11,19 +11,19 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/alfa_montreal/montreal.mdl"
 
-ENT.MaxVelocity = 2600
+ENT.MaxVelocity = 2500
 
 ENT.EnginePower = 1800
-ENT.EngineTorque = 100
+ENT.EngineTorque = 150
 ENT.EngineIdleRPM = 900
 ENT.EngineMaxRPM = 7000
 
-ENT.TransGears = 4
+ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/dodge_charger/engine_00791.wav",
+		sound = "lvs/vehicles/montreal/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -31,19 +31,19 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/dodge_charger/engine_02021.wav",
+		sound = "lvs/vehicles/montreal/eng_loop.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 90,
+		Pitch = 55,
+		PitchMul = 65,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
 	},
 	{
-		sound = "lvs/vehicles/dodge_charger/engine_01835.wav",
+		sound = "lvs/vehicles/montreal/eng_revdown_loop.wav",
 		Volume = 1,
-		Pitch = 80,
-		PitchMul = 110,
+		Pitch = 55,
+		PitchMul = 65,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
