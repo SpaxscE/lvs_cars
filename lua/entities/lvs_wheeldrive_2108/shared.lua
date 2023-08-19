@@ -14,7 +14,7 @@ ENT.MDL = "models/DiggerCars/VAZ 2108 Sport/v1.mdl"
 ENT.MaxVelocity = 2200
 
 ENT.EnginePower = 600
-ENT.EngineTorque = 235
+ENT.EngineTorque = 170
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
