@@ -59,10 +59,7 @@ function ENT:PreDraw()
 end
 
 function ENT:PreDrawTranslucent()
-	return true
-end
-
-function ENT:PostDraw()
+	return LocalPlayer():GetPos():DistToSqr( self:GetPos() ) < 300000
 end
 
 function ENT:Think()

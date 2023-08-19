@@ -231,12 +231,6 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	end
 
 	self:SetReverse( false )
-
-	local LightsHandler = self:GetLightsHandler()
-
-	if not IsValid( LightsHandler ) then return end
-
-	LightsHandler:SetHighActive( false )
 end
 
 function ENT:OnRefueled()

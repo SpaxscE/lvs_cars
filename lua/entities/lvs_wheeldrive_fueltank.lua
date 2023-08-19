@@ -51,8 +51,9 @@ if SERVER then
 				Base:TakeDamage( 0.99 )
 
 				self:SetFuel( math.max( self:GetFuel() - 0.001, 0 ) )
+
 			else
-				self:Repair()
+				self:SetDestroyed( false )
 			end
 		else
 			local base = self:GetBase()
@@ -80,7 +81,6 @@ if SERVER then
 
 		if NewHealth <= 0 then
 			self:SetDestroyed( true )
-			self:EmitSound("ambient/fire/ignite.wav")
 		end
 	end
 
@@ -109,20 +109,22 @@ function ENT:Initialize()
 end
 
 function ENT:RemoveFireSound()
-	if self.snd then
-		self.snd:Stop()
-		self.snd = nil
+	if self.FireBurnSND then
+		self.FireBurnSND:Stop()
+		self.FireBurnSND = nil
 	end
 
-	self.stopped = nil
+	self.ShouldStopFire = nil
 end
 
 function ENT:StopFireSound()
-	if self.stopped or not self.snd then return end
+	if self.ShouldStopFire or not self.FireBurnSND then return end
 
-	self.stopped = true
+	self.ShouldStopFire = true
 
-	self.snd:ChangeVolume( 0, 0.5 )
+	self:EmitSound("ambient/fire/mtov_flame2.wav")
+
+	self.FireBurnSND:ChangeVolume( 0, 0.5 )
 
 	timer.Simple( 1, function()
 		if not IsValid( self ) then return end
@@ -132,11 +134,13 @@ function ENT:StopFireSound()
 end
 
 function ENT:StartFireSound()
-	if self.stopped or self.snd then return end
+	if self.ShouldStopFire or self.FireBurnSND then return end
 
-	self.snd = CreateSound( self, "ambient/fire/fire_med_loop1.wav" )
-	self.snd:PlayEx(0,100)
-	self.snd:ChangeVolume( LVS.EngineVolume, 1 )
+	self.FireBurnSND = CreateSound( self, "ambient/fire/firebig.wav" )
+	self.FireBurnSND:PlayEx(0,100)
+	self.FireBurnSND:ChangeVolume( LVS.EngineVolume, 1 )
+
+	self:EmitSound("ambient/fire/gascan_ignite1.wav")
 end
 
 function ENT:OnRemove()
@@ -151,7 +155,7 @@ function ENT:Think()
 end
 
 function ENT:DamageFX()
-	if not self:GetDestroyed() then
+	if not self:GetDestroyed() or self:GetFuel() <= 0  then
 		self:StopFireSound()
 
 		return

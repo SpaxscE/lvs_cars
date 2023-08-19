@@ -285,6 +285,8 @@ function ENT:AlignWheel( Wheel )
 
 	local Axle = self:GetAxleData( ID )
 
+	if not Axle.ForwardAngle then return false end
+
 	local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
 
 	AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
