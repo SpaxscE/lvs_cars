@@ -30,9 +30,7 @@ if SERVER then
 		return false
 	end
 
-	function ENT:PhysicsCollide( data )
-		local ent = data.HitEntity
-
+	function ENT:LinkTo( ent )
 		if not IsValid( ent ) or not ent.LVS or not ent.AllowTurbo or IsValid( ent.TurboEnt ) then return end
 
 		local engine = ent:GetEngine()
@@ -53,6 +51,10 @@ if SERVER then
 		ent:OnTurboCharged( true )
 
 		ent.TurboEnt = self
+	end
+
+	function ENT:PhysicsCollide( data )
+		self:LinkTo( data.HitEntity )
 	end
 
 	function ENT:OnRemove()

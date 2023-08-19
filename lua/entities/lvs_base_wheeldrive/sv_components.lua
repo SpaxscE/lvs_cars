@@ -91,3 +91,47 @@ function ENT:AddLights()
 
 	self:SetLightsHandler( LightHandler )
 end
+
+function ENT:AddTurboCharger()
+	local Turbo = ents.Create( "lvs_wheeldrive_poweradder_turbo" )
+
+	if not IsValid( Turbo ) then
+		self:Remove()
+
+		print("LVS: Failed to create turbocharger entity. Vehicle terminated.")
+
+		return
+	end
+
+	Turbo:SetPos( self:GetPos() )
+	Turbo:SetAngles( self:GetAngles() )
+	Turbo:Spawn()
+	Turbo:Activate()
+	Turbo:LinkTo( self )
+
+	self:TransferCPPI( Turbo )
+
+	return Turbo
+end
+
+function ENT:AddSuperCharger()
+	local SuperCharger = ents.Create( "lvs_wheeldrive_poweradder_supercharger" )
+
+	if not IsValid( SuperCharger ) then
+		self:Remove()
+
+		print("LVS: Failed to create supercharger entity. Vehicle terminated.")
+
+		return
+	end
+
+	SuperCharger:SetPos( self:GetPos() )
+	SuperCharger:SetAngles( self:GetAngles() )
+	SuperCharger:Spawn()
+	SuperCharger:Activate()
+	SuperCharger:LinkTo( self )
+
+	self:TransferCPPI( SuperCharger )
+
+	return SuperCharger
+end
