@@ -11,7 +11,7 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/alfa_montreal/montreal.mdl"
 
-ENT.MaxVelocity = 2500
+ENT.MaxVelocity = 2400
 
 ENT.EnginePower = 1800
 ENT.EngineTorque = 150
@@ -34,7 +34,7 @@ ENT.EngineSounds = {
 		sound = "lvs/vehicles/montreal/eng_loop.wav",
 		Volume = 1,
 		Pitch = 55,
-		PitchMul = 65,
+		PitchMul = 60,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_UP,
 		UseDoppler = true,
@@ -43,7 +43,7 @@ ENT.EngineSounds = {
 		sound = "lvs/vehicles/montreal/eng_revdown_loop.wav",
 		Volume = 1,
 		Pitch = 55,
-		PitchMul = 65,
+		PitchMul = 60,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_REV_DOWN,
 		UseDoppler = true,
