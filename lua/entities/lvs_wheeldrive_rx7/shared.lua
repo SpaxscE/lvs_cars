@@ -15,15 +15,15 @@ ENT.MaxVelocity = 2600
 
 ENT.EnginePower = 1800
 ENT.EngineTorque = 100
-ENT.EngineIdleRPM = 600
-ENT.EngineMaxRPM = 8000
+ENT.EngineIdleRPM = 800
+ENT.EngineMaxRPM = 7000
 
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/rx7/wank_idle.wav",
+		sound = "lvs/vehicles/rx7/eng_idle_loop.wav",
 		Volume = 1,
 		Pitch = 85,
 		PitchMul = 25,
@@ -31,7 +31,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/rx7/wank.wav",
+		sound = "lvs/vehicles/rx7/eng_loop.wav",
 		Volume = 1,
 		Pitch = 80,
 		PitchMul = 110,
