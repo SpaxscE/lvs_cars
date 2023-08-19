@@ -29,7 +29,7 @@ ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/boxer6/eng_idle_loop.wav",
 		Volume = 1,
-		Pitch = 70,
+		Pitch = 55,
 		PitchMul = 30,
 		SoundLevel = 75,
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
