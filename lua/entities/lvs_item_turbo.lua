@@ -2,8 +2,8 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.PrintName = "Supercharger"
-ENT.Author = "Digger"
+ENT.PrintName = "Turbo"
+ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars - Items"
 
@@ -20,7 +20,7 @@ end
 
 if SERVER then
 	function ENT:Initialize()	
-		self:SetModel("models/diggercars/dodge_charger/blower.mdl")
+		self:SetModel("models/diggercars/dodge_charger/turbo.mdl")
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:PhysWake()
@@ -31,7 +31,7 @@ if SERVER then
 	end
 
 	function ENT:LinkTo( ent )
-		if not IsValid( ent ) or not ent.LVS or not ent.AllowSuperCharger or IsValid( ent.SuperChargerEnt ) then return end
+		if not IsValid( ent ) or not ent.LVS or not ent.AllowTurbo or IsValid( ent.TurboEnt ) then return end
 
 		local engine = ent:GetEngine()
 
@@ -48,9 +48,9 @@ if SERVER then
 
 		self:SetBase( ent )
 
-		ent:OnSuperCharged( true )
-	
-		ent.SuperChargerEnt = self
+		ent:OnTurboCharged( true )
+
+		ent.TurboEnt = self
 	end
 
 	function ENT:PhysicsCollide( data )
@@ -62,7 +62,7 @@ if SERVER then
 
 		if not IsValid( base ) or base.ExplodedAlready then return end
 
-		base:OnSuperCharged( false )
+		base:OnTurboCharged( false )
 	end
 
 	return
@@ -96,15 +96,36 @@ end
 function ENT:HandleSounds( vehicle, engine )
 	if not self.snd then return end
 
+	if not self.TurboRPM then
+		self.TurboRPM = 0
+	end
+
+	local FT = FrameTime()
+
 	local throttle = engine:GetClutch() and 0 or vehicle:GetThrottle()
-	local volume = (0.2 + math.max( math.sin( math.rad( ((engine:GetRPM() - vehicle.EngineIdleRPM) / (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM)) * 90 ) ), 0 ) * 0.8) * throttle
-	local pitch = engine:GetRPM() / vehicle.EngineMaxRPM
+
+	local volume = math.Clamp(((self.TurboRPM - 300) / 300),0,1)
+	local pitch = math.min(self.TurboRPM / 3,150)
+
+	if throttle == 0 and (self.TurboRPM > 350) then
+		if istable( vehicle.TurboBlowOff ) then
+			self:EmitSound( vehicle.TurboBlowOff[ math.random( 1, #vehicle.TurboBlowOff ) ], 75, 100, volume * LVS.EngineVolume )
+		else
+			self:EmitSound( vehicle.TurboBlowOff, 75, 100, volume * LVS.EngineVolume )
+		end
+		self.TurboRPM = 0
+	end
+
+	local rpm = engine:GetRPM()
+	local maxRPM = vehicle.EngineMaxRPM
 
 	local ply = LocalPlayer()
 	local doppler = vehicle:CalcDoppler( ply )
 
+	self.TurboRPM = self.TurboRPM + math.Clamp(math.min(rpm / maxRPM,1) * 600 * (0.75 + 0.25 * throttle) - self.TurboRPM,-100 * FT,500 * FT)
+
 	self.snd:ChangeVolume( volume * LVS.EngineVolume )
-	self.snd:ChangePitch( (60 + pitch * 85) * doppler )
+	self.snd:ChangePitch( pitch * doppler )
 end
 
 function ENT:Think()
@@ -117,7 +138,7 @@ function ENT:Think()
 	if self._oldEnActive ~= EngineActive then
 		self._oldEnActive = EngineActive
 
-		self:OnEngineActiveChanged( EngineActive, vehicle.SuperChargerSound )
+		self:OnEngineActiveChanged( EngineActive, vehicle.TurboSound )
 	end
 
 	if EngineActive then

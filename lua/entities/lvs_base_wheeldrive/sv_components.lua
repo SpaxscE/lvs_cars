@@ -93,7 +93,7 @@ function ENT:AddLights()
 end
 
 function ENT:AddTurboCharger()
-	local Turbo = ents.Create( "lvs_wheeldrive_poweradder_turbo" )
+	local Turbo = ents.Create( "lvs_item_turbo" )
 
 	if not IsValid( Turbo ) then
 		self:Remove()
@@ -115,7 +115,7 @@ function ENT:AddTurboCharger()
 end
 
 function ENT:AddSuperCharger()
-	local SuperCharger = ents.Create( "lvs_wheeldrive_poweradder_supercharger" )
+	local SuperCharger = ents.Create( "lvs_item_compressor" )
 
 	if not IsValid( SuperCharger ) then
 		self:Remove()
