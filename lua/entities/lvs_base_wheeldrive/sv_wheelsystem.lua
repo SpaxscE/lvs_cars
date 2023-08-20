@@ -69,7 +69,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 		Wheel:SetHideModel( data.hide == true )
 	end
 
-	Wheel:MakeSpherical( data.radius or -1 )
+	Wheel:lvsMakeSpherical( data.radius or -1 )
 
 	Wheel:SetWidth( data.width or 3 )
 

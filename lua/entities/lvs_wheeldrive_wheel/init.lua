@@ -35,7 +35,7 @@ function ENT:OnTakeDamage( dmginfo )
 	base:OnTakeDamage( dmginfo )
 end
 
-function ENT:MakeSpherical( radius )
+function ENT:lvsMakeSpherical( radius )
 	if not radius or radius <= 0 then
 		radius = (self:OBBMaxs() - self:OBBMins()) * 0.5
 		radius = math.max( radius.x, radius.y, radius.z )
