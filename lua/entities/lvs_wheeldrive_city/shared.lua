@@ -20,6 +20,8 @@ ENT.EngineMaxRPM = 7000
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 
+ENT.TurboVolume = 0.4
+
 ENT.ExhaustPositions = {
 	{
 		pos = Vector(-62.14,-17.18,13.04),

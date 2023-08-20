@@ -60,9 +60,11 @@ ENT.WheelSideForce = 800
 ENT.WheelDownForce = 500
 
 ENT.AllowSuperCharger = true
+ENT.SuperChargerVolume = 1
 ENT.SuperChargerSound = "lvs/vehicles/generic/supercharger_loop.wav"
 
 ENT.AllowTurbo = true
+ENT.TurboVolume = 1
 ENT.TurboSound = "lvs/vehicles/generic/turbo_loop.wav"
 ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff1.wav"}
 

@@ -103,7 +103,7 @@ function ENT:HandleSounds( vehicle, engine )
 	if not self.snd then return end
 
 	local throttle = engine:GetClutch() and 0 or vehicle:GetThrottle()
-	local volume = (0.2 + math.max( math.sin( math.rad( ((engine:GetRPM() - vehicle.EngineIdleRPM) / (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM)) * 90 ) ), 0 ) * 0.8) * throttle
+	local volume = (0.2 + math.max( math.sin( math.rad( ((engine:GetRPM() - vehicle.EngineIdleRPM) / (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM)) * 90 ) ), 0 ) * 0.8) * throttle * vehicle.SuperChargerVolume
 	local pitch = engine:GetRPM() / vehicle.EngineMaxRPM
 
 	local ply = LocalPlayer()

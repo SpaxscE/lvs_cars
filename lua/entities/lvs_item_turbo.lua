@@ -110,7 +110,7 @@ function ENT:HandleSounds( vehicle, engine )
 
 	local throttle = engine:GetClutch() and 0 or vehicle:GetThrottle()
 
-	local volume = math.Clamp(((self.TurboRPM - 300) / 300),0,1)
+	local volume = math.Clamp(((self.TurboRPM - 300) / 300),0,1) * vehicle.TurboVolume
 	local pitch = math.min(self.TurboRPM / 3,150)
 
 	if throttle == 0 and (self.TurboRPM > 350) then
