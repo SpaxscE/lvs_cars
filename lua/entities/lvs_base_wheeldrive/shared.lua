@@ -56,7 +56,7 @@ ENT.PhysicsDampingSpeed = 4000
 ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
-ENT.WheelPhysicsDampingSpeed = 1000
+ENT.WheelPhysicsDampingSpeed = 500
 
 ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400
