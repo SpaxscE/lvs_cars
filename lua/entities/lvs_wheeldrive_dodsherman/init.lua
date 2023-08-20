@@ -1,9 +1,16 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_prediction.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(50,0,25), Angle(0,-90,0) )
+	local ID = self:LookupAttachment( "turret_cannon" )
+	local Muzzle = self:GetAttachment( ID )
+	self.SNDTurret = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/weapons/gunner_mg_loop.wav", "lvs/weapons/gunner_mg_loop_interior.wav" )
+	self.SNDTurret:SetSoundLevel( 95 )
+	self.SNDTurret:SetParent( self, ID )
+
+	self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
 

@@ -1,4 +1,5 @@
 include("shared.lua")
+include("cl_prediction.lua")
 
 ENT.TireSoundTypes = {
 	["roll"] = "lvs/vehicles/sherman/tracks_loop.wav",
@@ -23,17 +24,6 @@ for i = 1,6 do
 		poseparameter = "suspension_right_"..i,
 	}
 end
-
-
-function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
-	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
-end
-
-function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
-	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
-end
-
---pos = self:LocalToWorld( self:OBBCenter() + Vector(0,0,50) )
 
 function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel, oil, ammeter )
 	for i, v in pairs( sherman_susdata ) do
@@ -68,4 +58,23 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		self:SetPoseParameter("spin_wheels_right", -scroll * 1.252 )
 		self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/track_sherman", Vector(0,scroll * 0.004,0) ) )
 	end
+end
+
+function ENT:OnFrame()
+	self:PredictPoseParameters()
+end
+
+function ENT:LVSPreHudPaint( X, Y, ply )
+
+	if ply == self:GetDriver() then
+		local Col = Color(255,255,255,255)
+
+		local Pos2D = self:GetEyeTrace().HitPos:ToScreen() 
+
+		self:PaintCrosshairCenter( Pos2D, Col )
+		self:PaintCrosshairOuter( Pos2D, Col )
+		self:LVSPaintHitMarker( Pos2D )
+	end
+
+	return true
 end
