@@ -24,7 +24,18 @@ for i = 1,6 do
 	}
 end
 
-function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear )
+
+function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+end
+
+function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+end
+
+--pos = self:LocalToWorld( self:OBBCenter() + Vector(0,0,50) )
+
+function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel, oil, ammeter )
 	for i, v in pairs( sherman_susdata ) do
 		local pos = self:GetAttachment( self:LookupAttachment( sherman_susdata[i].attachment ) ).Pos
 

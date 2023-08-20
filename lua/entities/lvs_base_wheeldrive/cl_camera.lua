@@ -3,15 +3,23 @@ function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
 	return pos, angles, fov
 end
 
+function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+end
+
+function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+end
+
 function ENT:CalcViewDriver( ply, pos, angles, fov, pod )
 	pos = pos + pod:GetUp() * 7 - pod:GetRight() * 11
 
 	if ply:lvsMouseAim() then
 		angles = ply:EyeAngles()
 
-		return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+		return self:CalcViewMouseAim( ply, pos, angles,  fov, pod )
 	else
-		return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+		return self:CalcViewDirectInput( ply, pos, angles,  fov, pod )
 	end
 end
 

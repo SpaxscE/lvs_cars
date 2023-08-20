@@ -29,3 +29,5 @@ ENT.TransShiftSpeed = 0.1
 
 ENT.TransGears = 3
 ENT.TransGearsReverse = 3
+
+ENT.MouseSteerAngle = 45

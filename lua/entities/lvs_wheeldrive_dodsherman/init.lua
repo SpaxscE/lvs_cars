@@ -3,7 +3,7 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(0,0,50), Angle(0,-90,0) )
+	self:AddDriverSeat( Vector(50,0,25), Angle(0,-90,0) )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
 

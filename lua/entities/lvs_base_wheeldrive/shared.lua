@@ -42,7 +42,7 @@ ENT.SteerAssistMaxAngle = 15
 ENT.SteerAssistExponent = 1.5
 ENT.SteerAssistMultiplier = 3
 
-ENT.MouseSteerAngle = 10
+ENT.MouseSteerAngle = 20
 ENT.MouseSteerExponent = 2
 
 ENT.PhysicsWeightScale = 1
