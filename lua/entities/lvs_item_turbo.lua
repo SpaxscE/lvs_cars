@@ -130,7 +130,7 @@ function ENT:HandleSounds( vehicle, engine )
 
 	self.TurboRPM = self.TurboRPM + math.Clamp(math.min(rpm / maxRPM,1) * 600 * (0.75 + 0.25 * throttle) - self.TurboRPM,-100 * FT,500 * FT)
 
-	self._smBoost = self._smBoost and self._smBoost + ((self.TurboRPM or 0) / 600 - self._smBoost) * FT * 10 or 0
+	self._smBoost = self._smBoost and self._smBoost + (math.min( (self.TurboRPM or 0) / 400, 1 ) - self._smBoost) * FT * 10 or 0
 
 	self.snd:ChangeVolume( volume * LVS.EngineVolume )
 	self.snd:ChangePitch( pitch * doppler )
