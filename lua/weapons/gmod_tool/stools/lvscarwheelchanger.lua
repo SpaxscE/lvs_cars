@@ -7,11 +7,18 @@ TOOL.ClientConVar[ "camber" ] = 0
 TOOL.ClientConVar[ "caster" ] = 0
 TOOL.ClientConVar[ "toe" ] = 0
 
+TOOL.Information = {
+	{ name = "left" },
+	{ name = "right" },
+	{ name = "reload" }
+}
+
 if CLIENT then
-	language.Add( "tool.lvscarwheelchanger.name", "[LVS-Car] Wheel Editor" )
-	language.Add( "tool.lvscarwheelchanger.desc", "A tool used to edit LVS-Car Wheels" )
-	language.Add( "tool.lvscarwheelchanger.0", "Left click to apply Wheel. Left click again to flip 180 degrees. Right click to copy Wheel. Reload to apply Camber/Caster/Toe settings" )
-	language.Add( "tool.lvscarwheelchanger.1", "Left click to apply Wheel. Left click again to flip 180 degrees. Right click to copy Wheel. Reload to apply Camber/Caster/Toe settings" )
+	language.Add( "tool.lvscarwheelchanger.name", "Wheel Editor" )
+	language.Add( "tool.lvscarwheelchanger.desc", "A tool used to edit [LVS-Cars] Wheels" )
+	language.Add( "tool.lvscarwheelchanger.left", "Apply wheel. Click again to flip 180 degrees" )
+	language.Add( "tool.lvscarwheelchanger.right", "Copy wheel" )
+	language.Add( "tool.lvscarwheelchanger.reload", "Apply camber/caster/toe settings" )
 
 	local ConVarsDefault = TOOL:BuildConVarList()
 	function TOOL.BuildCPanel( panel )
