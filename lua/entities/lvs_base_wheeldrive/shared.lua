@@ -62,7 +62,7 @@ ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400
 
 ENT.WheelSideForce = 800
-ENT.WheelDownForce = 500
+ENT.WheelDownForce = 60
 
 ENT.AllowSuperCharger = true
 ENT.SuperChargerSound = "lvs/vehicles/generic/supercharger_loop.wav"
