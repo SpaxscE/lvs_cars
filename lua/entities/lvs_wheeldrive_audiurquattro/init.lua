@@ -7,6 +7,7 @@ function ENT:OnSpawn( PObj )
 	self:AddPassengerSeat( Vector(2,-12,2), Angle(0,-90,20) )
 
 	self:AddEngine( Vector(60,0,15) )
+	self:AddTurboCharger()
 
 	local WheelModel = "models/DiggerCars/bmw_m5e34/e34_shit_wheel.mdl"
 

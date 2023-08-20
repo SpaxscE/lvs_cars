@@ -60,7 +60,7 @@ ENT.ExhaustPositions = {
 ENT.Lights = {
 	{
 		Trigger = "main",
-		SubMaterialID = 16,
+		SubMaterialID = 17,
 		Sprites = {
 			[1] = {
 				pos = Vector(82.75,-25.26,15.61),
@@ -96,7 +96,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "high",
-		SubMaterialID = 17,
+		SubMaterialID = 18,
 		Sprites = {
 			[1] = {
 				pos = Vector(85.65,-18.09,15.71),
@@ -128,7 +128,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "main+brake",
-		SubMaterialID = 14,
+		SubMaterialID = 15,
 		Sprites = {
 			{ pos = Vector(-89.46,20,15.72), colorG = 0, colorB = 0, colorA = 150 },
 			{ pos = Vector(-89.46,-20,15.72), colorG = 0, colorB = 0, colorA = 150 },
@@ -136,7 +136,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "reverse",
-		SubMaterialID = 12,
+		SubMaterialID = 13,
 		Sprites = {
 			[1] = {
 				pos = Vector(-89.59,-14.54,15.57),
@@ -154,7 +154,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "turnright",
-		SubMaterialID = 13,
+		SubMaterialID = 14,
 		Sprites = {
 			[1] = {
 				width = 35,
@@ -176,7 +176,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "turnleft",
-		SubMaterialID = 11,
+		SubMaterialID = 12,
 		Sprites = {
 			[1] = {
 				width = 35,
@@ -198,7 +198,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "fog",
-		SubMaterialID = 9,
+		SubMaterialID = 10,
 		Sprites = {
 			{ pos = Vector(89.55,-17.48,5.9), colorB = 200, colorA = 150, bodygroup = { name = "Foglight", active = { 0 } }, },
 			{ pos = Vector(89.55,17.48,5.9), colorB = 200, colorA = 150, bodygroup = { name = "Foglight", active = { 0 } }, },
