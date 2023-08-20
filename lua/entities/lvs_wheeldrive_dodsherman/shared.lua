@@ -46,15 +46,21 @@ ENT.EngineSounds = {
 function ENT:OnSetupDataTables()
 	self:AddDT( "Entity", "DriveWheelFL" )
 	self:AddDT( "Entity", "DriveWheelFR" )
+
+	self:AddDT( "Float", "TurretPitch" )
+	self:AddDT( "Float", "TurretYaw" )
 end
 
 function ENT:AimTurret()
-	local trace = self:GetEyeTrace()
+	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
 
-	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - self:LocalToWorld( Vector(0,25,55)) ):GetNormalized():Angle() )
+	local AimRate = 25 * FrameTime() 
 
-	self:SetPoseParameter("turret_pitch", AimAngles.p )
-	self:SetPoseParameter("turret_yaw", AimAngles.y )
+	self:SetTurretPitch( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ) )
+	self:SetTurretYaw( math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate ) )
+
+	self:SetPoseParameter("turret_pitch", self:GetTurretPitch() )
+	self:SetPoseParameter("turret_yaw", self:GetTurretYaw() )
 end
 
 function ENT:InitWeapons()
@@ -71,27 +77,24 @@ function ENT:InitWeapons()
 
 		if not Muzzle then return end
 
-		local Pos =  Muzzle.Pos
-		local Dir =  Muzzle.Ang:Up()
-
 		local bullet = {}
-		bullet.Src 	= Pos
-		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
 		bullet.HullSize 	= 15
 		bullet.Damage	= 10
 		bullet.Velocity = 30000
-		bullet.SplashDamage = 100
-		bullet.SplashDamageRadius = 25
+		bullet.SplashDamage = 150
+		bullet.SplashDamageRadius = 150
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
 
 		local effectdata = EffectData()
-		effectdata:SetOrigin( Pos )
-		effectdata:SetNormal( Dir )
+		effectdata:SetOrigin( bullet.Src )
+		effectdata:SetNormal( bullet.Dir )
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle", effectdata )
 

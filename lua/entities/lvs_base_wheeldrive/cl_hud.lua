@@ -26,6 +26,11 @@ function ENT:LVSHudPaint( X, Y, ply )
 	if not self:LVSPreHudPaint( X, Y, ply ) then return end
 
 	self:PaintZoom( X, Y, ply )
+
+	if ply ~= self:GetDriver() then return end
+
+	local HitPilot = self:GetEyeTrace().HitPos:ToScreen()
+	self:LVSPaintHitMarker( HitPilot )
 end
 
 ENT.IconEngine = Material( "lvs/engine.png" )
