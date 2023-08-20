@@ -1,7 +1,7 @@
-"VertexLitGeneric"
+"VertexlitGeneric"
 {
-	"$basetexture" "models/DiggerCars/Highwayman/EXT_Wheel"
-	"$bumpmap" "models/DiggerCars/Highwayman/EXT_Wheel_nm"
+	"$basetexture" "models/diggercars/mazda_miata/tire"
+	"$bumpmap" "models/diggercars/mazda_miata/tire_nm"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
@@ -16,4 +16,3 @@
 		}
 	}
 }
-
