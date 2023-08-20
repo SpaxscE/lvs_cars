@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/bmw_e9/bmw_e9.mdl"
 
 ENT.MaxVelocity = 2600
 
-ENT.EnginePower = 1800
 ENT.EngineTorque = 95
 ENT.EngineIdleRPM = 660
 ENT.EngineMaxRPM = 8000

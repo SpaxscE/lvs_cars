@@ -16,7 +16,7 @@ ENT.PhysicsWeightScale = 2
 ENT.MaxVelocity = 800
 ENT.MaxVelocityReverse = 500
 
-ENT.EnginePower = 0
+ENT.EngineCurve = 0.1
 ENT.EngineTorque = 300
 
 ENT.TransGears = 3

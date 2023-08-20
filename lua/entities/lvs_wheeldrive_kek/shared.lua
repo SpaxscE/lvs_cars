@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/shared/1.mdl"
 
 ENT.MaxVelocity = 2600
 
-ENT.EnginePower = 1000
 ENT.EngineTorque = 50
 
 ENT.TransGears = 3

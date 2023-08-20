@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/mazda_rx7gsl/rx7.mdl"
 
 ENT.MaxVelocity = 2600
 
-ENT.EnginePower = 1800
 ENT.EngineTorque = 100
 ENT.EngineIdleRPM = 800
 ENT.EngineMaxRPM = 7000

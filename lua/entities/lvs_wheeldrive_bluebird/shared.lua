@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/NISSAN_BLUEBIRD910/BLUEBIRD.mdl"
 
 ENT.MaxVelocity = 2100
 
-ENT.EnginePower = 1800
 ENT.EngineTorque = 100
 
 ENT.TransGears = 5

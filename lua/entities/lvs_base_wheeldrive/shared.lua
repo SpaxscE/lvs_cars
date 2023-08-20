@@ -14,7 +14,7 @@ ENT.MaxHealth = 400
 ENT.MaxVelocity = 1200
 ENT.MaxVelocityReverse = 500
 
-ENT.EnginePower = 25
+ENT.EngineCurve = 0.65
 ENT.EngineTorque = 350
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000

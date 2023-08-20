@@ -21,7 +21,7 @@ ENT.PhysicsInertia = Vector(6000,6000,1500)
 ENT.MaxVelocity = 450
 ENT.MaxVelocityReverse = 450
 
-ENT.EnginePower = 10
+ENT.EngineCurve = 0.1
 ENT.EngineTorque = 200
 
 ENT.TransMinGearHoldTime = 0.25

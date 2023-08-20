@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/mb_w123/w123.mdl"
 
 ENT.MaxVelocity = 1500
 
-ENT.EnginePower = 800
 ENT.EngineTorque = 100
 
 ENT.TransGears = 5

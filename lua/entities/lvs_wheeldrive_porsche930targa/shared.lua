@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/porsche_930/targa.mdl"
 
 ENT.MaxVelocity = 2100
 
-ENT.EnginePower = 4000
 ENT.EngineTorque = 100
 
 ENT.TransGears = 5

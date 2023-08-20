@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/alfa_montreal/montreal.mdl"
 
 ENT.MaxVelocity = 2400
 
-ENT.EnginePower = 1800
 ENT.EngineTorque = 105
 ENT.EngineIdleRPM = 900
 ENT.EngineMaxRPM = 7000

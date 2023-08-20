@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/nissan_skyline_gtr34/gtr.mdl"
 
 ENT.MaxVelocity = 2750
 
-ENT.EnginePower = 1700
 ENT.EngineTorque = 160
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 8500
@@ -22,17 +21,6 @@ ENT.TransGears = 6
 ENT.TransGearsReverse = 1
 
 ENT.WheelPhysicsMass = 120
-
---[[
---edit sounds here @digger
-
-ENT.AllowSuperCharger = true
-ENT.SuperChargerSound = "lvs/vehicles/generic/supercharger_loop.wav"
-
-ENT.AllowTurbo = true
-ENT.TurboSound = "lvs/vehicles/generic/turbo_loop.wav"
-ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff1.wav"}
-]]
 
 ENT.EngineSounds = {
 	{

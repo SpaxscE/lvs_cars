@@ -157,7 +157,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			local targetRPM = ent:VelToRPM( targetVelocity )
 			local targetRPMabs = math.abs( targetRPM )
 
-			local powerRPM = math.min( self.EnginePower, targetRPMabs )
+			local powerRPM = targetRPMabs * self.EngineCurve
 
 			local powerCurve = (powerRPM + math.max( targetRPMabs - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPMabs * self:Sign( targetRPM - curRPM )
 

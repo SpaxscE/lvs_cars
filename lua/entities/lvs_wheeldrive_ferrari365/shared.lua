@@ -13,7 +13,6 @@ ENT.MDL = "models/diggercars/ferrari_365/ferrari_365norig.mdl"
 
 ENT.MaxVelocity = 2600
 
-ENT.EnginePower = 2000
 ENT.EngineTorque = 150
 
 ENT.TransGears = 5

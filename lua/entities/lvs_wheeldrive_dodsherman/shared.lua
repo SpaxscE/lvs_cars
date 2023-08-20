@@ -18,7 +18,6 @@ ENT.MaxHealth = 2700
 ENT.MaxVelocity = 450
 ENT.MaxVelocityReverse = 450
 
-ENT.EnginePower = 10
 ENT.EngineTorque = 200
 
 ENT.TransGears = 3
