@@ -5,6 +5,8 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	self:SetPoseParameter( "tacho_gauge", engine_rpm / 11000 )
 	self:SetPoseParameter( "temp_gauge", temperature )
 	self:SetPoseParameter( "fuel_gauge", fuel )
+	self:SetPoseParameter( "oil_gauge", oil )
+	self:SetPoseParameter( "alt_gauge", ammeter )
 	self:SetPoseParameter( "vehicle_gauge", speed_kmh / 210 )
 	self:SetPoseParameter( "throttle_pedal", throttle )
 	self:SetPoseParameter( "brake_pedal", brake )
@@ -19,6 +21,14 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 		[4] = 10,
 		[5] = 12,
 	}
+
+	local hours = os.date( "%H" )
+	local min = os.date( "%M" ) 
+	local sec = os.date( "%S" )
+
+	self:SetPoseParameter( "hour", hours + min / 60 )
+	self:SetPoseParameter( "minute", min + sec / 60 )
+	self:SetPoseParameter( "second", sec )
 
 	self:SetPoseParameter( "gear",  self:QuickLerp( "gear", (GearIDtoPose[ gear ] or 1) ) )
 end

@@ -23,6 +23,9 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
+	local FuelCap = self:AddDoorHandler( "fuel_cap", Vector(-68,-35.5,29), Angle(0,0,0), Vector(-5,0,-3), Vector(5,5,3), Vector(-5,-5,-3), Vector(5,5,3) )
+	FuelCap:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	FuelCap:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
 	local WheelModel = "models/diggercars/toyota_supra/supra_wheel.mdl"
 

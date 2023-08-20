@@ -2,8 +2,10 @@
 {
 	"$basetexture" "models/DiggerCars/MB_W123/many"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$alphatest" "1"
-	"$allowalphatocoverage" "1"
+	"$detail" "models/DiggerCars/MB_W123/many"
+	"$detailscale" "1"
+	"$detailblendfactor" "0" //use this for emission strength
+	"$detailblendmode" "5"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
@@ -18,5 +20,6 @@
 		}
 	}
 }
+
 
 

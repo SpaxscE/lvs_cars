@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/mb_w123/v2.mdl"
+ENT.MDL = "models/diggercars/mb_w123/w123.mdl"
 
 ENT.MaxVelocity = 1500
 
@@ -103,6 +103,34 @@ ENT.Lights = {
 		Sprites = {
 			{ pos = Vector(96.88,17.33,20.92), colorB = 200, colorA = 150 },
 			{ pos = Vector(96.88,-17.33,20.92), colorB = 200, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "turnright",
+		SubMaterialID = 29,
+		Sprites = {
+			{ width = 35, height = 35, pos = Vector(-83.76,-30.27,21.27), colorG = 100, colorB = 0, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "turnleft",
+		SubMaterialID = 28,
+		Sprites = {
+			{ width = 35, height = 35, pos = Vector(-83.76,30.27,21.27), colorG = 100, colorB = 0, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "turnright",
+		SubMaterialID = 21,
+		Sprites = {
+			{ width = 35, height = 35, pos = Vector(95.17,-31.15,20.42), colorG = 100, colorB = 0, colorA = 150 },
+		},
+	},
+	{
+		Trigger = "turnleft",
+		SubMaterialID = 22,
+		Sprites = {
+			{ width = 35, height = 35, pos = Vector(95.17,31.15,20.42), colorG = 100, colorB = 0, colorA = 150 },
 		},
 	},
 }

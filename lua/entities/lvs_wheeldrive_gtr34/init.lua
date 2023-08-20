@@ -11,6 +11,7 @@ function ENT:OnSpawn( PObj )
 
 	self:AddFuelTank( Vector(-70,0,25), 600, LVS.FUELTYPE_PETROL )
 
+
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(-15,29,29), Angle(0,0,0), Vector(-8,-6,-16), Vector(46,6,8), Vector(0,-20,-16), Vector(46,52,8) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/skyline/door_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/skyline/door_close.wav" )
@@ -24,6 +25,15 @@ function ENT:OnSpawn( PObj )
 	local DoorHandler = self:AddDoorHandler( "hood", Vector(63,0,35), Angle(10,0,0), Vector(-27,-28,-3), Vector(24,28,3), Vector(-27,-28,-3), Vector(10,28,40) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
+
+	local FuelCap = self:AddDoorHandler( "fuel_cap", Vector(-66,-36.5,33), Angle(0,0,0), Vector(-5,0,-3), Vector(5,5,3), Vector(-5,-5,-3), Vector(5,5,3) )
+	FuelCap:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	FuelCap:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
+
+	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-70,0,40), Angle(0,0,0), Vector(-20,-28,-10), Vector(10,28,3), Vector(-20,-28,-3), Vector(10,28,20) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_trunk_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/classiccar_door_close.wav" )
+
 
 
 	local WheelModel = "models/diggercars/nissan_skyline_gtr34/gtr_wheel.mdl"

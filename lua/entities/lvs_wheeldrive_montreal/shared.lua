@@ -77,6 +77,10 @@ ENT.Lights = {
 		},
 	},
 	{
+		Trigger = "main",
+		SubMaterialID = 27,
+	},
+	{
 		Trigger = "high",
 		SubMaterialID = 26,
 		Sprites = {

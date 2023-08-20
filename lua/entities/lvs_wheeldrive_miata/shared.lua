@@ -66,6 +66,10 @@ ENT.Lights = {
 		},
 	},
 	{
+		Trigger = "main",
+		SubMaterialID = 11,
+	},
+	{
 		Trigger = "high",
 		ProjectedTextures = {
 			{ pos = Vector(65.4,19.66,30.22), ang = Angle(0,0,0), colorB = 200, colorA = 150, shadows = true },

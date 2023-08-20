@@ -1,12 +1,14 @@
-"VertexLitGeneric"
+"VertexlitGeneric"
 {
-	"$basetexture" "models/diggercars/bmw_m5e34/INT_gauges"
-
-	"$detail" "models/diggercars/bmw_m5e34/INT_gauges_e"
+	"$basetexture" "models/DiggerCars/bmw_m5e34/int_gauges"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$detail" "models/DiggerCars/bmw_m5e34/int_gauges_e"
 	"$detailscale" "1"
 	"$detailblendfactor" "1"
 	"$detailblendmode" "5"
-
+	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
 	"$phongfresnelranges" "[1 1 1]" 
@@ -20,5 +22,7 @@
 		}
 	}
 }
+
+
 
 
