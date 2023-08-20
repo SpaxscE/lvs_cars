@@ -20,7 +20,7 @@ ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000
 
 ENT.ForceLinearMultiplier = 1
-ENT.ForceAngleMultiplier = 1
+ENT.ForceAngleMultiplier = 0.5
 
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
@@ -46,17 +46,12 @@ ENT.MouseSteerAngle = 10
 ENT.MouseSteerExponent = 2
 
 ENT.PhysicsWeightScale = 1
-
-ENT.PhysicsDrag = false
 ENT.PhysicsMass = 1000
 ENT.PhysicsInertia = Vector(1500,1500,750)
-ENT.PhysicsDampingMultiplier = 1
 ENT.PhysicsDampingSpeed = 4000
 
-ENT.WheelPhysicsDrag = false
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
-ENT.WheelPhysicsDampingSpeed = 500
 
 ENT.WheelBrakeLockupRPM = 50
 ENT.WheelBrakeForce = 400

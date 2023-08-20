@@ -59,7 +59,7 @@ function ENT:PostInitialize( PObj )
 	BaseClass.PostInitialize( self, PObj )
 
 	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
-	PObj:EnableDrag( self.PhysicsDrag )
+	PObj:EnableDrag( false )
 	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
 	SetMinimumAngularVelocityTo( 24000 )
@@ -107,9 +107,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		if not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
 
-		local F = math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 )
-
-		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * F * 0.5 * self.ForceAngleMultiplier )
+		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
 
 		return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
 	end
@@ -218,7 +216,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		end
 	end
 
-	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * self.PhysicsDampingMultiplier * math.min( math.abs( Fx ) / self.WheelPhysicsDampingSpeed, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
+	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / 500, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
 end

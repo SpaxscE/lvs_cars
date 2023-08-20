@@ -92,7 +92,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 
 	PhysObj:SetMass( self.WheelPhysicsMass * self.PhysicsWeightScale )
 	PhysObj:SetInertia( self.WheelPhysicsInertia * self.PhysicsWeightScale )
-	PhysObj:EnableDrag( self.WheelPhysicsDrag )
+	PhysObj:EnableDrag( false )
 
 	local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
 	nocollide_constraint.DoNotDuplicate = true
