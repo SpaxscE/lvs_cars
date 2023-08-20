@@ -13,9 +13,9 @@ ENT.MDL = "models/diggercars/bmw_m5e34/e34_2.mdl"
 
 ENT.MaxVelocity = 2500
 
-ENT.EngineTorque = 99
+ENT.EngineTorque = 100
 ENT.EngineIdleRPM = 660
-ENT.EngineMaxRPM = 7000
+ENT.EngineMaxRPM = 6750
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
@@ -52,11 +52,11 @@ ENT.EngineSounds = {
 ENT.ExhaustPositions = {
 	{
 		pos = Vector(-97.46,21.75,6.67),
-		ang = Angle(45,180,0),
+		ang = Angle(20,180,0),
 	},
 	{
 		pos = Vector(-97.37,25.12,6.79),
-		ang = Angle(45,180,0),
+		ang = Angle(20,180,0),
 	}
 }
 
@@ -99,8 +99,8 @@ ENT.Lights = {
 		Trigger = "brake",
 		SubMaterialID = 23,
 		Sprites = {
-			{ pos = Vector(-96.53,19.3,21.88), colorG = 0, colorB = 0, colorA = 150 },
-			{ pos = Vector(-96.53,-19.3,21.88), colorG = 0, colorB = 0, colorA = 150 },
+			{ pos = Vector(-96.3,30.3,23.24), colorG = 0, colorB = 0, colorA = 150 },
+			{ pos = Vector(-96.3,-30.3,23.24), colorG = 0, colorB = 0, colorA = 150 },
 		}
 	},
 	{
@@ -117,7 +117,7 @@ ENT.Lights = {
 		Sprites = {
 			{ width = 35, height = 35, pos = Vector(81.05,-28.33,16.98), colorG = 100, colorB = 0, colorA = 150 },
 			{ width = 40, height = 40, pos = Vector(37.58,-34.58,14.43), colorG = 100, colorB = 0, colorA = 150 },
-			{ width = 35, height = 35, pos = Vector(-95.08,-26.78,26.96), colorG = 100, colorB = 0, colorA = 150},
+			{ width = 35, height = 35, pos = Vector(-95.08,-28.5,26.96), colorG = 100, colorB = 0, colorA = 150},
 		},
 	},
 	{
@@ -126,7 +126,7 @@ ENT.Lights = {
 		Sprites = {
 			{ width = 35, height = 35, pos = Vector(81.05,28.33,16.98), colorG = 100, colorB = 0, colorA = 50 },
 			{ width = 40, height = 40, pos = Vector(37.58,34.58,14.43), colorG = 100, colorB = 0, colorA = 150 },
-			{ width = 35, height = 35, pos = Vector(-95.08,26.78,26.96), colorG = 100, colorB = 0, colorA = 150 },
+			{ width = 35, height = 35, pos = Vector(-95.08,28.5,26.96), colorG = 100, colorB = 0, colorA = 150 },
 		},
 	},
 	{
