@@ -203,6 +203,21 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	local Fy = self:VectorSplitNormal( Right, Vel )
 	local Fx = self:VectorSplitNormal( Forward, Vel )
 
+	if TorqueFactor >= 1 then
+		local VelX = math.abs( Fx )
+		local VelY = math.abs( Fy )
+
+		if VelY > VelX * 0.1 then
+			if VelX > self.FastSteerActiveVelocity then
+				if VelY < VelX * 0.6 then
+					return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+				end
+			else
+				return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+			end
+		end
+	end
+
 	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * self.PhysicsDampingMultiplier * math.min( math.abs( Fx ) / self.WheelPhysicsDampingSpeed, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
 
 	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
