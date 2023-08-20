@@ -14,7 +14,7 @@ ENT.MDL = "models/diggercars/dodge_charger/charger.mdl"
 ENT.MaxVelocity = 2300
 
 ENT.EnginePower = 1200
-ENT.EngineTorque = 135
+ENT.EngineTorque = 130
 ENT.EngineIdleRPM = 750
 ENT.EngineMaxRPM = 5000
 
