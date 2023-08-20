@@ -31,6 +31,8 @@ end
 ENT.IconEngine = Material( "lvs/engine.png" )
 
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
+	self:DrawDeveloperInfo()
+
 	local kmh = math.Round(self:GetVelocity():Length() * 0.09144,0)
 	draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
 	draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
@@ -195,4 +197,106 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 
 	surface.SetMaterial( self.CarMenuHazard )
 	DrawTexturedRect( cX, cY, size, SelectedThing == 3 )
+end
+
+local smXX = 0
+function ENT:DrawDeveloperInfo()
+	if not LVS.DeveloperEnabled then return end
+	local SizeX = 400
+	local SizeY = 200
+	local X = ScrW() - SizeX - 100
+	local Y = 100
+
+	surface.SetDrawColor(0,0,0,200)
+	surface.DrawRect(X,Y,SizeX,SizeY)
+
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.DrawLine( X, Y, X, Y + SizeY )
+	surface.DrawLine( X, Y + SizeY, X + SizeX, Y + SizeY )
+
+	local torque = self.EngineTorque / 5
+	local target = self.MaxVelocity
+	local boost = (target / self.TransGears) * 0.5
+
+	if self:GetReverse() then
+		target = self.MaxVelocityReverse
+		boost = (target / self.TransGearsReverse) * 0.5
+	end
+
+	local power = target * self.EngineCurve
+
+
+	surface.SetDrawColor( 0, 255, 255, 255 )
+
+	local steps = target / SizeX * 2
+
+	if self:GetEngineActive() then
+		local throttle = self:GetThrottle()
+
+		for a = 0, target, steps do
+			local curRPM = a
+			local nextRPM = a + steps
+
+			local powerCurve1 = (power + math.max( target - power,0) - math.max(curRPM - power,0)) / target
+			local powerCurve2 = (power + math.max( target - power,0) - math.max(nextRPM - power,0)) / target
+
+			local TorqueBoost1 = 2 - (math.min( math.max( curRPM - boost, 0 ), boost) / boost)
+			local TorqueBoost2 = 2 - (math.min( math.max( nextRPM - boost, 0 ), boost) / boost)
+
+			local X1 = X + (curRPM / target) * SizeX
+			local Y1 = Y + SizeY - powerCurve1 * TorqueBoost1 * torque * throttle
+
+			local X2 = X + (nextRPM / target) * SizeX
+			local Y2 = Y + SizeY - powerCurve2 * TorqueBoost2 * torque * throttle
+
+			surface.DrawLine( X1, Y1, X2, Y2 )
+		end
+
+		smXX = smXX + ((self:GetVelocity():Length() / target) * SizeX - smXX) * RealFrameTime() * 5
+		local XX = X + smXX
+		surface.SetDrawColor( 255, 0, 0, 255 )
+		surface.DrawLine( XX, Y - 10, XX, Y + SizeY + 10 )
+	else
+		for a = 0, target, steps do
+			local curRPM = a
+			local nextRPM = a + steps
+
+			local powerCurve1 = (power + math.max( target - power,0) - math.max(curRPM - power,0)) / target
+			local powerCurve2 = (power + math.max( target - power,0) - math.max(nextRPM - power,0)) / target
+
+			local TorqueBoost1 = 2 - (math.min( math.max( curRPM - boost, 0 ), boost) / boost)
+			local TorqueBoost2 = 2 - (math.min( math.max( nextRPM - boost, 0 ), boost) / boost)
+
+			local X1 = X + (curRPM / target) * SizeX
+			local Y1 = Y + SizeY - powerCurve1 * TorqueBoost1 * torque
+
+			local X2 = X + (nextRPM / target) * SizeX
+			local Y2 = Y + SizeY - powerCurve2 * TorqueBoost2 * torque
+
+			surface.DrawLine( X1, Y1, X2, Y2 )
+		end
+	end
+
+	draw.SimpleTextOutlined( "velocity u/s", "DermaDefault", X + SizeX + 15, Y + SizeY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, color_black )
+	draw.SimpleTextOutlined( "torque@wheel", "DermaDefault", X, Y - 15, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, color_black )
+
+	surface.SetDrawColor( 255, 255, 255, 255 )
+
+	for a = 0, target, 250 do
+		local X1 = X + (a / target) * SizeX
+		local Y1 = Y + SizeY
+
+		surface.DrawLine( X1, Y1 + 5, X1, Y1 - 5 )
+
+		draw.SimpleTextOutlined( a, "DermaDefault", X1, Y1 + 10, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, color_black )
+	end
+
+	for a = 0, SizeY, 20 do
+		local X1 = X
+		local Y1 = Y + SizeY - a
+
+		surface.DrawLine( X1 - 5, Y1, X1 + 5, Y1 )
+
+		draw.SimpleTextOutlined( a * 5, "DermaDefault", X1 - 10, Y1, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER, 1, color_black )
+	end
 end
