@@ -1,7 +1,7 @@
 "VertexlitGeneric"
 {
-	"$basetexture" "models/diggercars/bmw_e9/tire"
-	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+	"$basetexture" "models/diggercars/mazda_miata/tire"
+	"$bumpmap" "models/diggercars/mazda_miata/tire_nm"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
@@ -16,13 +16,4 @@
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
 
