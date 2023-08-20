@@ -20,7 +20,7 @@ ENT.EngineMaxRPM = 7000
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
 
-ENT.TurboVolume = 0.4
+ENT.TurboVolume = 0.35
 
 ENT.ExhaustPositions = {
 	{
