@@ -3,11 +3,26 @@
 TOOL.Category		= "LVS"
 TOOL.Name			= "#Wheel Changer"
 
+TOOL.ClientConVar[ "camber" ] = 0
+TOOL.ClientConVar[ "caster" ] = 0
+TOOL.ClientConVar[ "toe" ] = 0
+
 if CLIENT then
 	language.Add( "tool.lvscarwheelchanger.name", "[LVS-Car] Wheel Changer" )
-	language.Add( "tool.lvscarwheelchanger.desc", "A tool used to edit LVS-Cars" )
-	language.Add( "tool.lvscarwheelchanger.0", "Left click to apply Wheel. Left click again to flip 180 degrees. Right click to copy Wheel." )
-	language.Add( "tool.lvscarwheelchanger.1", "Left click to apply Wheel. Left click again to flip 180 degrees. Right click to copy Wheel." )
+	language.Add( "tool.lvscarwheelchanger.desc", "A tool used to edit LVS-Car Wheels" )
+	language.Add( "tool.lvscarwheelchanger.0", "Left click to apply Wheel. Left click again to flip 180 degrees. Right click to copy Wheel. Reload to apply Camber/Caster/Toe settings" )
+	language.Add( "tool.lvscarwheelchanger.1", "Left click to apply Wheel. Left click again to flip 180 degrees. Right click to copy Wheel. Reload to apply Camber/Caster/Toe settings" )
+
+	local ConVarsDefault = TOOL:BuildConVarList()
+	function TOOL.BuildCPanel( panel )
+		panel:AddControl( "Header", { Text = "#tool.lvscarwheelchanger.name", Description = "#tool.lvscarwheelchanger.desc" } )
+		panel:AddControl( "ComboBox", { MenuButton = 1, Folder = "lvswheels", Options = { [ "#preset.default" ] = ConVarsDefault }, CVars = table.GetKeys( ConVarsDefault ) } )
+
+		panel:AddControl("Slider", { Label = "Camber", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_camber" } )
+		panel:AddControl("Slider", { Label = "Caster", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_caster" } )
+		panel:AddControl("Slider", { Label = "Toe", Type = "float", Min = "-30", Max = "30", Command = "lvscarwheelchanger_toe" } )
+	end
+
 end
 
 function TOOL:IsValidTarget( ent )
@@ -65,5 +80,13 @@ function TOOL:RightClick( trace )
 end
 
 function TOOL:Reload( trace )
-	return false
+	local ent = trace.Entity
+
+	if not self:IsValidTarget( ent ) then return false end
+
+	ent:SetCamber( self:GetClientInfo("camber") )
+	ent:SetCaster( self:GetClientInfo("caster") )
+	ent:SetToe( self:GetClientInfo("toe") )
+
+	return true
 end
