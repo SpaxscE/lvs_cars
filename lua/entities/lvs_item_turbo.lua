@@ -18,6 +18,12 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 end
 
+function ENT:GetBoost()
+	if not self._smBoost then return 0 end
+
+	return self._smBoost
+end
+
 if SERVER then
 	function ENT:Initialize()	
 		self:SetModel("models/diggercars/dodge_charger/turbo.mdl")
@@ -31,7 +37,7 @@ if SERVER then
 	end
 
 	function ENT:LinkTo( ent )
-		if not IsValid( ent ) or not ent.LVS or not ent.AllowTurbo or IsValid( ent.TurboEnt ) then return end
+		if not IsValid( ent ) or not ent.LVS or not ent.AllowTurbo or IsValid( ent:GetTurbo() ) then return end
 
 		local engine = ent:GetEngine()
 
@@ -50,7 +56,7 @@ if SERVER then
 
 		ent:OnTurboCharged( true )
 
-		ent.TurboEnt = self
+		ent:SetTurbo( self )
 	end
 
 	function ENT:PhysicsCollide( data )
@@ -123,6 +129,8 @@ function ENT:HandleSounds( vehicle, engine )
 	local doppler = vehicle:CalcDoppler( ply )
 
 	self.TurboRPM = self.TurboRPM + math.Clamp(math.min(rpm / maxRPM,1) * 600 * (0.75 + 0.25 * throttle) - self.TurboRPM,-100 * FT,500 * FT)
+
+	self._smBoost = self._smBoost and self._smBoost + ((self.TurboRPM or 0) / 600 - self._smBoost) * FT * 10 or 0
 
 	self.snd:ChangeVolume( volume * LVS.EngineVolume )
 	self.snd:ChangePitch( pitch * doppler )

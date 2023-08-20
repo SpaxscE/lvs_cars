@@ -85,6 +85,8 @@ function ENT:SetupDataTables()
 	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "FuelTank" )
 	self:AddDT( "Entity", "LightsHandler" )
+	self:AddDT( "Entity", "Turbo" )
+	self:AddDT( "Entity", "Compressor" )
 
 	self:AddDT( "Vector", "AIAimVector" )
 end

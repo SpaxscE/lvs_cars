@@ -23,4 +23,10 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	}
 
 	self:SetPoseParameter( "gear",  self:QuickLerp( "gear", (GearIDtoPose[ gear ] or 1) ) )
+
+	local Turbo = self:GetTurbo()
+
+	if not IsValid( Turbo ) then return end
+
+	self:SetPoseParameter( "turbo_gauge", Turbo:GetBoost() )
 end

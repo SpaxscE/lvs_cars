@@ -18,6 +18,12 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 end
 
+function ENT:GetBoost()
+	if not self._smBoost then return 0 end
+
+	return self._smBoost
+end
+
 if SERVER then
 	function ENT:Initialize()	
 		self:SetModel("models/diggercars/dodge_charger/blower.mdl")
@@ -31,7 +37,7 @@ if SERVER then
 	end
 
 	function ENT:LinkTo( ent )
-		if not IsValid( ent ) or not ent.LVS or not ent.AllowSuperCharger or IsValid( ent.SuperChargerEnt ) then return end
+		if not IsValid( ent ) or not ent.LVS or not ent.AllowSuperCharger or IsValid( ent:GetCompressor() ) then return end
 
 		local engine = ent:GetEngine()
 
@@ -50,7 +56,7 @@ if SERVER then
 
 		ent:OnSuperCharged( true )
 	
-		ent.SuperChargerEnt = self
+		ent:SetCompressor( self )
 	end
 
 	function ENT:PhysicsCollide( data )
@@ -102,6 +108,8 @@ function ENT:HandleSounds( vehicle, engine )
 
 	local ply = LocalPlayer()
 	local doppler = vehicle:CalcDoppler( ply )
+
+	self._smBoost = self._smBoost and self._smBoost + (volume - self._smBoost) * FrameTime() * 5 or 0
 
 	self.snd:ChangeVolume( volume * LVS.EngineVolume )
 	self.snd:ChangePitch( (60 + pitch * 85) * doppler )
