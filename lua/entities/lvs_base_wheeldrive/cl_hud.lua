@@ -278,7 +278,7 @@ function ENT:DrawDeveloperInfo()
 	end
 
 	draw.SimpleTextOutlined( "velocity u/s", "DermaDefault", X + SizeX + 15, Y + SizeY, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, 1, color_black )
-	draw.SimpleTextOutlined( "torque@wheel", "DermaDefault", X, Y - 15, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, color_black )
+	draw.SimpleTextOutlined( self:GetReverse() and "torque@wheel [reverse]" or "torque@wheel", "DermaDefault", X, Y - 15, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM, 1, color_black )
 
 	surface.SetDrawColor( 255, 255, 255, 255 )
 
