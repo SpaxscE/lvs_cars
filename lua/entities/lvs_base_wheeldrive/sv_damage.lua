@@ -64,8 +64,6 @@ function ENT:Explode()
 		end
 	end
 
-	self:RemoveWeapons()
-
 	local ent = ents.Create( "lvs_destruction" )
 	if IsValid( ent ) then
 		ent:SetModel( self:GetModel() )
@@ -76,6 +74,14 @@ function ENT:Explode()
 		ent:Spawn()
 		ent:Activate()
 	end
+
+	if self.DeleteOnExplode then
+		self:Remove()
+
+		return
+	end
+
+	self:RemoveWeapons()
 
 	for id, group in pairs( self:GetBodyGroups() ) do
 		for subid, subgroup in pairs( group.submodels ) do

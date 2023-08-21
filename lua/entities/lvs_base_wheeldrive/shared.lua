@@ -72,6 +72,8 @@ ENT.TurboVolume = 1
 ENT.TurboSound = "lvs/vehicles/generic/turbo_loop.wav"
 ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff1.wav"}
 
+ENT.DeleteOnExplode = false
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
