@@ -1,7 +1,7 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/DiggerThings/T1/T1"
-	"$detail" "models/DiggerThings/T1/T1_g"
+	"$basetexture" "models/diggercars/T1/T1"
+	"$detail" "models/diggercars/T1/T1_g"
 	"$detailscale" "1"
 	"$detailblendfactor" "1"
 	"$detailblendmode" "5"

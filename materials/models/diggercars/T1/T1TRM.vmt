@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/DiggerThings/T1/T1TR"
+	"$basetexture" "models/diggercars/T1/T1TR"
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
 	"$phongfresnelranges" "[1 1 1]" 
