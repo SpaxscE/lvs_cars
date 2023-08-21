@@ -23,17 +23,31 @@ function ENT:OnSpawn( PObj )
 	--[[ engine sound / effects ]]
 	self:AddEngine( Vector(0,0,0) ) -- add a engine. This is used for sounds and effects and is required to get accurate RPM for the gauges.
 
+	
+	--[[ fuel system ]]
+	-- self:AddFuelTank( pos, tanksize, fueltype ) -- adds a fuel tank.
+	--[[
+	 fueltypes:
+		LVS.FUELTYPE_PETROL
+		LVS.FUELTYPE_DIESEL
+		LVS.FUELTYPE_ELECTRIC
+	
+	tanksize is how many seconds@fullthrottle you can drive. Not in liter.
+	]]
+	--Example:
+	self:AddFuelTank( Vector(0,0,0), 600, LVS.FUELTYPE_PETROL )
+
 
 	--[[ damage system ]]
 	--[[
-	-- registers a critical hit point to the damage system like this:
+	-- The fuel tank internally registers a critical hitpoint that catches the vehicle on fire when damaged. You can use this same system to create your own damage behaviors like this:
 	self:AddDS( {
 		pos = Vector(0,0,0),
 		ang = Angle(0,0,0),
 		mins = Vector(-40,-20,-30),
 		maxs =  Vector(40,20,30),
 		Callback = function( tbl, ent, dmginfo )
-			--dmginfo:ScaleDamage( 15 )
+			--dmginfo:ScaleDamage( 15 ) -- this would scale damage *15 when this critical hitpoint has been hit
 		end
 	} )
 
@@ -51,20 +65,6 @@ function ENT:OnSpawn( PObj )
 
 	NOTE: !!DS parts are inactive while the vehicle has shield!!
 	]]
-
-
-	--[[ fuel system ]]
-	-- self:AddFuelTank( pos, tanksize, fueltype ) -- adds a fuel tank.
-	--[[
-	 fueltypes:
-		LVS.FUELTYPE_PETROL
-		LVS.FUELTYPE_DIESEL
-		LVS.FUELTYPE_ELECTRIC
-	
-	tanksize is how many seconds@fullthrottle you can drive. Not in liter.
-	]]
-	--Example:
-	self:AddFuelTank( Vector(0,0,0), 600, LVS.FUELTYPE_PETROL )
 
 
 
