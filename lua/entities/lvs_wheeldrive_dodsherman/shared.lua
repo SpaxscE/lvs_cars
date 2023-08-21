@@ -44,23 +44,8 @@ ENT.EngineSounds = {
 }
 
 function ENT:OnSetupDataTables()
-	self:AddDT( "Entity", "DriveWheelFL" )
-	self:AddDT( "Entity", "DriveWheelFR" )
-
-	self:AddDT( "Float", "TurretPitch" )
-	self:AddDT( "Float", "TurretYaw" )
-end
-
-function ENT:AimTurret()
-	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
-
-	local AimRate = 25 * FrameTime() 
-
-	self:SetTurretPitch( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ) )
-	self:SetTurretYaw( math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate ) )
-
-	self:SetPoseParameter("turret_pitch", self:GetTurretPitch() )
-	self:SetPoseParameter("turret_yaw", self:GetTurretYaw() )
+	self:AddTracksDT()
+	self:AddTurretDT()
 end
 
 function ENT:InitWeapons()
@@ -100,9 +85,6 @@ function ENT:InitWeapons()
 
 		ent:TakeAmmo( 1 )
 	end
-	weapon.OnThink = function( ent, active )
-		ent:AimTurret()
-	end
 	weapon.StartAttack = function( ent )
 		if not IsValid( ent.SNDTurret ) then return end
 		ent.SNDTurret:Play()
@@ -111,6 +93,7 @@ function ENT:InitWeapons()
 		if not IsValid( ent.SNDTurret ) then return end
 		ent.SNDTurret:Stop()
 	end
+	--weapon.OnSelect = function( ent ) end
 	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
 
 	self:AddWeapon( weapon )
