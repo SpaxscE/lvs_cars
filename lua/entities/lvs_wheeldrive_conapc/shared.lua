@@ -14,12 +14,16 @@ ENT.MDL = "models/diggercars/amd35/amd35.mdl"
 ENT.PhysicsWeightScale = 2
 
 ENT.MaxVelocity = 800
-ENT.MaxVelocityReverse = 500
+ENT.MaxVelocityReverse = 800
 
 ENT.EngineCurve = 0.1
 ENT.EngineTorque = 300
 
 ENT.TransGears = 3
+ENT.TransGearsReverse = 3
+
+ENT.PhysicsDampingForward = true
+ENT.PhysicsDampingReverse = true
 
 ENT.EngineSounds = {
 	{

@@ -64,6 +64,8 @@ function ENT:Explode()
 		end
 	end
 
+	self:RemoveWeapons()
+
 	local ent = ents.Create( "lvs_destruction" )
 	if IsValid( ent ) then
 		ent:SetModel( self:GetModel() )
@@ -100,7 +102,32 @@ function ENT:Explode()
 	self:OnExploded()
 end
 
+function ENT:RemoveWeapons()
+	self:WeaponsFinish()
+
+	for _, pod in pairs( self:GetPassengerSeats() ) do
+		local weapon = pod:lvsGetWeapon()
+
+		if not IsValid( weapon ) or not weapon._activeWeapon then continue end
+
+		local CurWeapon = self.WEAPONS[ weapon:GetPodIndex() ][ weapon._activeWeapon ]
+
+		if not CurWeapon then continue end
+
+		if CurWeapon.FinishAttack then
+			CurWeapon.FinishAttack( weapon )
+		end
+	end
+
+	self:WeaponsOnRemove()
+
+	table.Empty( self.WEAPONS )
+
+	self.WEAPONS[1] = {}
+end
+
 function ENT:OnExploded()
+
 	self:Ignite( 30 )
 
 	local PhysObj = self:GetPhysicsObject()
