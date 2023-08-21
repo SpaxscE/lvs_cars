@@ -11,8 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.MaxHealth = 400
 
-ENT.MaxVelocity = 1200
-ENT.MaxVelocityReverse = 500
+ENT.MaxVelocity = 1400
+ENT.MaxVelocityReverse = 700
 
 ENT.EngineCurve = 0.65
 ENT.EngineTorque = 350
@@ -49,6 +49,8 @@ ENT.PhysicsWeightScale = 1
 ENT.PhysicsMass = 1000
 ENT.PhysicsInertia = Vector(1500,1500,750)
 ENT.PhysicsDampingSpeed = 4000
+ENT.PhysicsDampingForward = true
+ENT.PhysicsDampingReverse = false
 
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
@@ -91,6 +93,14 @@ function ENT:SetupDataTables()
 	self:AddDT( "Entity", "Compressor" )
 
 	self:AddDT( "Vector", "AIAimVector" )
+end
+
+function ENT:StabilityAssist()
+	if self:GetReverse() then
+		return self.PhysicsDampingReverse
+	end
+
+	return self.PhysicsDampingForward
 end
 
 function ENT:GetMaxSteerAngle()

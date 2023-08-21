@@ -105,7 +105,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		self:SetWheelVelocity( Vel )
 
-		if not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
+		if not self:StabilityAssist() or not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
 
 		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
 
@@ -189,7 +189,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	phys:Wake()
 
-	if not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
+	if not self:StabilityAssist() or not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
 
 	local Vel = phys:GetVelocity()
 
