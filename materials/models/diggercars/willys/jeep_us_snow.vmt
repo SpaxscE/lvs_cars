@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$baseTexture" "models/DiggerCars/Willys/jeep_us"
+	"$baseTexture" "models/DiggerCars/Willys/jeep_us_snow"
 	"$bumpmap" "models/DiggerCars/Willys/jeep_us_normal2"
 	"$detail" "models/DiggerCars/Willys/jeep_us_e"
 	"$detailscale" "1"
