@@ -32,9 +32,3 @@ function ENT:UpdateAnimation( ply, velocity, maxseqgroundspeed )
 
 	return false
 end
-
-if CLIENT then return end
-
-function ENT:UpdatePoseParameters( steer )
-	self:SetPoseParameter( "vehicle_steer", steer )
-end
