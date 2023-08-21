@@ -18,3 +18,44 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	]]
 	-- no need to call invalidatebonecache. Its called automatically after this function.
 end
+
+--[[
+function ENT:OnSpawn()
+end
+
+-- use this instead of ENT:OnRemove
+function ENT:OnRemoved()
+end
+
+-- use this instead of ENT:Think()
+function ENT:OnFrame()
+end
+
+function ENT:LVSPreHudPaint( X, Y, ply )
+	return true -- return false to prevent original hud paint from running
+end
+
+-- called when the engine is turned on or off
+function ENT:OnEngineActiveChanged( Active )
+end
+
+-- called when either an ai is activated/deactivated or when a player is sitting/exiting the driver seat
+function ENT:OnActiveChanged( Active )
+end
+
+function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
+	return pos, angles, fov
+end
+
+function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+end
+
+function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles,  fov, pod )
+end
+
+function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
+	return LVS:CalcView( self, ply, pos, angles, fov, pod )
+end
+]]
