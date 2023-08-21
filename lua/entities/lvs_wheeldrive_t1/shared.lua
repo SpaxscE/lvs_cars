@@ -13,10 +13,10 @@ ENT.MDL = "models/diggercars/t1/t1.mdl"
 
 ENT.AITEAM = 2
 
-ENT.MaxHealth = 2700
+ENT.MaxHealth = 250
 
-ENT.MaxVelocity = 450
-ENT.MaxVelocityReverse = 450
+ENT.MaxVelocity = 1200
+ENT.MaxVelocityReverse = 1200
 
 ENT.EngineTorque = 200
 
@@ -63,9 +63,9 @@ function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bullet.png")
 	weapon.Ammo = 1000
-	weapon.Delay = 0.1
-	weapon.HeatRateUp = 0.2
-	weapon.HeatRateDown = 0.25
+	weapon.Delay = 0.015
+	weapon.HeatRateUp = 0.1
+	weapon.HeatRateDown = 0.5
 	weapon.Attack = function( ent )
 		local ID_L = ent:LookupAttachment( "muzzle_left" )
 		local ID_R = ent:LookupAttachment( "muzzle_right" )
@@ -81,11 +81,11 @@ function ENT:InitWeapons()
 		local bullet = {}
 		bullet.Src 	= Pos
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
-		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
+		bullet.Spread 	= Vector(0.01,0.01,0.01)
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
-		bullet.HullSize 	= 15
-		bullet.Damage	= 10
+		bullet.HullSize 	= 1
+		bullet.Damage	= 5
 		bullet.Velocity = 30000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end

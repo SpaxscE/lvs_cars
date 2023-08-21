@@ -14,6 +14,6 @@ function ENT:OnSpawn( PObj )
 
 	self:CreateTracks()
 
-	self.SNDTurret = self:AddSoundEmitter( Vector(0,-20,30), "lvs/weapons/gunner_mg_loop.wav", "lvs/weapons/gunner_mg_loop_interior.wav" )
+	self.SNDTurret = self:AddSoundEmitter( Vector(0,-20,30), "npc/combine_gunship/gunship_fire_loop1.wav" )
 	self.SNDTurret:SetSoundLevel( 95 )
 end
