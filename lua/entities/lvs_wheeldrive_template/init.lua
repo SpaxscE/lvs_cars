@@ -60,6 +60,8 @@ function ENT:OnSpawn( PObj )
 		LVS.FUELTYPE_PETROL
 		LVS.FUELTYPE_DIESEL
 		LVS.FUELTYPE_ELECTRIC
+	
+	tanksize is how many seconds@fullthrottle you can drive. Not in liter.
 	]]
 	--Example:
 	self:AddFuelTank( Vector(0,0,0), 600, LVS.FUELTYPE_PETROL )
