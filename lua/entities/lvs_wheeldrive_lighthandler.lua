@@ -434,7 +434,9 @@ function ENT:RenderLights( base, data )
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
 				local pos = base:LocalToWorld( projdata.pos )
 				local dir = base:LocalToWorldAngles( projdata.ang ):Forward()
-	
+
+				if not projdata.colorR or not projdata.colorG or not projdata.colorB or not projdata.brightness then self:InitializeLights( base ) break end
+
 				render.SetMaterial( self.LightMaterial )
 				render.DrawBeam( pos, pos + dir * 100, 50, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, projdata.brightness ) )
 
