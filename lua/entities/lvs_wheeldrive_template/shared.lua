@@ -6,7 +6,7 @@ ENT.Author = "*your name*"
 ENT.Information = ""
 ENT.Category = "[LVS] *your category*"
 
-ENT.Spawnable			= true -- set to "true" to make it spawnable
+ENT.Spawnable			= false -- set to "true" to make it spawnable
 ENT.AdminSpawnable		= false
 
 ENT.SpawnNormalOffset = 40 -- spawn normal offset, raise to prevent spawning into the ground
