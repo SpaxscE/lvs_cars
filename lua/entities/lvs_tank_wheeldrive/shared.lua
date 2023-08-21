@@ -31,3 +31,5 @@ ENT.TransGears = 3
 ENT.TransGearsReverse = 3
 
 ENT.MouseSteerAngle = 45
+
+ENT.WheelBrakeAutoLockup = true

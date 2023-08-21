@@ -145,11 +145,21 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	else
-		if ent:IsRotationLocked() then
-			ent:ReleaseRotation()
-		end
-
 		local Throttle = self:GetThrottle()
+
+		if self.WheelBrakeAutoLockup then
+			if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
+				ent:LockRotation()
+			else
+				if ent:IsRotationLocked() then
+					ent:ReleaseRotation()
+				end
+			end
+		else
+			if ent:IsRotationLocked() then
+				ent:ReleaseRotation()
+			end
+		end
 
 		if TorqueFactor > 0 and Throttle > 0 then
 			local targetVelocity = self:GetTargetVelocity()

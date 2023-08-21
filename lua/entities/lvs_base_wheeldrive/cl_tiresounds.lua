@@ -43,8 +43,6 @@ function ENT:TireSoundThink()
 end
 
 function ENT:DoTireSound( snd )
-	local ply = LocalPlayer()
-
 	if not istable( self._TireSounds ) then
 		self._TireSounds = {}
 	end
