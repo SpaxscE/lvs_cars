@@ -7,17 +7,8 @@ include("sv_axle.lua")
 include("sv_brakes.lua")
 
 function ENT:Initialize()
-	self:SetUseType( SIMPLE_USE )
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
-end
-
-function ENT:Use( ply )
-	local base = self:GetBase()
-
-	if not IsValid( base ) then return end
-
-	base:Use( ply )
 end
 
 function ENT:Think()
