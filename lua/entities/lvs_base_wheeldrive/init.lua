@@ -67,6 +67,18 @@ function ENT:PostInitialize( PObj )
 	self:EnableHandbrake()
 end
 
+function ENT:StartEngine()
+	self:PhysWake()
+
+	for _, wheel in pairs( self:GetWheels() ) do
+		if not IsValid( wheel ) then continue end
+
+		wheel:PhysWake()
+	end
+
+	BaseClass.StartEngine( self )
+end
+
 function ENT:AlignView( ply )
 	if not IsValid( ply ) then return end
 
@@ -88,6 +100,9 @@ function ENT:AlignView( ply )
 end
 
 function ENT:PhysicsSimulate( phys, deltatime )
+
+	if self:GetEngineActive() then phys:Wake() end
+
 	local ent = phys:GetEntity()
 
 	if ent == self then
@@ -196,8 +211,6 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	end
-
-	phys:Wake()
 
 	if not self:StabilityAssist() or not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
 
