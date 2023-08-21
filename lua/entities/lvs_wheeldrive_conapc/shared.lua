@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/blu/conscript_apc.mdl"
+ENT.MDL = "models/diggercars/amd35/amd35.mdl"
 
 ENT.PhysicsWeightScale = 2
 
@@ -43,10 +43,10 @@ ENT.EngineSounds = {
 function ENT:AimTurret()
 	local trace = self:GetEyeTrace()
 
-	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - self:LocalToWorld( Vector(0,25,55)) ):GetNormalized():Angle() )
+	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - self:LocalToWorld( Vector(0,0,80)) ):GetNormalized():Angle() )
 
 	self:SetPoseParameter("turret_pitch", -AimAngles.p )
-	self:SetPoseParameter("turret_yaw", AimAngles.y - 90 )
+	self:SetPoseParameter("turret_yaw", AimAngles.y -90 )
 end
 
 function ENT:InitWeapons()
@@ -57,8 +57,8 @@ function ENT:InitWeapons()
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.Attack = function( ent )
-		local ID_L = ent:LookupAttachment( "muzzle_left" )
-		local ID_R = ent:LookupAttachment( "muzzle_right" )
+		local ID_L = ent:LookupAttachment( "muzzle_mg" )
+		local ID_R = ent:LookupAttachment( "muzzle_turret" )
 		local MuzzleL = ent:GetAttachment( ID_L )
 		local MuzzleR = ent:GetAttachment( ID_R )
 

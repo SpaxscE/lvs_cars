@@ -21,7 +21,7 @@ function ENT:OnSpawn( PObj )
 
 	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-57,0,40), Angle(-70,0,0), Vector(-15,-25,-3), Vector(20,25,3), Vector(15,-25,-3), Vector(40,25,30) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_trunk_open.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/classiccar_door_close.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_trunk_close.wav" )
 
 	local DoorHandler = self:AddDoorHandler( "hood", Vector(65,0,33), Angle(14,0,0), Vector(-30,-25,-3), Vector(0,25,3), Vector(-30,-25,-3), Vector(-15,25,25) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
