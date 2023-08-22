@@ -13,10 +13,6 @@ if CLIENT then
 		self:AimTurret()
 	end
 else
-	--vehicles/tank_turret_start1.wav
-	--vehicles/tank_turret_stop1.wav
-	--vehicles/tank_turret_loop1.wav
-
 	function ENT:CalcTurretSound( Pitch, Yaw, AimRate )
 		local DeltaPitch = Pitch - self:GetTurretPitch()
 		local DeltaYaw = Yaw - self:GetTurretYaw()
@@ -92,13 +88,15 @@ function ENT:AddTurretDT()
 end
 
 function ENT:IsTurretEnabled()
+	if self:GetHP() <= 0 then return false end
+
 	if not self:GetTurretEnabled() then return false end
 
 	return IsValid( self:GetDriver() ) or self:GetAI()
 end
 
 function ENT:AimTurret()
-	if not self:IsTurretEnabled() then self:StopTurretSound() return end
+	if not self:IsTurretEnabled() then if SERVER then self:StopTurretSound() end return end
 
 	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
 
