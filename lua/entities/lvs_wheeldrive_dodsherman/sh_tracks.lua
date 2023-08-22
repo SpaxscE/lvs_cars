@@ -4,15 +4,6 @@ function ENT:AddTracksDT()
 	self:AddDT( "Entity", "DriveWheelFR" )
 end
 
-ENT.TireSoundTypes = {
-	["roll"] = "lvs/vehicles/sherman/tracks_loop.wav",
-	["roll_dirt"] = "lvs/vehicles/sherman/tracks_loop.wav",
-	["roll_wet"] = "lvs/vehicles/sherman/tracks_loop.wav",
-	["skid"] = "common/null.wav",
-	["skid_dirt"] = "lvs/vehicles/generic/wheel_skid_dirt.wav",
-	["skid_wet"] = "common/null.wav",
-}
-
 if SERVER then
 	function ENT:CreateTracks()
 		local WheelModel = "models/props_vehicles/tire001b_truck.mdl"
@@ -95,78 +86,30 @@ if SERVER then
 		} )
 	end
 else
+	ENT.TrackSounds = "lvs/vehicles/sherman/tracks_loop.wav"
 	ENT.TrackHull = Vector(20,20,20)
-	ENT.TrackData = {
-		{ 
-			attachment = "vehicle_suspension_l_1",
-			poseparameter = "suspension_left_1",
-		},
-		{ 
-			attachment = "vehicle_suspension_l_2",
-			poseparameter = "suspension_left_2",
-		},
-		{ 
-			attachment = "vehicle_suspension_l_3",
-			poseparameter = "suspension_left_3",
-		},
-		{ 
-			attachment = "vehicle_suspension_l_4",
-			poseparameter = "suspension_left_4",
-		},
-		{ 
-			attachment = "vehicle_suspension_l_5",
-			poseparameter = "suspension_left_5",
-		},
-		{ 
-			attachment = "vehicle_suspension_l_6",
-			poseparameter = "suspension_left_6",
-		},
-		{ 
-			attachment = "vehicle_suspension_r_1",
-			poseparameter = "suspension_right_1",
-		},
-		{ 
-			attachment = "vehicle_suspension_r_2",
-			poseparameter = "suspension_right_2",
-		},
-		{ 
-			attachment = "vehicle_suspension_r_3",
-			poseparameter = "suspension_right_3",
-		},
-		{ 
-			attachment = "vehicle_suspension_r_4",
-			poseparameter = "suspension_right_4",
-		},
-		{ 
-			attachment = "vehicle_suspension_r_5",
-			poseparameter = "suspension_right_5",
-		},
-		{ 
-			attachment = "vehicle_suspension_r_6",
-			poseparameter = "suspension_right_6",
-		},
-	}
-
-	function ENT:CalcTracks()
-		for i, v in pairs( self.TrackData ) do
-			local att = self:GetAttachment( self:LookupAttachment( self.TrackData[i].attachment ) )
-
-			if not att then continue end
-
-			local pos = att.Pos
-
-			local trace = util.TraceHull( {
-				start = pos,
-				endpos = pos + self:GetUp() * - 100,
-				filter = self:GetCrosshairFilterEnts(),
-				mins = -self.TrackHull,
-				maxs = self.TrackHull,
-			} )
-			local Dist = (pos - trace.HitPos):Length() - (30 - self.TrackHull.z)
-
-			self:SetPoseParameter(self.TrackData[i].poseparameter, self:QuickLerp( self.TrackData[i].poseparameter, 12 - Dist, 25 ) )
+	ENT.TrackData = {}
+	for i = 1, 6 do
+		for n = 0, 1 do
+			local LR = n == 0 and "l" or "r"
+			local LeftRight = n == 0 and "left" or "right"
+			local data = {
+				Attachment = {
+					name = "vehicle_suspension_"..LR.."_"..i,
+					toGroundDistance = 21,
+					traceLength = 100,
+				},
+				PoseParameter = {
+					name = "suspension_"..LeftRight.."_"..i,
+					rangeMultiplier = 1,
+					lerpSpeed = 25,
+				}
+			}
+			table.insert( ENT.TrackData, data )
 		end
+	end
 
+	function ENT:CalcTrackScrollTexture()
 		local DriveWheelFL = self:GetDriveWheelFL()
 		if IsValid( DriveWheelFL ) then
 			local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r

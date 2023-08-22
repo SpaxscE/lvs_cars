@@ -15,8 +15,8 @@ ENT.AITEAM = 2
 
 ENT.MaxHealth = 250
 
-ENT.MaxVelocity = 1200
-ENT.MaxVelocityReverse = 1200
+ENT.MaxVelocity = 650
+ENT.MaxVelocityReverse = 650
 
 ENT.EngineTorque = 200
 
