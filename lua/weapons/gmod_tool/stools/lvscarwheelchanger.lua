@@ -3,6 +3,7 @@
 TOOL.Category		= "LVS"
 TOOL.Name			= "#Wheel Editor"
 
+TOOL.ClientConVar[ "model" ] = ""
 TOOL.ClientConVar[ "camber" ] = 0
 TOOL.ClientConVar[ "caster" ] = 0
 TOOL.ClientConVar[ "toe" ] = 0
@@ -28,6 +29,14 @@ if CLIENT then
 		panel:AddControl("Slider", { Label = "Camber", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_camber" } )
 		panel:AddControl("Slider", { Label = "Caster", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_caster" } )
 		panel:AddControl("Slider", { Label = "Toe", Type = "float", Min = "-30", Max = "30", Command = "lvscarwheelchanger_toe" } )
+
+		-- purpose: avoid bullshit concommand system and avoid players abusing it
+		for mdl, _ in pairs( list.Get( "lvs_wheels" ) or {} ) do
+			list.Set( "lvs_wheels_selection", mdl, {} )
+		end
+		panel:AddControl( "Label",  { Text = "" } )
+		panel:AddControl( "Label",  { Text = "Wheel Models" } )
+		panel:AddControl( "PropSelect", { Label = "", ConVar = "lvscarwheelchanger_model", Height = 0, Models = list.Get( "lvs_wheels_selection" ) } )
 	end
 
 end
@@ -43,13 +52,35 @@ end
 function TOOL:GetData( ent )
 	if CLIENT then return end
 
-	self.radius = ent:GetRadius() * (1 / ent:GetModelScale())
-	self.ang = ent:GetAlignmentAngle()
-	self.mdl = ent:GetModel()
+	if self:IsValidTarget( ent ) then
+		self.radius = ent:GetRadius() * (1 / ent:GetModelScale())
+		self.ang = ent:GetAlignmentAngle()
+		self.mdl = ent:GetModel()
+
+		self:GetOwner():ConCommand( [[lvscarwheelchanger_model ""]] )
+	else
+		local data = list.Get( "lvs_wheels" )[ mdl ]
+
+		if data then
+			self:GetOwner():ConCommand( [[lvscarwheelchanger_model "]]..mdl..[["]] )
+		end
+	end
 end
 
 function TOOL:SetData( ent )
 	if CLIENT then return end
+
+	local mdl = self:GetClientInfo("model")
+
+	if mdl ~= "" then
+		local data = list.Get( "lvs_wheels" )[ mdl ]
+
+		if data then
+			self.mdl = mdl
+			self.ang = data.angle
+			self.radius = data.radius
+		end
+	end
 
 	if not isstring( self.mdl ) or not isangle( self.ang ) or not isnumber( self.radius ) then return end
 
@@ -79,8 +110,6 @@ function TOOL:LeftClick( trace )
 end
 
 function TOOL:RightClick( trace )
-	if not self:IsValidTarget( trace.Entity ) then return false end
-
 	self:GetData( trace.Entity )
 
 	return true
@@ -97,3 +126,11 @@ function TOOL:Reload( trace )
 
 	return true
 end
+
+list.Set( "lvs_wheels", "models/props_vehicles/tire001b_truck.mdl", {angle = Angle(0,0,0), radius = 24.8} )
+list.Set( "lvs_wheels", "models/diggercars/kubel/kubelwagen_wheel.mdl", {angle = Angle(0,0,0), radius = 13.47} )
+list.Set( "lvs_wheels", "models/diggercars/willys/wh.mdl", {angle = Angle(0,0,0), radius = 15.64} )
+list.Set( "lvs_wheels", "models/diggercars/dodge_charger/wh.mdl", {angle = Angle(0,0,0), radius = 12.03} )
+list.Set( "lvs_wheels", "models/diggercars/nissan_bluebird910/bluebird_wheel.mdl", {angle = Angle(0,0,0), radius = 11.97} )
+list.Set( "lvs_wheels", "models/diggercars/ferrari_365/f365_wheel.mdl", {angle = Angle(0,0,0), radius = 13.96} )
+list.Set( "lvs_wheels", "models/diggercars/alfa_montreal/monteral_wheel.mdl", {angle = Angle(0,0,0), radius = 12.77} )
