@@ -1,14 +1,10 @@
 "VertexLitGeneric"
 {
-	"$basetexture" "models/diggercars/honda_integra_dc2/lights"
-	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-
-	"$detail" "models/DiggerCars/honda_integra_dc2/lights"
+	"$basetexture" "models/diggercars/T1/T1"
+	"$detail" "models/diggercars/T1/T1_g"
 	"$detailscale" "1"
-	"$detailblendfactor" "5"
+	"$detailblendfactor" "1"
 	"$detailblendmode" "5"
-
-	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
 	"$phongfresnelranges" "[1 1 1]" 
