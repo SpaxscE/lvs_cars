@@ -63,7 +63,7 @@ ENT.ExhaustPositions = {
 ENT.Lights = {
 	{
 		Trigger = "main",
-		SubMaterialID = 13,
+		SubMaterialID = 12,
 		Sprites = {
 			{ pos = Vector(82.02,23.46,16.95), colorB = 200, colorA = 150 },
 			{ pos = Vector(82.02,-23.46,16.95), colorB = 200, colorA = 150 },
@@ -97,7 +97,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "brake",
-		SubMaterialID = 23,
+		SubMaterialID = 15,
 		Sprites = {
 			{ pos = Vector(-96.3,30.3,23.24), colorG = 0, colorB = 0, colorA = 150 },
 			{ pos = Vector(-96.3,-30.3,23.24), colorG = 0, colorB = 0, colorA = 150 },
@@ -105,7 +105,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "reverse",
-		SubMaterialID = 22,
+		SubMaterialID = 23,
 		Sprites = {
 			{ pos = Vector(-96.41,19.49,24.45), height = 25, width = 25, colorA = 150 },
 			{ pos = Vector(-96.41,-19.49,24.45), height = 25, width = 25, colorA = 150 },
@@ -122,7 +122,7 @@ ENT.Lights = {
 	},
 	{
 		Trigger = "turnleft",
-		SubMaterialID = 14,
+		SubMaterialID = 13,
 		Sprites = {
 			{ width = 35, height = 35, pos = Vector(81.05,28.33,16.98), colorG = 100, colorB = 0, colorA = 50 },
 			{ width = 40, height = 40, pos = Vector(37.58,34.58,14.43), colorG = 100, colorB = 0, colorA = 150 },
