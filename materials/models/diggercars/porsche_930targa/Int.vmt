@@ -2,7 +2,10 @@
 {
 	"$basetexture" "models/DiggerCars/PORSCHE_930Targa/Int"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$nocull" "1"
+	"$detail" "models/DiggerCars/PORSCHE_930Targa/Int_e"
+	"$detailscale" "1"
+	"$detailblendfactor" "0" //use this for emission strength
+	"$detailblendmode" "5"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
