@@ -149,7 +149,11 @@ else
 
 	function ENT:CalcTracks()
 		for i, v in pairs( self.TrackData ) do
-			local pos = self:GetAttachment( self:LookupAttachment( self.TrackData[i].attachment ) ).Pos
+			local att = self:GetAttachment( self:LookupAttachment( self.TrackData[i].attachment ) )
+
+			if not att then continue end
+
+			local pos = att.Pos
 
 			local trace = util.TraceHull( {
 				start = pos,
