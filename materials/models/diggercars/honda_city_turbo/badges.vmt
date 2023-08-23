@@ -2,7 +2,6 @@
 {
 	"$basetexture" "models/diggercars/honda_city_turbo/badges"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
-	"$decal" "1"
 	"$alphatest" "1"
 	"$allowalphatocoverage" "1"
 	"$phong" "1" 
