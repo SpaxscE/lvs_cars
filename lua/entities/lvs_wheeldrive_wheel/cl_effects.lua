@@ -40,9 +40,11 @@ function ENT:DoWheelEffects( Base, trace, traceWater )
 	if self.SkidmarkSurfaces[ SurfacePropName ] then
 		local Scale = math.min( 0.3 + SkidValue / 4000, 1 ) ^ 2
 
-		if Scale > 0.4 then
+		if Scale > 0.2 then
 			self:StartSkidmark( trace.HitPos )
 			self:CalcSkidmark( trace, Base:GetCrosshairFilterEnts() )
+		else
+			self:FinishSkidmark()
 		end
 
 		local effectdata = EffectData()
