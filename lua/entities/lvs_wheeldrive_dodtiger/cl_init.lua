@@ -13,7 +13,7 @@ function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
 		local Muzzle = self:GetAttachment( ID )
 
 		if Muzzle then
-			pos =  Muzzle.Pos - Muzzle.Ang:Up() * 140 - Muzzle.Ang:Forward() * 24
+			pos =  Muzzle.Pos - Muzzle.Ang:Up() * 130 - Muzzle.Ang:Forward() * 30
 		end
 
 	end
