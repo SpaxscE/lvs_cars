@@ -1,9 +1,7 @@
 "VertexlitGeneric"
 {
-	"$basetexturetransform" "center .5 .5 scale 40 40 rotate 0 translate 0 0"
-	"$basetexture" "models/DiggerCars/shared/skin"
-	"$bumpmap" "models/DiggerCars/shared/skin_normal"
-	"$nodecal" "1"
+	"$basetexture" "models/diggercars/nissan_bluebird910/skin"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 	"$phong" 1
 	"$phongexponent" 5
 	"$phongboost"	2
@@ -29,3 +27,7 @@
 		}
 	}
 }
+
+
+
+
