@@ -1,0 +1,25 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/DiggerCars/m5m16/halftrackgun_us1Snow"
+	"$bumpmap" "models/DiggerCars/m5m16/halftrackgun_us1_normal"
+	"$phong" "1" 
+	"$phongboost" "0.04" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
