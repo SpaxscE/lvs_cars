@@ -133,8 +133,8 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
-		bullet.Damage	= 1500
-		bullet.Velocity = 7500
+		bullet.Damage	= 750
+		bullet.Velocity = 14000
 		bullet.SplashDamage = 150
 		bullet.SplashDamageRadius = 250
 		bullet.Attacker 	= ent:GetDriver()
