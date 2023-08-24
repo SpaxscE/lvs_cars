@@ -13,13 +13,16 @@ ENT.MDL = "models/diggercars/222/222.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxVelocity = 1100
+ENT.MaxVelocity = 1000
 
-ENT.EngineCurve = 0.35
-ENT.EngineTorque = 120
+ENT.EngineCurve = 0.2
+ENT.EngineTorque = 200
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 5
+
+ENT.FastSteerAngleClamp = 5
+ENT.FastSteerDeactivationDriftAngle = 12
 
 ENT.PhysicsWeightScale = 1.5
 ENT.PhysicsDampingForward = true
@@ -43,3 +46,71 @@ ENT.EngineSounds = {
 		UseDoppler = true,
 	},
 }
+
+
+ENT.Lights = {
+	{
+		Trigger = "main",
+		SubMaterialID = 1,
+		Sprites = {
+			[1] = {
+				pos = Vector(-21.76,92.74,44.5),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(21.76,92.74,44.5),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(-21.76,92.74,44.5),
+				ang = Angle(0,90,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(21.76,92.74,44.5),
+				ang = Angle(0,90,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "high",
+		Sprites = {
+			[1] = {
+				pos = Vector(-21.76,92.74,44.5),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(21.76,92.74,44.5),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(-21.76,92.74,44.5),
+				ang = Angle(0,90,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(21.76,92.74,44.5),
+				ang = Angle(0,90,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+}
+

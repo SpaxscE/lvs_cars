@@ -3,7 +3,8 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(-10,25,22), Angle(0,0,0) )
+	local DriverSeat =self:AddDriverSeat( Vector(0,50,22), Angle(0,0,0) )
+	DriverSeat.HidePlayer = true
 
 	self:AddEngine( Vector(42,0,35) )
 
