@@ -121,6 +121,7 @@ ENT.Lights = {
 
 function ENT:OnSetupDataTables()
 	self:AddTurretDT()
+	self:AddDT( "Entity", "GunnerSeat" )
 end
 
 
@@ -183,6 +184,7 @@ function ENT:InitWeapons()
 			local MuzzlePos2D = traceTurret.HitPos:ToScreen() 
 
 			ent:PaintCrosshairCenter( MuzzlePos2D, Col )
+			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
 	self:AddWeapon( weapon )
@@ -251,6 +253,7 @@ function ENT:InitWeapons()
 			local MuzzlePos2D = traceTurret.HitPos:ToScreen() 
 
 			ent:PaintCrosshairOuter( MuzzlePos2D, Col )
+			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
 	self:AddWeapon( weapon )
