@@ -1,23 +1,32 @@
-VertexLitGeneric
+"VertexlitGeneric"
 {
-	$basetexture				"models/DiggerCars/VAZ 2108 Sport/vaz_2108_lightglass_diff.vtf"
-	$allowalphatocoverage		1
-	$alphatest					1
-	$halflambert				1
-	$normalmapalphaenvmapmask	1
-
-	$color2						"[1 1 1]"
-	$bumpmap					"models/DiggerCars/VAZ 2108 Sport/vaz_2108_lightglass_norm.vtf"
-	$envmap						env_cubemap
-	$envmapsaturation			0.5
-	$envmaptint 				"[.5 .5 .5]"
-
-	Proxies
+	"$basetexture" "models/DiggerCars/VAZ 2108 Sport/vaz_2108_lightglass_diff"
+	"$basetexture" "models/diggercars/VAZ 2108 Sport/vaz_2108_lightglass_norm"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.4 0.4 0.4]"
+	"$normalmapalphaenvmapmask" "1"
+	"$envmapfresnel" "1"
+	"$phong" "1"
+	"$phongexponent" "2"
+	"$phongboost" "0.05"	
+	"$phongfresnelranges"	"[0.1 1 2]"
+	"$additive" "1"
+	"$rimlight" "1"
+	"$rimlightexponent" "2"	
+	"$rimlightboost" "1"	
+	"$colorfix" "{5 5 5}"
+	"Proxies"
 	{
-		Equals
+		"Equals"
 		{
-			srcVar1				$color2
-			resultVar			$color
+			srcVar1 $colorfix
+			resultVar	$color
 		}
 	}
 }
+
+
+
+
+
+

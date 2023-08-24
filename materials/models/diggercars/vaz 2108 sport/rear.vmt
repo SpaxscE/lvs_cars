@@ -3,6 +3,11 @@
 	"$basetexture" "models/DiggerCars/VAZ 2108 Sport/lights"
 	"$bumpmap" "models/DiggerCars/VAZ 2108 Sport/vaz_2108_lights_norm"
 
+	"$detail" "models/DiggerCars/VAZ 2108 Sport/lights_glow"
+	"$detailscale" "1"
+	"$detailblendfactor" "0"
+	"$detailblendmode" "5"
+
 	"$alphatest" "1"
 	"$allowalphatocoverage" "1"
 	"$halflambert" 1
@@ -24,8 +29,6 @@
 		}
 	}
 }
-
-
 
 
 
