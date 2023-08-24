@@ -27,6 +27,7 @@ function ENT:OnSpawn( PObj )
 
 
 	self:AddEngine( Vector(0,-60,51) )
+	self:AddFuelTank( Vector(0,-63,25), 600, LVS.FUELTYPE_PETROL )
 
 	local WheelModel = "models/diggercars/222/222_wheel.mdl"
 
