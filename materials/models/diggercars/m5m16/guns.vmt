@@ -2,7 +2,7 @@
 {
 	"$baseTexture" "models/DiggerCars/m5m16/halftrackgun_us1"
 	"$bumpmap" "models/DiggerCars/m5m16/halftrackgun_us1_normal"
-	"$detail" "models/DiggerCars/m5m16/halftrackgun_us1"
+	"$detail" "models/DiggerCars/m5m16/halftrackgun_us1_e"
 	"$detailscale" "1"
 	"$detailblendfactor" "0" //use this for emission strength
 	"$detailblendmode" "5"
