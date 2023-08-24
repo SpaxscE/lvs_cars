@@ -17,9 +17,6 @@ ENT.MaxHealth = 1350
 
 ENT.MaxVelocity = 1000
 
-ENT.SteerSpeed = 1
-ENT.SteerReturnSpeed = 3
-
 ENT.EngineCurve = 0.2
 ENT.EngineTorque = 200
 

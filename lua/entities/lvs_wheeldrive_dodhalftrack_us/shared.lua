@@ -1,5 +1,5 @@
 
-ENT.Base = "lvs_base_wheeldrive"
+ENT.Base = "lvs_tank_wheeldrive"
 
 ENT.PrintName = "DOD:S Half-track US"
 ENT.Author = "Luna"
@@ -9,16 +9,17 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/willys/willys.mdl"
+ENT.MDL = "models/diggercars/m5m16/m5m16.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxVelocity = 1200
+ENT.MaxVelocity = 700
+ENT.MaxVelocityReverse = 250
 
-ENT.EngineCurve = 0.25
-ENT.EngineTorque = 150
+ENT.EngineCurve = 0
+ENT.EngineTorque = 175
 
-ENT.TransGears = 4
+ENT.TransGears = 3
 ENT.TransGearsReverse = 1
 
 ENT.EngineSounds = {
@@ -40,112 +41,6 @@ ENT.EngineSounds = {
 	},
 }
 
-ENT.Lights = {
-	{
-		Trigger = "main",
-		SubMaterialID = 0,
-		Sprites = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-			[3] = {
-				pos = Vector(-63.41,-20.49,21.1),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-		},
-		ProjectedTextures = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-		},
-	},
-	{
-		Trigger = "main",
-		SubMaterialID = 3,
-	},
-	{
-		Trigger = "high",
-		Sprites = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-		},
-		ProjectedTextures = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-		},
-	},
-	{
-
-		Trigger = "brake",
-		SubMaterialID = 2,
-		Sprites = {
-			[1] = {
-				pos = Vector(-63.41,20.49,21.1),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-		}
-	},
-	{
-		Trigger = "fog",
-		SubMaterialID = 1,
-		Sprites = {
-			[1] = {
-				pos = Vector(61.03,14.6,28.6),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(61.03,-14.6,28.6),
-				colorB = 200,
-				colorA = 150,
-			},
-			[3] = {
-				pos = Vector(53.09,26.85,35.88),
-				colorB = 200,
-				colorA = 150,
-			},
-		},
-	},
-}
+function ENT:OnSetupDataTables()
+	self:AddTracksDT()
+end

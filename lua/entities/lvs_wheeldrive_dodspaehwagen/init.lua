@@ -26,7 +26,7 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetParent( self, ID )
 
 
-	self:AddEngine( Vector(42,0,35) )
+	self:AddEngine( Vector(0,-60,51) )
 
 	local WheelModel = "models/diggercars/222/222_wheel.mdl"
 
