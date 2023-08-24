@@ -5,7 +5,7 @@ include("shared.lua")
 include("sh_turret.lua")
 
 function ENT:OnSpawn( PObj )
-	local DriverSeat =self:AddDriverSeat( Vector(0,50,22), Angle(0,0,0) )
+	local DriverSeat =self:AddDriverSeat( Vector(0,-15,30), Angle(0,0,0) )
 	DriverSeat.HidePlayer = true
 
 	local ID = self:LookupAttachment( "muzzle_mg" )

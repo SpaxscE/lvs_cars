@@ -1,6 +1,7 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_tankview.lua" )
+AddCSLuaFile( "cl_attachable_playermodels.lua" )
 include("shared.lua")
 
 function ENT:CreateWheelChain( wheels )

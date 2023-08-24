@@ -1,5 +1,4 @@
 include("shared.lua")
-include("cl_tankview.lua")
 
 ENT.TrackHull = Vector(1,1,1)
 ENT.TrackData = {}

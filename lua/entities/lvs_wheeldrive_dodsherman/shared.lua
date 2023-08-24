@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_tank_wheeldrive"
 
-ENT.PrintName = "DOD:S Sherman Tank"
+ENT.PrintName = "DOD:S Sherman"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"

@@ -84,6 +84,7 @@ function ENT:AddTurretDT()
 
 	if SERVER then
 		self:SetTurretEnabled( true )
+		self:SetTurretYaw( 90 )
 	end
 end
 
@@ -100,7 +101,7 @@ function ENT:AimTurret()
 
 	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
 
-	local AimRate = 25 * FrameTime() 
+	local AimRate = 50 * FrameTime() 
 
 	local Pitch = math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate )
 	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )

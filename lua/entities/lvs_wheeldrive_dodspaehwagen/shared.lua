@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "DOD:S Panzerspaehwagen"
+ENT.PrintName = "DOD:S Sd.Kfz 222"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -13,7 +13,12 @@ ENT.MDL = "models/diggercars/222/222.mdl"
 
 ENT.AITEAM = 1
 
+ENT.MaxHealth = 1350
+
 ENT.MaxVelocity = 1000
+
+ENT.SteerSpeed = 1
+ENT.SteerReturnSpeed = 3
 
 ENT.EngineCurve = 0.2
 ENT.EngineTorque = 200
@@ -218,10 +223,11 @@ function ENT:InitWeapons()
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle", effectdata )
 
-		--ent:PlayAnimation( "turret_fire" )
+		ent:PlayAnimation( "turret_fire" )
+
 		local PhysObj = ent:GetPhysicsObject()
 		if IsValid( PhysObj ) then
-			PhysObj:ApplyForceOffset( -bullet.Dir * 1500, bullet.Src )
+			PhysObj:ApplyForceOffset( -bullet.Dir * 10000, bullet.Src )
 		end
 
 		ent:TakeAmmo( 1 )

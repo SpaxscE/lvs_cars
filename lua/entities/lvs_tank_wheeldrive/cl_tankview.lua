@@ -1,9 +1,11 @@
 
-function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
+function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 	return pos, angles, fov
 end
 
-function ENT:CalcTankView( ply, pos, angles, fov, pod )
+function ENT:CalcTankView( ply, original_pos, original_ang, original_fov, pod )
+	local pos, angles, fov = self:TankViewOverride( ply, original_pos, original_ang, original_fov, pod )
+
 	local view = {}
 	view.origin = pos
 	view.angles = angles

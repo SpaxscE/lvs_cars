@@ -6,7 +6,9 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	self:CalcTurret()
 end
 
-function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
+
+include("entities/lvs_tank_wheeldrive/cl_tankview.lua")
+function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 	if ply == self:GetDriver() and not pod:GetThirdPersonMode() then
 		local ID = self:LookupAttachment( "muzzle" )
 
