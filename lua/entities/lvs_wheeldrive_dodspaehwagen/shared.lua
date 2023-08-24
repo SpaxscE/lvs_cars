@@ -140,7 +140,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_yellow"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
-		bullet.Damage	= 45
+		bullet.Damage	= 10
 		bullet.Velocity = 30000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
@@ -185,8 +185,8 @@ function ENT:InitWeapons()
 
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_cannon.png")
-	weapon.Ammo = 200
-	weapon.Delay = 0.5
+	weapon.Ammo = 250
+	weapon.Delay = 0.25
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.2
 
@@ -204,7 +204,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
-		bullet.Damage	= 25
+		bullet.Damage	= 50
 		bullet.Velocity = 14000
 		bullet.SplashDamage = 100
 		bullet.SplashDamageRadius = 150
