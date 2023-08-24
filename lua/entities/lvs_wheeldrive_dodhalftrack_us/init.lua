@@ -6,6 +6,7 @@ include("sh_tracks.lua")
 
 function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,21,30), Angle(0,-90,0) )
+	self:AddPassengerSeat( Vector(15,-21,37), Angle(0,-90,10) )
 
 	self:AddEngine( Vector(42,0,35) )
 
