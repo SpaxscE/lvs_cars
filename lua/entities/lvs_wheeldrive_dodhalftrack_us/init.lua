@@ -44,3 +44,9 @@ function ENT:OnSpawn( PObj )
 
 	self:CreateTracks()
 end
+
+function ENT:OnEngineActiveChanged( Active )
+	if Active then
+		self:EmitSound( "lvs/vehicles/halftrack/engine_start.wav" )
+	end
+end

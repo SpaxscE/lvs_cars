@@ -60,7 +60,7 @@ else
 		}
 	}
 
-	ENT.TrackSounds = "lvs/vehicles/sherman/tracks_loop.wav"
+	ENT.TrackSounds = "lvs/vehicles/halftrack/tracks_loop.wav"
 	ENT.TrackHull = Vector(5,5,5)
 	ENT.TrackData = {}
 
