@@ -3,32 +3,31 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(-29,17.5,21), Angle(0,-90,-10) )
-	self:AddPassengerSeat( Vector(-11,-17.5,24), Angle(0,-90,10) )
+	self:AddDriverSeat( Vector(-10,25,22), Angle(0,0,0) )
 
 	self:AddEngine( Vector(42,0,35) )
 
-	local WheelModel = "models/diggercars/willys/wh.mdl"
+	local WheelModel = "models/diggercars/222/222_wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
-			ForwardAngle = Angle(0,0,0),
+			ForwardAngle = Angle(0,90,0),
 			SteerType = LVS.WHEEL_STEER_FRONT,
-			SteerAngle = 30,
-			TorqueFactor = 0.3,
+			SteerAngle = 22,
+			TorqueFactor = 0.4,
 			BrakeFactor = 1,
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(49.5,-27,16),
+				pos = Vector(-35,70,18),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
+				mdl_ang = Angle(0,-90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(49.5,27,16),
+				pos = Vector(35,70,18),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
+				mdl_ang = Angle(0,90,0),
 			} ),
 		},
 		Suspension = {
@@ -43,23 +42,24 @@ function ENT:OnSpawn( PObj )
 
 	local RearAxle = self:DefineAxle( {
 		Axle = {
-			ForwardAngle = Angle(0,0,0),
-			SteerType = LVS.WHEEL_STEER_NONE,
-			TorqueFactor = 0.7,
+			ForwardAngle = Angle(0,90,0),
+			SteerType = LVS.WHEEL_STEER_REAR,
+			SteerAngle = 8,
+			TorqueFactor = 0.6,
 			BrakeFactor = 1,
 			UseHandbrake = true,
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(-37,-27,12),
+				pos = Vector(-35,-45,14),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
+				mdl_ang = Angle(0,-90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(-37,27,12),
+				pos = Vector(35,-45,14),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
+				mdl_ang = Angle(0,90,0),
 			} ),
 		},
 		Suspension = {

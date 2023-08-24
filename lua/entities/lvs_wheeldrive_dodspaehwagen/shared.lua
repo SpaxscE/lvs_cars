@@ -9,17 +9,21 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/diggercars/willys/willys.mdl"
+ENT.MDL = "models/diggercars/222/222.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxVelocity = 1200
+ENT.MaxVelocity = 1100
 
-ENT.EngineCurve = 0.25
-ENT.EngineTorque = 150
+ENT.EngineCurve = 0.35
+ENT.EngineTorque = 120
 
-ENT.TransGears = 4
-ENT.TransGearsReverse = 1
+ENT.TransGears = 5
+ENT.TransGearsReverse = 5
+
+ENT.PhysicsWeightScale = 1.5
+ENT.PhysicsDampingForward = true
+ENT.PhysicsDampingReverse = true
 
 ENT.EngineSounds = {
 	{
@@ -37,115 +41,5 @@ ENT.EngineSounds = {
 		PitchMul = 100,
 		SoundLevel = 75,
 		UseDoppler = true,
-	},
-}
-
-ENT.Lights = {
-	{
-		Trigger = "main",
-		SubMaterialID = 0,
-		Sprites = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-			[3] = {
-				pos = Vector(-63.41,-20.49,21.1),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-		},
-		ProjectedTextures = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-		},
-	},
-	{
-		Trigger = "main",
-		SubMaterialID = 3,
-	},
-	{
-		Trigger = "high",
-		Sprites = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				colorB = 200,
-				colorA = 150,
-			},
-		},
-		ProjectedTextures = {
-			[1] = {
-				pos = Vector(60.34,-17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-			[2] = {
-				pos = Vector(60.34,17.52,34.46),
-				ang = Angle(0,0,0),
-				colorB = 200,
-				colorA = 150,
-				shadows = true,
-			},
-		},
-	},
-	{
-
-		Trigger = "brake",
-		SubMaterialID = 2,
-		Sprites = {
-			[1] = {
-				pos = Vector(-63.41,20.49,21.1),
-				colorG = 0,
-				colorB = 0,
-				colorA = 150,
-			},
-		}
-	},
-	{
-		Trigger = "fog",
-		SubMaterialID = 1,
-		Sprites = {
-			[1] = {
-				pos = Vector(61.03,14.6,28.6),
-				colorB = 200,
-				colorA = 150,
-			},
-			[2] = {
-				pos = Vector(61.03,-14.6,28.6),
-				colorB = 200,
-				colorA = 150,
-			},
-			[3] = {
-				pos = Vector(53.09,26.85,35.88),
-				colorB = 200,
-				colorA = 150,
-			},
-		},
 	},
 }
