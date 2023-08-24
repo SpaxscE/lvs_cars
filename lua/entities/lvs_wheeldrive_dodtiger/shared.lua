@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_tank_wheeldrive"
 
-ENT.PrintName = "DOD:S Tiger Tank"
+ENT.PrintName = "DOD:S Panzerkampfwagen VI"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -11,7 +11,7 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/tanks/tiger.mdl"
 
-ENT.AITEAM = 2
+ENT.AITEAM = 1
 
 ENT.MaxHealth = 4000
 

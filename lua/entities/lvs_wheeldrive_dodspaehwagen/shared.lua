@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive"
 
-ENT.PrintName = "DOD:S Willys Jeep"
+ENT.PrintName = "DOD:S Panzerspaehwagen"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
@@ -11,7 +11,7 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/willys/willys.mdl"
 
-ENT.AITEAM = 2
+ENT.AITEAM = 1
 
 ENT.MaxVelocity = 1200
 

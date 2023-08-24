@@ -156,3 +156,11 @@ end
 function ENT:GetTurnFlasher()
 	return math.cos( CurTime() * 8 + self:EntIndex() * 1337 ) > 0
 end
+
+function ENT:OnEngineActiveChanged( Active )
+	if Active then
+		self:EmitSound( "lvs/vehicles/generic/engine_start1.wav", 75, 100,  LVS.EngineVolume )
+	else
+		self:EmitSound( "vehicles/jetski/jetski_off.wav", 75, 100,  LVS.EngineVolume )
+	end
+end

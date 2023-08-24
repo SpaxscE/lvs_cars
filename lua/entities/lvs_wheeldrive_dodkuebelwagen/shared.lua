@@ -11,6 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/kubel/kubelwagen.mdl"
 
+ENT.AITEAM = 1
+
 ENT.MaxVelocity = 1200
 
 ENT.EngineTorque = 150

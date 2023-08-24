@@ -100,11 +100,3 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 end
-
-function ENT:OnEngineActiveChanged( Active )
-	if Active then
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_start.wav" )
-	else
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_stop.wav" )
-	end
-end
