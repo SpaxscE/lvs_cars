@@ -19,6 +19,19 @@ function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 end
 
 
+function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
+	if pod == self:GetGunnerSeat() and not pod:GetThirdPersonMode() then
+		local ID = self:LookupAttachment( "seat2" )
+
+		local Muzzle = self:GetAttachment( ID )
+
+		if Muzzle then
+			pos =  Muzzle.Pos - Muzzle.Ang:Right() * 25
+		end
+	end
+
+	return LVS:CalcView( self, ply, pos, angles, fov, pod )
+end
 
 include("entities/lvs_tank_wheeldrive/cl_attachable_playermodels.lua")
 function ENT:DrawDriver()
