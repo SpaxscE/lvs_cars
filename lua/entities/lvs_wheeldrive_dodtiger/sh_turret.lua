@@ -100,7 +100,7 @@ function ENT:AimTurret()
 
 	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
 
-	local AimRate = 25 * FrameTime() 
+	local AimRate = 15 * FrameTime() 
 
 	local Pitch = math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate )
 	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
