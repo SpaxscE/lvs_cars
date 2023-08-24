@@ -54,3 +54,70 @@ ENT.EngineSounds = {
 function ENT:OnSetupDataTables()
 	self:AddTracksDT()
 end
+
+ENT.Lights = {
+	{
+		Trigger = "main",
+		SubMaterialID = 1,
+		Sprites = {
+			[1] = {
+				pos = Vector(91.57,29.43,50.18),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(91.57,-29.43,50.18),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(91.57,29.43,50.18),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(91.57,-29.43,50.18),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "high",
+		SubMaterialID = 2,
+		Sprites = {
+			[1] = {
+				pos = Vector(96.81,19.99,49.67),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(96.81,-19.99,49.67),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(96.81,19.99,49.67),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(96.81,-19.99,49.67),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+}

@@ -18,8 +18,15 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat )
 
+	local DoorHandler = self:AddDoorHandler( "hatch", Vector(35,0,70), Angle(0,0,0), Vector(-10,-30,-10), Vector(10,30,10), Vector(-10,-30,-10), Vector(10,30,10) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_close.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_open.wav" )
 
-	self:AddEngine( Vector(42,0,35) )
+	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-115,0,60), Angle(0,0,0), Vector(-1,-15,-15), Vector(1,15,15), Vector(-30,-15,-15), Vector(1,15,15) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
+
+	self:AddEngine( Vector(68,0,50) )
 
 	local WheelModel = "models/diggercars/m5m16/m5_wheel.mdl"
 
