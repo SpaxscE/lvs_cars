@@ -20,11 +20,3 @@ function ENT:OnSpawn( PObj )
 
 	self:CreateTracks()
 end
-
-function ENT:OnEngineActiveChanged( Active )
-	if Active then
-		self:EmitSound( "lvs/vehicles/tiger/engine_start.wav" )
-	else
-		self:EmitSound( "lvs/vehicles/tiger/engine_stop.wav" )
-	end
-end

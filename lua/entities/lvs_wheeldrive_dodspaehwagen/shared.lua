@@ -32,7 +32,7 @@ ENT.PhysicsDampingReverse = true
 
 ENT.EngineSounds = {
 	{
-		sound = "lvs/vehicles/willy/eng_idle_loop.wav",
+		sound = "lvs/vehicles/222/eng_idle_loop.wav",
 		Volume = 0.5,
 		Pitch = 85,
 		PitchMul = 25,
@@ -40,15 +40,14 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/willy/eng_loop.wav",
+		sound = "lvs/vehicles/222/eng_loop.wav",
 		Volume = 1,
-		Pitch = 50,
+		Pitch = 70,
 		PitchMul = 100,
 		SoundLevel = 75,
 		UseDoppler = true,
 	},
 }
-
 
 ENT.Lights = {
 	{

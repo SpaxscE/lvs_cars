@@ -11,7 +11,7 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/diggercars/m5m16/m5m16.mdl"
 
-ENT.AITEAM = 1
+ENT.AITEAM = 2
 
 ENT.MaxVelocity = 700
 ENT.MaxVelocityReverse = 250

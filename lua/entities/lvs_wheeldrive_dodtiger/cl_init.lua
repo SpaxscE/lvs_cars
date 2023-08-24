@@ -22,3 +22,12 @@ function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 
 	return pos, angles, fov
 end
+
+
+function ENT:OnEngineActiveChanged( Active )
+	if Active then
+		self:EmitSound( "lvs/vehicles/tiger/engine_start.wav", 75, 100,  LVS.EngineVolume )
+	else
+		self:EmitSound( "lvs/vehicles/tiger/engine_stop.wav", 75, 100,  LVS.EngineVolume )
+	end
+end

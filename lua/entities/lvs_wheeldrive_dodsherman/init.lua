@@ -27,9 +27,3 @@ function ENT:OnSpawn( PObj )
 
 	self:CreateTracks()
 end
-
-function ENT:OnEngineActiveChanged( Active )
-	if Active then
-		self:EmitSound( "lvs/vehicles/sherman/engine_start.wav" )
-	end
-end

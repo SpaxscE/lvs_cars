@@ -51,8 +51,8 @@ ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/tiger/eng_loop.wav",
 		Volume = 1,
-		Pitch = 20,
-		PitchMul = 70,
+		Pitch = 10,
+		PitchMul = 60,
 		SoundLevel = 85,
 		SoundType = LVS.SOUNDTYPE_NONE,
 		UseDoppler = true,
