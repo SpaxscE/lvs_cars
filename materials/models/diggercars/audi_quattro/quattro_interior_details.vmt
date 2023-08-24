@@ -2,10 +2,21 @@
 {
 	"$basetexture" "models/DiggerCars/audi_quattro/quattro_interior_details"
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+
+	"$detail" "models/diggercars/audi_quattro/quattro_interior_details_e"
+	"$detailscale" "1"
+	"$detailblendfactor" "0"
+	"$detailblendmode" "5"
+
+	"$halflambert" 1
+
 	"$phong" "1" 
-	"$phongboost" "0.08" 
-	"$phongexponent" 3
-	"$phongfresnelranges" "[1 1 1]" 
+	"$phongboost" "1" 
+	"$phongfresnelranges" "[.3 .5 1]" 
+	"$phongexponent" 20
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.1 0.1 0.1]"
 	"$colorfix" "{255 255 255}"
 	"Proxies"
 	{
@@ -16,6 +27,20 @@
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

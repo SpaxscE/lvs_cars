@@ -1,0 +1,36 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/DiggerCars/audi_quattro/midlight"
+	"$bumpmap" "models/DiggerCars/shared/skin_nm"
+
+	"$detail" "models/diggercars/audi_quattro/midlight"
+	"$detailscale" "1"
+	"$detailblendfactor" "0"
+	"$detailblendmode" "5"
+
+	"$halflambert" 1
+
+	"$phong" "1" 
+	"$phongboost" "1" 
+	"$phongfresnelranges" "[.3 .5 1]" 
+	"$phongexponent" 20
+
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[0.1 0.1 0.1]"
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
