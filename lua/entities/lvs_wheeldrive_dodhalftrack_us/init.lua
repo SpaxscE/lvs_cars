@@ -5,8 +5,19 @@ include("shared.lua")
 include("sh_tracks.lua")
 
 function ENT:OnSpawn( PObj )
-	self:AddDriverSeat( Vector(0,21,30), Angle(0,-90,0) )
-	self:AddPassengerSeat( Vector(15,-21,37), Angle(0,-90,10) )
+	local DriverSeat = self:AddDriverSeat( Vector(0,21,30), Angle(0,-90,0) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(15,-21,37), Angle(0,-90,10) )
+
+	local DoorHandler = self:AddDoorHandler( "left_door", Vector(20,30,48), Angle(0,0,0), Vector(-17,-3,-12), Vector(20,6,12), Vector(-17,-15,-12), Vector(20,30,12) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
+	DoorHandler:LinkToSeat( DriverSeat )
+
+	local DoorHandler = self:AddDoorHandler( "right_door", Vector(20,-30,48), Angle(0,180,0), Vector(-17,-3,-12), Vector(20,6,12), Vector(-17,-15,-12), Vector(20,30,12) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
+	DoorHandler:LinkToSeat( PassengerSeat )
+
 
 	self:AddEngine( Vector(42,0,35) )
 
