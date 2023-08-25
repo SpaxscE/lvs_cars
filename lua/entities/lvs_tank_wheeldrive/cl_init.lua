@@ -7,6 +7,19 @@ function ENT:CalcTrackScrollTexture()
 end
 
 function ENT:CalcTracks()
+	if self:GetHP() <= 0 then
+		if self._ResetSubMaterials then
+			self._ResetSubMaterials = nil
+			for i = 0, 128 do
+				self:SetSubMaterial( i )
+			end
+		end
+
+		return
+	end
+
+	self._ResetSubMaterials = true
+
 	for _, data in pairs( self.TrackData ) do
 		if not istable( data.Attachment ) or not istable( data.PoseParameter ) then continue end
 		if not isstring( data.PoseParameter.name ) then continue end

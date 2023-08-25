@@ -48,8 +48,8 @@ if SERVER then
 			if self:GetFuel() > 0 then
 				local dmg = DamageInfo()
 				dmg:SetDamage( 10 )
-				dmg:SetAttacker( Base.LastAttacker or game.GetWorld() )
-				dmg:SetInflictor( Base.LastInflictor or game.GetWorld() )
+				dmg:SetAttacker( IsValid( Base.LastAttacker ) and Base.LastAttacker or game.GetWorld() )
+				dmg:SetInflictor( IsValid(  Base.LastInflictor ) and Base.LastInflictor or game.GetWorld() )
 				dmg:SetDamageType( DMG_BURN )
 				Base:TakeDamageInfo( dmg )
 

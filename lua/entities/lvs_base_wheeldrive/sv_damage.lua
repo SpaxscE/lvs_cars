@@ -65,6 +65,7 @@ function ENT:Explode()
 	end
 
 	local ent = ents.Create( "lvs_destruction" )
+
 	if IsValid( ent ) then
 		ent:SetModel( self:GetModel() )
 		ent:SetPos( self:GetPos() )
@@ -73,9 +74,11 @@ function ENT:Explode()
 		ent.Vel = self:GetVelocity()
 		ent:Spawn()
 		ent:Activate()
+		self:DeleteOnRemove( ent )
 	end
 
 	if self.DeleteOnExplode then
+
 		self:Remove()
 
 		return
@@ -83,10 +86,16 @@ function ENT:Explode()
 
 	self:RemoveWeapons()
 
-	for id, group in pairs( self:GetBodyGroups() ) do
-		for subid, subgroup in pairs( group.submodels ) do
-			if subgroup == "" then
-				self:SetBodygroup( id - 1, subid )
+	if self.MDL_DESTROYED then
+		self:SetModel( self.MDL_DESTROYED )
+		self:PhysicsDestroy()
+		self:PhysicsInit( SOLID_VPHYSICS )
+	else
+		for id, group in pairs( self:GetBodyGroups() ) do
+			for subid, subgroup in pairs( group.submodels ) do
+				if subgroup == "" then
+					self:SetBodygroup( id - 1, subid )
+				end
 			end
 		end
 	end
@@ -133,7 +142,6 @@ function ENT:RemoveWeapons()
 end
 
 function ENT:OnExploded()
-
 	self:Ignite( 30 )
 
 	local PhysObj = self:GetPhysicsObject()

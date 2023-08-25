@@ -10,6 +10,13 @@ ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/tanks/tiger.mdl"
+ENT.MDL_DESTROYED = "models/blu/tanks/tiger_gib_1.mdl"
+
+ENT.GibModels = {
+	"models/blu/tanks/tiger_gib_2.mdl",
+	"models/blu/tanks/tiger_gib_3.mdl",
+	"models/blu/tanks/tiger_gib_4.mdl",
+}
 
 ENT.AITEAM = 1
 
@@ -83,13 +90,11 @@ function ENT:InitWeapons()
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
-		bullet.TracerName = "lvs_tracer_orange"
+		bullet.TracerName = "lvs_tracer_cannon"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
 		bullet.Damage	= 750
 		bullet.Velocity = 14000
-		bullet.SplashDamage = 150
-		bullet.SplashDamageRadius = 250
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
