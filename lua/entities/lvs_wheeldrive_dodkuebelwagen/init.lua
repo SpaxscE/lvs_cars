@@ -33,6 +33,7 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
 	self:AddEngine( Vector(-56,0,37.5) )
+	self:AddFuelTank( Vector(-57.06,0,18.92), 600, LVS.FUELTYPE_PETROL )
 
 	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"
 

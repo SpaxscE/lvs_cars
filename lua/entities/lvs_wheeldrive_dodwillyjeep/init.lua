@@ -5,8 +5,10 @@ include("shared.lua")
 function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(-29,17.5,21), Angle(0,-90,-10) )
 	self:AddPassengerSeat( Vector(-11,-17.5,24), Angle(0,-90,10) )
+	self:AddPassengerSeat( Vector(-45,0,24), Angle(0,-90,10) )
 
 	self:AddEngine( Vector(42,0,35) )
+	self:AddFuelTank( Vector(-42.36,0,13.8), 600, LVS.FUELTYPE_PETROL )
 
 	local WheelModel = "models/diggercars/willys/wh.mdl"
 

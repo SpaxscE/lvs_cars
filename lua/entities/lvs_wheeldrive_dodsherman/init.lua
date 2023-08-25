@@ -24,6 +24,7 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
+	self:AddFuelTank( Vector(-60,0,25), 600, LVS.FUELTYPE_PETROL )
 
 	self:CreateTracks()
 end

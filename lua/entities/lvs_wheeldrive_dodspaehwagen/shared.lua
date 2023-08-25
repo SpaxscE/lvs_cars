@@ -142,10 +142,9 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_yellow"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
-		bullet.Damage	= 10
+		bullet.Damage	= 25
 		bullet.Velocity = 30000
 		bullet.Attacker 	= ent:GetDriver()
-		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
 
 		local effectdata = EffectData()
@@ -205,12 +204,11 @@ function ENT:InitWeapons()
 		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
 		bullet.TracerName = "lvs_tracer_autocannon"
-		bullet.Force	= 10
+		bullet.Force	= 100000
 		bullet.HullSize 	= 0
 		bullet.Damage	= 70
 		bullet.Velocity = 14000
 		bullet.Attacker 	= ent:GetDriver()
-		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
 
 		local effectdata = EffectData()
@@ -271,3 +269,14 @@ function ENT:InitWeapons()
 	self:AddWeapon( weapon )
 end
 
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-20.98,-56.09,17.55),
+		ang = Angle(90,0,0),
+	},
+	{
+		pos = Vector(20.98,-56.09,17.55),
+		ang = Angle(90,0,0),
+	},
+}

@@ -2,6 +2,14 @@
 EFFECT.MatBeam = Material( "effects/lvs_base/spark" )
 EFFECT.MatSprite = Material( "sprites/light_glow02_add" )
 
+EFFECT.SurfaceProps = {
+	["chainlink"] = true,
+	["canister"] = true,
+	["metal_barrel"] = true,
+	["metalvehicle"] = true,
+	["metal"] = true,
+}
+
 EFFECT.MatSmoke = {
 	"particle/smokesprites_0001",
 	"particle/smokesprites_0002",
@@ -32,6 +40,7 @@ function EFFECT:Init( data )
 	self.emitter = ParticleEmitter( pos, false )
 
 	self.OldPos = pos
+	self.Dir = dir
 
 	if not self.emitter then return end
 
@@ -67,6 +76,34 @@ function EFFECT:Init( data )
 		particle:SetAirResistance( 0 )
 		particle:SetColor( 255, 200, 120 )
 	end
+
+	local trace = util.TraceLine( {
+		start = pos,
+		endpos = pos - Vector(0,0,500),
+		mask = MASK_SOLID_BRUSHONLY,
+	} )
+
+	if not trace.Hit then return end
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin( trace.HitPos )
+	effectdata:SetScale( 80 )
+	util.Effect( "ThumperDust", effectdata, true, true )
+
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) then return end
+
+	local ViewEnt = ply:GetViewEntity()
+
+	if not IsValid( ViewEnt ) then return end
+
+	local Intensity = ply:InVehicle() and 1 or 10
+	local Ratio = math.min( 250 / (ViewEnt:GetPos() - trace.HitPos):Length(), 1 )
+
+	if Ratio < 0 then return end
+
+	util.ScreenShake( trace.HitPos, Intensity * Ratio, 0.1, 0.5, 250 )
 end
 
 function EFFECT:Think()
@@ -74,6 +111,27 @@ function EFFECT:Think()
 		if self.emitter then
 			self.emitter:Finish()
 		end
+
+		local StartPos = self.OldPos
+		local EndPos = StartPos + self.Dir * 1000
+
+		local trace = util.TraceLine( {
+			start = StartPos,
+			endpos = EndPos,
+		} )
+
+		local SurfaceName = util.GetSurfacePropName( trace.SurfaceProps )
+
+		if not self.SurfaceProps[ SurfaceName ] then return false end
+
+		local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( self.Dir ) ,-1,1) )
+		local Fx = math.cos( Ax )
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetNormal( (self.Dir - trace.HitNormal * Fx * 2):GetNormalized() * 0.5 )
+		util.Effect( "manhacksparks", effectdata, true, true )
+
 
 		return false
 	end

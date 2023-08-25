@@ -73,6 +73,71 @@ end
 
 function ENT:InitWeapons()
 	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/mg.png")
+	weapon.Ammo = 1000
+	weapon.Delay = 0.1
+	weapon.HeatRateUp = 0.2
+	weapon.HeatRateDown = 0.25
+	weapon.Attack = function( ent )
+		local ID = ent:LookupAttachment( "muzzle" )
+
+		local Muzzle = ent:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local bullet = {}
+		bullet.Src 	= Muzzle.Pos - Muzzle.Ang:Up() * 140 - Muzzle.Ang:Forward() * 15
+		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Spread 	= Vector( 0.03,  0.03, 0.03 )
+		bullet.TracerName = "lvs_tracer_yellow"
+		bullet.Force	= 10
+		bullet.HullSize 	= 0
+		bullet.Damage	= 25
+		bullet.Velocity = 30000
+		bullet.Attacker 	= ent:GetDriver()
+		ent:LVSFireBullet( bullet )
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( bullet.Src )
+		effectdata:SetNormal( bullet.Dir )
+		effectdata:SetEntity( ent )
+		util.Effect( "lvs_muzzle", effectdata )
+
+		ent:TakeAmmo( 1 )
+	end
+	weapon.StartAttack = function( ent )
+		if not IsValid( ent.SNDTurretMG ) then return end
+		ent.SNDTurretMG:Play()
+	end
+	weapon.FinishAttack = function( ent )
+		if not IsValid( ent.SNDTurretMG ) then return end
+		ent.SNDTurretMG:Stop()
+	end
+	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local ID = ent:LookupAttachment( "muzzle" )
+
+		local Muzzle = ent:GetAttachment( ID )
+
+		if Muzzle then
+			local Start = Muzzle.Pos - Muzzle.Ang:Up() * 140 - Muzzle.Ang:Forward() * 15
+
+			local traceTurret = util.TraceLine( {
+				start = Start,
+				endpos = Start + Muzzle.Ang:Up() * 50000,
+				filter = ent:GetCrosshairFilterEnts()
+			} )
+
+			local MuzzlePos2D = traceTurret.HitPos:ToScreen() 
+
+			ent:PaintCrosshairCenter( MuzzlePos2D, Col )
+			ent:LVSPaintHitMarker( MuzzlePos2D )
+		end
+	end
+	self:AddWeapon( weapon )
+
+
+	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_cannon.png")
 	weapon.Ammo = 20
 	weapon.Delay = 2
@@ -91,12 +156,11 @@ function ENT:InitWeapons()
 		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
 		bullet.TracerName = "lvs_tracer_cannon"
-		bullet.Force	= 10
+		bullet.Force	= 500000
 		bullet.HullSize 	= 0
 		bullet.Damage	= 750
 		bullet.Velocity = 14000
 		bullet.Attacker 	= ent:GetDriver()
-		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
 
 		local effectdata = EffectData()
@@ -154,4 +218,17 @@ function ENT:InitWeapons()
 	end
 	self:AddWeapon( weapon )
 end
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-116.7,-16.67,68.88),
+		ang = Angle(-90,0,0),
+	},
+	{
+		pos = Vector(-116.7,16.67,68.88),
+		ang = Angle(-90,0,0),
+	},
+}
+
+
 

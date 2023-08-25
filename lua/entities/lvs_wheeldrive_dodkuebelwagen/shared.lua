@@ -83,3 +83,10 @@ ENT.Lights = {
 		},
 	},
 }
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-72.3,15.49,17.61),
+		ang = Angle(0,180,0),
+	},
+}
