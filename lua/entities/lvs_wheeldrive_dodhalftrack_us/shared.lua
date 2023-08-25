@@ -135,10 +135,10 @@ ENT.ExhaustPositions = {
 function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bullet.png")
-	weapon.Ammo = 1000
-	weapon.Delay = 0.05
-	weapon.HeatRateUp = 0.2
-	weapon.HeatRateDown = 0.2
+	weapon.Ammo = 2000
+	weapon.Delay = 0.02
+	weapon.HeatRateUp = 0.05
+	weapon.HeatRateDown = 0.08
 	weapon.Attack = function( ent )
 		if not ent:TurretInRange() then
 			if IsValid( ent.SNDTurretMG ) then
@@ -166,12 +166,12 @@ function ENT:InitWeapons()
 		local bullet = {}
 		bullet.Src 	= Pos
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
-		bullet.Spread 	= Vector(0.025,0.025,0.025)
+		bullet.Spread 	= Vector(0.03,0.03,0.03)
 		bullet.TracerName = "lvs_tracer_white"
 		bullet.Force	= 10
-		bullet.HullSize 	= 25
-		bullet.Damage	= 35
-		bullet.Velocity = 20000
+		bullet.HullSize 	= 5
+		bullet.Damage	= 6
+		bullet.Velocity = 40000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
@@ -194,6 +194,8 @@ function ENT:InitWeapons()
 	end
 	weapon.FinishAttack = function( ent )
 		if not IsValid( ent.SNDTurretMG ) then return end
+		if not ent.SNDTurretMG:GetActive() then return end
+
 		ent.SNDTurretMG:Stop()
 		ent.SNDTurretMG:EmitSound( "lvs/vehicles/halftrack/mc_lastshot.wav" )
 	end
