@@ -50,14 +50,14 @@ function EFFECT:Init( data )
 		if not particle then continue end
 
 		particle:SetVelocity( dir * 700 + VectorRand() * 200 )
-		particle:SetDieTime( math.Rand(1.5,2) )
+		particle:SetDieTime( math.Rand(2,3) )
 		particle:SetAirResistance( 250 ) 
-		particle:SetStartAlpha( 100 )
+		particle:SetStartAlpha( 50 )
 		particle:SetStartSize( 5 )
 		particle:SetEndSize( 120 )
-		particle:SetRollDelta( math.Rand(-2,2) )
-		particle:SetColor( 100, 100, 100 )
-		particle:SetGravity( Vector(0,0,300) )
+		particle:SetRollDelta( math.Rand(-1,1) )
+		particle:SetColor( 40, 40, 40 )
+		particle:SetGravity( Vector(0,0,100) )
 		particle:SetCollide( false )
 	end
 
@@ -69,10 +69,27 @@ function EFFECT:Init( data )
 
 	if not trace.Hit then return end
 
-	local effectdata = EffectData()
-	effectdata:SetOrigin( trace.HitPos )
-	effectdata:SetScale( 300 )
-	util.Effect( "ThumperDust", effectdata, true, true )
+	local VecCol = (render.GetLightColor( trace.HitPos + trace.HitNormal ) * 0.5 + Vector(0.3,0.25,0.2)) * 255
+	for i = 1,24 do
+		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], trace.HitPos )
+		
+		if not particle then continue end
+
+		local ang = i * 15
+		local X = math.cos( math.rad(ang) )
+		local Y = math.sin( math.rad(ang) )
+
+		particle:SetVelocity( Vector(X,Y,0) * 2000 )
+		particle:SetDieTime( math.Rand(0.5,1) )
+		particle:SetAirResistance( 500 ) 
+		particle:SetStartAlpha( 10 )
+		particle:SetStartSize( 25 )
+		particle:SetEndSize( 120 )
+		particle:SetRollDelta( math.Rand(-1,1) )
+		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetGravity( Vector(0,0,150) + self.Dir * 2000 )
+		particle:SetCollide( false )
+	end
 
 	local ply = LocalPlayer()
 
@@ -139,14 +156,14 @@ function EFFECT:Think()
 		particle:SetVelocity( -Dir * 1500 + VectorRand() * 10 )
 		particle:SetDieTime( math.Rand(0.05,1) )
 		particle:SetAirResistance( 250 )
-		particle:SetStartAlpha( 5 )
+		particle:SetStartAlpha( 100 )
 		particle:SetEndAlpha( 0 )
 
 		particle:SetStartSize( 0 )
 		particle:SetEndSize( 30 )
 
 		particle:SetRollDelta( 1 )
-		particle:SetColor( 200, 200, 200 )
+		particle:SetColor( 40, 40, 40 )
 		particle:SetCollide( false )
 	end
 

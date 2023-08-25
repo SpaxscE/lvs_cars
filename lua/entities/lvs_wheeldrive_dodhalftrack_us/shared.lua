@@ -137,8 +137,8 @@ function ENT:InitWeapons()
 	weapon.Icon = Material("lvs/weapons/bullet.png")
 	weapon.Ammo = 2000
 	weapon.Delay = 0.02
-	weapon.HeatRateUp = 0.05
-	weapon.HeatRateDown = 0.08
+	weapon.HeatRateUp = 0.1
+	weapon.HeatRateDown = 0.05
 	weapon.Attack = function( ent )
 		if not ent:TurretInRange() then
 			if IsValid( ent.SNDTurretMG ) then
@@ -229,6 +229,9 @@ function ENT:InitWeapons()
 		if ent.SetTurretEnabled then
 			ent:SetTurretEnabled( true )
 		end
+	end
+	weapon.OnThink = function( ent, active )
+		ent:SetHeat( self.WEAPONS[1][ 1 ]._CurHeat or 0 )
 	end
 	self:AddWeapon( weapon )
 end
