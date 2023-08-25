@@ -1,0 +1,27 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/DiggerCars/222/222"
+	"$bumpmap" "models/DiggerCars/222/222_nm"
+	"$detail" "models/DiggerCars/222/heat"
+	"$detailscale" "1"
+	"$detailblendfactor" "0" //use this for emission strength
+	"$detailblendmode" "5"
+	"$phong" "1" 
+	"$phongboost" "0.04" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+	"$colorfix" "{255 255 255}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
