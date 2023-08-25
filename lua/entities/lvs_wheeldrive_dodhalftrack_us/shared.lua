@@ -136,7 +136,7 @@ function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bullet.png")
 	weapon.Ammo = 4000
-	weapon.Delay = 0.05
+	weapon.Delay = 0.07
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.2
 	weapon.Attack = function( ent )
@@ -195,6 +195,7 @@ function ENT:InitWeapons()
 	weapon.FinishAttack = function( ent )
 		if not IsValid( ent.SNDTurretMG ) then return end
 		ent.SNDTurretMG:Stop()
+		ent.SNDTurretMG:EmitSound( "lvs/vehicles/halftrack/mc_lastshot.wav" )
 	end
 	weapon.OnOverheat = function( ent )
 		ent:EmitSound("lvs/overheat.wav")
