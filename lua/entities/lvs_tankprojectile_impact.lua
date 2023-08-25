@@ -12,9 +12,10 @@ if SERVER then
 	return
 end
 
-ENT.LifeTime = 30
+ENT.LifeTime = 15
 ENT.GlowMat1 = Material( "particle/particle_ring_wave_8" )
 ENT.GlowMat2 = Material( "sprites/light_glow02_add" )
+ENT.DecalMat = Material( "particle/particle_noisesphere" )
 ENT.MatSmoke = {
 	"particle/smokesprites_0001",
 	"particle/smokesprites_0002",
@@ -53,7 +54,7 @@ function ENT:Smoke()
 	if not self.emitter then return end
 
 	if (self.NextFX or 0) < CurTime() then
-		self.NextFX = CurTime() + 0.1
+		self.NextFX = CurTime() + 0.2
 
 		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], self:GetPos() )
 
@@ -61,7 +62,7 @@ function ENT:Smoke()
 			particle:SetVelocity( self:GetUp() * 60 + VectorRand() * 30 )
 			particle:SetDieTime( math.Rand(1.5,2) )
 			particle:SetAirResistance( 100 ) 
-			particle:SetStartAlpha( 10 )
+			particle:SetStartAlpha( 30 )
 			particle:SetEndAlpha( 0 )
 			particle:SetStartSize( 0 )
 			particle:SetEndSize( 60 )
@@ -102,6 +103,10 @@ function ENT:Draw()
 		surface.DrawTexturedRectRotated( 0, 0, 8 , 8 , self.RandomAng )
 
 		surface.SetMaterial( self.GlowMat2 )
+		surface.DrawTexturedRectRotated( 0, 0, 16 , 16 , self.RandomAng )
+
+		surface.SetDrawColor( 0, 0, 0, 255 )
+		surface.SetMaterial( self.DecalMat )
 		surface.DrawTexturedRectRotated( 0, 0, 16 , 16 , self.RandomAng )
 	cam.End3D2D()
 end

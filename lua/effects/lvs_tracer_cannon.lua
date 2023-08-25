@@ -28,7 +28,6 @@ EFFECT.MatSmoke = {
 	"particle/smokesprites_0015",
 	"particle/smokesprites_0016"
 }
-EFFECT.DecalMat = Material( util.DecalMaterial( "FadingScorch" ) )
 
 function EFFECT:Init( data )
 	local pos  = data:GetOrigin()
@@ -134,8 +133,6 @@ function EFFECT:Think()
 			effectdata:SetOrigin( trace.HitPos )
 			effectdata:SetNormal( (self.Dir - trace.HitNormal * Fx * 2):GetNormalized() )
 		util.Effect( "manhacksparks", effectdata, true, true )
-
-		util.DecalEx( self.DecalMat, trace.Entity, trace.HitPos + trace.HitNormal, trace.HitNormal, Color(255,255,255,255), math.Rand(1.5,2), math.Rand(1.5,2) )
 
 		local hit_decal = ents.CreateClientside( "lvs_tankprojectile_impact" )
 		hit_decal:SetPos( trace.HitPos )
