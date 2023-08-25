@@ -135,8 +135,8 @@ ENT.ExhaustPositions = {
 function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bullet.png")
-	weapon.Ammo = 4000
-	weapon.Delay = 0.07
+	weapon.Ammo = 1000
+	weapon.Delay = 0.05
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.2
 	weapon.Attack = function( ent )
