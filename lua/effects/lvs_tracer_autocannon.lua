@@ -44,6 +44,7 @@ function EFFECT:Init( data )
 
 	if not self.emitter then return end
 
+	local VecCol = (render.GetLightColor( pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
 	for i = 0,10 do
 		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], pos )
 
@@ -56,7 +57,7 @@ function EFFECT:Init( data )
 		particle:SetStartSize( 5 )
 		particle:SetEndSize( 120 )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( 40, 40, 40 )
+		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
 		particle:SetGravity( Vector(0,0,100) )
 		particle:SetCollide( false )
 	end
@@ -85,8 +86,7 @@ function EFFECT:Init( data )
 
 	if not trace.Hit then return end
 
-	local VecCol = (render.GetLightColor( trace.HitPos + trace.HitNormal ) * 0.5 + Vector(0.3,0.25,0.2)) * 255
-
+	local VecCol = (render.GetLightColor( trace.HitPos + trace.HitNormal ) * 0.8 + Vector(0.17,0.15,0.1)) * 255
 	for i = 1,24 do
 		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], trace.HitPos )
 		
@@ -99,7 +99,7 @@ function EFFECT:Init( data )
 		particle:SetVelocity( Vector(X,Y,0) * 1000 )
 		particle:SetDieTime( math.Rand(0.5,1) )
 		particle:SetAirResistance( 500 ) 
-		particle:SetStartAlpha( 10 )
+		particle:SetStartAlpha( 100 )
 		particle:SetStartSize( 25 )
 		particle:SetEndSize( 80 )
 		particle:SetRollDelta( math.Rand(-1,1) )
@@ -167,6 +167,8 @@ function EFFECT:Think()
 	for i = 0, Dist, 25 do
 		local cur_pos = self.OldPos + Dir * i
 
+		local VecCol = (render.GetLightColor( cur_pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
+
 		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], cur_pos )
 		
 		if not particle then continue end
@@ -180,7 +182,7 @@ function EFFECT:Think()
 		particle:SetEndSize( 15 )
 
 		particle:SetRollDelta( 1 )
-		particle:SetColor( 40, 40, 40 )
+		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
 		particle:SetCollide( false )
 	end
 
