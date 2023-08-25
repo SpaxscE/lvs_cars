@@ -87,7 +87,7 @@ function EFFECT:Init( data )
 
 	local effectdata = EffectData()
 	effectdata:SetOrigin( trace.HitPos )
-	effectdata:SetScale( 80 )
+	effectdata:SetScale( 120 )
 	util.Effect( "ThumperDust", effectdata, true, true )
 
 	local ply = LocalPlayer()

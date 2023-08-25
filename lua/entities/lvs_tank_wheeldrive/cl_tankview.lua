@@ -59,3 +59,7 @@ end
 function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
 	return self:CalcTankView( ply, pos, angles, fov, pod )
 end
+
+function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
+	return self:CalcTankView( ply, pos, angles, fov, pod )
+end

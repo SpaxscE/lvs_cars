@@ -1,7 +1,9 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "sh_turret.lua" )
 AddCSLuaFile( "sh_tracks.lua" )
 include("shared.lua")
+include("sh_turret.lua")
 include("sh_tracks.lua")
 
 function ENT:OnSpawn( PObj )
@@ -27,6 +29,7 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
 	self:AddEngine( Vector(68,0,50) )
+	self:AddFuelTank( Vector(-85,0,22), 600, LVS.FUELTYPE_PETROL )
 
 	local WheelModel = "models/diggercars/m5m16/m5_wheel.mdl"
 

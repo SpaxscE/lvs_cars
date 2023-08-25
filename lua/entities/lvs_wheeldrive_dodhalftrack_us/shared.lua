@@ -53,6 +53,7 @@ ENT.EngineSounds = {
 
 function ENT:OnSetupDataTables()
 	self:AddTracksDT()
+	self:AddTurretDT()
 end
 
 ENT.Lights = {
@@ -121,3 +122,76 @@ ENT.Lights = {
 		},
 	},
 }
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-49.71,-39.44,25.4),
+		ang = Angle(0,-142.92,-24.29),
+	},
+}
+
+function ENT:InitWeapons()
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/bullet.png")
+	weapon.Ammo = 4000
+	weapon.Delay = 0.01
+	weapon.HeatRateUp = 0.05
+	weapon.HeatRateDown = 0.2
+	weapon.Attack = function( ent )
+		if not ent:TurretInRange() then return true end
+
+		ent._MuzzleID = ent._MuzzleID and ent._MuzzleID + 1 or 1
+
+		if ent._MuzzleID > 4 then
+			ent._MuzzleID = 1
+		end
+
+		local ID = ent:LookupAttachment( "muzzle_"..ent._MuzzleID )
+
+		local Muzzle = ent:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local Pos = Muzzle.Pos
+		local Dir =  Muzzle.Ang:Forward()
+
+		local bullet = {}
+		bullet.Src 	= Pos
+		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
+		bullet.Spread 	= Vector(0.025,0.025,0.025)
+		bullet.TracerName = "lvs_tracer_orange"
+		bullet.Force	= 10
+		bullet.HullSize 	= 50
+		bullet.Damage	= 15
+		bullet.Velocity = 10000
+		bullet.Attacker 	= ent:GetDriver()
+		bullet.Callback = function(att, tr, dmginfo) end
+		ent:LVSFireBullet( bullet )
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( Pos )
+		effectdata:SetNormal( Dir )
+		effectdata:SetEntity( ent )
+		util.Effect( "lvs_muzzle", effectdata )
+
+		ent:TakeAmmo( 1 )
+	end
+	weapon.StartAttack = function( ent )
+	end
+	weapon.FinishAttack = function( ent )
+	end
+	weapon.OnOverheat = function( ent )
+	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local Pos2D = ent:GetEyeTrace().HitPos:ToScreen()
+
+		local Col =  ent:TurretInRange() and Color(255,255,255,255) or Color(255,0,0,255)
+
+		ent:PaintCrosshairCenter( Pos2D, Col )
+		ent:PaintCrosshairOuter( Pos2D, Col )
+		ent:LVSPaintHitMarker( Pos2D )
+	end
+
+	self:AddWeapon( weapon )
+end
+
