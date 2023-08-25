@@ -153,7 +153,7 @@ function EFFECT:Think()
 		
 		if not particle then continue end
 		particle:SetVelocity( -Dir * 1500 + VectorRand() * 10 )
-		particle:SetDieTime( math.Rand(0.3,2) )
+		particle:SetDieTime( math.Rand(0.05,1) )
 		particle:SetAirResistance( 250 )
 		particle:SetStartAlpha( 5 )
 		particle:SetEndAlpha( 0 )

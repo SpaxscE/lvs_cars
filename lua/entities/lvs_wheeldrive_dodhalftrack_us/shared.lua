@@ -170,7 +170,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_white"
 		bullet.Force	= 10
 		bullet.HullSize 	= 5
-		bullet.Damage	= 6
+		bullet.Damage	= 15
 		bullet.Velocity = 40000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
