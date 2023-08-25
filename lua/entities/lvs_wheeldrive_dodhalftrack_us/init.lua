@@ -31,6 +31,9 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(68,0,50) )
 	self:AddFuelTank( Vector(-85,0,22), 600, LVS.FUELTYPE_PETROL )
 
+	self.SNDTurretMG = self:AddSoundEmitter( Vector(-63,0,85), "lvs/vehicles/halftrack/mc_loop.wav", "lvs/vehicles/halftrack/mc_loop.wav" )
+	self.SNDTurretMG:SetSoundLevel( 95 )
+
 	local WheelModel = "models/diggercars/m5m16/m5_wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {

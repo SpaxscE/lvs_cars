@@ -9,6 +9,20 @@ include("cl_scrolltexture.lua")
 
 DEFINE_BASECLASS( "lvs_base" )
 
+function ENT:CreateSubMaterial( SubMaterialID, name )
+	if not SubMaterialID then return end
+
+	local mat = self:GetMaterials()[ SubMaterialID + 1 ]
+
+	if not mat then return end
+
+	local string_data = file.Read( "materials/"..mat..".vmt", "GAME" )
+
+	if not string_data then return end
+
+	return CreateMaterial( name, "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
+end
+
 function ENT:QuickLerp( name, target, rate )
 	name =  "_smValue"..name
 

@@ -13,6 +13,8 @@ ENT.MDL = "models/diggercars/m5m16/m5m16.mdl"
 
 ENT.AITEAM = 2
 
+ENT.MaxHealth = 800
+
 ENT.MaxVelocity = 700
 ENT.MaxVelocityReverse = 250
 
@@ -134,11 +136,17 @@ function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bullet.png")
 	weapon.Ammo = 4000
-	weapon.Delay = 0.01
-	weapon.HeatRateUp = 0.05
+	weapon.Delay = 0.05
+	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.2
 	weapon.Attack = function( ent )
-		if not ent:TurretInRange() then return true end
+		if not ent:TurretInRange() then
+			if IsValid( ent.SNDTurretMG ) then
+				ent.SNDTurretMG:Stop()
+			end
+
+			return true
+		end
 
 		ent._MuzzleID = ent._MuzzleID and ent._MuzzleID + 1 or 1
 
@@ -159,11 +167,11 @@ function ENT:InitWeapons()
 		bullet.Src 	= Pos
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
 		bullet.Spread 	= Vector(0.025,0.025,0.025)
-		bullet.TracerName = "lvs_tracer_orange"
+		bullet.TracerName = "lvs_tracer_white"
 		bullet.Force	= 10
-		bullet.HullSize 	= 50
-		bullet.Damage	= 15
-		bullet.Velocity = 10000
+		bullet.HullSize 	= 25
+		bullet.Damage	= 35
+		bullet.Velocity = 20000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
 		ent:LVSFireBullet( bullet )
@@ -175,12 +183,21 @@ function ENT:InitWeapons()
 		util.Effect( "lvs_muzzle", effectdata )
 
 		ent:TakeAmmo( 1 )
+
+		if not IsValid( ent.SNDTurretMG ) then return end
+
+		ent.SNDTurretMG:Play()
 	end
 	weapon.StartAttack = function( ent )
+		if not IsValid( ent.SNDTurretMG ) then return end
+		ent.SNDTurretMG:Play()
 	end
 	weapon.FinishAttack = function( ent )
+		if not IsValid( ent.SNDTurretMG ) then return end
+		ent.SNDTurretMG:Stop()
 	end
 	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
 	end
 	weapon.HudPaint = function( ent, X, Y, ply )
 		local Pos2D = ent:GetEyeTrace().HitPos:ToScreen()
@@ -191,7 +208,25 @@ function ENT:InitWeapons()
 		ent:PaintCrosshairOuter( Pos2D, Col )
 		ent:LVSPaintHitMarker( Pos2D )
 	end
+	self:AddWeapon( weapon )
 
+
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/tank_noturret.png")
+	weapon.Ammo = -1
+	weapon.Delay = 0
+	weapon.HeatRateUp = 0
+	weapon.HeatRateDown = 0
+	weapon.OnSelect = function( ent )
+		if ent.SetTurretEnabled then
+			ent:SetTurretEnabled( false )
+		end
+	end
+	weapon.OnDeselect = function( ent )
+		if ent.SetTurretEnabled then
+			ent:SetTurretEnabled( true )
+		end
+	end
 	self:AddWeapon( weapon )
 end
 
