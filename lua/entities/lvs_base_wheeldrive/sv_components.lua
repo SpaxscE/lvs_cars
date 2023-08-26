@@ -166,11 +166,15 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, damagereduction )
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( Armor ) then return end
 
-			Armor:OnTakeDamage( dmginfo )
+			local DidDamage = Armor:OnTakeDamage( dmginfo )
 
 			if Armor:GetDestroyed() then return end
 
-			dmginfo:ScaleDamage( (damagereduction or 0) )
+			if DidDamage then
+				dmginfo:ScaleDamage( (damagereduction or 0) )
+			else
+				dmginfo:ScaleDamage( 0 )
+			end
 		end
 	} )
 

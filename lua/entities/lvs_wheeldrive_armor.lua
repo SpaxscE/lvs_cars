@@ -32,7 +32,7 @@ if SERVER then
 		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce():Length()
 
-		if Force <= 100 then return end
+		if Force <= 100 then return false end
 
 		local CurHealth = self:GetHP()
 
@@ -49,6 +49,8 @@ if SERVER then
 
 			self:SetDestroyed( true )
 		end
+
+		return true
 	end
 
 	return
