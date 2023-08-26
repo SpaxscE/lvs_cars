@@ -26,8 +26,8 @@ function ENT:OnSpawn( PObj )
 
 	self:CreateTracks()
 
-	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-40,-20), Vector(20,40,20), 3000 )
-	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-10,-60,-30), Vector(10,60,40), 1500 )
+	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-70,-20), Vector(20,70,20), 3000 )
+	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-15,-70,-30), Vector(10,70,40), 1500 )
 	
 	self:AddArmor( Vector(0,50,20), Angle(0,0,0), Vector(-120,-15,-30), Vector(80,15,50), 1500 )
 	self:AddArmor( Vector(0,-50,20), Angle(0,0,0), Vector(-120,-15,-30), Vector(80,15,50), 1500 )
