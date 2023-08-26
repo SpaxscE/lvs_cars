@@ -29,6 +29,7 @@ function ENT:LVSHudPaint( X, Y, ply )
 end
 
 ENT.IconEngine = Material( "lvs/engine.png" )
+ENT.IconFuel = Material( "lvs/fuel.png" )
 
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	self:DrawDeveloperInfo()
@@ -51,7 +52,14 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	local hX = X + W - H * 0.5
 	local hY = Y + H * 0.25 + H * 0.25
 
-	surface.SetMaterial( self.IconEngine )
+	local fueltank = self:GetFuelTank()
+
+	if IsValid( fueltank ) and fueltank:GetFuel() <= 0 then
+		surface.SetMaterial( self.IconFuel )
+	else
+		surface.SetMaterial( self.IconEngine )
+	end
+
 	surface.SetDrawColor( 0, 0, 0, 200 )
 	surface.DrawTexturedRectRotated( hX + 4, hY + 1, H * 0.5, H * 0.5, 0 )
 	surface.SetDrawColor( color_white )
