@@ -2,11 +2,16 @@
 ENT.ScrollTextureData = {
 	["$alphatest"] = "1",
 	["$translate"] = "[0.0 0.0 0.0]",
+	["$colorfix"] = "{255 255 255}",
 	["Proxies"] = {
 		["TextureTransform"] = {
 			["translateVar"] = "$translate",
 			["centerVar"]    = "$center",
 			["resultVar"]    = "$basetexturetransform",
+		},
+		["Equals"] = {
+			["srcVar1"] =  "$colorfix",
+			["resultVar"] = "$color",
 		}
 	}
 }

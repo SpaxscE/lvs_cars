@@ -115,6 +115,6 @@ else
 		if not IsValid( vehicle ) then return end
 
 		vehicle.LastCritMarker = CurTime() + 0.15
-		ply:EmitSound( "lvs/pen_armor.wav", 85, math.random(95,105), 0.4, CHAN_ITEM2 )
+		ply:EmitSound( "lvs/armor_pen.wav", 85, math.random(95,105), 0.4, CHAN_ITEM2 )
 	end )
 end
