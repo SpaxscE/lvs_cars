@@ -30,16 +30,16 @@ ENT.PhysicsDampingSpeed = 1000
 ENT.PhysicsInertia = Vector(6000,6000,1500)
 
 ENT.MaxVelocity = 450
-ENT.MaxVelocityReverse = 450
+ENT.MaxVelocityReverse = 150
 
 ENT.EngineCurve = 0.1
 ENT.EngineTorque = 200
 
-ENT.TransMinGearHoldTime = 0.25
-ENT.TransShiftSpeed = 0.1
+ENT.TransMinGearHoldTime = 0.1
+ENT.TransShiftSpeed = 0
 
 ENT.TransGears = 3
-ENT.TransGearsReverse = 3
+ENT.TransGearsReverse = 1
 
 ENT.MouseSteerAngle = 45
 
@@ -58,8 +58,8 @@ ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/tiger/eng_loop.wav",
 		Volume = 1,
-		Pitch = 10,
-		PitchMul = 60,
+		Pitch = 30,
+		PitchMul = 100,
 		SoundLevel = 85,
 		SoundType = LVS.SOUNDTYPE_NONE,
 		UseDoppler = true,
