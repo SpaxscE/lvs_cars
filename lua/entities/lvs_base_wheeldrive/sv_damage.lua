@@ -136,10 +136,6 @@ function ENT:RemoveWeapons()
 	end
 
 	self:WeaponsOnRemove()
-
-	table.Empty( self.WEAPONS )
-
-	self.WEAPONS[1] = {}
 end
 
 function ENT:OnExploded()
