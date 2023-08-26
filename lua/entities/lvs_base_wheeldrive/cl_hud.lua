@@ -33,7 +33,14 @@ ENT.IconEngine = Material( "lvs/engine.png" )
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	self:DrawDeveloperInfo()
 
-	local kmh = math.Round(self:GetVelocity():Length() * 0.09144,0)
+	local T = CurTime()
+
+	if (self._nextRefreshVel or 0) < T then
+		self._nextRefreshVel = T + 0.1
+		self._refreshVel = self:GetVelocity():Length()
+	end
+
+	local kmh = math.Round( (self._refreshVel or 0) * 0.09144,0)
 	draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
 	draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
 

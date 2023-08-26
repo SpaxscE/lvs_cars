@@ -11,7 +11,7 @@ end
 function ENT:OnFrame()
 	local Heat = 0
 	if self:GetSelectedWeapon() == 1 then
-		Heat = self:QuickLerp( "50cal_heat", self:GetNWHeat(), 100 )
+		Heat = self:QuickLerp( "50cal_heat", self:GetNWHeat(), 10 )
 	else
 		Heat = self:QuickLerp( "50cal_heat", 0, 0.2 )
 	end
@@ -27,7 +27,7 @@ function ENT:OnFrame()
 	if self._oldGunHeat ~= Heat then
 		self._oldGunHeat = Heat
 
-		self.TurretGlow:SetFloat("$detailblendfactor", Heat ^ 7 )
+		self.TurretGlow:SetFloat("$detailblendfactor", Heat ^ 2 )
 
 		self:SetSubMaterial(4, "!"..name)
 	end
