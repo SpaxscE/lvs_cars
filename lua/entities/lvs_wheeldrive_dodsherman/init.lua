@@ -7,12 +7,17 @@ include("sh_turret.lua")
 include("sh_tracks.lua")
 
 function ENT:OnSpawn( PObj )
+	local ID = self:LookupAttachment( "machinegun" )
+	local Muzzle = self:GetAttachment( ID )
+	self.SNDTurretMGf = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/sherman/mg_loop.wav", "lvs/vehicles/sherman/mg_loop_interior.wav" )
+	self.SNDTurretMGf:SetSoundLevel( 95 )
+	self.SNDTurretMGf:SetParent( self, ID )
+
 	local ID = self:LookupAttachment( "turret_machinegun" )
 	local Muzzle = self:GetAttachment( ID )
 	self.SNDTurretMG = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/sherman/mg_loop.wav", "lvs/vehicles/sherman/mg_loop_interior.wav" )
 	self.SNDTurretMG:SetSoundLevel( 95 )
 	self.SNDTurretMG:SetParent( self, ID )
-
 
 	local ID = self:LookupAttachment( "turret_cannon" )
 	local Muzzle = self:GetAttachment( ID )

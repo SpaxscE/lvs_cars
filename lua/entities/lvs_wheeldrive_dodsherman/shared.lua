@@ -145,7 +145,6 @@ function ENT:InitWeapons()
 	weapon.Delay = 2
 	weapon.HeatRateUp = 1
 	weapon.HeatRateDown = 0.5
-
 	weapon.Attack = function( ent )
 		local ID = ent:LookupAttachment( "turret_cannon" )
 
@@ -223,14 +222,83 @@ function ENT:InitWeapons()
 	self:AddGunnerWeapons()
 end
 
+function ENT:GunnerInRange( Dir )
+	return self:AngleBetweenNormal( self:GetForward(), Dir ) < 60
+end
+
 function ENT:AddGunnerWeapons()
+	local COLOR_RED = Color(255,0,0,255)
+	local COLOR_WHITE = Color(255,255,255,255)
+
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/mg.png")
 	weapon.Ammo = 1000
 	weapon.Delay = 0.1
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
-	weapon.Attack = function( ent ) end
+	weapon.Icon = Material("lvs/weapons/mg.png")
+	weapon.Ammo = 1000
+	weapon.Delay = 0.1
+	weapon.HeatRateUp = 0.2
+	weapon.HeatRateDown = 0.25
+	weapon.Attack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		if not base:GunnerInRange( ent:GetAimVector() ) then
+
+			if not IsValid( base.SNDTurretMGf ) then return true end
+
+			base.SNDTurretMGf:Stop()
+	
+			return true
+		end
+
+		local ID = base:LookupAttachment( "machinegun" )
+
+		local Muzzle = base:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local bullet = {}
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
+		bullet.Spread 	= Vector( 0.03,  0.03, 0.03 )
+		bullet.TracerName = "lvs_tracer_yellow"
+		bullet.Force	= 10
+		bullet.HullSize 	= 0
+		bullet.Damage	= 25
+		bullet.Velocity = 30000
+		bullet.Attacker 	= ent:GetDriver()
+		ent:LVSFireBullet( bullet )
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( bullet.Src )
+		effectdata:SetNormal( Muzzle.Ang:Forward() )
+		effectdata:SetEntity( ent )
+		util.Effect( "lvs_muzzle", effectdata )
+
+		ent:TakeAmmo( 1 )
+
+		if not IsValid( base.SNDTurretMGf ) then return end
+
+		base.SNDTurretMGf:Play()
+	end
+	weapon.StartAttack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) or not IsValid( base.SNDTurretMGf ) then return end
+
+		base.SNDTurretMGf:Play()
+	end
+	weapon.FinishAttack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) or not IsValid( base.SNDTurretMGf ) then return end
+
+		base.SNDTurretMGf:Stop()
+	end
 	weapon.OnThink = function( ent, active )
 		local base = ent:GetVehicle()
 
@@ -241,6 +309,18 @@ function ENT:AddGunnerWeapons()
 
 		base:SetPoseParameter("machinegun_yaw", Angles.y )
 		base:SetPoseParameter("machinegun_pitch",  Angles.p )
+	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		local Pos2D = ent:GetEyeTrace().HitPos:ToScreen()
+
+		local Col =  base:GunnerInRange( ent:GetAimVector() ) and COLOR_WHITE or COLOR_RED
+
+		base:PaintCrosshairCenter( Pos2D, Col )
+		base:LVSPaintHitMarker( Pos2D )
 	end
 	self:AddWeapon( weapon, 2 )
 end
