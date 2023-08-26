@@ -51,7 +51,7 @@ if SERVER then
 			filter = function( ent ) return ent == self:GetBase() end
 		} )
 
-		if CurHealth - Damage < 0 then
+		if NewHealth <= 0 then
 			self:SetDestroyed( true )
 
 			local Attacker = dmginfo:GetAttacker() 
