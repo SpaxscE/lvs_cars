@@ -10,18 +10,12 @@ function ENT:GetMaster()
 end
 
 function ENT:GetDirectionAngle()
-	local master = self:GetMaster()
+	if not IsValid( self._Master ) then return angle_zero end
 
-	if not IsValid( master ) then return self:GetAngles() end
-
-	return master:GetAngles()
+	return self._Master:GetAngles()
 end
 
 function ENT:GetRotationAxis()
-	local base = self:GetBase()
-
-	if not IsValid( base ) then return vector_origin end
-
 	local WorldAngleDirection = -self:WorldToLocalAngles( self:GetDirectionAngle() )
 
 	return WorldAngleDirection:Right()

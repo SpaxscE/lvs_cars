@@ -38,3 +38,7 @@ function ENT:RPMToVel( rpm )
 
 	return (math.pi * rpm * self:GetRadius() * 2) / 60
 end
+
+function ENT:CheckAlignment()
+	self.CamberCasterToe = (math.abs( self:GetToe() ) + math.abs( self:GetCaster() ) + math.abs( self:GetCamber() )) ~= 0
+end

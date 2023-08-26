@@ -76,6 +76,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	Wheel:SetCamber( data.camber or 0 )
 	Wheel:SetCaster( data.caster or 0 )
 	Wheel:SetToe( data.toe or 0 )
+	Wheel:CheckAlignment()
 
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )
@@ -309,9 +310,11 @@ function ENT:AlignWheel( Wheel )
 
 	local AxleAng = self:LocalToWorldAngles( Master.ForwardAngle )
 
-	AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
-	AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
-	AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
+	if Wheel.CamberCasterToe then
+		AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
+		AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
+		AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
+	end
 
 	if Master.SteerType == LVS.WHEEL_STEER_REAR then
 		AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(Steer,-Master.SteerAngle,Master.SteerAngle) )
