@@ -4,15 +4,31 @@ ENT.Type            = "anim"
 
 ENT.RenderGroup = RENDERGROUP_BOTH 
 
+ENT.LifeTime = 15
+
 if SERVER then
 	function ENT:Initialize()
+		self:SetMoveType( MOVETYPE_NONE )
+		self:SetSolid( SOLID_NONE )
+		self:DrawShadow( false )
+		self.DieTime = CurTime() + self.LifeTime
+	end
+
+	function ENT:Think()
+		self:NextThink( CurTime() + 0.1 )
+
+		if not IsValid( self:GetParent() ) then PrintChat( "remove no parent" ) self:Remove() return end
+
+		if (self.DieTime or 0) > CurTime() then return true end
+
 		self:Remove()
+
+		return false
 	end
 
 	return
 end
 
-ENT.LifeTime = 15
 ENT.GlowMat1 = Material( "particle/particle_ring_wave_8" )
 ENT.GlowMat2 = Material( "sprites/light_glow02_add" )
 ENT.DecalMat = Material( "particle/particle_noisesphere" )
@@ -35,14 +51,9 @@ ENT.MatSmoke = {
 	"particle/smokesprites_0016"
 }
 
-function ENT:SetLifeTime( n )
-	self.LifeTime = n
-	self.DieTime = CurTime() + n
-end
-
 function ENT:Initialize()
-	self.DieTime = CurTime() + self.LifeTime
 	self.RandomAng = math.random(0,360)
+	self.DieTime = CurTime() + self.LifeTime
 
 	local Pos = self:GetPos()
 	local Dir = self:GetUp()
@@ -51,6 +62,8 @@ function ENT:Initialize()
 end
 
 function ENT:Smoke()
+	if (self.DieTime or 0) < CurTime() then return end
+
 	if not self.emitter then return end
 
 	if (self.NextFX or 0) < CurTime() then
@@ -75,15 +88,7 @@ function ENT:Smoke()
 end
 
 function ENT:Think()
-	if not IsValid( self:GetParent() ) then self:Remove() return end
-
-	if (self.DieTime or 0) > CurTime() then
-		self:Smoke()
-
-		return
-	end
-
-	self:Remove()
+	self:Smoke()
 end
 
 function ENT:OnRemove()

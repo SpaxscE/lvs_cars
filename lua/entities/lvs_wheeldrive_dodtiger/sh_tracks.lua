@@ -86,6 +86,28 @@ if SERVER then
 		} )
 	end
 else
+
+	ENT.ScrollTextureData = {
+		["$bumpmap"] = "models/blu/tiger/track_nm",
+		["$phong"] = "1",
+		["$phongboost"] = "0.02", 
+		["$phongexponent"] = "3",
+		["$phongfresnelranges"] = "[1 1 1]",
+		["$translate"] = "[0.0 0.0 0.0]",
+		["$colorfix"] = "{255 255 255}",
+		["Proxies"] = {
+			["TextureTransform"] = {
+				["translateVar"] = "$translate",
+				["centerVar"]    = "$center",
+				["resultVar"]    = "$basetexturetransform",
+			},
+			["Equals"] = {
+				["srcVar1"] =  "$colorfix",
+				["resultVar"] = "$color",
+			}
+		}
+	}
+
 	ENT.TrackSounds = "lvs/vehicles/tiger/tracks_loop.wav"
 	ENT.TrackHull = Vector(20,20,20)
 	ENT.TrackData = {}
@@ -116,7 +138,7 @@ else
 			local scroll = self:CalcScroll( "scroll_left", rotation )
 
 			self:SetPoseParameter("spin_wheels_left", -scroll * 1.252 )
-			self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/track", Vector(0,scroll * 0.0135,0) ) )
+			self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/tiger/track", Vector(0,scroll * 0.125,0) ) )
 		end
 
 		local DriveWheelFR = self:GetDriveWheelFR()
@@ -125,7 +147,7 @@ else
 			local scroll = self:CalcScroll( "scroll_right", rotation )
 
 			self:SetPoseParameter("spin_wheels_right", -scroll * 1.252 )
-			self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/track", Vector(0,scroll * 0.0135,0) ) )
+			self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/tiger/track", Vector(0,scroll * 0.125,0) ) )
 		end
 	end
 end

@@ -150,13 +150,6 @@ function EFFECT:Think()
 			effectdata:SetNormal( (self.Dir - trace.HitNormal * Fx * 2):GetNormalized() * 0.5 )
 		util.Effect( "manhacksparks", effectdata, true, true )
 
-		local hit_decal = ents.CreateClientside( "lvs_tankprojectile_impact" )
-		hit_decal:SetPos( trace.HitPos )
-		hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
-		hit_decal:Spawn()
-		hit_decal:Activate()
-		hit_decal:SetParent( trace.Entity )
-
 		return false
 	end
 

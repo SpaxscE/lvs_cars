@@ -30,15 +30,33 @@ if SERVER then
 
 	function ENT:OnTakeDamage( dmginfo )
 		local Damage = dmginfo:GetDamage()
-		local Force = dmginfo:GetDamageForce():Length()
+		local Force = dmginfo:GetDamageForce()
 
-		if Force <= 100 then return false end
+		if Force:Length() <= 1000 then return false end
 
 		local CurHealth = self:GetHP()
 
 		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
 
 		self:SetHP( NewHealth )
+
+		local pos = dmginfo:GetDamagePosition()
+		local dir = Force:GetNormalized() * 20
+
+		local trace = util.TraceLine( {
+			start = pos - dir,
+			endpos = pos + dir,
+			filter = function( ent ) return ent == self:GetBase() end
+		} )
+
+		if trace.Entity == self:GetBase() then
+			local hit_decal = ents.Create( "lvs_wheeldrive_armor_impact" )
+			hit_decal:SetPos( trace.HitPos )
+			hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
+			hit_decal:Spawn()
+			hit_decal:Activate()
+			hit_decal:SetParent( trace.Entity )
+		end
 
 		if NewHealth <= 0 then
 			local Attacker = dmginfo:GetAttacker() 
