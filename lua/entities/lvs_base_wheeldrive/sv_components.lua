@@ -140,7 +140,7 @@ function ENT:AddSuperCharger()
 	return SuperCharger
 end
 
-function ENT:AddArmor( pos, ang, mins, maxs, health )
+function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 	local Armor = ents.Create( "lvs_wheeldrive_armor" )
 
 	if not IsValid( Armor ) then return end
@@ -153,6 +153,10 @@ function ENT:AddArmor( pos, ang, mins, maxs, health )
 	Armor:SetBase( self )
 	Armor:SetMaxHP( health )
 	Armor:SetHP( health )
+
+	if isnumber( minforce ) then
+		Armor.MinForce = minforce
+	end
 
 	self:DeleteOnRemove( Armor )
 

@@ -32,7 +32,7 @@ if SERVER then
 		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce()
 
-		if Force:Length() <= 1000 then return false end
+		if Force:Length() <= (self.MinForce or 1000) then return false end
 
 		local CurHealth = self:GetHP()
 
@@ -67,7 +67,7 @@ if SERVER then
 
 			local HitAngle = 90 - (180 - math.deg( Ax ))
 
-			if HitAngle > 20 then
+			if HitAngle > 10 then
 				local hit_decal = ents.Create( "lvs_wheeldrive_armor_penetrate" )
 				hit_decal:SetPos( trace.HitPos )
 				hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
