@@ -156,7 +156,6 @@ function EFFECT:Think()
 		hit_decal:Spawn()
 		hit_decal:Activate()
 		hit_decal:SetParent( trace.Entity )
-		hit_decal:SetLifeTime( 5 )
 
 		return false
 	end
