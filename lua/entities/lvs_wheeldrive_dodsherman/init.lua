@@ -38,14 +38,14 @@ function ENT:OnSpawn( PObj )
 	self:CreateTracks()
 
 	-- front upper wedge
-	self:AddArmor( Vector(90,0,60), Angle(30,0,0), Vector(-40,-45,-15), Vector(25,45,-2), 1500, 150000 )
+	self:AddArmor( Vector(90,0,60), Angle(30,0,0), Vector(-40,-45,-15), Vector(25,45,-2), 1500, 120000 )
 
 	-- front lower wedge
-	self:AddArmor( Vector(105,0,30), Angle(-45,0,0), Vector(-10,-45,-15), Vector(15,45,10), 750, 150000 )
+	self:AddArmor( Vector(105,0,30), Angle(-45,0,0), Vector(-10,-45,-15), Vector(15,45,10), 750, 120000 )
 
 	-- side armor
-	self:AddArmor( Vector(0,45,20), Angle(0,0,0), Vector(-100,-15,-20), Vector(120,15,55), 750, 150000 )
-	self:AddArmor( Vector(0,-45,20), Angle(0,0,0), Vector(-100,-15,-20), Vector(120,15,55), 750, 150000 )
+	self:AddArmor( Vector(0,45,20), Angle(0,0,0), Vector(-100,-15,-20), Vector(120,15,55), 750, 80000 )
+	self:AddArmor( Vector(0,-45,20), Angle(0,0,0), Vector(-100,-15,-20), Vector(120,15,55), 750, 80000 )
 
 	-- roof
 	self:AddArmor( Vector(0,0,68), Angle(-3,0,0), Vector(-105,-45,0), Vector(55,45,10), 2000 )
