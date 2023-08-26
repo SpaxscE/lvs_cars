@@ -182,6 +182,9 @@ function ENT:InitWeapons()
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
+	end
 	self:AddWeapon( weapon )
 
 
@@ -247,6 +250,9 @@ function ENT:InitWeapons()
 			ent:PaintCrosshairOuter( MuzzlePos2D, Col )
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
+	end
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
 	end
 	self:AddWeapon( weapon )
 
