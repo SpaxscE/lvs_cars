@@ -28,7 +28,7 @@ function ENT:AddEngine( pos )
 	return Engine
 end
 
-function ENT:AddFuelTank( pos, tanksize, fueltype )
+function ENT:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs )
 	if IsValid( self:GetFuelTank() ) then return end
 
 	local FuelTank = ents.Create( "lvs_wheeldrive_fueltank" )
@@ -58,9 +58,9 @@ function ENT:AddFuelTank( pos, tanksize, fueltype )
 
 	self:AddDS( {
 		pos = pos,
-		ang = Angle(0,0,0),
-		mins = Vector(-15,-15,-5),
-		maxs =  Vector(15,15,5),
+		ang = ang,
+		mins = (mins or Vector(-15,-15,-5)),
+		maxs =  (maxs or Vector(15,15,5)),
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( FuelTank ) then return end
 

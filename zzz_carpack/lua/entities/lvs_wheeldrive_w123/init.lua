@@ -42,7 +42,7 @@ function ENT:OnSpawn( PObj )
 	FuelCap:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
 	FuelCap:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
-	local FuelTank = self:AddFuelTank( Vector(-72,0,14), 600, LVS.FUELTYPE_PETROL )
+	local FuelTank = self:AddFuelTank( Vector(-72,0,14), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 	FuelTank:SetDoorHandler( FuelCap )
 
 	local WheelModel = "models/diggercars/mb_w123/wheel.mdl"

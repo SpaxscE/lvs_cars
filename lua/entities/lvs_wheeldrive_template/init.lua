@@ -25,7 +25,7 @@ function ENT:OnSpawn( PObj )
 
 	
 	--[[ fuel system ]]
-	-- self:AddFuelTank( pos, tanksize, fueltype ) -- adds a fuel tank.
+	-- self:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs ) -- adds a fuel tank.
 	--[[
 	 fueltypes:
 		LVS.FUELTYPE_PETROL
@@ -35,7 +35,7 @@ function ENT:OnSpawn( PObj )
 	tanksize is how many seconds@fullthrottle you can drive. Not in liter.
 	]]
 	--Example:
-	self:AddFuelTank( Vector(0,0,0), 600, LVS.FUELTYPE_PETROL )
+	self:AddFuelTank( Vector(0,0,0), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 
 
 	--[[ damage system ]]

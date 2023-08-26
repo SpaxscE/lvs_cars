@@ -38,7 +38,7 @@ function ENT:OnSpawn( PObj )
 
 	self:AddEngine( Vector(-56,0,37.5) )
 
-	local FuelTank = self:AddFuelTank( Vector(-57.06,0,18.92), 600, LVS.FUELTYPE_PETROL )
+	local FuelTank = self:AddFuelTank( Vector(-57.06,0,18.92), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 	FuelTank:SetDoorHandler( FuelCap )
 
 	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"

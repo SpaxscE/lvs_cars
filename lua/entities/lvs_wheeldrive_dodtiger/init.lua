@@ -22,7 +22,19 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
-	self:AddFuelTank( Vector(-45,0,15), 600, LVS.FUELTYPE_PETROL )
+	self:AddFuelTank( Vector(-45,0,15), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 
 	self:CreateTracks()
+
+
+	--Armor spots protecting the weakspots
+	self:AddDSArmor( {
+		pos = Vector(115,0,32),
+		ang = Angle(10,0,0),
+		mins = Vector(-20,-40,-20),
+		maxs =  Vector(20,40,20),
+		Callback = function( tbl, ent, dmginfo )
+			dmginfo:ScaleDamage( 0 )
+		end
+	} )
 end

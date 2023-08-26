@@ -29,7 +29,7 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
 	self:AddEngine( Vector(68,0,50) )
-	self:AddFuelTank( Vector(-85,0,22), 600, LVS.FUELTYPE_PETROL )
+	self:AddFuelTank( Vector(-85,0,22), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 
 	self.SNDTurretMG = self:AddSoundEmitter( Vector(-63,0,85), "lvs/vehicles/halftrack/mc_loop.wav", "lvs/vehicles/halftrack/mc_loop.wav" )
 	self.SNDTurretMG:SetSoundLevel( 95 )
