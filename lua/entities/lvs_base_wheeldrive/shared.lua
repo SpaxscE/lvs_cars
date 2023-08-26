@@ -74,8 +74,6 @@ ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/gene
 
 ENT.DeleteOnExplode = false
 
-ENT.DSArmorBulletPenetrationAdd = 25
-
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 

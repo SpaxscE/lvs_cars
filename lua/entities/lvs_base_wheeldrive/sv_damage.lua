@@ -1,5 +1,6 @@
 
 ENT.FireTrailScale = 0.35
+ENT.DSArmorBulletPenetrationAdd = 50
 
 DEFINE_BASECLASS( "lvs_base" )
 

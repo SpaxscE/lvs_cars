@@ -29,11 +29,10 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
-		if self:GetDestroyed() then return end
-
 		local Damage = dmginfo:GetDamage()
+		local Force = dmginfo:GetDamageForce():Length()
 
-		if Damage <= 0 then return end
+		if Force <= 100 then return end
 
 		local CurHealth = self:GetHP()
 
@@ -42,6 +41,12 @@ if SERVER then
 		self:SetHP( NewHealth )
 
 		if NewHealth <= 0 then
+			local Attacker = dmginfo:GetAttacker() 
+			if IsValid( Attacker ) and Attacker:IsPlayer() then
+				net.Start( "lvs_car_markers" )
+				net.Send( Attacker )
+			end
+
 			self:SetDestroyed( true )
 		end
 	end

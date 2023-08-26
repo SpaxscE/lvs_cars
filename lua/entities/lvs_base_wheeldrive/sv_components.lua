@@ -140,7 +140,7 @@ function ENT:AddSuperCharger()
 	return SuperCharger
 end
 
-function ENT:AddArmor( pos, ang, mins, maxs, health )
+function ENT:AddArmor( pos, ang, mins, maxs, health, damagereduction )
 	local Armor = ents.Create( "lvs_wheeldrive_armor" )
 
 	if not IsValid( Armor ) then return end
@@ -166,11 +166,11 @@ function ENT:AddArmor( pos, ang, mins, maxs, health )
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( Armor ) then return end
 
-			if Armor:GetDestroyed() then return end
-
 			Armor:OnTakeDamage( dmginfo )
 
-			dmginfo:ScaleDamage( 0 )
+			if Armor:GetDestroyed() then return end
+
+			dmginfo:ScaleDamage( (damagereduction or 0) )
 		end
 	} )
 
