@@ -139,3 +139,40 @@ function ENT:AddSuperCharger()
 
 	return SuperCharger
 end
+
+function ENT:AddArmor( pos, ang, mins, maxs, health )
+	local Armor = ents.Create( "lvs_wheeldrive_armor" )
+
+	if not IsValid( Armor ) then return end
+
+	Armor:SetPos( self:LocalToWorld( pos ) )
+	Armor:SetAngles( self:LocalToWorldAngles( ang ) )
+	Armor:Spawn()
+	Armor:Activate()
+	Armor:SetParent( self )
+	Armor:SetBase( self )
+	Armor:SetMaxHP( health )
+	Armor:SetHP( health )
+
+	self:DeleteOnRemove( Armor )
+
+	self:TransferCPPI( Armor )
+
+	self:AddDSArmor( {
+		pos = pos,
+		ang = ang,
+		mins = mins,
+		maxs = maxs,
+		Callback = function( tbl, ent, dmginfo )
+			if not IsValid( Armor ) then return end
+
+			if Armor:GetDestroyed() then return end
+
+			Armor:OnTakeDamage( dmginfo )
+
+			dmginfo:ScaleDamage( 0 )
+		end
+	} )
+
+	return Armor
+end
