@@ -17,7 +17,7 @@ if SERVER then
 	function ENT:Think()
 		self:NextThink( CurTime() + 0.1 )
 
-		if not IsValid( self:GetParent() ) then PrintChat( "remove no parent" ) self:Remove() return end
+		if not IsValid( self:GetParent() ) then self:Remove() return end
 
 		if (self.DieTime or 0) > CurTime() then return true end
 

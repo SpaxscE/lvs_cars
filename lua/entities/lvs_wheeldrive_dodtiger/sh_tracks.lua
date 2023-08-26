@@ -138,7 +138,7 @@ else
 			local scroll = self:CalcScroll( "scroll_left", rotation )
 
 			self:SetPoseParameter("spin_wheels_left", -scroll * 1.252 )
-			self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/tiger/track", Vector(0,scroll * 0.125,0) ) )
+			self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/tiger/track", Vector(0,-scroll * 0.075,0) ) )
 		end
 
 		local DriveWheelFR = self:GetDriveWheelFR()
@@ -147,7 +147,7 @@ else
 			local scroll = self:CalcScroll( "scroll_right", rotation )
 
 			self:SetPoseParameter("spin_wheels_right", -scroll * 1.252 )
-			self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/tiger/track", Vector(0,scroll * 0.125,0) ) )
+			self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/tiger/track", Vector(0,-scroll * 0.075,0) ) )
 		end
 	end
 end

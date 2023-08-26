@@ -40,25 +40,27 @@ if SERVER then
 
 		self:SetHP( NewHealth )
 
+		if not dmginfo:IsDamageType( DMG_AIRBOAT ) then return end
+
 		local pos = dmginfo:GetDamagePosition()
-		local dir = Force:GetNormalized() * 20
+		local dir = Force:GetNormalized()
 
 		local trace = util.TraceLine( {
-			start = pos - dir,
-			endpos = pos + dir,
+			start = pos - dir * 20,
+			endpos = pos + dir * 20,
 			filter = function( ent ) return ent == self:GetBase() end
 		} )
 
-		if trace.Entity == self:GetBase() then
-			local hit_decal = ents.Create( "lvs_wheeldrive_armor_impact" )
-			hit_decal:SetPos( trace.HitPos )
-			hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
-			hit_decal:Spawn()
-			hit_decal:Activate()
-			hit_decal:SetParent( trace.Entity )
-		end
-
 		if NewHealth <= 0 then
+			if trace.Entity == self:GetBase() then
+				local hit_decal = ents.Create( "lvs_wheeldrive_armor_penetrate" )
+				hit_decal:SetPos( trace.HitPos )
+				hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
+				hit_decal:Spawn()
+				hit_decal:Activate()
+				hit_decal:SetParent( trace.Entity )
+			end
+
 			local Attacker = dmginfo:GetAttacker() 
 			if IsValid( Attacker ) and Attacker:IsPlayer() then
 				net.Start( "lvs_car_markers" )
@@ -66,6 +68,31 @@ if SERVER then
 			end
 
 			self:SetDestroyed( true )
+		else
+			if trace.Entity == self:GetBase() then
+
+				local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( dir ) ,-1,1) )
+				local Fx = math.cos( Ax )
+
+				local HitAngle = 90 - (180 - math.deg( Ax ))
+
+				if HitAngle > 20 then return true end
+
+				local NewDir = dir - trace.HitNormal * Fx * 2
+
+				local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
+				hit_decal:SetPos( trace.HitPos )
+				hit_decal:SetAngles( NewDir:Angle() )
+				hit_decal:Spawn()
+				hit_decal:Activate()
+
+				local PhysObj = hit_decal:GetPhysicsObject()
+				if IsValid( PhysObj ) then
+					PhysObj:EnableDrag( false )
+					PhysObj:SetVelocityInstantaneous( NewDir * 4000 )
+					PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
+				end
+			end
 		end
 
 		return true

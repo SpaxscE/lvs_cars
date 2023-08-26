@@ -22,7 +22,7 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
-	self:AddFuelTank( Vector(-100,0,10), Angle(-15,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-40,0),Vector(10,40,60) )
+	self:AddFuelTank( Vector(-80,0,10), Angle(-15,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-40,0),Vector(10,40,60) )
 
 	self:CreateTracks()
 
@@ -31,7 +31,8 @@ function ENT:OnSpawn( PObj )
 	
 	self:AddArmor( Vector(0,50,20), Angle(0,0,0), Vector(-120,-15,-30), Vector(80,15,50), 1500 )
 	self:AddArmor( Vector(0,-50,20), Angle(0,0,0), Vector(-120,-15,-30), Vector(80,15,50), 1500 )
-	self:AddArmor( Vector(0,0,60), Angle(0,0,0), Vector(-120,-30,-15), Vector(80,30,15), 4000 )
+	self:AddArmor( Vector(0,0,70), Angle(0,0,0), Vector(-110,-40,0), Vector(80,40,5), 4000 )
 
 	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 4000 )
+	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-40,0),Vector(10,40,60), 1500 )
 end
