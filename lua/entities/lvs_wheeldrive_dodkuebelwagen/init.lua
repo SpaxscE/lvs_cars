@@ -3,10 +3,10 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	local DriverSeat = self:AddDriverSeat( Vector(-8,13.75,16.25), Angle(0,-95,-8) )
-	local PassengerSeat = self:AddPassengerSeat( Vector(10,-13.75,20), Angle(0,-85,8) )
-	local PassengerSeat1 = self:AddPassengerSeat( Vector(-27,13.5,20), Angle(0,-90,8) )
-	local PassengerSeat2 = self:AddPassengerSeat( Vector(-27,-13.5,20), Angle(0,-90,8) )
+	local DriverSeat = self:AddDriverSeat( Vector(-6.5,12,16.5), Angle(0,-95,-8) )
+	local PassengerSeat = self:AddPassengerSeat( Vector(13,-12,22), Angle(0,-85,15) )
+	local PassengerSeat1 = self:AddPassengerSeat( Vector(-22,12,22), Angle(0,-90,15) )
+	local PassengerSeat2 = self:AddPassengerSeat( Vector(-22,-12,22), Angle(0,-90,15) )
 
 	local DoorHandler = self:AddDoorHandler( "left_door", Vector(10,21,35), Angle(0,0,0), Vector(-10,-3,-12), Vector(20,6,12), Vector(-10,-15,-12), Vector(20,30,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
@@ -28,12 +28,18 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 	DoorHandler:LinkToSeat( PassengerSeat2 )
 
-	local DoorHandler = self:AddDoorHandler( "fuel_cap", Vector(46,-15.5,48.5), Angle(0,90,-70), Vector(-5,0,-5), Vector(5,5,5), Vector(-5,-5,-5), Vector(5,5,5) )
-	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
-	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
+	local DoorHandler = self:AddDoorHandler( "hatch", Vector(27.71,0,53), Angle(0,0,0), Vector(-5,-23,-5), Vector(5,23,7), Vector(-5,-23,-10), Vector(18,23,-3) )
+	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_close.wav" )
+	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_open.wav" )
+
+	local FuelCap = self:AddDoorHandler( "fuel_cap", Vector(46.84,-15.13,45.95), Angle(0,90,-70), Vector(-2,-0.5,-2), Vector(2,2,2), Vector(-2,-3,-2), Vector(2,2,5) )
+	FuelCap:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
+	FuelCap:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
 
 	self:AddEngine( Vector(-56,0,37.5) )
-	self:AddFuelTank( Vector(-57.06,0,18.92), 600, LVS.FUELTYPE_PETROL )
+
+	local FuelTank = self:AddFuelTank( Vector(-57.06,0,18.92), 600, LVS.FUELTYPE_PETROL )
+	FuelTank:SetDoorHandler( FuelCap )
 
 	local WheelModel = "models/diggercars/kubel/kubelwagen_wheel.mdl"
 

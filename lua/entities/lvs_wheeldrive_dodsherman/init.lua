@@ -20,8 +20,12 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetSoundLevel( 95 )
 	self.SNDTurret:SetParent( self, ID )
 
+	local DriverSeat = self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
+	DriverSeat.HidePlayer = true
 
-	self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
+	local GunnerSeat = self:AddPassengerSeat( Vector(88,-20,32), Angle(0,-90,0) )
+	GunnerSeat.HidePlayer = true
+	self:SetGunnerSeat( GunnerSeat )
 
 	self:AddEngine( Vector(-79.66,0,72.21) )
 	self:AddFuelTank( Vector(-60,0,25), 600, LVS.FUELTYPE_PETROL )

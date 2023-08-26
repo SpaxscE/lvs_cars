@@ -69,6 +69,8 @@ ENT.EngineSounds = {
 }
 
 function ENT:OnSetupDataTables()
+	self:AddDT( "Entity", "GunnerSeat" )
+
 	self:AddTracksDT()
 	self:AddTurretDT()
 end
@@ -217,6 +219,30 @@ function ENT:InitWeapons()
 		end
 	end
 	self:AddWeapon( weapon )
+
+	self:AddGunnerWeapons()
+end
+
+function ENT:AddGunnerWeapons()
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/mg.png")
+	weapon.Ammo = 1000
+	weapon.Delay = 0.1
+	weapon.HeatRateUp = 0.2
+	weapon.HeatRateDown = 0.25
+	weapon.Attack = function( ent ) end
+	weapon.OnThink = function( ent, active )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		local Angles = base:WorldToLocalAngles( ent:GetAimVector():Angle() )
+		Angles:Normalize()
+
+		base:SetPoseParameter("machinegun_yaw", Angles.y )
+		base:SetPoseParameter("machinegun_pitch",  Angles.p )
+	end
+	self:AddWeapon( weapon, 2 )
 end
 
 ENT.ExhaustPositions = {
