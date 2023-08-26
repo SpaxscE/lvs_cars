@@ -166,11 +166,12 @@ function ENT:AddArmor( pos, ang, mins, maxs, health )
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( Armor ) then return true end
 
+			local DamageRemaining = math.max( dmginfo:GetDamage() - Armor:GetHP(), 0 )
 			local DidDamage = Armor:OnTakeDamage( dmginfo )
 
+			dmginfo:SetDamage( DamageRemaining )
+	
 			if Armor:GetDestroyed() then return true end
-
-			dmginfo:ScaleDamage( 0 )
 
 			if DidDamage then
 				local Attacker = dmginfo:GetAttacker() 
