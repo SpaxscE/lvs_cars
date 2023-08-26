@@ -1,7 +1,7 @@
 "VertexLitGeneric"
 {
-	"$baseTexture" "models/blu/track"
-	"$bumpmap" "models/blu/track_nm"
+	"$baseTexture" "models\blu\tiger\track"
+	"$bumpmap" "models\blu\tiger\track_nm"
 	"$phong" "1" 
 	"$phongboost" "0.02" 
 	"$phongexponent" 3
@@ -16,3 +16,12 @@
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
