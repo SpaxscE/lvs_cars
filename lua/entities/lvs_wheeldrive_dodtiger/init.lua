@@ -35,4 +35,22 @@ function ENT:OnSpawn( PObj )
 
 	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 4000 )
 	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-40,0),Vector(10,40,60), 1500 )
+
+	self:AddDS( {
+		pos = Vector(105,21,55),
+		ang = Angle(0,0,0),
+		mins = Vector(-1,-7,-1),
+		maxs =  Vector(1,7,1),
+		Callback = function( tbl, ent, dmginfo )
+			if dmginfo:GetDamage() <= 0 then return end
+
+			local ply = self:GetDriver()
+
+			if IsValid( ply ) then
+				self:HurtPlayer( ply, dmginfo:GetDamage(), dmginfo:GetAttacker(), dmginfo:GetInflictor() )
+			end
+
+			dmginfo:ScaleDamage( 0 )
+		end
+	} )
 end
