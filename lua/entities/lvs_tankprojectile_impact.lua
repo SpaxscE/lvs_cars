@@ -96,8 +96,10 @@ function ENT:Draw()
 	local Timed = 1 - (self.DieTime - CurTime()) / self.LifeTime
 	local Scale = math.max(math.min(2 - Timed * 2,1),0)
 
+	local Scale02 = math.max(Scale - 0.8,0) / 0.2
+
 	cam.Start3D2D( self:GetPos() + self:GetAngles():Up(), self:GetAngles(), 1 )
-		surface.SetDrawColor( 255, 93 + 50 * Scale, 50 * Scale, 200 * Scale )
+		surface.SetDrawColor( 255 * Scale02, (93 + 50 * Scale) * Scale02, (50 * Scale) * Scale02, (200 * Scale) * Scale02 )
 
 		surface.SetMaterial( self.GlowMat1 )
 		surface.DrawTexturedRectRotated( 0, 0, 8 , 8 , self.RandomAng )
