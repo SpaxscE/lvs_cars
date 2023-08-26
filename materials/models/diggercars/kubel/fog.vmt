@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$baseTexture" "models\DiggerCars\kubel\kubelwagen_color"
+	"$baseTexture" "models\DiggerCars\kubel\kubelwagen_grey"
 	"$bumpmap" "models\DiggerCars\kubel\kubelwagen_normal"
 	"$detail" "models/DiggerCars/kubel\kubelwagen_e"
 	"$detailscale" "1"

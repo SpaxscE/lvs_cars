@@ -1,0 +1,18 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/DiggerCars/kubel/kubelwagen_paint"
+	"$bumpmap" "models/DiggerCars/kubel/kubelwagen_normal"
+       	 "$blendtintbybasealpha" 1
+	"$phong" "1" 
+	"$phongboost" "0.04" 
+	"$phongexponent" 3
+	"$phongfresnelranges" "[1 1 1]" 
+}
+
+
+
+
+
+
+
+
