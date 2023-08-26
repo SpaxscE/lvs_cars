@@ -35,7 +35,7 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(0,0,70), Angle(0,0,0), Vector(-110,-40,0), Vector(80,40,5), 4000 )
 
 	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 4000, 150000 )
-	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-40,0),Vector(10,40,60), 500 )
+	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-45,0),Vector(10,45,65), 500 )
 
 	self:AddDriverViewPort( Vector(105,21,55), Angle(0,0,0), Vector(-1,-7,-1), Vector(1,7,1) )
 end
