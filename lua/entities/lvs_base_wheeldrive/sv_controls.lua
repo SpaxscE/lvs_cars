@@ -1,5 +1,5 @@
 
-function ENT:CalcMouseSteer( ply, cmd )
+function ENT:CalcMouseSteer( ply )
 	local pod = ply:GetVehicle()
 
 	local ang = self:GetAngles()
@@ -20,7 +20,7 @@ function ENT:CalcMouseSteer( ply, cmd )
 	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
 end
 
-function ENT:CalcSteer( ply, cmd )
+function ENT:CalcSteer( ply )
 	local KeyLeft = ply:lvsKeyDown( "CAR_STEER_LEFT" )
 	local KeyRight = ply:lvsKeyDown( "CAR_STEER_RIGHT" )
 
@@ -66,7 +66,7 @@ function ENT:CalcSteer( ply, cmd )
 	self:SteerTo( TargetValue, MaxSteer  )
 end
 
-function ENT:CalcThrottle( ply, cmd )
+function ENT:CalcThrottle( ply )
 	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
 
 	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
@@ -80,7 +80,7 @@ function ENT:CalcThrottle( ply, cmd )
 	self:SetThrottle( New )
 end
 
-function ENT:CalcHandbrake( ply, cmd )
+function ENT:CalcHandbrake( ply )
 	if ply:lvsKeyDown( "CAR_HANDBRAKE" ) then
 		self:EnableHandbrake()
 	else
@@ -88,7 +88,7 @@ function ENT:CalcHandbrake( ply, cmd )
 	end
 end
 
-function ENT:CalcBrake( ply, cmd )
+function ENT:CalcBrake( ply )
 	local Brake = ply:lvsKeyDown( "CAR_BRAKE" ) and 1 or 0
 
 	local Rate = FrameTime() * 3.5
@@ -98,7 +98,7 @@ function ENT:CalcBrake( ply, cmd )
 	self:SetBrake( New )
 end
 
-function ENT:CalcTransmission( ply, cmd )
+function ENT:CalcTransmission( ply )
 	local walk = ply:lvsKeyDown( "CAR_REVERSE" )
 
 	if walk ~= self._oldwalk then
@@ -110,7 +110,7 @@ function ENT:CalcTransmission( ply, cmd )
 	end
 end
 
-function ENT:CalcLights( ply, cmd )
+function ENT:CalcLights( ply )
 	local LightsHandler = self:GetLightsHandler()
 
 	if not IsValid( LightsHandler ) then return end
@@ -163,23 +163,32 @@ end
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
-	self:SetPhysicsAttacker( ply, 1 )
-
 	if ply:lvsKeyDown( "CAR_MENU" ) then return end
 
 	if ply:lvsMouseAim() then
 		if ply:lvsKeyDown( "FREELOOK" ) or ply:lvsKeyDown( "CAR_STEER_LEFT" ) or ply:lvsKeyDown( "CAR_STEER_RIGHT" ) then
-			self:CalcSteer( ply, cmd )
+			self:CalcSteer( ply )
 		else
-			self:CalcMouseSteer( ply, cmd )
+			self:CalcMouseSteer( ply )
 		end
 	else
-		self:CalcSteer( ply, cmd )
+		self:CalcSteer( ply )
 	end
 
-	self:CalcThrottle( ply, cmd )
-	self:CalcHandbrake( ply, cmd )
-	self:CalcBrake( ply, cmd )
-	self:CalcTransmission( ply, cmd )
-	self:CalcLights( ply, cmd )
+	self:CalcThrottle( ply )
+	self:CalcHandbrake( ply )
+	self:CalcBrake( ply )
+	self:CalcTransmission( ply )
+	self:CalcLights( ply )
+	self:SetRoadkillAttacker( ply )
+end
+
+function ENT:SetRoadkillAttacker( ply )
+	local T = CurTime()
+
+	if (self._nextSetAttacker or 0) > T then return end
+
+	self._nextSetAttacker = T + 1
+
+	self:SetPhysicsAttacker( ply, 1.1 )
 end

@@ -22,8 +22,6 @@ function ENT:GetRotationAxis()
 
 	if not IsValid( base ) then return vector_origin end
 
-	local Axle = base:GetAxleData( self:GetAxle() )
-
 	local WorldAngleDirection = -self:WorldToLocalAngles( self:GetDirectionAngle() )
 
 	return WorldAngleDirection:Right()

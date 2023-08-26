@@ -267,37 +267,57 @@ end
 function ENT:AlignWheel( Wheel )
 	if not IsValid( Wheel ) then return false end
 
-	if not isfunction( Wheel.GetMaster ) then Wheel:Remove() return false end
+	local Master = Wheel.MasterEntity
 
-	local Master = Wheel:GetMaster()
+	if not IsValid( Master ) then
+		if not isfunction( Wheel.GetMaster ) then return false end
 
-	if not IsValid( Master ) then Wheel:Remove() return false end
+		Master = Wheel:GetMaster()
+
+		Wheel.MasterEntity = Master
+
+		if IsValid( Master ) then
+			Wheel.MasterPhysObj = Master:GetPhysicsObject()
+		end
+
+		return false
+	end
+
+	local PhysObj = Wheel.MasterPhysObj
+
+	if not IsValid( PhysObj ) then Wheel:Remove() return false end
 
 	local Steer = self:GetSteer()
 
-	local PhysObj = Master:GetPhysicsObject()
-
 	if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) return false end
 
-	local ID = Wheel:GetAxle()
+	if not Master.lvsValidAxleData then
+		local ID = Wheel:GetAxle()
 
-	if not ID then return false end
+		if ID then
+			local Axle = self:GetAxleData( ID )
 
-	local Axle = self:GetAxleData( ID )
+			Master.ForwardAngle = Axle.ForwardAngle or angle_zero
+			Master.SteerAngle = Axle.SteerAngle or 0
+			Master.SteerType = Axle.SteerType or 2
 
-	if not Axle.ForwardAngle then return false end
+			Master.lvsValidAxleData = true
+		end
 
-	local AxleAng = self:LocalToWorldAngles( Axle.ForwardAngle )
+		return false
+	end
+
+	local AxleAng = self:LocalToWorldAngles( Master.ForwardAngle )
 
 	AxleAng:RotateAroundAxis( AxleAng:Right(), Wheel:GetCaster() )
 	AxleAng:RotateAroundAxis( AxleAng:Forward(), Wheel:GetCamber() )
 	AxleAng:RotateAroundAxis( AxleAng:Up(), Wheel:GetToe() )
 
-	if Axle.SteerType == LVS.WHEEL_STEER_REAR then
-		AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(Steer,-Axle.SteerAngle,Axle.SteerAngle) )
+	if Master.SteerType == LVS.WHEEL_STEER_REAR then
+		AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(Steer,-Master.SteerAngle,Master.SteerAngle) )
 	else
-		if Axle.SteerType == LVS.WHEEL_STEER_FRONT then
-			AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(-Steer,-Axle.SteerAngle,Axle.SteerAngle) )
+		if Master.SteerType == LVS.WHEEL_STEER_FRONT then
+			AxleAng:RotateAroundAxis( AxleAng:Up(), math.Clamp(-Steer,-Master.SteerAngle,Master.SteerAngle) )
 		end
 	end
 
