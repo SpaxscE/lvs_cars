@@ -140,7 +140,7 @@ function ENT:AddSuperCharger()
 	return SuperCharger
 end
 
-function ENT:AddArmor( pos, ang, mins, maxs, health, damagereduction )
+function ENT:AddArmor( pos, ang, mins, maxs, health )
 	local Armor = ents.Create( "lvs_wheeldrive_armor" )
 
 	if not IsValid( Armor ) then return end
@@ -184,4 +184,25 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, damagereduction )
 	} )
 
 	return Armor
+end
+
+function ENT:AddDriverViewPort( pos, ang, mins, maxs )
+	self:AddDS( {
+		pos = pos,
+		ang = ang,
+		mins = mins,
+		maxs =  maxs,
+		Callback = function( tbl, ent, dmginfo )
+			if dmginfo:GetDamage() <= 0 then return end
+
+			local ply = self:GetDriver()
+
+			if IsValid( ply ) then
+				ply:EmitSound("lvs/hitdriver"..math.random(1,2)..".wav",120)
+				self:HurtPlayer( ply, dmginfo:GetDamage(), dmginfo:GetAttacker(), dmginfo:GetInflictor() )
+			end
+
+			dmginfo:ScaleDamage( 0 )
+		end
+	} )
 end
