@@ -20,7 +20,7 @@ ENT.GibModels = {
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 4000
+ENT.MaxHealth = 2000
 
 ENT.SteerSpeed = 1
 ENT.SteerReturnSpeed = 2
@@ -158,7 +158,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_cannon"
 		bullet.Force	= 500000
 		bullet.HullSize 	= 0
-		bullet.Damage	= 750
+		bullet.Damage	= 1000
 		bullet.Velocity = 14000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )

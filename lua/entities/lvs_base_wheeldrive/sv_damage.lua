@@ -85,8 +85,6 @@ function ENT:Explode()
 		return
 	end
 
-	self:RemoveWeapons()
-
 	if self.MDL_DESTROYED then
 		self:SetModel( self.MDL_DESTROYED )
 		self:PhysicsDestroy()
@@ -110,6 +108,8 @@ function ENT:Explode()
 	for _, ent in pairs( self:GetChildren() ) do
 		ent:Remove()
 	end
+
+	self:RemoveWeapons()
 
 	self:StopMotionController()
 

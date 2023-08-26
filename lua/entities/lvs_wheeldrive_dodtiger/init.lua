@@ -26,12 +26,12 @@ function ENT:OnSpawn( PObj )
 
 	self:CreateTracks()
 
-	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-40,-20), Vector(20,40,20), 3000, 0.1 )
-	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-10,-60,-30), Vector(10,60,40), 3000, 0.15 )
+	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-40,-20), Vector(20,40,20), 3000 )
+	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-10,-60,-30), Vector(10,60,40), 1500 )
 	
-	self:AddArmor( Vector(0,50,20), Angle(0,0,0), Vector(-80,-15,-30), Vector(80,15,50), 1500, 0.25 )
-	self:AddArmor( Vector(0,-50,20), Angle(0,0,0), Vector(-80,-15,-30), Vector(80,15,50), 1500, 0.25 )
-	self:AddArmor( Vector(0,0,60), Angle(0,0,0), Vector(-80,-30,-15), Vector(80,30,15), 1000, 0.5 )
+	self:AddArmor( Vector(0,50,20), Angle(0,0,0), Vector(-80,-15,-30), Vector(80,15,50), 1500 )
+	self:AddArmor( Vector(0,-50,20), Angle(0,0,0), Vector(-80,-15,-30), Vector(80,15,50), 1500 )
+	self:AddArmor( Vector(0,0,60), Angle(0,0,0), Vector(-80,-30,-15), Vector(80,30,15), 4000 )
 
-	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 2000, 0.15 )
+	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 4000 )
 end

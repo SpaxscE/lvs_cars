@@ -170,10 +170,15 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, damagereduction )
 
 			if Armor:GetDestroyed() then return end
 
+			dmginfo:ScaleDamage( 0 )
+
 			if DidDamage then
-				dmginfo:ScaleDamage( (damagereduction or 0) )
-			else
-				dmginfo:ScaleDamage( 0 )
+				local Attacker = dmginfo:GetAttacker() 
+				if IsValid( Attacker ) and Attacker:IsPlayer() then
+					net.Start( "lvs_hitmarker" )
+						net.WriteBool( false )
+					net.Send( Attacker )
+				end
 			end
 		end
 	} )
