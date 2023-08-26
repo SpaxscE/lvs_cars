@@ -1,8 +1,8 @@
 "VertexLitGeneric"
 {
-	"$baseTexture" "models\DiggerCars\kubel\kubelwagen_grey"
+	"$baseTexture" "models\DiggerCars\kubel\kubelwagen_paint"
 	"$bumpmap" "models\DiggerCars\kubel\kubelwagen_normal"
-	"$detail" "models/DiggerCars/kubel\kubelwagen_e"
+	"$detail" "models/DiggerCars/kubel/kubelwagen_e"
 	"$detailscale" "1"
 	"$detailblendfactor" "0" //use this for emission strength
 	"$detailblendmode" "5"
@@ -20,4 +20,5 @@
 		}
 	}
 }
+
 
