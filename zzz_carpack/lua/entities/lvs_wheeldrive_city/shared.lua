@@ -13,7 +13,8 @@ ENT.MDL = "models/diggercars/honda_city_turbo/city.mdl"
 
 ENT.MaxVelocity = 2200
 
-ENT.EngineTorque = 97
+ENT.EngineCurve = 0.15
+ENT.EngineTorque = 72
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 7000
 

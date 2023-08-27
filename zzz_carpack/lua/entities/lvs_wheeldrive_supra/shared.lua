@@ -13,7 +13,8 @@ ENT.MDL = "models/diggercars/toyota_supra/supra.mdl"
 
 ENT.MaxVelocity = 2650
 
-ENT.EngineTorque = 160
+ENT.EngineCurve = 0.15
+ENT.EngineTorque = 135
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 7000
 

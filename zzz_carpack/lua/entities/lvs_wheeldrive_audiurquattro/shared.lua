@@ -13,7 +13,8 @@ ENT.MDL = "models/diggercars/audi_quattro/quattro.mdl"
 
 ENT.MaxVelocity = 2000
 
-ENT.EngineTorque = 140
+ENT.EngineCurve = 0.15
+ENT.EngineTorque = 115
 
 ENT.TransGears = 5
 ENT.TransGearsReverse = 1
