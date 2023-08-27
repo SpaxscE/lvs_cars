@@ -10,12 +10,12 @@ ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/tanks/tiger_lvs.mdl"
-ENT.MDL_DESTROYED = "models/blu/tanks/tiger_gib_1.mdl"
+ENT.MDL_DESTROYED = "models/blu/tanks/tiger_lvs_gib_1.mdl"
 
 ENT.GibModels = {
-	"models/blu/tanks/tiger_gib_2.mdl",
-	"models/blu/tanks/tiger_gib_3.mdl",
-	"models/blu/tanks/tiger_gib_4.mdl",
+	"models/blu/tanks/tiger_lvs_gib_2.mdl",
+	"models/blu/tanks/tiger_lvs_gib_3.mdl",
+	"models/blu/tanks/tiger_lvs_gib_4.mdl",
 }
 
 ENT.AITEAM = 1

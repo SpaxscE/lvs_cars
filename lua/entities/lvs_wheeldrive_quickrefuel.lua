@@ -2,13 +2,13 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.PrintName = "Gas Pump"
+ENT.PrintName = "Quick Refuel"
 ENT.Author = "Luna"
-ENT.Information = "Refills Fuel Tanks"
+ENT.Information = "Refills fuel tanks"
 ENT.Category = "[LVS] - Cars - Items"
 
 ENT.Spawnable		= true
-ENT.AdminOnly		= false
+ENT.AdminOnly		= true
 
 if SERVER then
 	function ENT:SpawnFunction( ply, tr, ClassName )
