@@ -20,6 +20,8 @@ ENT.EngineMaxRPM = 5000
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
 
+ENT.SuperChargerVisible = false
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/dodge_charger/eng_idle_loop.wav",

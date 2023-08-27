@@ -14,8 +14,21 @@ ENT.DoNotDuplicate = true
 
 ENT._LVS = true
 
+ENT.Editable = true
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
+
+	self:NetworkVar( "Float",0, "EngineCurve", { KeyName = "addpower", Edit = { type = "Float",	 order = 1,min = 0, max = 1, category = "Upgrade Settings"} } )
+	self:NetworkVar( "Float",1, "EngineTorque", { KeyName = "addtorque", Edit = { type = "Float", order = 2,min = 0, max = 300,	 category = "Upgrade Settings"} } )
+
+	if SERVER then
+		self:SetEngineCurve( 0.5 )
+		self:SetEngineTorque( 25 )
+
+		self:NetworkVarNotify( "EngineCurve", self.OnEngineCurveChanged )
+		self:NetworkVarNotify( "EngineTorque", self.OnEngineTorqueChanged )
+	end
 end
 
 function ENT:GetBoost()
@@ -54,8 +67,8 @@ if SERVER then
 
 		self:SetBase( ent )
 
-		ent.EngineCurve = ent.EngineCurve + ent.TurboCurveAdd
-		ent.EngineTorque = ent.EngineTorque + ent.TurboTorqueAdd
+		ent.EngineCurve = ent.EngineCurve + self:GetEngineCurve()
+		ent.EngineTorque = ent.EngineTorque + self:GetEngineTorque()
 
 		ent:OnTurboCharged( true )
 
@@ -71,10 +84,30 @@ if SERVER then
 
 		if not IsValid( base ) or base.ExplodedAlready then return end
 
-		base.EngineCurve = base.EngineCurve - base.TurboCurveAdd
-		base.EngineTorque = base.EngineTorque - base.TurboTorqueAdd
+		base.EngineCurve = base.EngineCurve - self:GetEngineCurve()
+		base.EngineTorque = base.EngineTorque - self:GetEngineTorque()
 
 		base:OnTurboCharged( false )
+	end
+
+	function ENT:OnEngineCurveChanged( name, old, new )
+		if old == new then return end
+
+		local ent = self:GetBase()
+
+		if not IsValid( ent ) then return end
+
+		ent.EngineCurve = ent.EngineCurve - old + new
+	end
+
+	function ENT:OnEngineTorqueChanged( name, old, new )
+		if old == new then return end
+
+		local ent = self:GetBase()
+
+		if not IsValid( ent ) then return end
+
+		ent.EngineTorque = ent.EngineTorque - old + new
 	end
 
 	return
