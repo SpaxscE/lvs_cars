@@ -28,7 +28,7 @@ function ENT:OnFrame()
 	if self._oldGunHeat ~= Heat then
 		self._oldGunHeat = Heat
 
-		self.TurretGlow:SetFloat("$detailblendfactor", Heat ^ 2 )
+		self.TurretGlow:SetFloat("$detailblendfactor", Heat ^ 7 )
 
 		self:SetSubMaterial(4, "!"..name)
 	end

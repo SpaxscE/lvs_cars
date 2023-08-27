@@ -136,6 +136,10 @@ function ENT:RemoveWeapons()
 	end
 
 	self:WeaponsOnRemove()
+
+	for id, _ in pairs( self.WEAPONS ) do
+		self.WEAPONS[ id ] = {}
+	end
 end
 
 function ENT:OnExploded()
