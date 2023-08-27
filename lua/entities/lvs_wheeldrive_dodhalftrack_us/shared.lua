@@ -24,6 +24,8 @@ ENT.EngineTorque = 175
 ENT.TransGears = 3
 ENT.TransGearsReverse = 1
 
+ENT.lvsShowInSpawner = true
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/halftrack/eng_idle_loop.wav",

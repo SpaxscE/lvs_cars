@@ -75,6 +75,8 @@ ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/gene
 
 ENT.DeleteOnExplode = false
 
+ENT.lvsShowInSpawner = false
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 

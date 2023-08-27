@@ -31,6 +31,8 @@ ENT.PhysicsWeightScale = 1.5
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = true
 
+ENT.lvsShowInSpawner = true
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/222/eng_idle_loop.wav",

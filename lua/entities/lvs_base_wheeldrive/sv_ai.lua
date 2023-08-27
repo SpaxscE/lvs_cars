@@ -70,7 +70,7 @@ function ENT:RunAI()
 				if CurWeapon > 2 then
 					self:AISelectWeapon( 1 )
 				else
-					if CurHeat > 0.9 then
+					if Target.LVS and CurHeat < 0.9 then
 						if CurWeapon == 1 and self:AIHasWeapon( 2 ) then
 							self:AISelectWeapon( 2 )
 

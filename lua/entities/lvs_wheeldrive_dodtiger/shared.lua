@@ -47,6 +47,8 @@ ENT.MouseSteerAngle = 45
 ENT.WheelBrakeAutoLockup = true
 ENT.WheelBrakeLockupRPM = 15
 
+ENT.lvsShowInSpawner = true
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/tiger/eng_idle_loop.wav",
