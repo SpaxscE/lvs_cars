@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.PrintName = "Quick Refuel"
+ENT.PrintName = "Gas Station"
 ENT.Author = "Luna"
 ENT.Information = "Refills fuel tanks"
 ENT.Category = "[LVS] - Cars - Items"
