@@ -64,6 +64,14 @@ function ENT:OnSpawn( PObj )
 	} )
 
 	NOTE: !!DS parts are inactive while the vehicle has shield!!
+
+
+
+	-- in addition to DS-parts LVS-Cars has a inbuild Armor system:
+
+	self:AddArmor( pos, ang, mins, maxs, health, num_force_ignore )
+
+	-- num_force_ignore is the bullet force. Value here gets added to general immunity variable ENT.DSArmorIgnoreForce (see shared.lua)
 	]]
 
 

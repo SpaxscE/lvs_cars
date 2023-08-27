@@ -39,6 +39,7 @@ TEAMS:
 ]]
 
 ENT.MaxHealth = 400 -- max health
+--ENT.DSArmorIgnoreForce = 1000 -- add general immunity against small firearms
 
 --[[
 PLEASE READ:
