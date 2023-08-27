@@ -8,7 +8,7 @@ ENT.Information = "Refills fuel tanks"
 ENT.Category = "[LVS] - Cars - Items"
 
 ENT.Spawnable		= true
-ENT.AdminOnly		= true
+ENT.AdminOnly		= false
 
 ENT.Editable = true
 
