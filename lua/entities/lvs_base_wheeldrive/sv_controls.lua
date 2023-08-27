@@ -101,6 +101,15 @@ end
 function ENT:CalcTransmission( ply )
 	local walk = ply:lvsKeyDown( "CAR_REVERSE" )
 
+	if not self:GetReverse() and walk then
+		if self:GetVelocity():Length() > self.MaxVelocityReverse then
+			self:SetReverse( false )
+			self:SetBrake( 1 )
+
+			return
+		end
+	end
+
 	if walk ~= self._oldwalk then
 		self._oldwalk = walk
 
