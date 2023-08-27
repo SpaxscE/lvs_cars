@@ -1,23 +1,6 @@
 
 function ENT:CalcMouseSteer( ply )
-	local pod = ply:GetVehicle()
-
-	local ang = self:GetAngles()
-	ang.y = pod:GetAngles().y + 90
-
-	local Forward = ang:Right()
-	local View = pod:WorldToLocalAngles( ply:EyeAngles() ):Forward()
-	
-	local Reversed = false
-	if self:AngleBetweenNormal( View, ang:Forward() ) < 90 then
-		Reversed = self:GetReverse()
-	end
-
-	local LocalAngSteer = (self:AngleBetweenNormal( View, ang:Right() ) - 90) / self.MouseSteerAngle
-
-	local Steer = (math.min( math.abs( LocalAngSteer ), 1 ) ^ self.MouseSteerExponent * self:Sign( LocalAngSteer ))
-
-	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
+	self:ApproachTargetAngle( ply:EyeAngles() )
 end
 
 function ENT:CalcSteer( ply )

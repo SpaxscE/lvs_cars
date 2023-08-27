@@ -12,6 +12,7 @@ include("sh_animations.lua")
 include("sv_controls.lua")
 include("sv_controls_handbrake.lua")
 include("sv_components.lua")
+include("sv_ai.lua")
 include("sv_wheelsystem.lua")
 include("sv_damage.lua")
 include("sh_camera_eyetrace.lua")
@@ -289,4 +290,27 @@ function ENT:OnSuperCharged( enable )
 end
 
 function ENT:OnTurboCharged( enable )
+end
+
+function ENT:ApproachTargetAngle( TargetAngle )
+	local pod = self:GetDriverSeat()
+
+	if not IsValid( pod ) then return end
+
+	local ang = self:GetAngles()
+	ang.y = pod:GetAngles().y + 90
+
+	local Forward = ang:Right()
+	local View = pod:WorldToLocalAngles( TargetAngle ):Forward()
+
+	local Reversed = false
+	if self:AngleBetweenNormal( View, ang:Forward() ) < 90 then
+		Reversed = self:GetReverse()
+	end
+
+	local LocalAngSteer = (self:AngleBetweenNormal( View, ang:Right() ) - 90) / self.MouseSteerAngle
+
+	local Steer = (math.min( math.abs( LocalAngSteer ), 1 ) ^ self.MouseSteerExponent * self:Sign( LocalAngSteer ))
+
+	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
 end
