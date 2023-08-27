@@ -155,7 +155,7 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 	Armor:SetHP( health )
 
 	if isnumber( minforce ) then
-		Armor.MinForce = minforce
+		Armor.MinForce = minforce + self.DSArmorIgnoreForce
 	end
 
 	self:DeleteOnRemove( Armor )
@@ -173,8 +173,12 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 			local DamageRemaining = math.max( dmginfo:GetDamage() - Armor:GetHP(), 0 )
 			local DidDamage = Armor:OnTakeDamage( dmginfo )
 
-			dmginfo:SetDamage( DamageRemaining )
-	
+			if DidDamage then
+				dmginfo:SetDamage( DamageRemaining )
+			else
+				dmginfo:ScaleDamage( 0 )
+			end
+
 			if Armor:GetDestroyed() then return true end
 
 			if DidDamage then

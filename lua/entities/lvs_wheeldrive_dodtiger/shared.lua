@@ -21,6 +21,7 @@ ENT.GibModels = {
 ENT.AITEAM = 1
 
 ENT.MaxHealth = 2000
+ENT.DSArmorIgnoreForce = 1200
 
 ENT.SteerSpeed = 1
 ENT.SteerReturnSpeed = 2

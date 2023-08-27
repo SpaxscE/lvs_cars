@@ -168,8 +168,8 @@ function ENT:InitWeapons()
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
 		bullet.Spread 	= Vector(0.03,0.03,0.03)
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 10
-		bullet.HullSize 	= 1
+		bullet.Force	= 1100
+		bullet.HullSize 	= 0
 		bullet.Damage	= 50
 		bullet.Velocity = 20000
 		bullet.Attacker 	= ent:GetDriver()
