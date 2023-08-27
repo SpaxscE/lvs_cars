@@ -38,23 +38,23 @@ function ENT:OnSpawn( PObj )
 	self:CreateTracks()
 
 	-- front plate
-	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-70,-20), Vector(20,70,20), 3000, 150000 )
+	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-70,-20), Vector(20,70,20), 4000, 150000 )
 
 	-- "windscreen"
-	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-15,-70,-30), Vector(10,70,40), 1500, 150000 )
+	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-15,-70,-30), Vector(10,70,40), 3000, 150000 )
 
 	-- side armor
 	self:AddArmor( Vector(0,50,20), Angle(0,0,0), Vector(-120,-15,-30), Vector(80,15,50), 1500, 150000 )
 	self:AddArmor( Vector(0,-50,20), Angle(0,0,0), Vector(-120,-15,-30), Vector(80,15,50), 1500, 150000 )
 
 	-- roof
-	self:AddArmor( Vector(0,0,70), Angle(0,0,0), Vector(-110,-40,0), Vector(80,40,5), 4000 )
+	self:AddArmor( Vector(0,0,70), Angle(0,0,0), Vector(-110,-40,0), Vector(80,40,5), 2000 )
 
 	-- turret
-	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 4000, 150000 )
+	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 3000, 150000 )
 
 	-- rear
-	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-45,0),Vector(10,45,65), 500 )
+	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-45,0),Vector(10,45,65), 1000 )
 
 	-- driver viewport weakstop
 	self:AddDriverViewPort( Vector(105,21,55), Angle(0,0,0), Vector(-1,-7,-1), Vector(1,7,1) )

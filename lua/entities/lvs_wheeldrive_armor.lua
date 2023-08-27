@@ -51,6 +51,42 @@ if SERVER then
 			filter = function( ent ) return ent == self:GetBase() end
 		} )
 
+		if trace.Entity == self:GetBase() then
+			local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( dir ) ,-1,1) )
+			local Fx = math.cos( Ax )
+
+			local HitAngle = 90 - (180 - math.deg( Ax ))
+
+			if HitAngle > 30 then
+				local hit_decal = ents.Create( "lvs_wheeldrive_armor_penetrate" )
+				hit_decal:SetPos( trace.HitPos )
+				hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
+				hit_decal:Spawn()
+				hit_decal:Activate()
+				hit_decal:SetParent( trace.Entity )
+			else
+
+				local NewDir = dir - trace.HitNormal * Fx * 2
+
+				local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
+				hit_decal:SetPos( trace.HitPos )
+				hit_decal:SetAngles( NewDir:Angle() )
+				hit_decal:Spawn()
+				hit_decal:Activate()
+
+				local PhysObj = hit_decal:GetPhysicsObject()
+				if IsValid( PhysObj ) then
+					PhysObj:EnableDrag( false )
+					PhysObj:SetVelocityInstantaneous( NewDir * 2000 + Vector(0,0,250) )
+					PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
+				end
+
+				self:SetHP( CurHealth )
+
+				return
+			end
+		end
+
 		if NewHealth <= 0 then
 			self:SetDestroyed( true )
 
@@ -58,39 +94,6 @@ if SERVER then
 			if IsValid( Attacker ) and Attacker:IsPlayer() then
 				net.Start( "lvs_car_markers" )
 				net.Send( Attacker )
-			end
-		end
-
-		if trace.Entity == self:GetBase() then
-			local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( dir ) ,-1,1) )
-			local Fx = math.cos( Ax )
-
-			local HitAngle = 90 - (180 - math.deg( Ax ))
-
-			if HitAngle > 10 then
-				local hit_decal = ents.Create( "lvs_wheeldrive_armor_penetrate" )
-				hit_decal:SetPos( trace.HitPos )
-				hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
-				hit_decal:Spawn()
-				hit_decal:Activate()
-				hit_decal:SetParent( trace.Entity )
-	
-				return true
-			end
-
-			local NewDir = dir - trace.HitNormal * Fx * 2
-
-			local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
-			hit_decal:SetPos( trace.HitPos )
-			hit_decal:SetAngles( NewDir:Angle() )
-			hit_decal:Spawn()
-			hit_decal:Activate()
-
-			local PhysObj = hit_decal:GetPhysicsObject()
-			if IsValid( PhysObj ) then
-				PhysObj:EnableDrag( false )
-				PhysObj:SetVelocityInstantaneous( NewDir * 2000 + Vector(0,0,250) )
-				PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
 			end
 		end
 

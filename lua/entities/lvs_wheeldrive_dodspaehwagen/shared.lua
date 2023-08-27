@@ -13,7 +13,7 @@ ENT.MDL = "models/diggercars/222/222.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 1600
+ENT.MaxHealth = 1200
 ENT.DSArmorIgnoreForce = 1000
 
 ENT.MaxVelocity = 1000

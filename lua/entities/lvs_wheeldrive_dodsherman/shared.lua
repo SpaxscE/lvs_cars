@@ -22,7 +22,7 @@ ENT.GibModels = {
 
 ENT.AITEAM = 2
 
-ENT.MaxHealth = 2000
+ENT.MaxHealth = 1200
 ENT.DSArmorIgnoreForce = 1200
 
 ENT.SteerSpeed = 1
@@ -155,10 +155,10 @@ function ENT:InitWeapons()
 
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_cannon.png")
-	weapon.Ammo = 20
-	weapon.Delay = 2
+	weapon.Ammo = 24
+	weapon.Delay = 2.5
 	weapon.HeatRateUp = 1
-	weapon.HeatRateDown = 0.5
+	weapon.HeatRateDown = 0.4
 	weapon.Attack = function( ent )
 		local ID = ent:LookupAttachment( "turret_cannon" )
 
@@ -194,6 +194,8 @@ function ENT:InitWeapons()
 		if not IsValid( ent.SNDTurret ) then return end
 
 		ent.SNDTurret:PlayOnce( 100 + math.cos( CurTime() + ent:EntIndex() * 1337 ) * 5 + math.Rand(-1,1), 1 )
+
+		ent:EmitSound("lvs/vehicles/sherman/cannon_reload.wav")
 	end
 	weapon.HudPaint = function( ent, X, Y, ply )
 		local ID = ent:LookupAttachment(  "turret_cannon" )

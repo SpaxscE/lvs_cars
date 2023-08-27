@@ -20,7 +20,7 @@ ENT.GibModels = {
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 2000
+ENT.MaxHealth = 1500
 ENT.DSArmorIgnoreForce = 1200
 
 ENT.SteerSpeed = 1
@@ -156,9 +156,9 @@ function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_cannon.png")
 	weapon.Ammo = 20
-	weapon.Delay = 2
+	weapon.Delay = 3.3
 	weapon.HeatRateUp = 1
-	weapon.HeatRateDown = 0.5
+	weapon.HeatRateDown = 0.22
 
 	weapon.Attack = function( ent )
 		local ID = ent:LookupAttachment( "muzzle" )
@@ -174,7 +174,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_cannon"
 		bullet.Force	= 500000
 		bullet.HullSize 	= 0
-		bullet.Damage	= 1000
+		bullet.Damage	= 1250
 		bullet.Velocity = 14000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
@@ -195,6 +195,8 @@ function ENT:InitWeapons()
 		if not IsValid( ent.SNDTurret ) then return end
 
 		ent.SNDTurret:PlayOnce( 100 + math.cos( CurTime() + ent:EntIndex() * 1337 ) * 5 + math.Rand(-1,1), 1 )
+
+		ent:EmitSound("lvs/vehicles/tiger/cannon_reload.wav")
 	end
 	weapon.HudPaint = function( ent, X, Y, ply )
 		local ID = ent:LookupAttachment(  "muzzle" )
