@@ -26,7 +26,7 @@ end
 
 if SERVER then
 	function ENT:Initialize()	
-		self:SetModel("models/diggercars/dodge_charger/blower.mdl")
+		self:SetModel("models/diggercars/dodge_charger/blower_animated.mdl")
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:PhysWake()
@@ -48,11 +48,14 @@ if SERVER then
 		self:SetMoveType( MOVETYPE_NONE )
 
 		self:SetPos( engine:GetPos() )
-		self:SetAngles( engine:LocalToWorldAngles( Angle(0,-90,0) ) )
+		self:SetAngles( engine:GetAngles() )
 
 		self:SetParent( engine )
 
 		self:SetBase( ent )
+
+		ent.EngineCurve = ent.EngineCurve + ent.SuperChargerCurveAdd
+		ent.EngineTorque = ent.EngineTorque + ent.SuperChargerTorqueAdd
 
 		ent:OnSuperCharged( true )
 	
@@ -67,6 +70,9 @@ if SERVER then
 		local base = self:GetBase()
 
 		if not IsValid( base ) or base.ExplodedAlready then return end
+
+		base.EngineCurve = base.EngineCurve - base.SuperChargerCurveAdd
+		base.EngineTorque = base.EngineTorque - base.SuperChargerTorqueAdd
 
 		base:OnSuperCharged( false )
 	end
@@ -129,6 +135,9 @@ function ENT:Think()
 	end
 
 	if EngineActive then
+		self:SetPoseParameter( "throttle_pedal", vehicle:GetThrottle() )
+		self:InvalidateBoneCache()
+
 		local engine = vehicle:GetEngine()
 
 		if not IsValid( engine ) then return end
@@ -142,7 +151,7 @@ function ENT:OnRemove()
 end
 
 function ENT:Draw()
-	if IsValid( self:GetBase() ) then return end
+	--if IsValid( self:GetBase() ) then return end
 
 	self:DrawModel()
 end

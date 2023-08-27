@@ -54,6 +54,9 @@ if SERVER then
 
 		self:SetBase( ent )
 
+		ent.EngineCurve = ent.EngineCurve + ent.TurboCurveAdd
+		ent.EngineTorque = ent.EngineTorque + ent.TurboTorqueAdd
+
 		ent:OnTurboCharged( true )
 
 		ent:SetTurbo( self )
@@ -67,6 +70,9 @@ if SERVER then
 		local base = self:GetBase()
 
 		if not IsValid( base ) or base.ExplodedAlready then return end
+
+		base.EngineCurve = base.EngineCurve - base.TurboCurveAdd
+		base.EngineTorque = base.EngineTorque - base.TurboTorqueAdd
 
 		base:OnTurboCharged( false )
 	end
