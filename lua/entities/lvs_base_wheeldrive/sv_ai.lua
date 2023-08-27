@@ -31,11 +31,11 @@ function ENT:RunAI()
 	local MovementTargetPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
 
 	if IsValid( Target ) then
-		MovementTargetPos = (MovementTargetPos + Target:GetPos()) * 0.5
+		MovementTargetPos = Target:GetPos()
 	end
 
 	local TargetPosLocal = Pod:WorldToLocal( MovementTargetPos )
-	local Throttle = math.min( math.max( TargetPosLocal:Length() - 500, 0 ) / 10, 1 )
+	local Throttle = math.min( math.max( TargetPosLocal:Length() - 750, 0 ) / 10, 1 )
 
 	self:PhysWake()
 	self:SetThrottle( Throttle )
@@ -56,9 +56,7 @@ function ENT:RunAI()
 	if IsValid( self:GetHardLockTarget() ) then
 		TargetPos = self:GetHardLockTarget():GetPos()
 
-		if self:AITargetInFront( self:GetHardLockTarget(), 65 ) then
-			self._AIFireInput = true
-		end
+		self._AIFireInput = true
 	else
 		if IsValid( Target ) then
 			TargetPos = Target:LocalToWorld( Target:OBBCenter() )
