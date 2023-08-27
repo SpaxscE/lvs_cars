@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 SWEP.Category				= "LVS"
-SWEP.Spawnable			= true
+SWEP.Spawnable			= false
 SWEP.AdminSpawnable		= false
 SWEP.ViewModel			= "models/weapons/c_fuelfillerlvs.mdl"
 SWEP.WorldModel			= "models/props_equipment/gas_pump_p13.mdl"
@@ -19,6 +19,7 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic		= false
 SWEP.Secondary.Ammo		= "none"
 
+SWEP.RangeToCap = 24
 SWEP.HitDistance = 128
 
 function SWEP:SetupDataTables()
@@ -78,6 +79,20 @@ if CLIENT then
 		self:DrawModel()	
 	end
 
+	local function DrawText( pos, text, col )
+		local data2D = pos:ToScreen()
+
+		if not data2D.visible then return end
+
+		local font = "TargetIDSmall"
+
+		local x = data2D.x
+		local y = data2D.y
+		draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	end
+
 	function SWEP:DrawHUD()
 		local ply = self:GetOwner()
 
@@ -104,16 +119,38 @@ if CLIENT then
 			} )
 		end
 
+		local FuelTank = self:GetTank( trace.Entity )
 		local FuelCap = self:GetCap( trace.Entity )
 
-		if not IsValid( FuelCap ) or FuelCap:IsOpen() then return end
+		if not IsValid( FuelTank ) then return end
 
-		local point = FuelCap:GetPos()
-		local data2D = point:ToScreen()
+		if FuelTank:GetFuelType() ~= self:GetFuelType() then
+			DrawText( trace.HitPos, "Incorrect Fuel Type", Color(255,0,0,255) )
 
-		if not data2D.visible then return end
+			return
+		end
 
-		draw.SimpleText( "Press E to Open!", "Default", data2D.x, data2D.y, Color( 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		if not IsValid( FuelCap ) then
+			DrawText( trace.HitPos, math.Round(FuelTank:GetFuel() * 100,1).."%", Color(0,255,0,255) )
+
+			return
+		end
+
+		if FuelCap:IsOpen() then
+			if (trace.HitPos - FuelCap:GetPos()):Length() > self.RangeToCap then
+				DrawText( trace.HitPos, "Aim at Fuel Cap!", Color(255,255,0,255) )
+			else
+				DrawText( trace.HitPos, math.Round(FuelTank:GetFuel() * 100,1).."%", Color(0,255,0,255) )
+			end
+
+			return
+		end
+
+		local Key = input.LookupBinding( "+use" )
+
+		if not isstring( Key ) then Key = "[+use is not bound to a key]" end
+
+		DrawText( FuelCap:GetPos(), "Press "..Key.." to Open", Color(255,255,0,255) )
 	end
 end
 
@@ -150,13 +187,15 @@ function SWEP:PrimaryAttack()
 		} )
 	end
 
-	self:Refuel( trace.Entity )
+	self:Refuel( trace )
 end
 
 function SWEP:SecondaryAttack()
 end
 
-function SWEP:Refuel( entity )
+function SWEP:Refuel( trace )
+	local entity = trace.Entity
+
 	if CLIENT or not IsValid( entity ) then return end
 
 	local FuelCap = self:GetCap( entity )
@@ -166,7 +205,11 @@ function SWEP:Refuel( entity )
 
 	if FuelTank:GetFuelType() ~= self:GetFuelType() then return end
 
-	if IsValid( FuelCap ) and not FuelCap:IsOpen() then return end
+	if IsValid( FuelCap ) then
+		if not FuelCap:IsOpen() then return end
+
+		if (trace.HitPos - FuelCap:GetPos()):Length() > self.RangeToCap then return end
+	end
 
 	if FuelTank:GetFuel() ~= 1 then
 		FuelTank:SetFuel( math.min( FuelTank:GetFuel() + (entity.lvsGasStationFillSpeed or 0.005), 1 ) )

@@ -61,7 +61,7 @@ if SERVER then
 		self:SetUseType( SIMPLE_USE )
 	end
 
-	function ENT:Refuel( entity )
+	function ENT:RefuelByTouch( entity )
 		if self:GetFuel() <= 0 then return end
 
 		if not IsValid( entity ) then return end
@@ -93,6 +93,31 @@ if SERVER then
 		end
 	end
 
+	function ENT:RefuelByPouring( trace, amount )
+		local entity = trace.Entity
+		local pos = trace.HitPos
+
+		if self:GetFuel() <= 0 then return end
+
+		if not IsValid( entity ) then return end
+
+		if not entity.LVS or not entity.GetFuelTank then return end
+
+		local FuelTank = entity:GetFuelTank()
+
+		if not IsValid( FuelTank ) then return end
+
+		if FuelTank:GetFuelType() ~= self.FuelType then return end
+
+		local FuelCap = FuelTank:GetDoorHandler()
+
+		if not IsValid( FuelCap ) or not FuelCap:IsOpen() then return end
+
+		if FuelTank:GetFuel() ~= 1 and (trace.HitPos - FuelCap:GetPos()):Length() < 50 then
+			FuelTank:SetFuel( math.min( FuelTank:GetFuel() + amount, 1 ) )
+		end
+	end
+
 	function ENT:Use( ply )
 		self:SetActive( not self:GetActive() )
 
@@ -107,7 +132,20 @@ if SERVER then
 
 	function ENT:Think()
 		if self:IsOpen() and not self:IsUpright() then
-			self:SetFuel( math.max( self:GetFuel() - FrameTime() * 0.25, 0 ) )
+			local amount = FrameTime() * 0.25
+
+			self:SetFuel( math.max( self:GetFuel() - amount, 0 ) )
+
+			local Pos = self:LocalToWorld( Vector(7.19,-0.01,10.46) )
+			local trace = util.TraceHull( {
+				start = Pos,
+				endpos = Pos - Vector(0,0,500),
+				mins = Vector(-15,-15,0),
+				maxs = Vector(15,15,0),
+				filter = self,
+			} )
+
+			self:RefuelByPouring( trace, amount * 0.25 )
 		end
 
 		self:NextThink( CurTime() )
@@ -118,7 +156,7 @@ if SERVER then
 	function ENT:PhysicsCollide( data, physobj )
 		if not self:IsOpen() then return end
 
-		self:Refuel( data.HitEntity )
+		self:RefuelByTouch( data.HitEntity )
 	end
 
 	function ENT:PlayAnimation( animation, playbackrate )
@@ -192,10 +230,19 @@ if CLIENT then
 	function ENT:DoEffect()
 		local Up = self:GetUp()
 		local Pos = self:LocalToWorld( Vector(7.19,-0.01,10.46) )
+		local trace = util.TraceHull( {
+			start = Pos,
+			endpos = Pos - Vector(0,0,500),
+			mins = Vector(-15,-15,0),
+			maxs = Vector(15,15,0),
+			filter = self,
+		} )
 
 		local emitter = ParticleEmitter( Pos, false )
 		local particle = emitter:Add( "effects/slime1", Pos )
 
+		local NoCallback = IsValid( trace.Entity ) and trace.Entity.LVS
+	
 		if particle then
 			particle:SetVelocity( Up * math.abs( Up.z ) * 100 )
 			particle:SetGravity( Vector( 0, 0, -600 ) )
@@ -207,6 +254,13 @@ if CLIENT then
 			particle:SetRoll( math.Rand( -1, 1 ) )
 			particle:SetColor( 240,200,0,255 )
 			particle:SetCollide( true )
+
+			if NoCallback then
+				particle:SetDieTime( 0.5 )
+
+				emitter:Finish()
+				return
+			end
 
 			particle:SetCollideCallback( function( part, hitpos, hitnormal )
 				local effectdata = EffectData() 
