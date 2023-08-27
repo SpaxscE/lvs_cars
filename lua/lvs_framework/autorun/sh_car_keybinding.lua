@@ -85,6 +85,7 @@ if SERVER then
 	util.AddNetworkString( "lvs_car_turnsignal" )
 	util.AddNetworkString( "lvs_car_break" )
 	util.AddNetworkString( "lvs_car_markers" )
+	util.AddNetworkString( "lvs_car_performanceupdates" )
 
 	net.Receive( "lvs_car_turnsignal", function( len, ply )
 		if not IsValid( ply ) then return end
@@ -97,7 +98,16 @@ if SERVER then
 	end )
 
 else
-	net.Receive("lvs_car_break", function()
+	net.Receive("lvs_car_performanceupdates", function( len )
+		local ent = net.ReadEntity()
+
+		if not IsValid( ent ) then return end
+
+		ent.EngineCurve = net.ReadFloat()
+		ent.EngineTorque = net.ReadInt( 14 )
+	end)
+
+	net.Receive("lvs_car_break", function( len )
 		local ent = net.ReadEntity()
 
 		if not IsValid( ent ) or not isfunction( ent.OnEngineStallBroken ) then return end

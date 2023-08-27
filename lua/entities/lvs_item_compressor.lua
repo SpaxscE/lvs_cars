@@ -19,8 +19,8 @@ ENT.Editable = true
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 
-	self:NetworkVar( "Float",0, "EngineCurve", { KeyName = "addpower", Edit = { type = "Float",	 order = 1,min = 0, max = 1, category = "Upgrade Settings"} } )
-	self:NetworkVar( "Float",1, "EngineTorque", { KeyName = "addtorque", Edit = { type = "Float", order = 2,min = 0, max = 300,	 category = "Upgrade Settings"} } )
+	self:NetworkVar( "Float",0, "EngineCurve", { KeyName = "addpower", Edit = { type = "Float",	 order = 1,min = 0, max = 0.5, category = "Upgrade Settings"} } )
+	self:NetworkVar( "Int",1, "EngineTorque", { KeyName = "addtorque", Edit = { type = "Int", order = 2,min = 0, max = 100, category = "Upgrade Settings"} } )
 
 	self:NetworkVar( "Bool",0, "Visible", { KeyName = "modelvisible",	 Edit = { type = "Boolean",	order = 0,	category = "Visuals"} } )
 
@@ -73,6 +73,7 @@ if SERVER then
 
 		ent.EngineCurve = ent.EngineCurve + self:GetEngineCurve()
 		ent.EngineTorque = ent.EngineTorque + self:GetEngineTorque()
+		self:UpdateVehicle()
 
 		ent:OnSuperCharged( true )
 	
@@ -90,6 +91,7 @@ if SERVER then
 
 		base.EngineCurve = base.EngineCurve - self:GetEngineCurve()
 		base.EngineTorque = base.EngineTorque - self:GetEngineTorque()
+		self:UpdateVehicle()
 
 		base:OnSuperCharged( false )
 	end
@@ -102,6 +104,8 @@ if SERVER then
 		if not IsValid( ent ) then return end
 
 		ent.EngineCurve = ent.EngineCurve - old + new
+
+		self:UpdateVehicle()
 	end
 
 	function ENT:OnEngineTorqueChanged( name, old, new )
@@ -112,6 +116,20 @@ if SERVER then
 		if not IsValid( ent ) then return end
 
 		ent.EngineTorque = ent.EngineTorque - old + new
+
+		self:UpdateVehicle()
+	end
+
+	function ENT:UpdateVehicle()
+		local ent = self:GetBase()
+
+		if not IsValid( ent ) then return end
+
+		net.Start( "lvs_car_performanceupdates" )
+			net.WriteEntity( ent )
+			net.WriteFloat( ent.EngineCurve )
+			net.WriteInt( ent.EngineTorque, 14 )
+		net.Broadcast()
 	end
 
 	return
