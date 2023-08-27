@@ -22,7 +22,7 @@ function ENT:OnSpawn( PObj )
 	local DriverSeat = self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 	DriverSeat.HidePlayer = true
 
-	self:AddEngine( Vector(-79.66,0,72.21) )
+	self:AddEngine( Vector(-79.66,0,72.21), Angle(0,180,0) )
 	self:AddFuelTank( Vector(-80,0,10), Angle(-15,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-40,0),Vector(10,40,60) )
 
 	self:CreateTracks()

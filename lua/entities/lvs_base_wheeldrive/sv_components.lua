@@ -1,5 +1,5 @@
 
-function ENT:AddEngine( pos )
+function ENT:AddEngine( pos, ang )
 	if IsValid( self:GetEngine() ) then return end
 
 	local Engine = ents.Create( "lvs_wheeldrive_engine" )
@@ -13,7 +13,7 @@ function ENT:AddEngine( pos )
 	end
 
 	Engine:SetPos( self:LocalToWorld( pos ) )
-	Engine:SetAngles( self:GetAngles() )
+	Engine:SetAngles( self:LocalToWorldAngles( ang or angle_zero ) )
 	Engine:Spawn()
 	Engine:Activate()
 	Engine:SetParent( self )

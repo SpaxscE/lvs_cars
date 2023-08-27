@@ -32,7 +32,7 @@ function ENT:OnSpawn( PObj )
 	GunnerSeat.HidePlayer = true
 	self:SetGunnerSeat( GunnerSeat )
 
-	self:AddEngine( Vector(-79.66,0,72.21) )
+	self:AddEngine( Vector(-79.66,0,70), Angle(0,180,0) )
 	self:AddFuelTank( Vector(-75,0,20), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-30,0),Vector(10,30,40) )
 
 	self:CreateTracks()

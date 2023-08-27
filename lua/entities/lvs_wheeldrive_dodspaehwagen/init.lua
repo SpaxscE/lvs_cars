@@ -26,7 +26,7 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetParent( self, ID )
 
 
-	self:AddEngine( Vector(0,-60,51) )
+	self:AddEngine( Vector(0,-60,51), Angle(0,-90,0) )
 	self:AddFuelTank( Vector(0,-63,25), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 
 	local WheelModel = "models/diggercars/222/222_wheel.mdl"
