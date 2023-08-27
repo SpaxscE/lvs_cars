@@ -14,6 +14,7 @@ ENT.AutomaticFrameAdvance = true
 ENT.FuelAmount = 120 -- seconds
 ENT.FuelType = LVS.FUELTYPE_PETROL
 
+ENT.lvsGasStationFillSpeed = 0.05
 ENT.lvsGasStationRefillMe = true
 
 function ENT:SetupDataTables()
@@ -33,6 +34,10 @@ function ENT:IsUpright()
 	local Up = self:GetUp()
 
 	return Up.z > 0.5
+end
+
+function ENT:GetFuelType()
+	return self.FuelType
 end
 
 if SERVER then
@@ -133,10 +138,8 @@ if SERVER then
 end
 
 if CLIENT then
-	ENT.IconColor = Color(240,200,0,255)
 	ENT.FrameMat = Material( "lvs/3d2dmats/frame.png" )
 	ENT.RefuelMat = Material( "lvs/3d2dmats/refuel.png" )
-	ENT.Text = "Petrol"
 
 	function ENT:Draw()
 		self:DrawModel()
@@ -146,9 +149,13 @@ if CLIENT then
 
 		if (ply:GetPos() - Pos):LengthSqr() > 5000000 then return end
 
+		local data = LVS.FUELTYPES[ self.FuelType ]
+		local Text = data.name
+		local IconColor = Color( data.color.x, data.color.y, data.color.z, 255 )
+
 		for i = -1, 1, 2 do
 			cam.Start3D2D( self:LocalToWorld( Vector(0,4 * i,0) ), self:LocalToWorldAngles( Angle(0,90 + 90 * i,90) ), 0.1 )
-				surface.SetDrawColor( self.IconColor )
+				surface.SetDrawColor( IconColor )
 
 				surface.SetMaterial( self.FrameMat )
 				surface.DrawTexturedRect( -50, -50, 100, 100 )
@@ -156,9 +163,9 @@ if CLIENT then
 				surface.SetMaterial( self.RefuelMat )
 				surface.DrawTexturedRect( -50, -50, 100, 100 )
 
-				draw.SimpleText( self.Text, "LVS_FONT", 0, 75, self.IconColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( Text, "LVS_FONT", 0, 75, IconColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
-				draw.SimpleText( math.Round( self:GetFuel() * 100, 0 ).."%", "LVS_FONT", 0, 95, self.IconColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( math.Round( self:GetFuel() * 100, 0 ).."%", "LVS_FONT", 0, 95, IconColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			cam.End3D2D()
 		end
 	end

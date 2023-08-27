@@ -14,6 +14,7 @@ ENT.AutomaticFrameAdvance = true
 
 ENT.FuelType = LVS.FUELTYPE_DIESEL
 
+ENT.lvsGasStationFillSpeed = 0.01
 ENT.lvsGasStationRefillMe = true
 
 if SERVER then
@@ -21,7 +22,4 @@ if SERVER then
 		BaseClass.Initialize( self )
 		self:SetSkin( 1 )
 	end
-else
-	ENT.IconColor = Color(255,60,0,255)
-	ENT.Text = "Diesel"
 end

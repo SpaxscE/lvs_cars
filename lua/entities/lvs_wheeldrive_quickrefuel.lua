@@ -10,8 +10,15 @@ ENT.Category = "[LVS] - Cars - Items"
 ENT.Spawnable		= true
 ENT.AdminOnly		= true
 
+ENT.Editable = true
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "User" )
+	self:NetworkVar( "Int",0, "FuelType", { KeyName = "fueltype", Edit = { type = "Int", order = 1,min = 0, max = #LVS.FUELTYPES, category = "Settings"} } )
+
+	if SERVER then
+		self:SetFuelType( LVS.FUELTYPE_PETROL )
+	end
 end
 
 if SERVER then
@@ -42,11 +49,20 @@ if SERVER then
 	end
 
 	function ENT:giveSWEP( ply )
-		if self:WorldToLocal( ply:GetPos() ).y > 0 then return end
+		self:EmitSound("common/wpn_select.wav")
 
+		ply:SetSuppressPickupNotices( true )
 		ply:Give( "weapon_lvsfuelfiller" )
+		ply:SetSuppressPickupNotices( false )
+
 		ply:SelectWeapon( "weapon_lvsfuelfiller" )
 		self:SetUser( ply )
+
+		local SWEP = ply:GetWeapon( "weapon_lvsfuelfiller" )
+	
+		if not IsValid( SWEP ) then return end
+
+		SWEP:SetFuelType( self:GetFuelType() )
 	end
 
 	function ENT:removeSWEP( ply )
@@ -65,7 +81,9 @@ if SERVER then
 			return
 		end
 
-		if self:WorldToLocal( ply:GetPos() ).y > 0 then
+		local weapon = ply:GetActiveWeapon()
+
+		if not IsValid( weapon ) or weapon:GetClass() ~= "weapon_lvsfuelfiller" then
 			self:removeSWEP( ply )
 
 			return
@@ -152,9 +170,41 @@ if CLIENT then
 		return p
 	end
 
+	ENT.FrameMat = Material( "lvs/3d2dmats/frame.png" )
+	ENT.RefuelMat = Material( "lvs/3d2dmats/refuel.png" )
+
+
 	function ENT:Draw()
 		self:DrawModel()
+		self:DrawCable()
 
+		local ply = LocalPlayer()
+		local Pos = self:GetPos()
+
+		if (ply:GetPos() - Pos):LengthSqr() > 5000000 then return end
+
+		local data = LVS.FUELTYPES[ self:GetFuelType() ]
+		local Text = data.name
+		local IconColor = Color( data.color.x, data.color.y, data.color.z, 255 )
+
+		cam.Start3D2D( self:LocalToWorld( Vector(10,0,45) ), self:LocalToWorldAngles( Angle(0,90,90) ), 0.1 )
+			draw.NoTexture()
+			surface.SetDrawColor( 0, 0, 0, 255 )
+			surface.DrawRect( -150, -120, 300, 240 )
+
+			surface.SetDrawColor( IconColor )
+
+			surface.SetMaterial( self.FrameMat )
+			surface.DrawTexturedRect( -50, -50, 100, 100 )
+
+			surface.SetMaterial( self.RefuelMat )
+			surface.DrawTexturedRect( -50, -50, 100, 100 )
+
+			draw.SimpleText( Text, "LVS_FONT", 0, 75, IconColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		cam.End3D2D()
+	end
+
+	function ENT:DrawCable()
 		if LocalPlayer():GetPos():DistToSqr( self:GetPos() ) > 350000 then return end
 
 		local pos = self:LocalToWorld( Vector(10,0,45) )

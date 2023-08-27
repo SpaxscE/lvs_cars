@@ -79,6 +79,20 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 	LVS.FUELTYPE_PETROL = 0
 	LVS.FUELTYPE_DIESEL = 1
 	LVS.FUELTYPE_ELECTRIC = 2
+	LVS.FUELTYPES = {
+		[LVS.FUELTYPE_PETROL] = {
+			name = "Petrol",
+			color = Vector(240,200,0),
+		},
+		[LVS.FUELTYPE_DIESEL] = {
+			name = "Diesel",
+			color = Vector(255,60,0),
+		},
+		[LVS.FUELTYPE_ELECTRIC] = {
+			name = "Electric",
+			color = Vector(0,127,255),
+		},
+	}
 end )
 
 if SERVER then
