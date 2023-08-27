@@ -69,6 +69,17 @@ ENT.EngineSounds = {
 	},
 }
 
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-90.47,17.01,52.77),
+		ang = Angle(180,0,0)
+	},
+	{
+		pos = Vector(-90.47,-17.01,52.77),
+		ang = Angle(180,0,0)
+	},
+}
+
 function ENT:OnSetupDataTables()
 	self:AddDT( "Entity", "GunnerSeat" )
 
@@ -325,14 +336,3 @@ function ENT:AddGunnerWeapons()
 	end
 	self:AddWeapon( weapon, 2 )
 end
-
-ENT.ExhaustPositions = {
-	{
-		pos = Vector(-90.47,17.01,52.77),
-		ang = Angle(180,0,0)
-	},
-	{
-		pos = Vector(-90.47,-17.01,52.77),
-		ang = Angle(180,0,0)
-	},
-}

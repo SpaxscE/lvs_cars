@@ -7,6 +7,12 @@ include("sh_turret.lua")
 include("sh_tracks.lua")
 
 function ENT:OnSpawn( PObj )
+	local ID = self:LookupAttachment( "muzzle_machinegun" )
+	local Muzzle = self:GetAttachment( ID )
+	self.SNDTurretMGf = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/sherman/mg_loop.wav", "lvs/vehicles/sherman/mg_loop_interior.wav" )
+	self.SNDTurretMGf:SetSoundLevel( 95 )
+	self.SNDTurretMGf:SetParent( self, ID )
+
 	local ID = self:LookupAttachment( "muzzle" )
 	local Muzzle = self:GetAttachment( ID )
 	self.SNDTurret = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/tiger/cannon_fire.wav", "lvs/vehicles/tiger/cannon_fire.wav" )
@@ -21,6 +27,10 @@ function ENT:OnSpawn( PObj )
 
 	local DriverSeat = self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 	DriverSeat.HidePlayer = true
+
+	local GunnerSeat = self:AddPassengerSeat( Vector(108,-24,48), Angle(0,-90,0) )
+	GunnerSeat.HidePlayer = true
+	self:SetGunnerSeat( GunnerSeat )
 
 	self:AddEngine( Vector(-79.66,0,72.21), Angle(0,180,0) )
 	self:AddFuelTank( Vector(-80,0,10), Angle(-15,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-40,0),Vector(10,40,60) )
