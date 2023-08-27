@@ -1,6 +1,6 @@
 "VertexLitGeneric"
 {
-	"$baseTexture" "models\props_vehicles\tiger_tank"
+	"$baseTexture" "models\blu\tiger\tiger_tank"
 	"$bumpmap" "models\blu\tiger\tiger_nm"
 	"$phong" "1" 
 	"$phongboost" "0.04" 
