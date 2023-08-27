@@ -209,7 +209,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_autocannon"
 		bullet.Force	= 100000
 		bullet.HullSize 	= 0
-		bullet.Damage	= 70
+		bullet.Damage	= 95
 		bullet.Velocity = 14000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
