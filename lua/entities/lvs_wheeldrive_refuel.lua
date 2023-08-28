@@ -122,6 +122,14 @@ if SERVER then
 			self:giveSWEP( ply )
 		end
 	end
+
+	function ENT:OnRemove()
+		local User = self:GetUser()
+
+		if not IsValid( User ) then return end
+
+		self:removeSWEP( User )
+	end
 end
 
 if CLIENT then

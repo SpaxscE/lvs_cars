@@ -93,22 +93,6 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			color = Vector(0,127,255),
 		},
 	}
-
-	LVS.RandomVehiclePaint = {
-		Color(255,191,0),
-		Color(32,85,154),
-		Color(12,20,41),
-		Color(232,251,90),
-		Color(0,114,221),
-		Color(188,0,12),
-		Color(127,0,0),
-		Color(36,36,36),
-		Color(255,255,255),
-		Color(182,182,182),
-		Color(95,63,127),
-		Color(0,127,31),
-		Color(255,93,0),
-	}
 end )
 
 if SERVER then

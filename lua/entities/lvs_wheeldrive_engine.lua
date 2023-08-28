@@ -166,7 +166,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local NumGears = vehicle.TransGears
 
-	local VolumeValue = (DrivingMe and 1 or 0.4) * LVS.EngineVolume
+	local VolumeValue = (DrivingMe and 1 or 0.6) * LVS.EngineVolume
 	local PitchValue = vehicle.MaxVelocity / NumGears
 
 	local DesiredGear = 1
