@@ -142,6 +142,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local tickdelta = engine.TickInterval()
 	local forceMul = 1
+
 	if tickdelta < 1 / 30 then
 		local deltatimeNew = 1 / 15
 
