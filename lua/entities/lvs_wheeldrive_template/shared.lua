@@ -128,7 +128,51 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 
 --ENT.DeleteOnExplode = false -- remove the vehicle when it explodes?
 
+ --[[
 --ENT.RandomColor = {} -- table with colors to set on spawn
+	-- accepts colors and skin+color combo:
+
+	-- example variant1:
+	ENT.RandomColor = {
+		Color(255,255,255),
+		Color(255,255,255),
+		Color(255,255,255),
+		Color(255,255,255),
+		Color(255,255,255),
+		Color(255,255,255),
+	}
+
+
+	-- example variant2:
+	ENT.RandomColor = {
+		{
+			Skin = 1,
+			Color = Color(255,255,255),
+		},
+		{
+			Skin = 2,
+			Color = Color(255,255,255),
+		},
+		{
+			Skin = 3,
+			Color = Color(255,255,255),
+		},
+		{
+			Skin = 4,
+			Color = Color(255,255,255),
+		},
+		{
+			Skin = 5,
+			Color = Color(255,255,255),
+		},
+		{
+			Skin = 6,
+			Color = Color(255,255,255),
+		},
+	}
+ ]]
+ 
+ 
  
 --[[weapons]]
 function ENT:InitWeapons()
