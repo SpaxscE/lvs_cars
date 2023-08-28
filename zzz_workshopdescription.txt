@@ -40,7 +40,7 @@ A template can be found [url=https://github.com/Blu-x92/lvs_cars/tree/main/lua/e
 
 [h1][b]Thanks to[/b][/h1]
 [url=https://steamcommunity.com/id/Baunsu/]Bounce[/url] - playtest / research / sounds
-[url=https://steamcommunity.com/id/blu-x92]Luna[/url] - chassis design / scripting / sounds / effects
+[url=https://steamcommunity.com/id/blu-x92]Luna/Blu-x92[/url] - chassis design / scripting / sounds / effects
 [url=https://steamcommunity.com/id/diggerrrrr/]Digger[/url] - modelling / texture work / research / sounds
 [url=https://steamcommunity.com/id/salza01/]Salza[/url] - playtest / modelling
 
