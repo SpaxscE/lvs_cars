@@ -61,14 +61,6 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	Wheel:Spawn()
 	Wheel:Activate()
 
-	if self._WheelSkin then
-		Wheel:SetSkin( self._WheelSkin )
-	end
-
-	if self._WheelColor then
-		Wheel:SetColor( self._WheelColor )
-	end
-
 	Wheel:SetBase( self )
 
 	Wheel:SetAlignmentAngle( data.mdl_ang or Angle(0,0,0) )
@@ -133,6 +125,10 @@ function ENT:AddWheel( data )-- pos, ang, model )
 
 		self:AddToMotionController( PhysObj )
 	end )
+
+	if isnumber( self._WheelSkin ) then Wheel:SetSkin( self._WheelSkin ) end
+
+	if IsColor( self._WheelColor ) then Wheel:SetColor( self._WheelColor ) end
 
 	return Wheel
 end
