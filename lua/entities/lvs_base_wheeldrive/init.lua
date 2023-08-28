@@ -180,7 +180,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM then
 				ent:LockRotation()
 			else
-				if (ForwardVel > 0 and targetRPM > 0 or (ForwardVel < 0 and targetRPM < 0 then
+				if (ForwardVel > 0 and targetRPM > 0) or (ForwardVel < 0 and targetRPM < 0) then
 					ForceAngle = RotationAxis * math.Clamp( (targetRPM - curRPM) / 100,-1,1) * math.deg( self.WheelBrakeForce ) * ent:GetBrakeFactor() * self:GetBrake()
 				end
 			end
