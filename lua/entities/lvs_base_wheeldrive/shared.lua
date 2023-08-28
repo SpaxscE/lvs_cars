@@ -9,6 +9,8 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
+ENT.AITEAM = 3
+
 ENT.MaxHealth = 400
 
 ENT.MaxVelocity = 1400

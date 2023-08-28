@@ -30,6 +30,8 @@ function ENT:RunAI()
 
 	local MovementTargetPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
 
+	local TargetPos = MovementTargetPos
+
 	if IsValid( Target ) then
 		MovementTargetPos = Target:GetPos()
 	end
@@ -82,7 +84,9 @@ function ENT:RunAI()
 					end
 				end
 
-				self._AIFireInput = true
+				if self:AIHasWeapon( 1 ) or self:AIHasWeapon( 2 ) then
+					self._AIFireInput = true
+				end
 			else
 				self:AISelectWeapon( 1 )
 			end
