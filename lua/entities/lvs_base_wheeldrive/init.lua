@@ -63,6 +63,10 @@ function ENT:PostInitialize( PObj )
 	PObj:EnableDrag( false )
 	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
+	if istable( self.RandomColor ) then
+		self:SetColor( self.RandomColor[ math.random( #self.RandomColor ) ] )
+	end
+
 	SetMinimumAngularVelocityTo( 24000 )
 
 	self:EnableHandbrake()

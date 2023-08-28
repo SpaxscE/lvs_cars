@@ -128,6 +128,8 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 
 --ENT.DeleteOnExplode = false -- remove the vehicle when it explodes?
 
+--ENT.RandomColor = {} -- table with colors to set on spawn
+ 
 --[[weapons]]
 function ENT:InitWeapons()
 	-- add a weapon:
