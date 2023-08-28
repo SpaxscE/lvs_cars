@@ -156,3 +156,22 @@ ENT.ExhaustPositions = {
 		ang = Angle(0,180,0),
 	},
 }
+
+function ENT:InitWeapons()
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/horn.png")
+	weapon.Ammo = -1
+	weapon.Delay = 0.5
+	weapon.HeatRateUp = 0
+	weapon.HeatRateDown = 0
+	weapon.Attack = function( ent ) end
+	weapon.StartAttack = function( ent )
+		if not IsValid( ent.HornSND ) then return end
+		ent.HornSND:Play()
+	end
+	weapon.FinishAttack = function( ent )
+		if not IsValid( ent.HornSND ) then return end
+		ent.HornSND:Stop()
+	end
+	self:AddWeapon( weapon )
+end

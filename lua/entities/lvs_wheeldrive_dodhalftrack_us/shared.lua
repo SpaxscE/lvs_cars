@@ -215,13 +215,22 @@ function ENT:InitWeapons()
 	end
 	self:AddWeapon( weapon )
 
-
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/tank_noturret.png")
+	weapon.Icon = Material("lvs/weapons/horn.png")
 	weapon.Ammo = -1
-	weapon.Delay = 0
+	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
+	weapon.UseableByAI = false
+	weapon.Attack = function( ent ) end
+	weapon.StartAttack = function( ent )
+		if not IsValid( ent.HornSND ) then return end
+		ent.HornSND:Play()
+	end
+	weapon.FinishAttack = function( ent )
+		if not IsValid( ent.HornSND ) then return end
+		ent.HornSND:Stop()
+	end
 	weapon.OnSelect = function( ent )
 		if ent.SetTurretEnabled then
 			ent:SetTurretEnabled( false )
