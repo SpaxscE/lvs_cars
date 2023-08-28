@@ -73,6 +73,7 @@ if SERVER then
 				hit_decal:SetAngles( NewDir:Angle() )
 				hit_decal:Spawn()
 				hit_decal:Activate()
+				hit_decal:EmitSound("lvs/armor_rico"..math.random(1,4)..".wav", 95, 100, math.min( dmginfo:GetDamage() / 1000, 1 ) )
 
 				local PhysObj = hit_decal:GetPhysicsObject()
 				if IsValid( PhysObj ) then

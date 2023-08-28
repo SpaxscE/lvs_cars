@@ -52,9 +52,6 @@ if SERVER then
 		return ent
 	end
 
-	function ENT:OnTakeDamage( dmginfo )
-	end
-
 	function ENT:Initialize()	
 		self:SetModel( "models/misc/fuel_can.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
@@ -157,6 +154,9 @@ if SERVER then
 		if not self:IsOpen() then return end
 
 		self:RefuelByTouch( data.HitEntity )
+	end
+
+	function ENT:OnTakeDamage( dmginfo )
 	end
 
 	function ENT:PlayAnimation( animation, playbackrate )

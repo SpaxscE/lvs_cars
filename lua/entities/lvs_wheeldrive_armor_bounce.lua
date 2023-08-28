@@ -13,8 +13,6 @@ if SERVER then
 		self.DieTime = CurTime() + self.LifeTime
 
 		self:SetCollisionGroup( COLLISION_GROUP_WORLD )
-
-		self:EmitSound("lvs/armor_rico.wav", 95)
 	end
 
 	function ENT:Think()
