@@ -7,7 +7,7 @@ ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars - Items"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminOnly		= false
 
 ENT.LifeTime = 10
