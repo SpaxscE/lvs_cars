@@ -96,6 +96,8 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 end )
 
 if SERVER then
+	--resource.AddWorkshop("")
+
 	util.AddNetworkString( "lvs_car_turnsignal" )
 	util.AddNetworkString( "lvs_car_break" )
 	util.AddNetworkString( "lvs_car_markers" )
