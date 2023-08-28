@@ -155,7 +155,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local TorqueFactor = ent:GetTorqueFactor()
 
-	local deltatimeNew = 1 / self.lvsVehicleTickrate
+	local deltatimeNew = 1 / math.min( self.lvsVehicleTickrate, 1 / engine.TickInterval() )
 	local forceMul = 1
 
 	if deltatimeNew > deltatime then
@@ -180,7 +180,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM then
 				ent:LockRotation()
 			else
-				if (ForwardVel > 0 and targetRPM > self.WheelBrakeLockupRPM * 0.95) or (ForwardVel < 0 and targetRPM < -self.WheelBrakeLockupRPM * 0.95) then
+				if (ForwardVel > 0 and targetRPM > 0 or (ForwardVel < 0 and targetRPM < 0 then
 					ForceAngle = RotationAxis * math.Clamp( (targetRPM - curRPM) / 100,-1,1) * math.deg( self.WheelBrakeForce ) * ent:GetBrakeFactor() * self:GetBrake()
 				end
 			end
