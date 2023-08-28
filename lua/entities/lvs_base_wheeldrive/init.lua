@@ -64,7 +64,14 @@ function ENT:PostInitialize( PObj )
 	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
 	if istable( self.RandomColor ) then
-		self:SetColor( self.RandomColor[ math.random( #self.RandomColor ) ] )
+		local data = self.RandomColor[ math.random( #self.RandomColor ) ]
+
+		if IsColor( data ) then
+			self:SetColor( data )
+		else
+			self:SetSkin( data.Skin or 0 )
+			self:SetColor( data.Color or color_white )
+		end
 	end
 
 	SetMinimumAngularVelocityTo( 24000 )
