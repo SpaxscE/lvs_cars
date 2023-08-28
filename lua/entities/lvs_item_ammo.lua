@@ -106,7 +106,7 @@ if SERVER then
 
 		local PhysObj = hit_decal:GetPhysicsObject()
 		if IsValid( PhysObj ) then
-			PhysObj:SetMass( 2000 )
+			PhysObj:SetMass( 50 )
 			PhysObj:EnableDrag( false )
 			PhysObj:SetVelocityInstantaneous( self:GetForward() * 4000 )
 			PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
