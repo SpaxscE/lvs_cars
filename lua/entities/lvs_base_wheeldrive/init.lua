@@ -19,7 +19,6 @@ include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
-ENT.lvsVehicleTickrate = 15
 
 DEFINE_BASECLASS( "lvs_base" )
 
@@ -139,27 +138,14 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local T = CurTime()
 
-	local RotationAxis = ent:GetRotationAxis()
-
-	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
-
-	ent:SetRPM( curRPM )
-
 	if (ent._lvsNextThink or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
 
-	local AI = self:GetAI()
-	local Vel = phys:GetVelocity()
-
-	local Brake = self:GetBrake()
-	local Throttle = self:GetThrottle()
-
-	local TorqueFactor = ent:GetTorqueFactor()
-
-	local deltatimeNew = 1 / math.min( self.lvsVehicleTickrate, 1 / engine.TickInterval() )
+	local tickdelta = engine.TickInterval()
 	local forceMul = 1
+	if tickdelta < 1 / 30 then
+		local deltatimeNew = 1 / 15
 
-	if deltatimeNew > deltatime then
-		ent._lvsNextThink = T + (deltatimeNew - deltatime * 0.5)
+		ent._lvsNextThink = T + deltatimeNew - tickdelta * 0.5
 
 		local Tick1 = 1 / deltatime
 		local Tick2 = 1 / deltatimeNew
@@ -167,13 +153,21 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		forceMul = Tick1 / Tick2
 	end
 
+	local RotationAxis = ent:GetRotationAxis()
+
+	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
+
+	ent:SetRPM( curRPM )
+
 	local ForceAngle = vector_origin
 
-	if Brake > 0 then
+	local TorqueFactor = ent:GetTorqueFactor()
+
+	if self:GetBrake() > 0 then
 		if ent:IsRotationLocked() then
 			ForceAngle = vector_origin
 		else
-			local ForwardVel = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(), Vel )
+			local ForwardVel = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
 
 			local targetRPM = ent:VelToRPM( ForwardVel ) * 0.5
 
@@ -186,6 +180,8 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	else
+		local Throttle = self:GetThrottle()
+
 		if self.WheelBrakeAutoLockup then
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
 				ent:LockRotation()
@@ -222,7 +218,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM)
 
-			local curVelocity = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(), Vel )
+			local curVelocity = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
 
 			if targetVelocity >= 0 then
 				if curVelocity < targetVelocity then
@@ -237,6 +233,8 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	end
 
 	if not self:StabilityAssist() or not self:WheelsOnGround() then return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION end
+
+	local Vel = phys:GetVelocity()
 
 	local ForwardAngle = ent:GetDirectionAngle()
 
