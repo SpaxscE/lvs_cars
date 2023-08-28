@@ -131,10 +131,31 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	return self:SimulateRotatingWheel( ent, phys, deltatime )
 end
 
+ENT.SimulationSpeed = 0.1
+
 function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
 
 	if self:IsDestroyed() then self:EnableHandbrake() return vector_origin, vector_origin, SIM_NOTHING end
+
+	local T = CurTime()
+
+	if (ent._lvsNextThink or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
+
+	local AI = self:GetAI()
+	local Vel = phys:GetVelocity()
+
+	local Brake = self:GetBrake()
+	local Throttle = self:GetThrottle()
+
+	local TorqueFactor = ent:GetTorqueFactor()
+
+	ent._lvsNextThink = T + self.SimulationSpeed
+
+	local Diff = self.SimulationSpeed - deltatime
+	local Tick1 = 1 / deltatime
+	local Tick2 = 1 / Diff
+	local forceMul = Tick1 / Tick2
 
 	local RotationAxis = ent:GetRotationAxis()
 
@@ -144,13 +165,11 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local ForceAngle = vector_origin
 
-	local TorqueFactor = ent:GetTorqueFactor()
-
-	if self:GetBrake() > 0 then
+	if Brake > 0 then
 		if ent:IsRotationLocked() then
 			ForceAngle = vector_origin
 		else
-			local ForwardVel = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
+			local ForwardVel = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(), Vel )
 
 			local targetRPM = ent:VelToRPM( ForwardVel ) * 0.5
 
@@ -161,8 +180,6 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	else
-		local Throttle = self:GetThrottle()
-
 		if self.WheelBrakeAutoLockup then
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
 				ent:LockRotation()
@@ -199,7 +216,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM)
 
-			local curVelocity = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
+			local curVelocity = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(), Vel )
 
 			if targetVelocity >= 0 then
 				if curVelocity < targetVelocity then
@@ -213,9 +230,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		end
 	end
 
-	if not self:StabilityAssist() or not self:WheelsOnGround() then return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION end
-
-	local Vel = phys:GetVelocity()
+	if not self:StabilityAssist() or not self:WheelsOnGround() then return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION end
 
 	local ForwardAngle = ent:GetDirectionAngle()
 
@@ -232,17 +247,17 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		if VelY > VelX * 0.1 then
 			if VelX > self.FastSteerActiveVelocity then
 				if VelY < VelX * 0.6 then
-					return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+					return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION
 				end
 			else
-				return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+				return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION
 			end
 		end
 	end
 
 	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / 500, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
 
-	return ForceAngle, ForceLinear, SIM_GLOBAL_ACCELERATION
+	return ForceAngle * forceMul, ForceLinear * forceMul, SIM_GLOBAL_ACCELERATION
 end
 
 function ENT:SteerTo( TargetValue, MaxSteer )
