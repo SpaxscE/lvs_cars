@@ -1,0 +1,56 @@
+[quote]
+[h1][b]YOU NEED [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2912816023][LVS] - Framework[/url] FOR THIS ADDON TO WORK[/b][/h1]
+[/quote]
+
+This Vehicle system is optimized for small passenger cars. It uses real props with spherical collisions that are attached to the body using a traditional rigid rope suspension with adv ballsockets.
+It uses the collective knowledge of the entire sandbox vehicle building community from the past ~15 years and is tweaked for maximum performance and smoothness.
+To my knowledge, this is the peak of what you can sequeeze out of a legitimate prop based chassis with proper rotating wheels without falling back to fake physics as simfphys does (non-rotating sliding wheels/hoverwheels).
+
+This system should give you the best offroading experience aswell assuming the suspension is adjusted for it. No more sideways slide on hills ect. It is also tweaked to handle drifting. Tuning is done ingame using the SuperCharger and Turbocharger attachment.
+
+Also includes a Armorsystem, Fuelsystem and a Lightingsystem. Everything else you gonna figure out yourself. Everything is still WIP and could be subject for change. Tools for ingame editing will follow soon.
+
+[img]https://i.imgur.com/rTv7Qel.png[/img]
+
+[h1][b]Controls (Default)[/b][/h1]
+For Base-Controls see [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2912816023][LVS] - Framework[/url]
+
+[h1]INSIDE VEHICLE:[/h1]
+[list]
+[*] W [+forward] = 50% Throttle
+[*] W + Shift [+forward ; +speed] = 100 % Throttle
+[*] S [+back] = Brake
+[*] Space [+jump] = Handbrake
+[*] A or D [+moveleft ; +moveright] = Turn Left / Turn Right
+[*] R [+reload] = Toggle Engine
+[*] <not bound> [phys_swap] (Hold) = Turn Off Lights / Turn On FogLights
+[*] <not bound> [phys_swap] (Quick Press) = Turn On Lights / Toggle Highbeams if available
+[*] B [+zoom] = Open Turn Signal Menu
+[/list]
+
+You can switch between direct-input and mouse-aim using the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2912826012]control panel[/url]
+
+[img]https://i.imgur.com/rTv7Qel.png[/img]
+
+[h1][b]Want to make your own Car based on this base?[/b][/h1]
+
+A template can be found [url=https://github.com/Blu-x92/lvs_cars/tree/main/lua/entities/lvs_wheeldrive_template]here[/url]
+
+[img]https://i.imgur.com/rTv7Qel.png[/img]
+
+[h1][b]Thanks to[/b][/h1]
+[url=https://steamcommunity.com/id/Baunsu/]Bounce[/url] - playtest / research / sounds
+[url=https://steamcommunity.com/id/blu-x92]Luna[/url] - chassis design / scripting / sounds / effects
+[url=https://steamcommunity.com/id/diggerrrrr/]Digger[/url] - modelling / texture work / research / sounds
+[url=https://steamcommunity.com/id/salza01/]Salza[/url] - playtest / modelling
+
+[img]https://i.imgur.com/rTv7Qel.png[/img]
+
+[h1][b]Links[/b][/h1]
+[url=https://github.com/Blu-x92/lvs_cars]This Project on GitHub[/url]
+[url=https://github.com/Blu-x92]GitHub[/url]
+[url=https://discord.gg/ayFzAHvaTc]Discord[/url]
+
+[img]https://i.imgur.com/rTv7Qel.png[/img]
+
+[quote]No version or modification of this content is allowed to be uploaded to the workshop except under the account ID [url=https://steamcommunity.com/profiles/76561197995010235/]76561197995010235[/url][/quote]
