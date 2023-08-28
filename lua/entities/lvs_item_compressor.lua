@@ -25,8 +25,6 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Bool",0, "Visible", { KeyName = "modelvisible",	 Edit = { type = "Boolean",	order = 0,	category = "Visuals"} } )
 
 	if SERVER then
-		self:SetVisible( true )
-
 		self:SetEngineCurve( 0.25 )
 		self:SetEngineTorque( 50 )
 
@@ -190,12 +188,12 @@ function ENT:Think()
 	end
 
 	if EngineActive then
-		self:SetPoseParameter( "throttle_pedal", vehicle:GetThrottle() )
-		self:InvalidateBoneCache()
-
 		local engine = vehicle:GetEngine()
 
 		if not IsValid( engine ) then return end
+
+		self:SetPoseParameter( "throttle_pedal", math.max( vehicle:GetThrottle() - (engine:GetClutch() and 1 or 0), 0 ) )
+		self:InvalidateBoneCache()
 
 		self:HandleSounds( vehicle, engine )
 	end
@@ -214,7 +212,9 @@ function ENT:Draw()
 		return
 	end
 
-	if not vehicle.SuperChargerVisible or not self:GetVisible() then return end
+	if not vehicle.SuperChargerVisible then return end
+
+	if not self:GetVisible() then return end
 
 	self:DrawModel()
 end
