@@ -51,7 +51,7 @@ function ENT:RunAI()
 	self:ReleaseHandbrake()
 	self:SetReverse( TargetPosLocal.y < 0 )
 
-	self:SteerTo( math.Clamp(TargetPosLocal.x / 500,-1,1), self:GetMaxSteerAngle() )
+	self:SteerTo( math.Clamp(TargetPosLocal.x / 750,-1,1), self:GetMaxSteerAngle() )
 
 	self._AIFireInput = false
 
