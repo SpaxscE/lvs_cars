@@ -19,6 +19,7 @@ include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
 ENT.DriverInActiveSound = "common/null.wav"
+ENT.lvsVehicleTickrate = 15
 
 DEFINE_BASECLASS( "lvs_base" )
 
@@ -131,14 +132,18 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	return self:SimulateRotatingWheel( ent, phys, deltatime )
 end
 
-ENT.SimulationSpeed = 0.1
-
 function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
 
 	if self:IsDestroyed() then self:EnableHandbrake() return vector_origin, vector_origin, SIM_NOTHING end
 
 	local T = CurTime()
+
+	local RotationAxis = ent:GetRotationAxis()
+
+	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
+
+	ent:SetRPM( curRPM )
 
 	if (ent._lvsNextThink or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
 
@@ -150,18 +155,17 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local TorqueFactor = ent:GetTorqueFactor()
 
-	ent._lvsNextThink = T + self.SimulationSpeed
+	local deltatimeNew = 1 / self.lvsVehicleTickrate
+	local forceMul = 1
 
-	local Diff = self.SimulationSpeed - deltatime
-	local Tick1 = 1 / deltatime
-	local Tick2 = 1 / Diff
-	local forceMul = Tick1 / Tick2
+	if deltatimeNew > deltatime then
+		ent._lvsNextThink = T + (deltatimeNew - deltatime * 0.5)
 
-	local RotationAxis = ent:GetRotationAxis()
+		local Tick1 = 1 / deltatime
+		local Tick2 = 1 / deltatimeNew
 
-	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
-
-	ent:SetRPM( curRPM )
+		forceMul = Tick1 / Tick2
+	end
 
 	local ForceAngle = vector_origin
 
@@ -176,7 +180,9 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM then
 				ent:LockRotation()
 			else
-				ForceAngle = RotationAxis * (targetRPM - curRPM) * self.WheelBrakeForce * ent:GetBrakeFactor() * self:GetBrake()
+				if (ForwardVel > 0 and targetRPM > self.WheelBrakeLockupRPM * 0.95) or (ForwardVel < 0 and targetRPM < -self.WheelBrakeLockupRPM * 0.95) then
+					ForceAngle = RotationAxis * math.Clamp( (targetRPM - curRPM) / 100,-1,1) * math.deg( self.WheelBrakeForce ) * ent:GetBrakeFactor() * self:GetBrake()
+				end
 			end
 		end
 	else
