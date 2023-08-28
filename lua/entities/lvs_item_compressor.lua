@@ -25,6 +25,7 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Bool",0, "Visible", { KeyName = "modelvisible",	 Edit = { type = "Boolean",	order = 0,	category = "Visuals"} } )
 
 	if SERVER then
+		self:SetVisible( true )
 		self:SetEngineCurve( 0.25 )
 		self:SetEngineTorque( 50 )
 

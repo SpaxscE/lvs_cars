@@ -65,6 +65,7 @@ function ENT:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs )
 			if not IsValid( FuelTank ) then return end
 
 			FuelTank:OnTakeDamage( dmginfo )
+			dmginfo:ScaleDamage( 0.5 )
 		end
 	} )
 
