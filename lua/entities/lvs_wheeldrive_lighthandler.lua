@@ -383,6 +383,8 @@ function ENT:CalcTypeActivators( base )
 
 	self:LerpActivator( "main+high", main * 0.75 + high * 1.25, Rate )
 
+	self:LerpActivator( "main+fog", main * 0.75 + fog * 1.25, Rate )
+
 	self:LerpActivator( "high", high, Rate )
 end
 
