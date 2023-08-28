@@ -57,12 +57,6 @@ function ENT:PostInitialize( PObj )
 		self:AddLights()
 	end
 
-	BaseClass.PostInitialize( self, PObj )
-
-	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
-	PObj:EnableDrag( false )
-	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
-
 	if istable( self.RandomColor ) then
 		local data = self.RandomColor[ math.random( #self.RandomColor ) ]
 
@@ -71,8 +65,19 @@ function ENT:PostInitialize( PObj )
 		else
 			self:SetSkin( data.Skin or 0 )
 			self:SetColor( data.Color or color_white )
+
+			if istable( data.Wheels ) then
+				self._WheelSkin = data.Wheels.Skin or 0
+				self._WheelColor = data.Wheels.Color or color_white
+			end
 		end
 	end
+
+	BaseClass.PostInitialize( self, PObj )
+
+	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
+	PObj:EnableDrag( false )
+	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
 	SetMinimumAngularVelocityTo( 24000 )
 
@@ -181,9 +186,10 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local ForceAngle = vector_origin
 
+	local Throttle = self:GetThrottle()
 	local TorqueFactor = ent:GetTorqueFactor()
 
-	if self:GetBrake() > 0 then
+	if self:GetBrake() > 0 and Throttle == 0 then
 		if ent:IsRotationLocked() then
 			ForceAngle = vector_origin
 		else
@@ -200,8 +206,6 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	else
-		local Throttle = self:GetThrottle()
-
 		if self.WheelBrakeAutoLockup then
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
 				ent:LockRotation()

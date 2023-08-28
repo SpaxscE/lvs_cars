@@ -168,6 +168,10 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 		{
 			Skin = 6,
 			Color = Color(255,255,255),
+			Wheels = {  -- can also color wheels in this variant
+				Skin = 0,
+				Color = Color(255,255,0),
+			},
 		},
 	}
  ]]
