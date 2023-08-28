@@ -2,6 +2,14 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
+ENT.PrintName = "88mm Round"
+ENT.Author = "Luna"
+ENT.Information = "Luna's Vehicle Script"
+ENT.Category = "[LVS] - Cars - Items"
+
+ENT.Spawnable		= true
+ENT.AdminOnly		= false
+
 ENT.LifeTime = 10
 
 if SERVER then

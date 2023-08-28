@@ -87,11 +87,48 @@ if SERVER then
 		end
 	end
 
+	function ENT:ShootBullet( attacker )
+		if self.BeenFired then return end
+
+		self.BeenFired = true
+
+		local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
+		hit_decal:SetPos( self:GetPos() )
+		hit_decal:SetAngles( self:GetAngles() )
+		hit_decal:Spawn()
+		hit_decal:Activate()
+		hit_decal:EmitSound("ambient/explosions/explode_4.wav", 75, 120, 1)
+		hit_decal:SetCollisionGroup( COLLISION_GROUP_NONE )
+
+		if IsValid( attacker ) then
+			hit_decal:SetPhysicsAttacker( attacker, 10 )
+		end
+
+		local PhysObj = hit_decal:GetPhysicsObject()
+		if IsValid( PhysObj ) then
+			PhysObj:SetMass( 2000 )
+			PhysObj:EnableDrag( false )
+			PhysObj:SetVelocityInstantaneous( self:GetForward() * 4000 )
+			PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
+		end
+
+		self:SetModel("models/misc/88mm_casing.mdl")
+	end
+
 	function ENT:PhysicsCollide( data, physobj )
+		if data.Speed > 60 and data.DeltaTime > 0.2 then
+			local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
+
+			if VelDif > 700 then
+				self:ShootBullet()
+			end
+		end
+
 		self:Refil( data.HitEntity )
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
+		self:ShootBullet( dmginfo:GetAttacker() )
 	end
 end
 
@@ -105,4 +142,8 @@ if CLIENT then
 
 	function ENT:Think()
 	end
+end
+
+function ENT:GetCrosshairFilterEnts()
+	return {self}
 end
