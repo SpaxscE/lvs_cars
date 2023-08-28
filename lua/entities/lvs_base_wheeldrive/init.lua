@@ -132,21 +132,29 @@ function ENT:PhysicsSimulate( phys, deltatime )
 end
 
 function ENT:SimulateRotatingWheel( ent, phys, deltatime )
+	local T = CurTime()
+	local tickdelta = engine.TickInterval()
+
+	if not self:GetEngineActive() then
+		if (ent._lvsNextThink or 0) > T then
+			return vector_origin, vector_origin, SIM_NOTHING
+		else
+			ent._lvsNextThink = T + 0.05
+		end
+	end
+
 	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
 
 	if self:IsDestroyed() then self:EnableHandbrake() return vector_origin, vector_origin, SIM_NOTHING end
 
-	local T = CurTime()
+	if (ent._lvsNextSimulate or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
 
-	if (ent._lvsNextThink or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
-
-	local tickdelta = engine.TickInterval()
 	local forceMul = 1
 
 	if tickdelta < 1 / 30 then
 		local deltatimeNew = 1 / 15
 
-		ent._lvsNextThink = T + deltatimeNew - tickdelta * 0.5
+		ent._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
 
 		local Tick1 = 1 / deltatime
 		local Tick2 = 1 / deltatimeNew

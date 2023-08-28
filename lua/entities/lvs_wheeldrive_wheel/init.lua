@@ -19,7 +19,6 @@ function ENT:OnRemove()
 end
 
 function ENT:OnTakeDamage( dmginfo )
-	--[[
 	if dmginfo:IsDamageType( DMG_BLAST ) then return end
 
 	local base = self:GetBase()
@@ -27,7 +26,6 @@ function ENT:OnTakeDamage( dmginfo )
 	if not IsValid( base ) then return end
 
 	base:OnTakeDamage( dmginfo )
-	]]
 end
 
 function ENT:lvsMakeSpherical( radius )
