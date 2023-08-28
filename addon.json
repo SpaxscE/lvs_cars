@@ -1,0 +1,10 @@
+{
+	"title"		: "[LVS] - Cars",
+	"type"		: "vehicle",
+	"tags"		: [ "fun", "realism" ],
+	"ignore"	: [
+		"*.psd",
+		"*.vcproj",
+		"*.svn*"
+	]
+}
