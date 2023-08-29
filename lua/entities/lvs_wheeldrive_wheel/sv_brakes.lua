@@ -30,9 +30,7 @@ function ENT:ReleaseHandbrake()
 	self:ReleaseRotation()
 end
 
-function ENT:LockRotation( permanent )
-	self._PreventUnlock = permanent 
-
+function ENT:LockRotation()
 	if self:IsRotationLocked() then return end
 
 	local Master = self:GetMaster()
@@ -44,8 +42,6 @@ function ENT:LockRotation( permanent )
 end
 
 function ENT:ReleaseRotation()
-	if self._PreventUnlock then return end
-
 	if not self:IsRotationLocked() then return end
 
 	self.bsLock:Remove()
