@@ -51,5 +51,14 @@ function ENT:PhysicsOnGround( PhysObj )
 	return EntLoad > 0
 end
 
-function ENT:PhysicsCollide( data )
+function ENT:PhysicsCollide( data, physobj )
+	if data.Speed > 100 and data.DeltaTime > 0.2 then
+		local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
+
+		if data.Speed > 250 then 
+			local Volume = math.min( math.max( math.abs( VelDif ) - 50, 0 ) / 2000 , 1 )
+
+			self:EmitSound( "lvs/vehicles/generic/suspension_hit_".. math.random(1,17) ..".ogg", 75, 100, Volume )
+		end
+	end
 end
