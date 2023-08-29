@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/blu/tanks/sherman.mdl"
+ENT.MDL = "models/blu/tanks/sherman_lvs.mdl"
 ENT.MDL_DESTROYED = "models/blu/tanks/sherman_gib_1.mdl"
 
 ENT.GibModels = {

@@ -32,7 +32,11 @@ if SERVER then
 		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce()
 
-		if Force:Length() <= (self.MinForce or 1000) then return false end
+		local IsBlastDamage = dmginfo:IsDamageType( DMG_BLAST )
+
+		if not IsBlastDamage then
+			if Force:Length() <= (self.MinForce or 1000) then return false end
+		end
 
 		local CurHealth = self:GetHP()
 
@@ -40,7 +44,7 @@ if SERVER then
 
 		self:SetHP( NewHealth )
 
-		if not dmginfo:IsDamageType( DMG_AIRBOAT ) then return end
+		if not IsBlastDamage and not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER + DMG_DIRECT ) then return end
 
 		local pos = dmginfo:GetDamagePosition()
 		local dir = Force:GetNormalized()
@@ -51,7 +55,7 @@ if SERVER then
 			filter = function( ent ) return ent == self:GetBase() end
 		} )
 
-		if trace.Entity == self:GetBase() then
+		if trace.Entity == self:GetBase() and not IsBlastDamage then
 			local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( dir ) ,-1,1) )
 			local Fx = math.cos( Ax )
 

@@ -50,9 +50,13 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(40,45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
 	self:AddArmor( Vector(40,-45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
 
+	-- make tracks count as low health front armor
+	self:AddArmor( Vector(40,45,40), Angle(0,0,0), Vector(-150,-15,-40), Vector(0,15,0), 500, self.FrontArmor )
+	self:AddArmor( Vector(40,-45,40), Angle(0,0,0), Vector(-150,-15,-40), Vector(0,15,0), 500, self.FrontArmor )
+
 	-- side armor
-	self:AddArmor( Vector(40,45,20), Angle(0,0,0), Vector(-150,-15,-20), Vector(0,15,55), 500, self.SideArmor )
-	self:AddArmor( Vector(40,-45,20), Angle(0,0,0), Vector(-150,-15,-20), Vector(0,15,55), 500, self.SideArmor )
+	self:AddArmor( Vector(40,45,40), Angle(0,0,0), Vector(-150,-15,0), Vector(0,15,35), 500, self.SideArmor )
+	self:AddArmor( Vector(40,-45,40), Angle(0,0,0), Vector(-150,-15,0), Vector(0,15,35), 500, self.SideArmor )
 
 	-- turret
 	self:AddArmor( Vector(1.5,0,70), Angle(0,0,0), Vector(-50,-40,0), Vector(40,40,40), 1500, self.TurretArmor )
