@@ -14,7 +14,11 @@ ENT.MDL = "models/diggercars/222/222.mdl"
 ENT.AITEAM = 1
 
 ENT.MaxHealth = 1200
-ENT.DSArmorIgnoreForce = 1000
+
+--damage system
+ENT.DSArmorIgnoreForce = 1200
+ENT.CannonArmorPenetration = 3900
+
 
 ENT.MaxVelocity = 1000
 
@@ -210,7 +214,7 @@ function ENT:InitWeapons()
 		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
 		bullet.TracerName = "lvs_tracer_autocannon"
-		bullet.Force	= 100000
+		bullet.Force	= ent.CannonArmorPenetration
 		bullet.HullSize 	= 0
 		bullet.Damage	= 100
 		bullet.Velocity = 14000

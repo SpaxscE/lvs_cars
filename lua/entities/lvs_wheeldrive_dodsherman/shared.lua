@@ -23,7 +23,14 @@ ENT.GibModels = {
 ENT.AITEAM = 2
 
 ENT.MaxHealth = 1200
-ENT.DSArmorIgnoreForce = 1200
+
+--damage system
+ENT.DSArmorIgnoreForce = 3000
+ENT.CannonArmorPenetration = 9200
+ENT.FrontArmor = 2000
+ENT.SideArmor = 800
+ENT.TurretArmor = 3000
+ENT.RearArmor = 800
 
 ENT.SteerSpeed = 1
 ENT.SteerReturnSpeed = 2
@@ -171,7 +178,7 @@ function ENT:InitWeapons()
 		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
 		bullet.TracerName = "lvs_tracer_cannon"
-		bullet.Force	= 500000
+		bullet.Force	= ent.CannonArmorPenetration
 		bullet.HullSize 	= 0
 		bullet.Damage	= 500
 		bullet.Velocity = 14000

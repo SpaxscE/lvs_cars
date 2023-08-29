@@ -15,6 +15,9 @@ ENT.AITEAM = 2
 
 ENT.MaxHealth = 600
 
+--damage system
+ENT.CannonArmorPenetration = 2700
+
 ENT.MaxVelocity = 700
 ENT.MaxVelocityReverse = 250
 
@@ -170,7 +173,7 @@ function ENT:InitWeapons()
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
 		bullet.Spread 	= Vector(0.03,0.03,0.03)
 		bullet.TracerName = "lvs_tracer_white"
-		bullet.Force	= 1100
+		bullet.Force	= ent.CannonArmorPenetration
 		bullet.HullSize 	= 1
 		bullet.Damage	= 50
 		bullet.Velocity = 20000
