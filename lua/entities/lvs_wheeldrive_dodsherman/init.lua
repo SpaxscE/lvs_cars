@@ -38,17 +38,24 @@ function ENT:OnSpawn( PObj )
 	self:CreateTracks()
 
 	-- front upper wedge
-	self:AddArmor( Vector(90,0,60), Angle(30,0,0), Vector(-40,-45,-15), Vector(25,45,-2), 2000, self.FrontArmor )
+	self:AddArmor( Vector(90,0,60), Angle(30,0,0), Vector(-40,-55,-15), Vector(25,55,-2), 1200, self.FrontArmor )
 
 	-- front lower wedge
-	self:AddArmor( Vector(105,0,30), Angle(-45,0,0), Vector(-10,-45,-15), Vector(15,45,10), 2000, self.FrontArmor )
+	self:AddArmor( Vector(105,0,30), Angle(-45,0,0), Vector(-10,-55,-15), Vector(15,55,10), 1200, self.FrontArmor )
+
+	-- front bottom wedge
+	self:AddArmor( Vector(80,0,15), Angle(0,0,0), Vector(-40,-55,-10), Vector(0,55,10), 1200, self.FrontArmor )
+
+	-- front side wedge
+	self:AddArmor( Vector(40,45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
+	self:AddArmor( Vector(40,-45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
 
 	-- side armor
-	self:AddArmor( Vector(0,45,20), Angle(0,0,0), Vector(-100,-15,-20), Vector(120,15,55), 500, self.SideArmor )
-	self:AddArmor( Vector(0,-45,20), Angle(0,0,0), Vector(-100,-15,-20), Vector(120,15,55), 500, self.SideArmor )
+	self:AddArmor( Vector(40,45,20), Angle(0,0,0), Vector(-150,-15,-20), Vector(0,15,55), 500, self.SideArmor )
+	self:AddArmor( Vector(40,-45,20), Angle(0,0,0), Vector(-150,-15,-20), Vector(0,15,55), 500, self.SideArmor )
 
 	-- turret
-	self:AddArmor( Vector(1.5,0,70), Angle(0,0,0), Vector(-50,-40,0), Vector(40,40,40), 2000, self.TurretArmor )
+	self:AddArmor( Vector(1.5,0,70), Angle(0,0,0), Vector(-50,-40,0), Vector(40,40,40), 1500, self.TurretArmor )
 
 	-- rear
 	self:AddArmor( Vector(-90,0,20), Angle(-15,0,0), Vector(-10,-30,-5),Vector(10,30,50), self.RearArmor )
