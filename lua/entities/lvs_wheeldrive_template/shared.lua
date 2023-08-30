@@ -263,6 +263,7 @@ end
 -- LVS.SOUNDTYPE_NONE -- plays all the time except in idle
 -- LVS.SOUNDTYPE_REV_UP -- plays when revving up
 -- LVS.SOUNDTYPE_REV_DOWN -- plays when revving down
+-- LVS.SOUNDTYPE_ALL -- plays all the time
 ENT.EngineSounds = {
 	{
 		sound = "vehicles/apc/apc_idle1.wav",

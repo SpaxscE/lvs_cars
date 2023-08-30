@@ -257,24 +257,28 @@ function ENT:HandleEngineSounds( vehicle )
 		local Vol03 = data.Volume * 0.3
 		local Vol02 = data.Volume * 0.2
 
-		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue * self._smRPMVolume
+		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue
 
 		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * 0.6)
 
 		local Pitch = data.Pitch + PitchAdd + (data.PitchMul - PitchAdd) * Ratio + Wobble
 		local PitchMul = data.UseDoppler and Doppler or 1
 
-		if data.SoundType ~= LVS.SOUNDTYPE_NONE then
-			if data.SoundType == LVS.SOUNDTYPE_IDLE_ONLY then
+		local SoundType = data.SoundType
+
+		if SoundType ~= LVS.SOUNDTYPE_ALL then
+			Volume = Volume  * self._smRPMVolume
+
+			if SoundType == LVS.SOUNDTYPE_IDLE_ONLY then
 				Volume = self._smIdleVolume * data.Volume * VolumeValue
 				Pitch = data.Pitch + data.PitchMul * Ratio
 			end
 
-			if data.SoundType == LVS.SOUNDTYPE_REV_UP then
+			if SoundType == LVS.SOUNDTYPE_REV_UP then
 				Volume = Throttle == 0 and 0 or Volume
 			end
 
-			if data.SoundType == LVS.SOUNDTYPE_REV_DOWN then
+			if SoundType == LVS.SOUNDTYPE_REV_DOWN then
 				Volume =  Throttle == 0 and Volume or 0
 			end
 		end
