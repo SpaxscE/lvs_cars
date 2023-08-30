@@ -94,6 +94,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	PhysObj:SetMass( self.WheelPhysicsMass * self.PhysicsWeightScale )
 	PhysObj:SetInertia( self.WheelPhysicsInertia * self.PhysicsWeightScale )
 	PhysObj:EnableDrag( false )
+	PhysObj:EnableMotion( false )
 
 	local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
 	nocollide_constraint.DoNotDuplicate = true
@@ -123,7 +124,12 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	timer.Simple(0, function()
 		if not IsValid( self ) or not IsValid( Wheel ) or not IsValid( PhysObj ) then return end
 
+		Master:SetAngles( self:GetAngles() )
+		Wheel:SetAngles( self:LocalToWorldAngles( Angle(0,-90,0) ) )
+
 		self:AddToMotionController( PhysObj )
+
+		PhysObj:EnableMotion( true )
 	end )
 
 	if isnumber( self._WheelSkin ) then Wheel:SetSkin( self._WheelSkin ) end
