@@ -13,6 +13,7 @@ ENT.SpawnNormalOffset = 40 -- spawn normal offset, raise to prevent spawning int
 --ENT.SpawnNormalOffsetSpawner = 0 -- offset for ai vehicle spawner
 
 ENT.MDL = "models/props_interiors/Furniture_Couch02a.mdl"
+--ENT.MDL_DESTROYED = "models/props_interiors/Furniture_Couch02a.mdl"
 --[[
 ENT.GibModels = {
 	"models/gibs/manhack_gib01.mdl",
