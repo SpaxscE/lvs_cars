@@ -99,7 +99,7 @@ function ENT:OnSpawn( PObj )
 		-- width = 3, -- tire witdh used for skidmarks
 		pos = Vector(0,0,0),
 		mdl = "path/to/model.mdl",
-		mdl_ang = Angle(0,0,0),
+		mdl_ang = Angle(0,0,0), -- use this to match model orientation with wheel rotation
 
 		--camber = 0, -- camber alignment
 		--caster = 0, -- caster alignment
