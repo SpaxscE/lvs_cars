@@ -159,7 +159,7 @@ function ENT:DrawTranslucent()
 
 	local ply = LocalPlayer()
 
-	if not IsValid( ply ) or ply:InVehicle() then return end
+	if not IsValid( ply ) or ply:InVehicle() or not ply:KeyDown( IN_SPEED ) then return end
 
 	local boxOrigin = self:GetPos()
 	local boxAngles = self:GetAngles()
