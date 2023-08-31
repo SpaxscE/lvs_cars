@@ -1,6 +1,6 @@
 
 
-TOOL.Category		= "LVS-Cars"
+TOOL.Category		= "LVS"
 TOOL.Name			= "#Wheel Editor"
 
 TOOL.ClientConVar[ "model" ] = ""
