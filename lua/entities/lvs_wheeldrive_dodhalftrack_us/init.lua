@@ -6,6 +6,11 @@ include("shared.lua")
 include("sh_turret.lua")
 include("sh_tracks.lua")
 
+-- since this is based on a tank we need to reset these to default var values:
+ENT.DSArmorDamageReductionType = DMG_BULLET + DMG_CLUB
+ENT.DSArmorIgnoreDamageType = DMG_SONIC
+
+
 function ENT:OnSpawn( PObj )
 	local DriverSeat = self:AddDriverSeat( Vector(0,21,30), Angle(0,-90,0) )
 	local PassengerSeat = self:AddPassengerSeat( Vector(15,-21,37), Angle(0,-90,10) )

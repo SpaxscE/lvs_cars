@@ -40,7 +40,14 @@ TEAMS:
 ]]
 
 ENT.MaxHealth = 400 -- max health
---ENT.DSArmorIgnoreForce = 1000 -- add general immunity against small firearms
+
+--ENT.DSArmorDamageReduction = 0.1 -- damage reduction multiplier. Damage is clamped to a minimum of 1 tho
+--ENT.DSArmorDamageReductionType = DMG_BULLET + DMG_CLUB -- which damage type to damage reduce
+
+--ENT.DSArmorIgnoreDamageType = DMG_SONIC -- ignore this damage type completely
+--ENT.DSArmorIgnoreForce = 1000 -- add general immunity against small firearms, 1000 = 10mm armor thickness
+--ENT.DSArmorBulletPenetrationAdd = 250 -- changes how far bullets can cheat through the body to hit critical hitpoints and armor
+
 
 --[[
 PLEASE READ:

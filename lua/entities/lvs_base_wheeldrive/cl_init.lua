@@ -96,7 +96,10 @@ function ENT:PreDraw()
 	return true
 end
 
+local LVS = LVS
 function ENT:PreDrawTranslucent()
+	if LVS.DeveloperEnabled then return false end
+
 	return LocalPlayer():GetPos():DistToSqr( self:GetPos() ) < 300000
 end
 

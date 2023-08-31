@@ -157,9 +157,13 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 	Armor:SetBase( self )
 	Armor:SetMaxHP( health )
 	Armor:SetHP( health )
+	Armor:SetMins( mins )
+	Armor:SetMaxs( maxs )
 
 	if isnumber( minforce ) then
-		Armor.MinForce = minforce + self.DSArmorIgnoreForce
+		Armor:SetIgnoreForce( minforce + self.DSArmorIgnoreForce )
+	else
+		Armor:SetIgnoreForce( self.DSArmorIgnoreForce )
 	end
 
 	self:DeleteOnRemove( Armor )

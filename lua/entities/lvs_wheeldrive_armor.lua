@@ -3,11 +3,17 @@ AddCSLuaFile()
 ENT.Type            = "anim"
 ENT.DoNotDuplicate = true
 
+ENT.RenderGroup = RENDERGROUP_BOTH 
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 
 	self:NetworkVar( "Float",0, "HP" )
 	self:NetworkVar( "Float",1, "MaxHP" )
+	self:NetworkVar( "Float",2, "IgnoreForce" )
+
+	self:NetworkVar( "Vector",0, "Mins" )
+	self:NetworkVar( "Vector",1, "Maxs" )
 
 	self:NetworkVar( "Bool",0, "Destroyed" )
 
@@ -32,10 +38,12 @@ if SERVER then
 		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce()
 
+		if dmginfo:IsDamageType( DMG_BURN ) then return true end
+
 		local IsBlastDamage = dmginfo:IsDamageType( DMG_BLAST )
 
 		if not IsBlastDamage then
-			if Force:Length() <= (self.MinForce or 1000) then return false end
+			if Force:Length() <= self:GetIgnoreForce() then return false end
 		end
 
 		local CurHealth = self:GetHP()
@@ -44,7 +52,7 @@ if SERVER then
 
 		self:SetHP( NewHealth )
 
-		if not IsBlastDamage and not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER + DMG_DIRECT ) then return end
+		if not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER + DMG_DIRECT + DMG_BLAST ) then return end
 
 		local pos = dmginfo:GetDamagePosition()
 		local dir = Force:GetNormalized()
@@ -114,8 +122,63 @@ end
 function ENT:OnRemove()
 end
 
+function ENT:Think()
+end
+
+
 function ENT:Draw()
 end
 
-function ENT:Think()
+local function DrawText( pos, text, col )
+	cam.Start2D()
+		local data2D = pos:ToScreen()
+
+		if not data2D.visible then return end
+
+		local font = "TargetIDSmall"
+
+		local x = data2D.x
+		local y = data2D.y
+
+		draw.DrawText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER )
+		draw.DrawText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER )
+		draw.DrawText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER )
+	cam.End2D()
+end
+
+local LVS = LVS
+local BoxMat = Material("models/wireframe")
+local ColorSelect = Color(0,127,255,150)
+local ColorNormal = Color(50,50,50,150)
+local ColorTransBlack = Color(0,0,0,150)
+local OutlineThickness = Vector(0.5,0.5,0.5)
+local ColorText = Color(255,0,0,255)
+
+function ENT:DrawTranslucent()
+	if not LVS.DeveloperEnabled then return end
+
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) or ply:InVehicle() then return end
+
+	local boxOrigin = self:GetPos()
+	local boxAngles = self:GetAngles()
+	local boxMins = self:GetMins()
+	local boxMaxs = self:GetMaxs()
+
+	local HitPos, _, _ = util.IntersectRayWithOBB( ply:GetShootPos(), ply:GetAimVector() * 1000, boxOrigin, boxAngles, boxMins, boxMaxs )
+
+	local InRange = isvector( HitPos )
+
+	local Col = InRange and ColorSelect or ColorNormal
+
+	render.SetColorMaterial()
+	render.DrawBox( boxOrigin, boxAngles, boxMins, boxMaxs, Col )
+	render.DrawBox( boxOrigin, boxAngles, boxMaxs + OutlineThickness, boxMins - OutlineThickness, ColorTransBlack )
+
+	local boxCenter = (self:LocalToWorld( boxMins ) + self:LocalToWorld( boxMaxs )) * 0.5
+
+	if not InRange then return end
+
+	DrawText( boxCenter, "Armor: "..(self:GetIgnoreForce() / 100).."mm\nHealth:"..self:GetHP().."/"..self:GetMaxHP(), ColorText )
 end
