@@ -94,11 +94,6 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			color = Vector(0,127,255),
 		},
 	}
-
-	LVS.VehicleBlackList = {
-		["lvs_wheeldrive_pz4c"] = true,
-		["lvs_wheeldrive_t34"] = true,
-	}
 end )
 
 if SERVER then
