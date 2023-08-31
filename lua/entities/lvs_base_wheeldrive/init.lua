@@ -35,7 +35,11 @@ local function SetMinimumAngularVelocityTo( new )
 	end
 end
 
-local function IsServerOK()
+local function IsServerOK( class )
+
+	if istable( LVS.VehicleBlackList ) then
+		if LVS.VehicleBlackList[ class ] then return false end
+	end
 
 	if GetConVar( "gmod_physiterations" ):GetInt() ~= 4 then
 		RunConsoleCommand("gmod_physiterations", "4")
@@ -48,7 +52,7 @@ end
 
 function ENT:PostInitialize( PObj )
 
-	if not IsServerOK() then
+	if not IsServerOK( self:GetClass() ) then
 		self:Remove()
 		print("[LVS] ERROR COULDN'T INITIALIZE VEHICLE!")
 	end
