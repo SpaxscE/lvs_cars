@@ -62,7 +62,7 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(1.5,0,70), Angle(0,0,0), Vector(-50,-40,0), Vector(40,40,40), 1500, self.TurretArmor )
 
 	-- rear
-	self:AddArmor( Vector(-90,0,20), Angle(-15,0,0), Vector(-10,-30,-5),Vector(10,30,50), self.RearArmor )
+	self:AddArmor( Vector(-90,0,20), Angle(-15,0,0), Vector(-10,-30,-5),Vector(10,30,50), 500, self.RearArmor )
 
 	-- driver viewport weakstop
 	self:AddDriverViewPort( Vector(90,21,58), Angle(0,0,0), Vector(-2,-7,-2), Vector(2,7,2) )
