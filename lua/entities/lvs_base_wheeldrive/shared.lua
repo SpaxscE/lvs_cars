@@ -29,6 +29,7 @@ ENT.TransShiftSpeed = 0.3
 ENT.TransWobble = 40
 ENT.TransWobbleTime = 1.5
 ENT.TransWobbleFrequencyMultiplier = 1
+ENT.TransShiftSound = "lvs/vehicles/generic/gear_shift.wav"
 
 ENT.SteerSpeed = 3
 ENT.SteerReturnSpeed = 10

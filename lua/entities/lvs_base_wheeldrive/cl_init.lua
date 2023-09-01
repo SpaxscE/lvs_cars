@@ -164,7 +164,7 @@ function ENT:OnChangeGear( oldGear, newGear )
 
 		self:DoExhaustBackFire()
 	else
-		self:EmitSound( "buttons/lever7.wav", 75, 80, 0.25 )
+		self:EmitSound( self.TransShiftSound, 75 )
 	end
 
 	self:SuppressViewPunch( self.TransShiftSpeed )

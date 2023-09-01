@@ -90,6 +90,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.TransWobble = 40 -- basically how much "play" is in the drivedrain. 
 --ENT.TransWobbleTime = 1.5 -- in seconds. How long after a shift or after applying throttle the engine will wobble up and down in rpm
 --ENT.TransWobbleFrequencyMultiplier = 1 -- changes the frequency of the wobble
+--ENT.TransShiftSound = "lvs/vehicles/generic/gear_shift.wav"  change gear shift sound
 
 --ENT.SteerSpeed = 3 -- steer speed
 --ENT.SteerReturnSpeed = 10 -- steer return speed to neutral steer

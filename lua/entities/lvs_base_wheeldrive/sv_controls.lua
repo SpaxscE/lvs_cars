@@ -99,6 +99,7 @@ function ENT:CalcTransmission( ply )
 		if not walk then return end
 
 		self:SetReverse( not self:GetReverse() )
+		self:EmitSound( self.TransShiftSound, 75 )
 	end
 end
 
