@@ -310,6 +310,8 @@ end
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	if VehicleIsActive then return end
 
+	self:SetThrottle( 0 )
+
 	if self:GetBrake() > 0 then
 		self:SetBrake( 0 )
 		self:EnableHandbrake()
