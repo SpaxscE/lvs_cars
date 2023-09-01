@@ -58,7 +58,7 @@ function EFFECT:Init( data )
 		particle:SetStartSize( 10 * scale )
 		particle:SetEndSize( 20 * i * scale )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetGravity( Vector(0,0,-600) * scale )
 		particle:SetCollide( false )
 	end

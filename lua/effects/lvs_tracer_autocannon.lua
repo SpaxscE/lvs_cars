@@ -58,7 +58,7 @@ function EFFECT:Init( data )
 		particle:SetStartSize( 5 )
 		particle:SetEndSize( 120 )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetGravity( Vector(0,0,100) )
 		particle:SetCollide( false )
 	end
@@ -104,7 +104,7 @@ function EFFECT:Init( data )
 		particle:SetStartSize( 25 )
 		particle:SetEndSize( 80 )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetGravity( Vector(0,0,150) + self.Dir * 2000 )
 		particle:SetCollide( false )
 	end
@@ -182,7 +182,7 @@ function EFFECT:Think()
 		particle:SetEndSize( 15 )
 
 		particle:SetRollDelta( 1 )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetCollide( false )
 	end
 

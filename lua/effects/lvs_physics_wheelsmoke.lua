@@ -42,7 +42,7 @@ function EFFECT:Init( data )
 		particle:SetStartSize( 20 )
 		particle:SetEndSize( 60 )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetGravity( Vector(0,0,5) )
 		particle:SetCollide( false )
 	end
