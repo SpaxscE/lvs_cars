@@ -7,10 +7,6 @@ function ENT:OnSpawn( PObj )
 	self:AddPassengerSeat( Vector(-11,-17.5,24), Angle(0,-90,10) )
 	self:AddPassengerSeat( Vector(-45,0,24), Angle(0,-90,10) )
 
-	self.HornSND = self:AddSoundEmitter( Vector(40,0,35), "lvs/horn2.wav", "lvs/horn2.wav" )
-	self.HornSND:SetSoundLevel( 75 )
-	self.HornSND:SetDoppler( true )
-
 	self:AddEngine( Vector(38,0,37) )
 	self:AddFuelTank( Vector(-42.36,0,13.8), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL )
 

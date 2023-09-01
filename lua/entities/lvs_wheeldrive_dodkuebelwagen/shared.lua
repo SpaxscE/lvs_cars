@@ -21,6 +21,9 @@ ENT.EngineCurve = 0.25
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
 
+ENT.HornSound = "lvs/horn1.wav"
+ENT.HornPos = Vector(40,0,35)
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/kuebelwagen/eng_idle_loop.wav",
@@ -90,23 +93,3 @@ ENT.ExhaustPositions = {
 		ang = Angle(0,180,0),
 	},
 }
-
-function ENT:InitWeapons()
-	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/horn.png")
-	weapon.Ammo = -1
-	weapon.Delay = 0.5
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 0
-	weapon.UseableByAI = false
-	weapon.Attack = function( ent ) end
-	weapon.StartAttack = function( ent )
-		if not IsValid( ent.HornSND ) then return end
-		ent.HornSND:Play()
-	end
-	weapon.FinishAttack = function( ent )
-		if not IsValid( ent.HornSND ) then return end
-		ent.HornSND:Stop()
-	end
-	self:AddWeapon( weapon )
-end

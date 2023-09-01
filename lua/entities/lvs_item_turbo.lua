@@ -189,7 +189,7 @@ function ENT:HandleSounds( vehicle, engine )
 
 	self._smBoost = self._smBoost and self._smBoost + (math.min( (self.TurboRPM or 0) / 400, 1 ) - self._smBoost) * FT * 10 or 0
 
-	self.snd:ChangeVolume( volume * LVS.EngineVolume )
+	self.snd:ChangeVolume( volume * engine:GetEngineVolume() )
 	self.snd:ChangePitch( pitch * doppler )
 end
 

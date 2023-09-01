@@ -79,6 +79,14 @@ function ENT:PostInitialize( PObj )
 
 	BaseClass.PostInitialize( self, PObj )
 
+	if isstring( self.HornSound ) and isvector( self.HornPos ) then
+		if IsValid( self.HornSND ) then self.HornSND:Remove() end
+
+		self.HornSND = self:AddSoundEmitter( self.HornPos, self.HornSound, self.HornSound )
+		self.HornSND:SetSoundLevel( 75 )
+		self.HornSND:SetDoppler( true )
+	end
+
 	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
 	PObj:EnableDrag( false )
 	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )

@@ -115,6 +115,16 @@ function ENT:GetClutch()
 	return self._ClutchActive == true
 end
 
+function ENT:SetEngineVolume( volume )
+	self._engineVolume = volume
+
+	return volume
+end
+
+function ENT:GetEngineVolume()
+	return (self._engineVolume or 0)
+end
+
 function ENT:HandleEngineSounds( vehicle )
 	local ply = LocalPlayer()
 	local pod = ply:GetVehicle()
@@ -166,7 +176,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local NumGears = vehicle.TransGears
 
-	local VolumeValue = (DrivingMe and 1 or 0.6) * LVS.EngineVolume
+	local VolumeValue = self:SetEngineVolume( (DrivingMe and 1 or 0.6) * LVS.EngineVolume )
 	local PitchValue = vehicle.MaxVelocity / NumGears
 
 	local DesiredGear = 1

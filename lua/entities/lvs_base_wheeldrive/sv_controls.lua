@@ -174,6 +174,14 @@ function ENT:StartCommand( ply, cmd )
 	self:CalcTransmission( ply )
 	self:CalcLights( ply )
 	self:SetRoadkillAttacker( ply )
+
+	if not self.HornSound or not IsValid( self.HornSND ) then return end
+
+	if ply:lvsKeyDown( "ATTACK" ) then
+		self.HornSND:Play()
+	else
+		self.HornSND:Stop()
+	end
 end
 
 function ENT:SetRoadkillAttacker( ply )
