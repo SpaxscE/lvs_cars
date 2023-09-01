@@ -8,6 +8,7 @@ EFFECT.SurfaceProps = {
 	["metal_barrel"] = true,
 	["metalvehicle"] = true,
 	["metal"] = true,
+	["rubbertire"] = true,
 }
 
 EFFECT.MatSmoke = {
