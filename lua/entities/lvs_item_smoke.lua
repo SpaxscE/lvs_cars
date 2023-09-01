@@ -11,9 +11,28 @@ ENT.AdminOnly		= false
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Bool",0, "Active" )
+
+	self:NetworkVar( "Float",0, "Radius" )
+
+	self:NetworkVar( "Float",1, "LifeTime" )
+
+	if SERVER then
+		self:SetLifeTime( 30 )
+		self:SetRadius( 1000 )
+	end
 end
 
-ENT.LifeTime = 30
+function ENT:GetMins()
+	local Radius = self:GetRadius()
+
+	return Vector(-Radius,-Radius,-Radius)
+end
+
+function ENT:GetMaxs()
+	local Radius = self:GetRadius()
+
+	return Vector(Radius,Radius,Radius)
+end
 
 if SERVER then
 	function ENT:SpawnFunction( ply, tr, ClassName )
@@ -55,7 +74,7 @@ if SERVER then
 
 	function ENT:PhysicsCollide( data, physobj )
 		if not self:GetActive() then
-			self.RemoveTime = CurTime() + self.LifeTime
+			self.RemoveTime = CurTime() + self:GetLifeTime()
 
 			self:SetActive( true )
 
@@ -92,14 +111,12 @@ else
 		return self.snd
 	end
 
-	local Mins = Vector(-1,-1,-1) * 800
-	local Maxs = Vector(1,1,1) * 800
 	function ENT:Think()
 		local T = CurTime()
 
-		if not self:GetActive() then self.DieTime = T + self.LifeTime return end
+		if not self:GetActive() then self.DieTime = T + self:GetLifeTime() return end
 
-		local volume = ((self.DieTime or 0) - T) / self.LifeTime
+		local volume = ((self.DieTime or 0) - T) / self:GetLifeTime()
 		local snd = self:StartSound()
 		snd:ChangeVolume( volume, 0.5 )
 
@@ -108,12 +125,15 @@ else
 		local plyPos = LocalPlayer():GetPos()
 		local pos = self:GetPos()
 
-		if (plyPos - pos):Length() < 1000 then
+		if (plyPos - pos):Length() < self:GetRadius() then
 			for id, ent in pairs( LVS:GetVehicles() ) do
 				LVS:GetVehicles()[ id ] = nil
 				table.insert( self.RemovedEnts, ent )
 			end
 		else
+			local Mins = self:GetMins()
+			local Maxs = self:GetMaxs()
+
 			for id, ent in pairs( LVS:GetVehicles() ) do
 				local pDelta = ent:GetPos() - plyPos
 				local HitPos, HitNormal, Fraction = util.IntersectRayWithOBB( plyPos, pDelta, pos, angle_zero, Mins, Maxs )
