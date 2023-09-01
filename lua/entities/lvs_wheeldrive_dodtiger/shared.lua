@@ -228,10 +228,10 @@ function ENT:InitWeapons()
 
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/smoke_launcher.png")
-	weapon.Ammo = 2
+	weapon.Ammo = 3
 	weapon.Delay = 1
 	weapon.HeatRateUp = 1
-	weapon.HeatRateDown = 0.1
+	weapon.HeatRateDown = 0.05
 	weapon.Attack = function( ent )
 		ent:TakeAmmo( 1 )
 
