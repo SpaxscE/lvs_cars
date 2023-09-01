@@ -225,6 +225,68 @@ function ENT:InitWeapons()
 	end
 	self:AddWeapon( weapon )
 
+
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/smoke_launcher.png")
+	weapon.Ammo = 2
+	weapon.Delay = 1
+	weapon.HeatRateUp = 1
+	weapon.HeatRateDown = 0.1
+	weapon.Attack = function( ent )
+		ent:TakeAmmo( 1 )
+
+		local ID1 = ent:LookupAttachment( "muzzle_smoke_right" )
+		local ID2 = ent:LookupAttachment( "muzzle_smoke_left" )
+
+		local Muzzle1 = ent:GetAttachment( ID1 )
+		local Muzzle2 = ent:GetAttachment( ID2 )
+
+		if not Muzzle1 or not Muzzle2 then return end
+
+		local Up = self:GetUp()
+
+		ent:EmitSound("lvs/smokegrenade.wav")
+
+		local Ang1 = Muzzle1.Ang
+		Ang1:RotateAroundAxis( Up, -5 )
+		local grenade = ents.Create( "lvs_item_smoke" )
+		grenade:SetPos( Muzzle1.Pos )
+		grenade:SetAngles( Ang1 )
+		grenade:Spawn()
+		grenade:Activate()
+		grenade:GetPhysicsObject():SetVelocity( Ang1:Up() * 1000 ) 
+
+		local Ang2 = Muzzle2.Ang
+		Ang2:RotateAroundAxis( Up, 5 )
+		local grenade = ents.Create( "lvs_item_smoke" )
+		grenade:SetPos( Muzzle2.Pos )
+		grenade:SetAngles( Ang2 )
+		grenade:Spawn()
+		grenade:Activate()
+		grenade:GetPhysicsObject():SetVelocity( Ang2:Up() * 1000 ) 
+
+		local Ang3 = Muzzle1.Ang
+		Ang3:RotateAroundAxis( Up, -15 )
+		local grenade = ents.Create( "lvs_item_smoke" )
+		grenade:SetPos( Muzzle1.Pos )
+		grenade:SetAngles( Ang3 )
+		grenade:Spawn()
+		grenade:Activate()
+		grenade:GetPhysicsObject():SetVelocity( Ang3:Up() * 1000 ) 
+
+
+		local Ang4 = Muzzle2.Ang
+		Ang4:RotateAroundAxis( Up, 15 )
+		local grenade = ents.Create( "lvs_item_smoke" )
+		grenade:SetPos( Muzzle2.Pos )
+		grenade:SetAngles( Ang4 )
+		grenade:Spawn()
+		grenade:Activate()
+		grenade:GetPhysicsObject():SetVelocity( Ang4:Up() * 1000 ) 
+	end
+	self:AddWeapon( weapon )
+
+
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_noturret.png")
 	weapon.Ammo = -1
