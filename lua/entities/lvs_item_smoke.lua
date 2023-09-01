@@ -92,8 +92,8 @@ else
 		return self.snd
 	end
 
-	local Mins = Vector(-1,-1,-1) * 500
-	local Maxs = Vector(1,1,1) * 500
+	local Mins = Vector(-1,-1,-1) * 800
+	local Maxs = Vector(1,1,1) * 800
 	function ENT:Think()
 		local T = CurTime()
 
