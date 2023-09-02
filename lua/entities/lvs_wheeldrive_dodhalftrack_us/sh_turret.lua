@@ -116,7 +116,7 @@ function ENT:AimTurret()
 
 	local AimRate = 60 * FrameTime() 
 
-	local Pitch = math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate )
+	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), -30, 40 )
 	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
 
 	if SERVER then

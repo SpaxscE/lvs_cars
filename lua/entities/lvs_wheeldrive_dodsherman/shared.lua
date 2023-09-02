@@ -113,7 +113,7 @@ function ENT:InitWeapons()
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= Muzzle.Ang:Up()
-		bullet.Spread 	= Vector( 0.03,  0.03, 0.03 )
+		bullet.Spread 	= Vector(0.015,0.015,0.015)
 		bullet.TracerName = "lvs_tracer_yellow"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
@@ -176,7 +176,7 @@ function ENT:InitWeapons()
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= Muzzle.Ang:Up()
-		bullet.Spread 	= Vector( 0.015,  0.015, 0 )
+		bullet.Spread 	= Vector(0.01,0.01,0.01)
 		bullet.TracerName = "lvs_tracer_cannon"
 		bullet.Force	= ent.CannonArmorPenetration
 		bullet.HullSize 	= 0
@@ -287,7 +287,7 @@ function ENT:AddGunnerWeapons()
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
-		bullet.Spread 	= Vector( 0.03,  0.03, 0.03 )
+		bullet.Spread 	= Vector(0.015,0.015,0.015)
 		bullet.TracerName = "lvs_tracer_yellow"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0

@@ -24,7 +24,7 @@ EFFECT.DustMat = {
 }
 
 function EFFECT:Explosion( pos )
-	sound.Play( "weapons/shotgun/shotgun_fire6.wav", pos, 95, 150, 0.5 )
+	sound.Play( "weapons/shotgun/shotgun_fire6.wav", pos, 75, 150, 1 )
 
 	local emitter = ParticleEmitter( pos, false )
 	
