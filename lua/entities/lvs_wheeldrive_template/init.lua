@@ -224,6 +224,52 @@ function ENT:OnSpawn( PObj )
 		},
 	)
 	]]
+
+
+-- example 3, prop_vehicle_jeep rigged model method:
+--[[
+	local FrontRadius = 15
+	local RearRadius = 15
+	local FL, FR, RL, RR, ForwardAngle = self:AddWheelsUsingRig( FrontRadius, RearRadius )
+
+	local FrontAxle = self:DefineAxle( {
+		Axle = {
+			ForwardAngle = ForwardAngle,
+			SteerType = LVS.WHEEL_STEER_FRONT,
+			SteerAngle = 30,
+			TorqueFactor = 0,
+			BrakeFactor = 1,
+		},
+		Wheels = {FL,FR},
+		Suspension = {
+			Height = 10,
+			MaxTravel = 7,
+			ControlArmLength = 25,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
+
+	local RearAxle = self:DefineAxle( {
+		Axle = {
+			ForwardAngle = ForwardAngle,
+			SteerType = LVS.WHEEL_STEER_NONE,
+			TorqueFactor = 1,
+			BrakeFactor = 1,
+			UseHandbrake = true,
+		},
+		Wheels = {RL,RR},
+		Suspension = {
+			Height = 15,
+			MaxTravel = 7,
+			ControlArmLength = 25,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
+]]
 end
 
 --[[
