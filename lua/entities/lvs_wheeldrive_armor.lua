@@ -34,6 +34,13 @@ if SERVER then
 		return false
 	end
 
+	function ENT:OnHealthChanged( dmginfo, old, new )
+		if old == new then return end
+	end
+
+	function ENT:OnDestroyed( dmginfo )
+	end
+
 	function ENT:OnTakeDamage( dmginfo )
 		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce()
@@ -50,6 +57,7 @@ if SERVER then
 
 		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
 
+		self:OnHealthChanged( dmginfo, CurHealth, NewHealth )
 		self:SetHP( NewHealth )
 
 		if not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER + DMG_DIRECT + DMG_BLAST ) then return end
@@ -101,7 +109,10 @@ if SERVER then
 		end
 
 		if NewHealth <= 0 then
-			self:SetDestroyed( true )
+			if not self:GetDestroyed() then
+				self:SetDestroyed( true )
+				self:OnDestroyed( dmginfo )
+			end
 
 			local Attacker = dmginfo:GetAttacker() 
 			if IsValid( Attacker ) and Attacker:IsPlayer() then
