@@ -116,6 +116,13 @@ function ENT:Explode()
 	self.DoNotDuplicate = true
 
 	self:OnExploded()
+
+	if self:GetAI() then
+		timer.Simple( 10, function()
+			if not IsValid( self ) then return end
+			self:Remove()
+		end )
+	end
 end
 
 function ENT:RemoveWeapons()

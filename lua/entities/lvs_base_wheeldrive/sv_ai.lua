@@ -1,10 +1,33 @@
 
 function ENT:OnCreateAI()
 	self:StartEngine()
+
+	self.LVSFireBullet = function( self, data )
+		local Dir1 = (self:GetEyeTrace().HitPos - data.Src):GetNormalized()
+		local Dir2 = data.Dir
+
+		if self:AngleBetweenNormal( Dir1, Dir2 ) < 15 then
+			data.Dir = Dir1
+		end
+
+		data.Entity = self
+		data.Velocity = data.Velocity + self:GetVelocity():Length()
+		data.SrcEntity = self:WorldToLocal( data.Src )
+
+		LVS:FireBullet( data )
+	end
 end
 
 function ENT:OnRemoveAI()
 	self:StopEngine()
+end
+
+function ENT:AIGetMovementTarget()
+	return (self._MovmentTarget or self:GetPos())
+end
+
+function ENT:AISetMovementTarget( pos )
+	self._MovmentTarget = pos
 end
 
 function ENT:RunAI()
@@ -16,19 +39,9 @@ function ENT:RunAI()
 
 	local Target = self:AIGetTarget()
 
-	local StartPos = self:LocalToWorld( self:OBBCenter() )
+	local StartPos = Pod:LocalToWorld( Pod:OBBCenter() )
 
-	local TraceFilter = self:GetCrosshairFilterEnts()
-
-	local Front = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:GetForward() * RangerLength } )
-	local FrontLeft = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:LocalToWorldAngles( Angle(0,15,0) ):Forward() * RangerLength } )
-	local FrontRight = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:LocalToWorldAngles( Angle(0,-15,0) ):Forward() * RangerLength } )
-	local FrontLeft1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:LocalToWorldAngles( Angle(0,60,0) ):Forward() * RangerLength } )
-	local FrontRight1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:LocalToWorldAngles( Angle(0,-60,0) ):Forward() * RangerLength } )
-	local FrontLeft2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:LocalToWorldAngles( Angle(0,85,0) ):Forward() * RangerLength } )
-	local FrontRight2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + self:LocalToWorldAngles( Angle(0,-85,0) ):Forward() * RangerLength } )
-
-	local MovementTargetPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
+	local MovementTargetPos = self:AIGetMovementTarget()
 
 	local TargetPos = MovementTargetPos
 
@@ -56,46 +69,47 @@ function ENT:RunAI()
 	self._AIFireInput = false
 
 	if IsValid( self:GetHardLockTarget() ) then
-		TargetPos = self:GetHardLockTarget():GetPos()
+		Target = self:GetHardLockTarget()
+
+		TargetPos = Target:LocalToWorld( Target:OBBCenter() )
 
 		self._AIFireInput = true
 	else
 		if IsValid( Target ) then
-			TargetPos = Target:LocalToWorld( Target:OBBCenter() )
+			local PhysObj = Target:GetPhysicsObject()
+			if IsValid( PhysObj ) then
+				TargetPos = Target:LocalToWorld( PhysObj:GetMassCenter() )
+			else
+				TargetPos = Target:LocalToWorld( Target:OBBCenter() )
+			end
 
-			if self:AITargetInFront( Target, 65 ) then
-				local CurHeat = self:GetNWHeat()
-				local CurWeapon = self:GetSelectedWeapon()
+			if self:AIHasWeapon( 1 ) or self:AIHasWeapon( 2 ) then
+				self._AIFireInput = true
+			end
 
-				if CurWeapon > 2 then
-					self:AISelectWeapon( 1 )
+			local CurHeat = self:GetNWHeat()
+			local CurWeapon = self:GetSelectedWeapon()
+
+			if CurWeapon > 2 then
+				self:AISelectWeapon( 1 )
+			else
+				if Target.LVS and CurHeat < 0.9 then
+					if CurWeapon == 1 and self:AIHasWeapon( 2 ) then
+						self:AISelectWeapon( 2 )
+
+					elseif CurWeapon == 2 then
+						self:AISelectWeapon( 1 )
+					end
 				else
-					if Target.LVS and CurHeat < 0.9 then
-						if CurWeapon == 1 and self:AIHasWeapon( 2 ) then
-							self:AISelectWeapon( 2 )
-
-						elseif CurWeapon == 2 then
-							self:AISelectWeapon( 1 )
-						end
-					else
-						if CurHeat == 0 and math.cos( CurTime() ) > 0 then
-							self:AISelectWeapon( 1 )
-						end
+					if CurHeat == 0 and math.cos( CurTime() ) > 0 then
+						self:AISelectWeapon( 1 )
 					end
 				end
-
-				if self:AIHasWeapon( 1 ) or self:AIHasWeapon( 2 ) then
-					self._AIFireInput = true
-				end
-			else
-				self:AISelectWeapon( 1 )
 			end
 		end
 	end
 
-	local T = CurTime()
-	local AimOffSet = Vector( math.cos( T ) * 50, math.sin( T ) * 50, math.cos( T * 0.25 ) * 50 )
-	self:SetAIAimVector( (TargetPos + AimOffSet - StartPos):GetNormalized() )
+	self:SetAIAimVector( (TargetPos - StartPos):GetNormalized() )
 end
 
 function ENT:OnAITakeDamage( dmginfo )
@@ -132,4 +146,3 @@ function ENT:AISelectWeapon( ID )
 
 	self:SelectWeapon( ID )
 end
-
