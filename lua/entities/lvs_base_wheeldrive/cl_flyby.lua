@@ -29,7 +29,7 @@ function ENT:FlyByThink()
 
 	local Vel = self:GetVelocity()
 
-	if self:GetThrottle() < self.FlyByMinThrottle or Vel:Length() <= self.FlyByVelocity then return end
+	if self:GetThrottle() <= self.FlyByMinThrottle or Vel:Length() <= self.FlyByVelocity then return end
 
 	local Sub = ViewEnt:GetPos() - self:GetPos() - Vel * self.FlyByAdvance
 	local ToPlayer = Sub:GetNormalized()
