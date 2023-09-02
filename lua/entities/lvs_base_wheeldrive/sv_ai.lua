@@ -23,7 +23,11 @@ function ENT:OnRemoveAI()
 end
 
 function ENT:AIGetMovementTarget()
-	return (self._MovmentTarget or self:GetPos())
+	local Pod = self:GetDriverSeat()
+
+	if not IsValid( Pod ) then return (self._MovmentTarget or self:GetPos()) end
+
+	return (self._MovmentTarget or Pod:LocalToWorld( Pod:OBBCenter() + Vector(0,100,0)))
 end
 
 function ENT:AISetMovementTarget( pos )
