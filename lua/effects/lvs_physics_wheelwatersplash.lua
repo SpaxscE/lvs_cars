@@ -42,7 +42,7 @@ function EFFECT:Init( data )
 			particle:SetStartSize( self.Size * 0.2 )
 			particle:SetEndSize(  self.Size )
 			particle:SetRollDelta( math.Rand(-1,1) * 5 )
-			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
+			particle:SetColor( math.min( self.VecCol.r, 255 ), math.min( self.VecCol.g, 255 ), math.min( self.VecCol.b, 255 ) )
 			particle:SetGravity( Vector( 0, 0, -600 ) )
 			particle:SetCollide( false )
 		end
@@ -70,7 +70,7 @@ function EFFECT:Render()
 
 	cam.Start3D2D( self.Splash.Pos, Angle(0,0,0), 1 )
 		surface.SetMaterial( self.Splash.Mat )
-		surface.SetDrawColor( self.VecCol.r, self.VecCol.g, self.VecCol.b, Alpha )
+		surface.SetDrawColor( math.min( self.VecCol.r, 255 ), math.min( self.VecCol.g, 255 ), math.min( self.VecCol.b, 255 ), Alpha )
 		surface.DrawTexturedRectRotated( 0, 0, Size, Size, self.Splash.RandomAng )
 	cam.End3D2D()
 end
