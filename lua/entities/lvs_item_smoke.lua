@@ -6,7 +6,7 @@ ENT.PrintName = "Smoke"
 ENT.Author = "Luna"
 ENT.Category = "[LVS] - Cars - Items"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminOnly		= false
 
 function ENT:SetupDataTables()
@@ -47,7 +47,7 @@ if SERVER then
 	end
 
 	function ENT:Initialize()	
-		self:SetModel( "models/Items/AR2_Grenade.mdl" )
+		self:SetModel( "models/Items/grenadeAmmo.mdl" )
 
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )

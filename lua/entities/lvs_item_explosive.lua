@@ -6,10 +6,18 @@ ENT.PrintName = "Explosive"
 ENT.Author = "Luna"
 ENT.Category = "[LVS] - Cars - Items"
 
-ENT.Spawnable		= true
+ENT.Spawnable		= false
 ENT.AdminOnly		= false
 
 if SERVER then
+	function ENT:SetDamage( num ) self._dmg = num end
+	function ENT:SetRadius( num ) self._radius = num end
+	function ENT:SetAttacker( ent ) self._attacker = ent end
+
+	function ENT:GetAttacker() return self._attacker or NULL end
+	function ENT:GetDamage() return (self._dmg or 250) end
+	function ENT:GetRadius() return (self._radius or 250) end
+
 	function ENT:SpawnFunction( ply, tr, ClassName )
 		if not tr.Hit then return end
 
@@ -28,14 +36,48 @@ if SERVER then
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:SetSolid( SOLID_VPHYSICS )
 		self:SetRenderMode( RENDERMODE_TRANSALPHA )
-		self:SetCollisionGroup( COLLISION_GROUP_NONE )
+		self:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
+
+		self.TrailEntity = util.SpriteTrail( self, 0, Color(120,120,120,120), false, 5, 40, 0.2, 1 / ( 15 + 1 ) * 0.5, "trails/smoke" )
 	end
 
-	function ENT:Think()	
-		return false
+	function ENT:Think()
+		self:NextThink( CurTime() )
+
+		if self.Active then
+			self:Detonate()
+		end
+
+		return true
+	end
+
+	function ENT:Detonate()
+		local Pos = self:GetPos()
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( Pos )
+
+		if self:WaterLevel() >= 2 then
+			util.Effect( "WaterSurfaceExplosion", effectdata, true, true )
+		else
+			util.Effect( "lvs_defence_explosion", effectdata )
+		end
+
+		local dmginfo = DamageInfo()
+		dmginfo:SetDamage( self:GetDamage() )
+		dmginfo:SetAttacker( IsValid( self:GetAttacker() ) and self:GetAttacker() or self )
+		dmginfo:SetDamageType( DMG_SONIC )
+		dmginfo:SetInflictor( self )
+		dmginfo:SetDamagePosition( Pos )
+
+		util.BlastDamageInfo( dmginfo, Pos, self:GetRadius() )
+
+		self:Remove()
 	end
 
 	function ENT:PhysicsCollide( data, physobj )
+		self.Active = true
+
 		if data.Speed > 60 and data.DeltaTime > 0.2 then
 			local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
 
@@ -54,6 +96,7 @@ else
 	end
 
 	function ENT:Think()
+		return false
 	end
 
 	function ENT:OnRemove()

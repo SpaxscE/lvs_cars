@@ -288,6 +288,56 @@ function ENT:InitWeapons()
 
 
 	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/grenade_launcher.png")
+	weapon.Ammo = 1
+	weapon.Delay = 1
+	weapon.HeatRateUp = 1
+	weapon.HeatRateDown = 1
+	weapon.Attack = function( ent )
+		ent:TakeAmmo( 1 )
+
+		ent:EmitSound("lvs/smokegrenade.wav")
+
+		local nades = {
+			[1] = {
+				pos = Vector(82.52,61.27,74.75),
+				ang = Angle(-60,45,0),
+			},
+			[2] = {
+				pos = Vector(82.52,-61.27,74.75),
+				ang = Angle(-60,-45,0),
+			},
+			[3] = {
+				pos = Vector(-46.24,61.77,75.63),
+				ang = Angle(-60,90,0),
+			},
+			[4] = {
+				pos = Vector(-46.24,-61.77,75.63),
+				ang = Angle(-60,-90,0),
+			},
+		}
+
+		for _, data in pairs( nades ) do
+			timer.Simple( math.Rand(0,0.25), function()
+				if not IsValid( ent ) then return end
+
+				local pos = ent:LocalToWorld( data.pos ) 
+				local ang = ent:LocalToWorldAngles( data.ang )
+		
+				local grenade = ents.Create( "lvs_item_explosive" )
+				grenade:SetPos( pos )
+				grenade:SetAngles( ang )
+				grenade:Spawn()
+				grenade:Activate()
+				grenade:SetAttacker( ent:GetDriver() )
+				grenade:GetPhysicsObject():SetVelocity( ang:Forward() * 300 )
+			end )
+		end
+	end
+	self:AddWeapon( weapon )
+
+
+	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_noturret.png")
 	weapon.Ammo = -1
 	weapon.Delay = 0
