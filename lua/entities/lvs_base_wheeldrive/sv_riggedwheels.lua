@@ -9,8 +9,6 @@ local function SetAll( ent, n )
 end
 
 function ENT:CreateRigControler( name, wheelEntity, min, max )
-	if IsValid( self:GetEngine() ) then return end
-
 	local RigHandler = ents.Create( "lvs_wheeldrive_righandler" )
 
 	if not IsValid( RigHandler ) then

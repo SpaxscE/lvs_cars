@@ -48,13 +48,7 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(0,-50,30), Angle(0,0,0), Vector(-120,-15,-40), Vector(80,15,0), 1500, self.FrontArmor )
 
 	-- side armor
-	local Armor = self:AddArmor( Vector(0,50,30), Angle(0,0,0), Vector(-120,-15,0), Vector(80,15,45), 1500, self.SideArmor )
-	Armor.OnHealthChanged = function( ent, dmginfo, old, new )
-		if old == new then return end
-	end
-	Armor.OnDestroyed = function( ent,  dmginfo )
-	end
-
+	self:AddArmor( Vector(0,50,30), Angle(0,0,0), Vector(-120,-15,0), Vector(80,15,45), 1500, self.SideArmor )
 	self:AddArmor( Vector(0,-50,30), Angle(0,0,0), Vector(-120,-15,0), Vector(80,15,45), 1500, self.SideArmor )
 
 	-- turret
