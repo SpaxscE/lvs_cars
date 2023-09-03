@@ -202,7 +202,7 @@ function ENT:InitWeapons()
 		bullet.Spread 	= Vector(0.01,0.01,0.01)
 
 		if ent:GetUseHighExplosive() then
-			bullet.Force	= 1000
+			bullet.Force	= 500
 			bullet.HullSize 	= 15
 			bullet.Damage	= 250
 			bullet.SplashDamage = 750
