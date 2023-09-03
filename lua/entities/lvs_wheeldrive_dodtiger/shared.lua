@@ -204,7 +204,7 @@ function ENT:InitWeapons()
 			bullet.HullSize 	= 15
 			bullet.Damage	= 250
 			bullet.SplashDamage = 1000
-			bullet.SplashDamageRadius = 400
+			bullet.SplashDamageRadius = 250
 			bullet.SplashDamageEffect = "lvs_bullet_impact_explosive"
 			bullet.SplashDamageType = DMG_BLAST
 			bullet.Velocity = 13000
