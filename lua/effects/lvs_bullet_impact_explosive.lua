@@ -60,23 +60,6 @@ function EFFECT:Init( data )
 		effectdata:SetScale( 100 )
 		effectdata:SetFlags( 2 )
 		util.Effect( "WaterSplash", effectdata, true, true )
-	else
-		local trace = util.TraceLine( {
-			start = self.Pos + Vector(0,0,100),
-			endpos = self.Pos - Vector(0,0,100),
-		} )
-
-		if trace.Hit and not trace.HitNonWorld then
-			for i = 1, 3 do
-				local StartPos = trace.HitPos + Vector(math.random(-200,200),math.random(-200,200),0)
-				local decalTrace = util.TraceLine( {
-					start = StartPos + Vector(0,0,100),
-					endpos = StartPos - Vector(0,0,100),
-				} )
-
-				util.DecalEx( self.DecalMat, trace.Entity, decalTrace.HitPos + decalTrace.HitNormal, decalTrace.HitNormal, Color(255,255,255,255), math.Rand(3,6), math.Rand(3,6) )
-			end
-		end
 	end
 
 	local Pos = self.Pos
@@ -213,26 +196,6 @@ function EFFECT:Init( data )
 			particle:SetColor( 255, 255, 255 )
 
 			particle:SetAirResistance( 0 )
-		end
-	end
-	
-	for i = 0,60 do
-		local particle = emitter:Add( "effects/fleck_tile"..math.random(1,2), self.Pos )
-		local vel = VectorRand() * math.Rand(800,1600)
-		vel.z = math.Rand(1000,4000)
-
-		if particle then
-			particle:SetVelocity( vel )
-			particle:SetDieTime( math.random(5,15) )
-			particle:SetAirResistance( 10 ) 
-			particle:SetStartAlpha( 255 )
-			particle:SetStartSize( 5 )
-			particle:SetEndSize( 5 )
-			particle:SetRoll( math.Rand(-1,1) )
-			particle:SetColor( 0,0,0 )
-			particle:SetGravity( Vector( 0, 0, -2000 ) )
-			particle:SetCollide( true )
-			particle:SetBounce( 0.3 )
 		end
 	end
 
