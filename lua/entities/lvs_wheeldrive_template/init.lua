@@ -273,17 +273,6 @@ function ENT:OnSpawn( PObj )
 end
 
 --[[
-function ENT:OnEngineActiveChanged( Active )
-	-- called when engine is activated/deactived
-
-	if Active then -- if engine is active
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_start.wav" ) -- play engine start sound
-
-	else -- otherwise...
-		self:EmitSound( "lvs/vehicles/kuebelwagen/engine_stop.wav" ) -- play engine stop sound
-	end
-end
-
 function ENT:OnSuperCharged( enabled )
 	-- called when supercharger is equipped/unequipped
 end

@@ -20,6 +20,7 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 end
 
 --[[
+
 function ENT:OnSpawn()
 end
 
@@ -37,6 +38,11 @@ end
 
 -- called when the engine is turned on or off
 function ENT:OnEngineActiveChanged( Active )
+	if Active then
+		self:EmitSound( "lvs/vehicles/generic/engine_start1.wav", 75, 100,  LVS.EngineVolume )
+	else
+		self:EmitSound( "vehicles/jetski/jetski_off.wav", 75, 100,  LVS.EngineVolume )
+	end
 end
 
 -- called when either an ai is activated/deactivated or when a player is sitting/exiting the driver seat
