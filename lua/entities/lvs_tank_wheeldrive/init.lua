@@ -5,7 +5,7 @@ AddCSLuaFile( "cl_attachable_playermodels.lua" )
 include("shared.lua")
 
 ENT.DSArmorDamageReductionType = DMG_CLUB
-ENT.DSArmorIgnoreDamageType = DMG_BULLET + DMG_SONIC
+ENT.DSArmorIgnoreDamageType = DMG_BULLET + DMG_SONIC + DMG_ENERGYBEAM
 
 function ENT:CreateWheelChain( wheels )
 	if not istable( wheels ) then return end
