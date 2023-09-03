@@ -315,6 +315,14 @@ function ENT:SteerTo( TargetValue, MaxSteer )
 	local New = (Cur + math.Clamp(Diff,-Rate,Rate))
 
 	self:SetSteer( New * MaxSteer )
+
+	if New == 0 or self:GetEngineActive() then return end
+
+	for _, wheel in pairs( self:GetWheels() ) do
+		if not IsValid( wheel ) then continue end
+
+		wheel:PhysWake()
+	end
 end
 
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
