@@ -183,7 +183,7 @@ function ENT:InitWeapons()
 
 			if SwitchType then
 				ent:SetUseHighExplosive( not ent:GetUseHighExplosive() )
-				ent:EmitSound( "weapons/357/357_reload4.wav" )
+				ent:EmitSound("lvs/vehicles/sherman/cannon_unload.wav")
 				ent:SetHeat( 1 )
 				ent:SetOverheated( true )
 			end
