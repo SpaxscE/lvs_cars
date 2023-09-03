@@ -22,12 +22,12 @@ if CLIENT then
 		surface.SetMaterial( Icon )
 		surface.DrawTexturedRect( x, y, width, height )
 
-		surface.SetMaterial( switch )
-		surface.DrawTexturedRect( x + width + 5, y + 7, 24, 24 )
-
 		local ply = LocalPlayer()
 
 		if not IsValid( ply ) or self:GetSelectedWeapon() ~= 2 then return end
+
+		surface.SetMaterial( switch )
+		surface.DrawTexturedRect( x + width + 5, y + 7, 24, 24 )
 
 		local buttonCode = ply:lvsGetControls()[ "FREELOOK" ]
 
