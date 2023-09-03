@@ -38,7 +38,6 @@ if CLIENT then
 		if not KeyName then return end
 
 		draw.DrawText( KeyName, "DermaDefault", x + width + 17, y + height * 0.5 + 7, Color(0,0,0,IconColor.a), TEXT_ALIGN_CENTER )
-
 	end
 else
 	function ENT:CalcTurretSound( Pitch, Yaw, AimRate )

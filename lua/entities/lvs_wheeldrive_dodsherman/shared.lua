@@ -189,7 +189,6 @@ function ENT:InitWeapons()
 			end
 		end
 	end
-
 	weapon.Attack = function( ent )
 		local ID = ent:LookupAttachment( "turret_cannon" )
 
@@ -207,7 +206,7 @@ function ENT:InitWeapons()
 			bullet.HullSize 	= 15
 			bullet.Damage	= 250
 			bullet.SplashDamage = 750
-			bullet.SplashDamageRadius = 400
+			bullet.SplashDamageRadius = 200
 			bullet.SplashDamageEffect = "lvs_bullet_impact_explosive"
 			bullet.SplashDamageType = DMG_BLAST
 			bullet.Velocity = 13000
@@ -255,7 +254,12 @@ function ENT:InitWeapons()
 
 			local MuzzlePos2D = traceTurret.HitPos:ToScreen() 
 
-			ent:PaintCrosshairOuter( MuzzlePos2D, Col )
+			if ent:GetUseHighExplosive() then
+				ent:PaintCrosshairSquare( MuzzlePos2D, Col )
+			else
+				ent:PaintCrosshairOuter( MuzzlePos2D, Col )
+			end
+
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
