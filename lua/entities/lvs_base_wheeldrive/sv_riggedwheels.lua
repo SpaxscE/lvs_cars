@@ -45,6 +45,8 @@ function ENT:AddWheelsUsingRig( FrontRadius, RearRadius )
 	Body:SetMoveType( MOVETYPE_NONE )
 	Body:Spawn()
 	Body:Activate()
+	Body:SetColor( Color(255,255,255,0) )
+	Body:SetRenderMode( RENDERMODE_TRANSCOLOR )
 
 	SetAll( Body, 0 )
 
@@ -66,6 +68,7 @@ function ENT:AddWheelsUsingRig( FrontRadius, RearRadius )
 
 	local ForwardAngle = ((pFL0 + pFR0) / 2 - (pRL0 + pRR0) / 2):Angle()
 	ForwardAngle.p = 0
+	ForwardAngle.y = math.Round( ForwardAngle.y, 0 )
 	ForwardAngle.r = 0
 	ForwardAngle:Normalize() 
 

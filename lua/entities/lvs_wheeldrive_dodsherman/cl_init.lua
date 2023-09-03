@@ -6,7 +6,6 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 	self:CalcTurret()
 end
 
-
 include("entities/lvs_tank_wheeldrive/cl_tankview.lua")
 function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 	if ply == self:GetDriver() and not pod:GetThirdPersonMode() then
@@ -22,7 +21,6 @@ function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 
 	return pos, angles, fov
 end
-
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then

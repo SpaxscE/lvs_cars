@@ -64,7 +64,7 @@ function ENT:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs )
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( FuelTank ) then return end
 
-			FuelTank:OnTakeDamage( dmginfo )
+			FuelTank:TakeTransmittedDamage( dmginfo )
 
 			if not FuelTank:GetDestroyed() then
 				dmginfo:ScaleDamage( 0.5 )

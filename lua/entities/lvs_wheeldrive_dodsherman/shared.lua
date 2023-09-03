@@ -91,12 +91,14 @@ ENT.ExhaustPositions = {
 
 function ENT:OnSetupDataTables()
 	self:AddDT( "Entity", "GunnerSeat" )
+	self:AddDT( "Bool", "UseHighExplosive" )
 
 	self:AddTracksDT()
 	self:AddTurretDT()
 end
 
 function ENT:InitWeapons()
+	-- coaxial machinegun
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/mg.png")
 	weapon.Ammo = 1000
@@ -160,12 +162,34 @@ function ENT:InitWeapons()
 	self:AddWeapon( weapon )
 
 
+
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/tank_cannon.png")
+	weapon.Icon = true
 	weapon.Ammo = 24
 	weapon.Delay = 2.5
 	weapon.HeatRateUp = 1
 	weapon.HeatRateDown = 0.4
+	weapon.OnThink = function( ent )
+		if ent:GetSelectedWeapon() ~= 2 then return end
+
+		local ply = ent:GetDriver()
+
+		if not IsValid( ply ) then return end
+
+		local SwitchType = ply:lvsKeyDown( "FREELOOK" )
+
+		if ent._oldSwitchType ~= SwitchType then
+			ent._oldSwitchType = SwitchType
+
+			if SwitchType then
+				ent:SetUseHighExplosive( not ent:GetUseHighExplosive() )
+				ent:EmitSound( "weapons/357/357_reload4.wav" )
+				ent:SetHeat( 1 )
+				ent:SetOverheated( true )
+			end
+		end
+	end
+
 	weapon.Attack = function( ent )
 		local ID = ent:LookupAttachment( "turret_cannon" )
 
@@ -177,11 +201,24 @@ function ENT:InitWeapons()
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread 	= Vector(0.01,0.01,0.01)
+
+		if ent:GetUseHighExplosive() then
+			bullet.Force	= 1000
+			bullet.HullSize 	= 15
+			bullet.Damage	= 250
+			bullet.SplashDamage = 750
+			bullet.SplashDamageRadius = 400
+			bullet.SplashDamageEffect = "lvs_bullet_impact_explosive"
+			bullet.SplashDamageType = DMG_BLAST
+			bullet.Velocity = 13000
+		else
+			bullet.Force	= ent.CannonArmorPenetration
+			bullet.HullSize 	= 0
+			bullet.Damage	= 1000
+			bullet.Velocity = 16000
+		end
+
 		bullet.TracerName = "lvs_tracer_cannon"
-		bullet.Force	= ent.CannonArmorPenetration
-		bullet.HullSize 	= 0
-		bullet.Damage	= 1000
-		bullet.Velocity = 14000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
 
@@ -224,18 +261,20 @@ function ENT:InitWeapons()
 	end
 	self:AddWeapon( weapon )
 
+
+	-- turret rotation disabler
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/tank_noturret.png")
 	weapon.Ammo = -1
 	weapon.Delay = 0
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
-	weapon.OnSelect = function( ent )
+	weapon.OnSelect = function( ent, old, new  )
 		if ent.SetTurretEnabled then
 			ent:SetTurretEnabled( false )
 		end
 	end
-	weapon.OnDeselect = function( ent )
+	weapon.OnDeselect = function( ent, old, new  )
 		if ent.SetTurretEnabled then
 			ent:SetTurretEnabled( true )
 		end

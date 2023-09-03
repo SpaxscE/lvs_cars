@@ -68,7 +68,7 @@ if SERVER then
 		return true
 	end
 
-	function ENT:OnTakeDamage( dmginfo )
+	function ENT:TakeTransmittedDamage( dmginfo )
 		if self:GetDestroyed() then return end
 
 		local Damage = dmginfo:GetDamage()
@@ -84,6 +84,9 @@ if SERVER then
 		if NewHealth <= 0 then
 			self:SetDestroyed( true )
 		end
+	end
+
+	function ENT:OnTakeDamage( dmginfo )
 	end
 
 	function ENT:OnFuelChanged( name, old, new)
