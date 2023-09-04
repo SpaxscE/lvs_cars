@@ -58,18 +58,10 @@ PLEASE READ:
 	ENT.EngineIdleRPM -- optional: only used for rpm gauge. This will NOT change engine sound.
 	ENT.EngineMaxRPM -- optional: only used for rpm gauge. This will NOT change engine sound.
 
-	ENT.TransGears -- in a sane range based on maxvelocity. Dont set 10 gears for a car that only does 10kmh this will sound like garbage. Ideally use 3 - 6 gears
+	ENT.TransGears -- in a sane range based on maxvelocity. Dont set 10 gears for a car that only does 10kmh this will sound like garbage. Ideally use a total of 3 - 6 gears
 
 	I recommend keeping everything else at default settings.
 	(leave them commented-out or remove them from this script)
-
-	This Vehicle system is optimized for small passenger cars. It uses real props with spherical collisions that are attached to the body using a traditional rigid rope suspension with adv ballsockets.
-	It uses the collective knowledge of the entire sandbox vehicle building community from the past ~15 years and is tweaked for maximum performance and smoothness.
-	( https://youtu.be/Flex-2so_Zs )
-
-	This, to my knowledge, is the peak of what you can sequeeze out of a legitimate prop based chassis with proper rotating wheels without falling back to fake physics such as simfphys uses (non-rotating sliding wheels/hoverwheels)
-
-	This system should give you the best offroading experience aswell assuming the suspension is adjusted for it. No more sideways slide on hills ect.
 ]]
 
 ENT.MaxVelocity = 1400 -- max velocity in forward direction in gmod-units/second
