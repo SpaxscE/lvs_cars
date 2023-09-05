@@ -29,7 +29,8 @@ ENT.Lights = {
 				colorR = 255,
 				colorG = 255,
 				colorB = 255,
-				colorA = 255
+				colorA = 255,
+				bodygroup = { name = "WhatEver", active = { 0,1,4 } }, }, -- this sprite is active when "WhatEver" bodygroup is set to 0, 1 or 4
 			},
 
 
