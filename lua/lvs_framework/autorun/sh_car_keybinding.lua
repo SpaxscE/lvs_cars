@@ -60,7 +60,7 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 		{
 			name = "CAR_MENU",
 			category = "LVS-Car",
-			name_menu = "Open Car Menu",
+			name_menu = "Open Signal Menu",
 			default = "+zoom",
 			cmd = "lvs_car_menu"
 		},
