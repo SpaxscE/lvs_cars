@@ -33,14 +33,15 @@ function ENT:CalcTracks()
 
 		local trace = util.TraceHull( {
 			start = att.Pos,
-			endpos = att.Pos + self:GetUp() * - traceLength,
+			endpos = att.Pos - self:GetUp() * traceLength,
 			filter = self:GetCrosshairFilterEnts(),
 			mins = -self.TrackHull,
 			maxs = self.TrackHull,
 		} )
 
 		local Rate = data.PoseParameter.lerpSpeed or 25
-		local Dist = toGroundDistance - math.abs(toGroundDistance - (att.Pos - trace.HitPos):Length() - self.TrackHull.z)
+		local Dist = math.max( (att.Pos - trace.HitPos):Length() + self.TrackHull.z - toGroundDistance, 0 )
+
 		local RangeMul = data.PoseParameter.rangeMultiplier or 1
 
 		self:SetPoseParameter( data.PoseParameter.name, self:QuickLerp( data.PoseParameter.name, Dist * RangeMul, Rate ) )
