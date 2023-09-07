@@ -77,6 +77,7 @@ function ENT:AddWheel( data )-- pos, ang, model )
 	Wheel:SetCaster( data.caster or 0 )
 	Wheel:SetToe( data.toe or 0 )
 	Wheel:CheckAlignment()
+	Wheel:SetWheelType( data.wheeltype )
 
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )

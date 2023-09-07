@@ -16,6 +16,7 @@ include("sv_ai.lua")
 include("sv_riggedwheels.lua")
 include("sv_wheelsystem.lua")
 include("sv_damage.lua")
+include("sv_pivotsteer.lua")
 include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
@@ -238,6 +239,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			local targetVelocity = self:GetTargetVelocity()
 
 			local targetRPM = ent:VelToRPM( targetVelocity )
+
 			local targetRPMabs = math.abs( targetRPM )
 
 			local powerRPM = targetRPMabs * self.EngineCurve
@@ -266,6 +268,14 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 				if curVelocity > targetVelocity then
 					ForceAngle = RotationAxis * Torque * TorqueBoost
 				end
+			end
+
+			if self:PivotSteer() then
+				powerCurve = math.Clamp((self.PivotSteerWheelRPM * ent:GetWheelType() * self:GetPivotSteer() - curRPM) / self.PivotSteerWheelRPM,-1,1) * 2
+
+				Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle
+
+				ForceAngle = RotationAxis * Torque
 			end
 		end
 	end

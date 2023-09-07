@@ -49,18 +49,22 @@ function ENT:CalcSteer( ply )
 	self:SteerTo( TargetValue, MaxSteer  )
 end
 
-function ENT:CalcThrottle( ply )
+function ENT:LerpThrottle( Throttle )
 	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
-
-	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
-
-	local Throttle = ply:lvsKeyDown( "CAR_THROTTLE" ) and ThrottleValue or 0
 
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetThrottle()
 	local New = Cur + math.Clamp(Throttle - Cur,-Rate,Rate)
 
 	self:SetThrottle( New )
+end
+
+function ENT:CalcThrottle( ply )
+	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
+
+	local Throttle = ply:lvsKeyDown( "CAR_THROTTLE" ) and ThrottleValue or 0
+
+	self:LerpThrottle( Throttle )
 end
 
 function ENT:CalcHandbrake( ply )
@@ -168,7 +172,16 @@ function ENT:StartCommand( ply, cmd )
 		self:CalcSteer( ply )
 	end
 
-	self:CalcThrottle( ply )
+	if self.PivotSteerEnable then
+		self:CalcPivotSteer( ply )
+
+		if not self:PivotSteer() then
+			self:CalcThrottle( ply )
+		end
+	else
+		self:CalcThrottle( ply )
+	end
+
 	self:CalcHandbrake( ply )
 	self:CalcBrake( ply )
 	self:CalcTransmission( ply )

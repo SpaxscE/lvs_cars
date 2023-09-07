@@ -6,6 +6,14 @@ include("shared.lua")
 include("sv_axle.lua")
 include("sv_brakes.lua")
 
+function ENT:GetWheelType()
+	return self._WheelType or LVS.WHEELTYPE_NONE
+end
+
+function ENT:SetWheelType( wheel_type )
+	self._WheelType = wheel_type
+end
+
 function ENT:Initialize()
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )

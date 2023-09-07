@@ -77,6 +77,10 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 		LVS:AddKey( v.name, v.category, v.name_menu, v.cmd, v.default )
 	end
 
+	LVS.WHEELTYPE_NONE = 0
+	LVS.WHEELTYPE_LEFT = 1
+	LVS.WHEELTYPE_RIGHT = -1
+
 	LVS.SOUNDTYPE_NONE = 0
 	LVS.SOUNDTYPE_IDLE_ONLY = 1
 	LVS.SOUNDTYPE_REV_UP = 2
