@@ -8,6 +8,9 @@ ENT.WaterLevelAutoStop = 2 -- at this water level (on collision) the engine will
 ENT.WaterLevelDestroyAI = 2 -- at this water level (on collision) the AI will self destruct
 ]]
 
+--ENT.PivotSteerEnable = false -- uncomment and set to "true" to enable pivot steering (tank steering on the spot)
+--ENT.PivotSteerWheelRPM = 40 -- how fast the wheels rotate during pivot steer
+
 -- use this instead of ENT:Initialize()
 function ENT:OnSpawn( PObj )
 	--[[ basics ]]
@@ -105,7 +108,9 @@ function ENT:OnSpawn( PObj )
 		--caster = 0, -- caster alignment
 		--toe = 0, -- toe alignment
 
-		--hide = false, -- hide this wheel?
+		--hide = false, -- hide this wheel?, NOTE: if developer convar is set to 1 this will have no effect for debugging purposes.
+
+		-- wheeltype = LVS.WHEELTYPE_NONE --  this is only used when ENT.PivotSteerEnable is set to true. It can be either LVS.WHEELTYPE_LEFT or LVS.WHEELTYPE_RIGHT depending on which direction you want it to spin
 	} ),
 
 	!!NOTE!!
