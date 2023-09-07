@@ -40,7 +40,7 @@ function ENT:CalcTracks()
 		} )
 
 		local Rate = data.PoseParameter.lerpSpeed or 25
-		local Dist = math.max( (att.Pos - trace.HitPos):Length() + self.TrackHull.z - toGroundDistance, 0 )
+		local Dist = (att.Pos - trace.HitPos):Length() + self.TrackHull.z - toGroundDistance
 
 		local RangeMul = data.PoseParameter.rangeMultiplier or 1
 
