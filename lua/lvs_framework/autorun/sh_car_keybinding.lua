@@ -64,6 +64,13 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			default = "+zoom",
 			cmd = "lvs_car_menu"
 		},
+		{
+			name = "CAR_SWAP_AMMO",
+			category = "LVS-Car",
+			name_menu = "Change Ammo Type",
+			default = "+walk",
+			cmd = "lvs_car_swap_ammo"
+		},
 	}
 
 	for _, v in pairs( KEYS ) do

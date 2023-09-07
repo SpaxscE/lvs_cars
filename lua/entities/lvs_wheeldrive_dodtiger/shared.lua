@@ -174,7 +174,7 @@ function ENT:InitWeapons()
 
 		if not IsValid( ply ) then return end
 
-		local SwitchType = ply:lvsKeyDown( "FREELOOK" )
+		local SwitchType = ply:lvsKeyDown( "CAR_SWAP_AMMO" )
 
 		if ent._oldSwitchType ~= SwitchType then
 			ent._oldSwitchType = SwitchType

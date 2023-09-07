@@ -29,7 +29,7 @@ if CLIENT then
 		surface.SetMaterial( switch )
 		surface.DrawTexturedRect( x + width + 5, y + 7, 24, 24 )
 
-		local buttonCode = ply:lvsGetControls()[ "FREELOOK" ]
+		local buttonCode = ply:lvsGetControls()[ "CAR_SWAP_AMMO" ]
 
 		if not buttonCode then return end
 
