@@ -27,11 +27,12 @@ function ENT:AIGetMovementTarget()
 
 	if not IsValid( Pod ) then return (self._MovmentTarget or self:GetPos()) end
 
-	return (self._MovmentTarget or Pod:LocalToWorld( Pod:OBBCenter() + Vector(0,100,0)))
+	return (self._MovmentTarget or Pod:LocalToWorld( Pod:OBBCenter() + Vector(0,100,0))), (self._MovementDistance or 500)
 end
 
-function ENT:AISetMovementTarget( pos )
+function ENT:AISetMovementTarget( pos, dist )
 	self._MovmentTarget = pos
+	self._MovementDistance = (dist or 500)
 end
 
 function ENT:RunAI()
@@ -45,16 +46,16 @@ function ENT:RunAI()
 
 	local StartPos = Pod:LocalToWorld( Pod:OBBCenter() )
 
-	local MovementTargetPos = self:AIGetMovementTarget()
+	local GotoPos, GotoDist = self:AIGetMovementTarget()
 
-	local TargetPos = MovementTargetPos
+	local TargetPos = GotoPos
 
 	if IsValid( Target ) then
-		MovementTargetPos = Target:GetPos()
+		GotoPos = Target:GetPos()
 	end
 
-	local TargetPosLocal = Pod:WorldToLocal( MovementTargetPos )
-	local Throttle = math.min( math.max( TargetPosLocal:Length() - 750, 0 ) / 10, 1 )
+	local TargetPosLocal = Pod:WorldToLocal( GotoPos )
+	local Throttle = math.min( math.max( TargetPosLocal:Length() - GotoDist, 0 ) / 10, 1 )
 
 	self:PhysWake()
 	self:SetThrottle( Throttle )
@@ -68,7 +69,7 @@ function ENT:RunAI()
 	self:ReleaseHandbrake()
 	self:SetReverse( TargetPosLocal.y < 0 )
 
-	self:SteerTo( math.Clamp(TargetPosLocal.x / 750,-1,1), self:GetMaxSteerAngle() )
+	self:ApproachTargetAngle( Pod:LocalToWorldAngles( (GotoPos - self:GetPos()):Angle() ) )
 
 	self._AIFireInput = false
 
