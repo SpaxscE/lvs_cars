@@ -271,9 +271,17 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 
 			if self:PivotSteer() then
-				powerCurve = math.Clamp((self.PivotSteerWheelRPM * ent:GetWheelType() * self:GetPivotSteer() - curRPM) / self.PivotSteerWheelRPM,-1,1) * 2
+				local RotationDirection = ent:GetWheelType() * self:GetPivotSteer()
+	
+				if self.PivotSteerByBrake and RotationDirection < 0 then
+					ent:LockRotation( true )
 
-				Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle
+					return vector_origin, vector_origin, SIM_NOTHING
+				end
+
+				powerCurve = math.Clamp((self.PivotSteerWheelRPM * RotationDirection - curRPM) / self.PivotSteerWheelRPM,-1,1)
+
+				Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle * 2
 
 				ForceAngle = RotationAxis * Torque
 			end

@@ -6,6 +6,7 @@ end
 
 if SERVER then
 	ENT.PivotSteerEnable = true
+	ENT.PivotSteerByBrake = false
 	ENT.PivotSteerWheelRPM = 40
 
 	function ENT:CreateTracks()

@@ -30,7 +30,12 @@ function ENT:ReleaseHandbrake()
 	self:ReleaseRotation()
 end
 
-function ENT:LockRotation()
+function ENT:LockRotation( TimedLock )
+
+	if TimedLock then
+		self._RotationLockTime = CurTime() + 0.15
+	end
+
 	if self:IsRotationLocked() then return end
 
 	local Master = self:GetMaster()
@@ -42,6 +47,12 @@ function ENT:LockRotation()
 end
 
 function ENT:ReleaseRotation()
+	if self._RotationLockTime then
+		if self._RotationLockTime > CurTime() then
+			return
+		end
+	end
+
 	if not self:IsRotationLocked() then return end
 
 	self.bsLock:Remove()
