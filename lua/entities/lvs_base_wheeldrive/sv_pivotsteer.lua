@@ -9,7 +9,7 @@ end
 function ENT:PivotSteer()
 	if not self.PivotSteerEnable then return false end
 
-	return self._PivotSteer ~= 0
+	return (self._PivotSteer or 0) ~= 0
 end
 
 function ENT:CalcPivotSteer( ply )
