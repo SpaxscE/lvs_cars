@@ -71,12 +71,12 @@ else
 			local data = {
 				Attachment = {
 					name = "vehicle_suspension_"..LR.."_"..i,
-					toGroundDistance = 19,
+					toGroundDistance = 37,
 					traceLength = 150,
 				},
 				PoseParameter = {
 					name = "suspension_"..LeftRight.."_"..i,
-					rangeMultiplier = 1.25,
+					rangeMultiplier = -1.25,
 					lerpSpeed = 25,
 				}
 			}
