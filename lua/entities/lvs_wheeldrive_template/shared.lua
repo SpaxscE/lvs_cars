@@ -178,6 +178,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
  ]]
  
 --ENT.HornSound = "lvs/horn2.wav" add a horn sound
+--ENT.HornSoundInterior = "lvs/horn2.wav" -- leave it commented out, that way it uses the same as ENT.HornSound
 --ENT.HornPos = Vector(40,0,35) -- horn sound position
  
  

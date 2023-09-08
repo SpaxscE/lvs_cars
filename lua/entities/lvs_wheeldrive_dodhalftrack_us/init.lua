@@ -15,7 +15,7 @@ function ENT:OnSpawn( PObj )
 	local DriverSeat = self:AddDriverSeat( Vector(0,21,30), Angle(0,-90,0) )
 	local PassengerSeat = self:AddPassengerSeat( Vector(15,-21,37), Angle(0,-90,10) )
 
-	self.HornSND = self:AddSoundEmitter( Vector(40,0,35), "lvs/horn3.wav", "lvs/horn3.wav" )
+	self.HornSND = self:AddSoundEmitter( Vector(40,0,35), "lvs/horn3.wav" )
 	self.HornSND:SetSoundLevel( 75 )
 	self.HornSND:SetDoppler( true )
 
@@ -40,7 +40,7 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(68,0,50) )
 	self:AddFuelTank( Vector(55,0,18), Angle(0,0,0), 600, LVS.FUELTYPE_DIESEL )
 
-	self.SNDTurretMG = self:AddSoundEmitter( Vector(-63,0,85), "lvs/vehicles/halftrack/mc_loop.wav", "lvs/vehicles/halftrack/mc_loop.wav" )
+	self.SNDTurretMG = self:AddSoundEmitter( Vector(-63,0,85), "lvs/vehicles/halftrack/mc_loop.wav" )
 	self.SNDTurretMG:SetSoundLevel( 95 )
 
 	local WheelModel = "models/diggercars/m5m16/m5_wheel.mdl"

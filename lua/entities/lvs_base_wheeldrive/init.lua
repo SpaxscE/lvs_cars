@@ -84,7 +84,7 @@ function ENT:PostInitialize( PObj )
 	if isstring( self.HornSound ) and isvector( self.HornPos ) then
 		if IsValid( self.HornSND ) then self.HornSND:Remove() end
 
-		self.HornSND = self:AddSoundEmitter( self.HornPos, self.HornSound, self.HornSound )
+		self.HornSND = self:AddSoundEmitter( self.HornPos, self.HornSound, self.HornSoundInterior )
 		self.HornSND:SetSoundLevel( 75 )
 		self.HornSND:SetDoppler( true )
 	end
