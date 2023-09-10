@@ -431,6 +431,12 @@ function ENT:GetAmbientLight( base )
 	return self._AmbientLightMul, plyPos
 end
 
+local DoMagic = {
+	["main"] = true,
+	["high"] = true,
+	["main+high"] = true,
+}
+
 function ENT:RenderLights( base, data )
 	if not self.Enabled then return end
 
@@ -442,7 +448,7 @@ function ENT:RenderLights( base, data )
 
 		if mul < 0.01 then continue end
 
-		if typedata.ProjectedTextures then
+		if typedata.ProjectedTextures and DoMagic[ typedata.Trigger ] then
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
 				local pos = base:LocalToWorld( projdata.pos )
 				local dir = base:LocalToWorldAngles( projdata.ang ):Forward()

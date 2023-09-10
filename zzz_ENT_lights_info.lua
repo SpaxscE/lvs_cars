@@ -69,10 +69,11 @@ ENT.Lights = {
 ]]
 
 --[[
-		DynamicLights = {}, -- dynamic lights
+		DynamicLights = { -- dynamic lights
 			{ pos = Vector(0,0,0), ang = Angle(0,0,0) }, -- minimum requires a pos, everything else is optional and will use default values when not set.
-	
-			{ -- full list of variables ( i recommend only replacing what you really need to replace so you dont mess up the highbeam/lowbeam system) :
+
+			-- full list of variables:
+			{
 				pos = Vector(0,0,0),
 				colorR = 255,
 				colorG = 255,
@@ -86,6 +87,7 @@ ENT.Lights = {
 			-- settings recommendations:
 
 			-- DONT USE DYNAMIC LIGHTS THEY ARE UGLY
+		},
 ]]
 	},
 }
