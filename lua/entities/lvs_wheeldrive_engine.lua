@@ -184,6 +184,10 @@ function ENT:HandleEngineSounds( vehicle )
 	local subGeared = vehVel - (self._smVelGeared or 0)
 	local VelocityGeared = vehVel
 
+	if wheelVel == 0 and vehicle:GetParkingBrake() then
+		VelocityGeared = PitchValue * Throttle
+		Vel = VelocityGeared
+	end
 
 	--[[ workaround ]]-- TODO: Fix it properly
 	if vehicle:Sign( subGeared ) < 0 then

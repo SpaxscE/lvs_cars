@@ -58,12 +58,12 @@ function ENT:RunAI()
 	local Throttle = math.min( math.max( TargetPosLocal:Length() - GotoDist, 0 ) / 10, 1 )
 
 	self:PhysWake()
-	self:SetThrottle( Throttle )
+	self:LerpThrottle( Throttle )
 
 	if Throttle == 0 then
-		self:SetBrake( 1 )
+		self:LerpBrake( 1 )
 	else
-		self:SetBrake( 0 )
+		self:LerpBrake( 0 )
 	end
 
 	self:ReleaseHandbrake()

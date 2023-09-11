@@ -93,6 +93,7 @@ function ENT:SetupDataTables()
 	self:AddDT( "Int", "TurnMode" )
 
 	self:AddDT( "Bool", "Reverse" )
+	self:AddDT( "Bool", "ParkingBrake" )
 	self:AddDT( "Bool", "NWHandBrake" )
 
 	self:AddDT( "Entity", "Engine" )

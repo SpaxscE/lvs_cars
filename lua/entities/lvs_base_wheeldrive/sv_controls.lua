@@ -49,6 +49,15 @@ function ENT:CalcSteer( ply )
 	self:SteerTo( TargetValue, MaxSteer  )
 end
 
+function ENT:IsLegalInput()
+	if not self.ForwardAngle then return true end
+
+	local ForwardVel = self:Sign( math.Round( self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() ) / 100, 0 ) )
+	local DesiredVel = self:GetReverse() and -1 or 1
+
+	return ForwardVel == DesiredVel * math.abs( ForwardVel )
+end
+
 function ENT:LerpThrottle( Throttle )
 	if not self:GetEngineActive() then self:SetThrottle( 0 ) return end
 
@@ -59,25 +68,7 @@ function ENT:LerpThrottle( Throttle )
 	self:SetThrottle( New )
 end
 
-function ENT:CalcThrottle( ply )
-	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
-
-	local Throttle = ply:lvsKeyDown( "CAR_THROTTLE" ) and ThrottleValue or 0
-
-	self:LerpThrottle( Throttle )
-end
-
-function ENT:CalcHandbrake( ply )
-	if ply:lvsKeyDown( "CAR_HANDBRAKE" ) then
-		self:EnableHandbrake()
-	else
-		self:ReleaseHandbrake()
-	end
-end
-
-function ENT:CalcBrake( ply )
-	local Brake = ply:lvsKeyDown( "CAR_BRAKE" ) and 1 or 0
-
+function ENT:LerpBrake( Brake )
 	local Rate = FrameTime() * 3.5
 	local Cur = self:GetBrake()
 	local New = Cur + math.Clamp(Brake - Cur,-Rate,Rate)
@@ -85,22 +76,63 @@ function ENT:CalcBrake( ply )
 	self:SetBrake( New )
 end
 
+function ENT:CalcThrottle( ply )
+	local KeyThrottle = ply:lvsKeyDown( "CAR_THROTTLE" )
+	local KeyBrakes = ply:lvsKeyDown( "CAR_BRAKE" )
+
+	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
+	local Throttle = KeyThrottle and ThrottleValue or 0
+
+	if not self:IsLegalInput() then
+		self:LerpThrottle( 0 )
+		self:LerpBrake( (KeyThrottle or KeyBrakes) and 1 or 0 )
+
+		return
+	end
+
+	self:LerpThrottle( Throttle )
+	self:LerpBrake( KeyBrakes and 1 or 0 )
+end
+
+function ENT:CalcHandbrake( ply )
+	if self:GetParkingBrake() or ply:lvsKeyDown( "CAR_HANDBRAKE" ) then
+		self:EnableHandbrake()
+	else
+		self:ReleaseHandbrake()
+	end
+end
+
 function ENT:CalcTransmission( ply )
-	local walk = ply:lvsKeyDown( "CAR_REVERSE" )
+	local KeyReverse = ply:lvsKeyDown( "CAR_REVERSE" )
 
-	if not self:GetReverse() and walk then
-		if self:GetVelocity():Length() > self.MaxVelocityReverse then
-			self:SetReverse( false )
-			self:SetBrake( 1 )
+	if KeyReverse and self._KeyReversePressedTime then
+		local ForceHandbrake = (CurTime() - self._KeyReversePressedTime) > 1 and self:GetThrottle() == 0
 
-			return
+		if self._oldForceHandbrake ~= ForceHandbrake then
+			self._oldForceHandbrake = ForceHandbrake
+
+			if ForceHandbrake then
+				self:SetParkingBrake( not self:GetParkingBrake() )
+
+				if self:GetParkingBrake() then
+					self:SetReverse( false )
+				end
+			end
 		end
 	end
 
-	if walk ~= self._oldwalk then
-		self._oldwalk = walk
+	if KeyReverse ~= self._oldKeyReverse then
+		self._oldKeyReverse = KeyReverse
 
-		if not walk then return end
+		if KeyReverse then
+			self._KeyReversePressedTime = CurTime()
+		else
+			self._KeyReversePressedTime = nil
+
+			return
+		end
+
+		if self:GetParkingBrake() then return end
 
 		self:SetReverse( not self:GetReverse() )
 		self:EmitSound( self.TransShiftSound, 75 )
@@ -160,7 +192,14 @@ end
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
-	if ply:lvsKeyDown( "CAR_MENU" ) then return end
+	self:SetRoadkillAttacker( ply )
+
+	if ply:lvsKeyDown( "CAR_MENU" ) then
+		self:LerpBrake( 0 )
+		self:LerpThrottle( 0 )
+
+		return
+	end
 
 	if ply:lvsMouseAim() then
 		if ply:lvsKeyDown( "FREELOOK" ) or ply:lvsKeyDown( "CAR_STEER_LEFT" ) or ply:lvsKeyDown( "CAR_STEER_RIGHT" ) then
@@ -183,10 +222,8 @@ function ENT:StartCommand( ply, cmd )
 	end
 
 	self:CalcHandbrake( ply )
-	self:CalcBrake( ply )
 	self:CalcTransmission( ply )
 	self:CalcLights( ply )
-	self:SetRoadkillAttacker( ply )
 
 	if not self.HornSound or not IsValid( self.HornSND ) then return end
 

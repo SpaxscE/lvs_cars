@@ -42,7 +42,7 @@ function ENT:CreateSteerMaster( TargetEntity )
 	return Master
 end
 
-function ENT:AddWheel( data )-- pos, ang, model )
+function ENT:AddWheel( data )
 	if not istable( data ) or not isvector( data.pos ) then return end
 
 	local Wheel = ents.Create( "lvs_wheeldrive_wheel" )
@@ -154,6 +154,8 @@ function ENT:DefineAxle( data )
 	data.Axle.TorqueFactor = data.Axle.TorqueFactor or 1
 	data.Axle.BrakeFactor = data.Axle.BrakeFactor or 1
 	data.Axle.UseHandbrake = data.Axle.UseHandbrake == true
+
+	if not self.ForwardAngle then self.ForwardAngle = data.Axle.ForwardAngle end
 
 	self._WheelAxleData[ self._WheelAxleID ] = {
 		ForwardAngle = data.Axle.ForwardAngle,
