@@ -114,6 +114,8 @@ function ENT:StartFireSound()
 	self.FireBurnSND:ChangeVolume( 1, 1 )
 
 	self:EmitSound("lvs/ammo_fire.wav")
+
+	self.StartFireTime = CurTime()
 end
 
 function ENT:OnRemove()
@@ -124,7 +126,9 @@ function ENT:Draw()
 end
 
 function ENT:Think()
-	self:SetNextClientThink( CurTime() + 0.05 )
+	local T = CurTime()
+
+	self:SetNextClientThink( T + 0.05 )
  
 	if not self:GetDestroyed() then
 		self:StopFireSound()
@@ -134,9 +138,12 @@ function ENT:Think()
 
 	self:StartFireSound()
 
+	local Scale = math.min( (T - (self.StartFireTime or T)) / 2, 1 )
+
 	local effectdata = EffectData()
 		effectdata:SetOrigin( self:GetPos() )
 		effectdata:SetEntity( self:GetBase() )
+		effectdata:SetMagnitude( Scale )
 	util.Effect( "lvs_ammorack_fire", effectdata )
 
 	return true

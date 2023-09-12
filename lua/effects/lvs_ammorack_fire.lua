@@ -33,6 +33,7 @@ function EFFECT:Init( data )
 	self.Ent = Ent
 	self.Pos = Ent:WorldToLocal( Pos + VectorRand() * 3 )
 	self.Seed = math.Rand( 0, 10000 )
+	self.Magnitude = data:GetMagnitude()
 
 	local emitter = Ent:GetParticleEmitter( self.Pos )
 
@@ -47,7 +48,7 @@ function EFFECT:Init( data )
 		
 		if particle then
 			particle:SetVelocity( Vector(0,0,500) + VectorRand() * 500 )
-			particle:SetDieTime( 0.25 )
+			particle:SetDieTime( 0.25 * self.Magnitude )
 			particle:SetStartAlpha( 200 )
 			particle:SetEndAlpha( 0 )
 			particle:SetStartSize( 3 )
@@ -88,8 +89,8 @@ function EFFECT:Init( data )
 		local Dir = Angle(0,math.Rand(-180,180),0):Forward()
 
 		if particle then
-			particle:SetVelocity( Dir * math.Rand(600,900) )
-			particle:SetDieTime( math.Rand(0.2,0.3) )
+			particle:SetVelocity( Dir * math.Rand(600,900) * self.Magnitude )
+			particle:SetDieTime( math.Rand(0.2,0.3) * self.Magnitude )
 			particle:SetAirResistance( 400 ) 
 			particle:SetStartAlpha( 255 )
 			particle:SetStartSize( math.Rand(20,25) )
@@ -108,12 +109,12 @@ function EFFECT:Init( data )
 		local Dir = Angle(0,math.Rand(-180,180),0):Forward()
 
 		if particle then
-			particle:SetVelocity( Dir * 500 )
+			particle:SetVelocity( Dir * 500 * self.Magnitude )
 			particle:SetDieTime( 0.5 + i * 0.01 )
 			particle:SetAirResistance( 125 ) 
-			particle:SetStartAlpha( 150 )
-			particle:SetStartSize( 40 )
-			particle:SetEndSize( 250 )
+			particle:SetStartAlpha( 150 * self.Magnitude )
+			particle:SetStartSize( 40 * self.Magnitude )
+			particle:SetEndSize( 250 * self.Magnitude )
 			particle:SetRoll( math.Rand(-1,1) * math.pi )
 			particle:SetRollDelta( math.Rand(-1,1) * 3 )
 			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
@@ -141,7 +142,7 @@ function EFFECT:Render()
 end
 
 function EFFECT:RenderFire()
-	local Scale = (self.DieTime - CurTime()) / self.LifeTime
+	local Scale = ((self.DieTime - CurTime()) / self.LifeTime) * (self.Magnitude or 0)
 
 	if Scale < 0 then return end
 
