@@ -214,7 +214,9 @@ function ENT:StartCommand( ply, cmd )
 	if self.PivotSteerEnable then
 		self:CalcPivotSteer( ply )
 
-		if not self:PivotSteer() then
+		if self:PivotSteer() then
+			self:LerpBrake( 0 )
+		else
 			self:CalcThrottle( ply )
 		end
 	else
