@@ -25,3 +25,44 @@ function ENT:CreateWheelChain( wheels )
 		Rope.DoNotDuplicate = true
 	end
 end
+
+function ENT:AddAmmoRack( pos, ang, mins, maxs )
+	local AmmoRack = ents.Create( "lvs_wheeldrive_ammorack" )
+
+	if not IsValid( AmmoRack ) then
+		self:Remove()
+
+		print("LVS: Failed to create fueltank entity. Vehicle terminated.")
+
+		return
+	end
+
+	AmmoRack:SetPos( self:LocalToWorld( pos ) )
+	AmmoRack:SetAngles( self:GetAngles() )
+	AmmoRack:Spawn()
+	AmmoRack:Activate()
+	AmmoRack:SetParent( self )
+	AmmoRack:SetBase( self )
+
+	self:DeleteOnRemove( AmmoRack )
+
+	self:TransferCPPI( AmmoRack )
+
+	self:AddDS( {
+		pos = pos,
+		ang = ang,
+		mins = (mins or Vector(-30,-30,-30)),
+		maxs =  (maxs or Vector(30,30,30)),
+		Callback = function( tbl, ent, dmginfo )
+			if not IsValid( AmmoRack ) then return end
+
+			AmmoRack:TakeTransmittedDamage( dmginfo )
+
+			if AmmoRack:GetDestroyed() then return end
+
+			dmginfo:ScaleDamage( 0 )
+		end
+	} )
+
+	return AmmoRack
+end
