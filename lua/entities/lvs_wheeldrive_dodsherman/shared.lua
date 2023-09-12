@@ -165,7 +165,7 @@ function ENT:InitWeapons()
 
 	local weapon = {}
 	weapon.Icon = true
-	weapon.Ammo = 24
+	weapon.Ammo = 40
 	weapon.Delay = 2.5
 	weapon.HeatRateUp = 1
 	weapon.HeatRateDown = 0.4
@@ -262,6 +262,28 @@ function ENT:InitWeapons()
 
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
+	end
+	self:AddWeapon( weapon )
+
+
+	-- smoke
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/smoke_launcher.png")
+	weapon.Ammo = 3
+	weapon.Delay = 1
+	weapon.HeatRateUp = 1
+	weapon.HeatRateDown = 0.05
+	weapon.Attack = function( ent )
+		ent:TakeAmmo( 1 )
+
+		local grenade = ents.Create( "lvs_item_smoke" )
+		grenade:SetPos( ent:LocalToWorld( Vector(-92,0,51) ) )
+		grenade:SetAngles( ent:GetAngles() )
+		grenade:SetParent( ent )
+		grenade:Spawn()
+		grenade:Activate()
+		grenade:Enable()
+		grenade:SetColor( Color(0,0,0,0) )
 	end
 	self:AddWeapon( weapon )
 

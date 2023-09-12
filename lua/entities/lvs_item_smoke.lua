@@ -72,18 +72,22 @@ if SERVER then
 		return true
 	end
 
-	function ENT:PhysicsCollide( data, physobj )
-		if not self:GetActive() then
-			self.RemoveTime = CurTime() + self:GetLifeTime()
+	function ENT:Enable()
+		if self:GetActive() then return end
 
-			self:SetActive( true )
+		self.RemoveTime = CurTime() + self:GetLifeTime()
 
-			self:EmitSound("weapons/flaregun/fire.wav", 65, 100, 0.5)
+		self:SetActive( true )
 
-			if IsValid( self.TrailEntity ) then
-				self.TrailEntity:Remove()
-			end
+		self:EmitSound("weapons/flaregun/fire.wav", 65, 100, 0.5)
+
+		if IsValid( self.TrailEntity ) then
+			self.TrailEntity:Remove()
 		end
+	end
+
+	function ENT:PhysicsCollide( data, physobj )
+		self:Enable()
 
 		if data.Speed > 60 and data.DeltaTime > 0.2 then
 			local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
