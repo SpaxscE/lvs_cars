@@ -8,7 +8,10 @@ EFFECT.SurfaceProps = {
 	["metal_barrel"] = true,
 	["metalvehicle"] = true,
 	["metal"] = true,
-	["rubbertire"] = true,
+	["concrete"] = true,
+	["tile"] = true,
+	["plaster"] = true,
+	["boulder"] = true,
 }
 
 EFFECT.MatSmoke = {
@@ -123,16 +126,20 @@ function EFFECT:Think()
 			endpos = EndPos,
 		} )
 
-		local SurfaceName = util.GetSurfacePropName( trace.SurfaceProps )
-
-		if not self.SurfaceProps[ SurfaceName ] then return false end
-
 		local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( self.Dir ) ,-1,1) )
 		local Fx = math.cos( Ax )
 
 		local effectdata = EffectData()
+		effectdata:SetOrigin( trace.HitPos )
+		util.Effect( "cball_explode", effectdata, true, true )
+
+		local SurfaceName = util.GetSurfacePropName( trace.SurfaceProps )
+
+		if not self.SurfaceProps[ SurfaceName ] then return false end
+
+		local effectdata = EffectData()
 			effectdata:SetOrigin( trace.HitPos )
-			effectdata:SetNormal( (self.Dir - trace.HitNormal * Fx * 2):GetNormalized() )
+			effectdata:SetNormal( (self.Dir - trace.HitNormal * Fx * 2):GetNormalized() * 0.5 )
 		util.Effect( "manhacksparks", effectdata, true, true )
 
 		return false
