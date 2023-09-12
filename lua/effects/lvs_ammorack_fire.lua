@@ -38,7 +38,7 @@ function EFFECT:Init( data )
 
 	if not IsValid( emitter ) then return end
 
-	local VecCol = (render.GetLightColor( self.Pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
+	local VecCol = (render.GetLightColor( Pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
 
 	for i = 0, 20 do
 		local particle = emitter:Add( "sprites/rico1", Pos )
