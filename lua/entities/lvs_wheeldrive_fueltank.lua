@@ -156,7 +156,11 @@ function ENT:Draw()
 end
 
 function ENT:Think()
+	self:SetNextClientThink( CurTime() + 0.05 )
+
 	self:DamageFX()
+
+	return true
 end
 
 function ENT:DamageFX()
@@ -167,12 +171,6 @@ function ENT:DamageFX()
 	end
 
 	self:StartFireSound()
-
-	local T = CurTime()
-
-	if (self.nextDFX or 0) > T then return end
-
-	self.nextDFX = T + 0.05
 
 	local effectdata = EffectData()
 		effectdata:SetOrigin( self:GetPos() )

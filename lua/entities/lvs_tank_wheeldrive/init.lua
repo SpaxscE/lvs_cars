@@ -60,7 +60,9 @@ function ENT:AddAmmoRack( pos, ang, mins, maxs )
 
 			if AmmoRack:GetDestroyed() then return end
 
-			dmginfo:ScaleDamage( 0 )
+			local OriginalDamage = dmginfo:GetDamage()
+
+			dmginfo:SetDamage( math.min( 2, OriginalDamage ) )
 		end
 	} )
 

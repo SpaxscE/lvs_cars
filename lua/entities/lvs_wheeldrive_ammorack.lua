@@ -22,12 +22,6 @@ if SERVER then
 		self:SetMoveType( MOVETYPE_NONE )
 		self:SetSolid( SOLID_NONE )
 		self:DrawShadow( false )
-		debugoverlay.Cross( self:GetPos(), 20, 5, Color( 255, 93, 0 ) )
-	end
-
-	function ENT:ExtinguishAndRepair()
-		self:SetHP( self:GetMaxHP() )
-		self:SetDestroyed( false )
 	end
 
 	function ENT:Think()
@@ -64,6 +58,14 @@ if SERVER then
 
 		if NewHealth <= 0 then
 			self:SetDestroyed( true )
+
+			local Base = self:GetBase()
+
+			if not IsValid( Base ) then return end
+
+			for _, ply in pairs( Base:GetEveryone() ) do
+				Base:HurtPlayer( ply, ply:Health() + ply:Armor(), dmginfo:GetAttacker(), dmginfo:GetInflictor() )
+			end
 		end
 	end
 
@@ -122,27 +124,20 @@ function ENT:Draw()
 end
 
 function ENT:Think()
-	self:DamageFX()
-end
-
-function ENT:DamageFX()
+	self:SetNextClientThink( CurTime() + 0.05 )
+ 
 	if not self:GetDestroyed() then
 		self:StopFireSound()
 
-		return
+		return true
 	end
 
 	self:StartFireSound()
-
-	local T = CurTime()
-
-	if (self.nextDFX or 0) > T then return end
-
-	self.nextDFX = T + 0.05
 
 	local effectdata = EffectData()
 		effectdata:SetOrigin( self:GetPos() )
 		effectdata:SetEntity( self:GetBase() )
 	util.Effect( "lvs_ammorack_fire", effectdata )
-end
 
+	return true
+end
