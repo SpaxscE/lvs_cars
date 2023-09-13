@@ -2,18 +2,6 @@
 EFFECT.MatBeam = Material( "effects/lvs_base/spark" )
 EFFECT.MatSprite = Material( "sprites/light_glow02_add" )
 
-EFFECT.SurfaceProps = {
-	["chainlink"] = true,
-	["canister"] = true,
-	["metal_barrel"] = true,
-	["metalvehicle"] = true,
-	["metal"] = true,
-	["concrete"] = true,
-	["tile"] = true,
-	["plaster"] = true,
-	["boulder"] = true,
-}
-
 EFFECT.MatSmoke = {
 	"particle/smokesprites_0001",
 	"particle/smokesprites_0002",
@@ -126,21 +114,13 @@ function EFFECT:Think()
 			endpos = EndPos,
 		} )
 
-		local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( self.Dir ) ,-1,1) )
-		local Fx = math.cos( Ax )
-
 		local effectdata = EffectData()
 		effectdata:SetOrigin( trace.HitPos )
-		util.Effect( "cball_explode", effectdata, true, true )
-
-		local SurfaceName = util.GetSurfacePropName( trace.SurfaceProps )
-
-		if not self.SurfaceProps[ SurfaceName ] then return false end
-
-		local effectdata = EffectData()
-			effectdata:SetOrigin( trace.HitPos )
-			effectdata:SetNormal( (self.Dir - trace.HitNormal * Fx * 2):GetNormalized() * 0.5 )
-		util.Effect( "manhacksparks", effectdata, true, true )
+		effectdata:SetStart( self.Dir )
+		effectdata:SetEntity( trace.Entity )
+		effectdata:SetNormal( trace.HitNormal )
+		effectdata:SetSurfaceProp( trace.SurfaceProps )
+		util.Effect( "lvs_bullet_impact_ap", effectdata )
 
 		return false
 	end
