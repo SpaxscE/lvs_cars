@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-SWEP.Category				= "LVS"
+SWEP.Category				= "[LVS]"
 SWEP.Spawnable			= false
 SWEP.AdminSpawnable		= false
 SWEP.ViewModel			= "models/weapons/c_fuelfillerlvs.mdl"
@@ -56,6 +56,9 @@ if CLIENT then
 	SWEP.SlotPos			= 3
 
 	SWEP.DrawWeaponInfoBox 	= false
+
+	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	end
 
 	function SWEP:DrawWorldModel()
 		local ply = self:GetOwner()

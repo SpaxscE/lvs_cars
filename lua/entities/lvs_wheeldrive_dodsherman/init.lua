@@ -44,7 +44,7 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(105,0,30), Angle(-45,0,0), Vector(-10,-55,-15), Vector(15,55,10), 1200, self.FrontArmor )
 
 	-- front bottom wedge
-	self:AddArmor( Vector(80,0,15), Angle(0,0,0), Vector(-40,-55,-10), Vector(0,55,10), 1200, self.FrontArmor )
+	self:AddArmor( Vector(100,0,15), Angle(0,0,0), Vector(-40,-55,-10), Vector(0,55,10), 1200, self.FrontArmor )
 
 	-- front side wedge
 	self:AddArmor( Vector(40,45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
