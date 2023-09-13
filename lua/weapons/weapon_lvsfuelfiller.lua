@@ -53,7 +53,7 @@ end
 if CLIENT then
 	SWEP.PrintName		= "Fuel Filler Pistol"
 	SWEP.Slot				= 1
-	SWEP.SlotPos			= 12
+	SWEP.SlotPos			= 3
 
 	SWEP.DrawWeaponInfoBox 	= false
 
