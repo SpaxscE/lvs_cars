@@ -84,7 +84,7 @@ function ENT:CalcWheelEffects()
 
 	local Radius = Base:GetUp() * (self:GetRadius() + 1)
 
-	local Pos =  self:GetPos()
+	local Pos =  self:GetPos() + self:GetVelocity() * 0.025
 	local StartPos = Pos + Radius
 	local EndPos = Pos - Radius
 
