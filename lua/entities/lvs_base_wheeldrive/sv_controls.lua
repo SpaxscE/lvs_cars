@@ -52,7 +52,9 @@ end
 function ENT:IsLegalInput()
 	if not self.ForwardAngle then return true end
 
-	local ForwardVel = self:Sign( math.Round( self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() ) / 100, 0 ) )
+	local MinSpeed = math.min(self.MaxVelocity,self.MaxVelocityReverse)
+
+	local ForwardVel = self:Sign( math.Round( self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() ) / MinSpeed, 0 ) )
 	local DesiredVel = self:GetReverse() and -1 or 1
 
 	return ForwardVel == DesiredVel * math.abs( ForwardVel )
