@@ -87,32 +87,126 @@ if CLIENT then
 	SWEP.SlotPos			= 1
 
 	SWEP.Purpose			= "Repair Broken Armor"
-	SWEP.Instructions		= "Primary to Repair"
+	SWEP.Instructions		= "Primary to Repair Armor\nHold Secondary to switch to Frame Repair Mode"
 	SWEP.DrawWeaponInfoBox 	= true
 
 	SWEP.WepSelectIcon 			= surface.GetTextureID( "weapons/lvsrepair" )
 
-	local ColorSelect = Color(50,50,50,150)
+	local ColorSelect = Color(0,50,50,50)
 	local ColorTransBlack = Color(0,0,0,50)
 	local OutlineThickness = Vector(0.5,0.5,0.5)
 	local ColorText = Color(255,255,255,255)
 
 	local function DrawText( pos, text, col )
-		local data2D = pos:ToScreen()
+		cam.Start2D()
+			local data2D = pos:ToScreen()
 
-		if not data2D.visible then return end
+			if not data2D.visible then return end
 
-		local font = "TargetIDSmall"
+			local font = "TargetIDSmall"
 
-		local x = data2D.x
-		local y = data2D.y
+			local x = data2D.x
+			local y = data2D.y
 
-		draw.DrawText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER )
-		draw.DrawText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER )
-		draw.DrawText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER )
+			draw.DrawText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER )
+			draw.DrawText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER )
+			draw.DrawText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER )
+		cam.End2D()
+	end
+
+	function SWEP:PostDrawViewModel( vm, weapon, ply )
+		local ID = vm:LookupAttachment( "muzzle" )
+
+		local Muzzle = vm:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local Fire = ply:KeyDown( IN_ATTACK )
+
+		if not Fire then return end
+
+		local T = CurTime()
+
+		if (self._NextFX1 or 0) > T then return end
+
+		self._NextFX1 = T + 0.02
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( Muzzle.Pos )
+		effectdata:SetAngles( Muzzle.Ang )
+		effectdata:SetScale( 0.5 )
+		util.Effect( "MuzzleEffect", effectdata, true, true )
+
+		if (self._NextFX2 or 0) > T then return end
+
+		self._NextFX2 = T + 0.06
+
+		local trace = ply:GetEyeTrace()
+		local ShootPos = ply:GetShootPos()
+
+		if (ShootPos - trace.HitPos):Length() > self.MaxRange then return end
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetNormal( trace.HitNormal * 0.15 )
+		util.Effect( "manhacksparks", effectdata, true, true )
+	end
+
+	function SWEP:DrawWorldModel( flags )
+		self:DrawModel( flags )
+
+		local ply = self:GetOwner()
+
+		if not IsValid( ply ) then return end
+
+		local ID = self:LookupAttachment( "muzzle" )
+
+		local Muzzle = self:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local Fire = ply:KeyDown( IN_ATTACK )
+
+		if not Fire then return end
+
+		local T = CurTime()
+
+		if (self._NextFX1 or 0) > T then return end
+
+		self._NextFX1 = T + 0.02
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( Muzzle.Pos )
+		effectdata:SetAngles( Muzzle.Ang )
+		effectdata:SetScale( 0.5 )
+		util.Effect( "MuzzleEffect", effectdata, true, true )
+
+		if (self._NextFX2 or 0) > T then return end
+
+		self._NextFX2 = T + 0.06
+
+		local trace = ply:GetEyeTrace()
+		local ShootPos = ply:GetShootPos()
+
+		if (ShootPos - trace.HitPos):Length() > self.MaxRange then return end
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetNormal( trace.HitNormal * 0.15 )
+		util.Effect( "manhacksparks", effectdata, true, true )
 	end
 
 	function SWEP:DrawHUD()
+		local ply = self:GetOwner()
+
+		if not IsValid( ply ) or ply:KeyDown( IN_ATTACK2 ) then
+			local lvsEnt = self:GetLVS()
+
+			if IsValid( lvsEnt ) then DrawText( ply:GetEyeTrace().HitPos, "Frame\nHealth:"..lvsEnt:GetHP().."/"..lvsEnt:GetMaxHP(), ColorText ) end
+	
+			return
+		end
+
 		local Target = self:FindClosest()
 
 		if IsValid( Target ) then
@@ -127,7 +221,7 @@ if CLIENT then
 				render.DrawBox( boxOrigin, boxAngles, boxMaxs + OutlineThickness, boxMins - OutlineThickness, ColorTransBlack )
 			cam.End3D()
 
-			DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), "Armor: "..(Target:GetIgnoreForce() / 100).."mm\nHealth:"..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+			DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm Armor Plate\nHealth:"..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
 		end
 	end
 end
@@ -137,9 +231,17 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire( CurTime() + 0.1 )
+	self:SetNextPrimaryFire( CurTime() + 0.15 )
 
+	local ArmorMode = true
 	local Target = self:FindClosest()
+
+	local ply = self:GetOwner()
+
+	if IsValid( ply ) and ply:KeyDown( IN_ATTACK2 ) then
+		Target = self:GetLVS()
+		ArmorMode = false
+	end
 
 	if not IsValid( Target ) then return end
 
@@ -147,24 +249,23 @@ function SWEP:PrimaryAttack()
 	local MaxHP = Target:GetMaxHP()
 
 	if IsFirstTimePredicted() then
+		local trace = ply:GetEyeTrace()
+
 		if HP ~= MaxHP then
-			Target:EmitSound("ambient/energy/spark"..math.random(1,6)..".wav")
+			Target:EmitSound("ambient/energy/spark"..math.random(1,6)..".wav",65,math.Rand(90,110),1)
 
-			local ply = self:GetOwner()
-			if IsValid( ply ) then
-				local trace = ply:GetEyeTrace()
-
-				local effectdata = EffectData()
-				effectdata:SetOrigin( trace.HitPos )
-				effectdata:SetNormal( trace.HitNormal )
-				util.Effect( "stunstickimpact", effectdata, true, true )
-			end
+			local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos )
+			effectdata:SetNormal( trace.HitNormal )
+			util.Effect( "stunstickimpact", effectdata, true, true )
 		end
 	end
 
 	if CLIENT then return end
 
-	Target:SetHP( math.min( HP + 5, MaxHP ) )
+	Target:SetHP( math.min( HP + 7, MaxHP ) )
+
+	if not ArmorMode then return end
 
 	if Target:GetDestroyed() then Target:SetDestroyed( false ) end
 end
