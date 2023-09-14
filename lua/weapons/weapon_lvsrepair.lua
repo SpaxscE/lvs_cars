@@ -201,7 +201,7 @@ if CLIENT then
 			local lvsEnt = self:GetLVS()
 			local Pos = ply:GetEyeTrace().HitPos
 
-			if IsValid( lvsEnt ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange then
+			if IsValid( lvsEnt ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange and not ply:InVehicle() then
 				DrawText( ply:GetEyeTrace().HitPos, "Frame\nHealth: "..lvsEnt:GetHP().."/"..lvsEnt:GetMaxHP(), ColorText )
 			end
 
@@ -230,7 +230,7 @@ if CLIENT then
 		else
 			local Pos = ply:GetEyeTrace().HitPos
 
-			if IsValid( self:GetLVS() ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange then
+			if IsValid( self:GetLVS() ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange and not ply:InVehicle() then
 				DrawText( Pos, "No Armor\nHold Right Mouse Button to switch to Frame Repair Mode", ColorText )
 			end
 		end
