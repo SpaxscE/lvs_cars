@@ -92,9 +92,7 @@ if CLIENT then
 
 	SWEP.WepSelectIcon 			= surface.GetTextureID( "weapons/lvsrepair" )
 
-	local ColorSelect = Color(0,50,50,50)
-	local ColorTransBlack = Color(0,0,0,50)
-	local OutlineThickness = Vector(0.5,0.5,0.5)
+	local ColorSelect = Color(0,50,50,150)
 	local ColorText = Color(255,255,255,255)
 
 	local function DrawText( pos, text, col )
@@ -201,9 +199,12 @@ if CLIENT then
 
 		if not IsValid( ply ) or ply:KeyDown( IN_ATTACK2 ) then
 			local lvsEnt = self:GetLVS()
+			local Pos = ply:GetEyeTrace().HitPos
 
-			if IsValid( lvsEnt ) then DrawText( ply:GetEyeTrace().HitPos, "Frame\nHealth:"..lvsEnt:GetHP().."/"..lvsEnt:GetMaxHP(), ColorText ) end
-	
+			if IsValid( lvsEnt ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange then
+				DrawText( ply:GetEyeTrace().HitPos, "Frame\nHealth: "..lvsEnt:GetHP().."/"..lvsEnt:GetMaxHP(), ColorText )
+			end
+
 			return
 		end
 
@@ -215,13 +216,23 @@ if CLIENT then
 			local boxMins = Target:GetMins()
 			local boxMaxs = Target:GetMaxs()
 
-			cam.Start3D()
-				render.SetColorMaterial()
-				render.DrawBox( boxOrigin, boxAngles, boxMins, boxMaxs, ColorSelect )
-				render.DrawBox( boxOrigin, boxAngles, boxMaxs + OutlineThickness, boxMins - OutlineThickness, ColorTransBlack )
-			cam.End3D()
+			if ply:KeyDown( IN_ATTACK ) then
+				DrawText( ply:GetEyeTrace().HitPos, (Target:GetIgnoreForce() / 100).."mm Armor Plate\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
 
-			DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm Armor Plate\nHealth:"..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+			else
+				cam.Start3D()
+					render.SetColorMaterial()
+					render.DrawBox( boxOrigin, boxAngles, boxMins, boxMaxs, ColorSelect )
+				cam.End3D()
+
+				DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm Armor Plate\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+			end
+		else
+			local Pos = ply:GetEyeTrace().HitPos
+
+			if IsValid( self:GetLVS() ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange then
+				DrawText( Pos, "No Armor\nHold Right Mouse Button to switch to Frame Repair Mode", ColorText )
+			end
 		end
 	end
 end
