@@ -127,14 +127,19 @@ function ENT:CalcTransmission( ply )
 		self._oldKeyReverse = KeyReverse
 
 		if KeyReverse then
-			self._KeyReversePressedTime = CurTime()
+			if not self:GetParkingBrake() then
+				self._KeyReversePressedTime = CurTime()
+			end
 		else
 			self._KeyReversePressedTime = nil
 
 			return
 		end
 
-		if self:GetParkingBrake() then return end
+		if self:GetParkingBrake() then
+			self:SetParkingBrake( false )
+			return
+		end
 
 		self:SetReverse( not self:GetReverse() )
 		self:EmitSound( self.TransShiftSound, 75 )
