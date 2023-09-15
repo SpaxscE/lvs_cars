@@ -1,15 +1,37 @@
 
+include("cl_optics.lua")
+
 function ENT:LVSPreHudPaint( X, Y, ply )
 	return true
 end
 
 local zoom = 0
 local zoom_mat = Material( "vgui/zoom" )
+local zoom_switch = 0
+local zoom_blinder = 0
+
+local TargetZoom = 0
+function ENT:GetZoom()
+	return TargetZoom
+end
 
 function ENT:PaintZoom( X, Y, ply )
-	local TargetZoom = ply:lvsKeyDown( "ZOOM" ) and 1 or 0
+	TargetZoom = ply:lvsKeyDown( "ZOOM" ) and 1 or 0
 
 	zoom = zoom + (TargetZoom - zoom) * RealFrameTime() * 10
+
+	if self.OpticsEnable then
+		if zoom_switch ~= TargetZoom then
+			zoom_switch = TargetZoom
+
+			zoom_blinder = 1
+		end
+
+		zoom_blinder = zoom_blinder - zoom_blinder * RealFrameTime() * 10
+
+		surface.SetDrawColor( Color(0,0,0,255 * zoom_blinder) )
+		surface.DrawRect( 0, 0, X, Y )
+	end
 
 	X = X * 0.5
 	Y = Y * 0.5

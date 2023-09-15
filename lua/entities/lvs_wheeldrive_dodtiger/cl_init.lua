@@ -1,11 +1,11 @@
 include("shared.lua")
 include("sh_turret.lua")
 include("sh_tracks.lua")
+include("cl_optics.lua")
 
 function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel, oil, ammeter )
 	self:CalcTurret()
 end
-
 
 include("entities/lvs_tank_wheeldrive/cl_tankview.lua")
 function ENT:TankViewOverride( ply, pos, angles, fov, pod )
@@ -22,7 +22,6 @@ function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 
 	return pos, angles, fov
 end
-
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
