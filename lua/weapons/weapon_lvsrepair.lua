@@ -269,7 +269,7 @@ function SWEP:Think()
 
 	if not IsValid( ply ) then self:StopSND() return end
 
-	local PlaySound = self:GetFlameTime() >= CurTime() and IsValid( self:GetLVS() ) and (ply:GetShootPos() - ply:GetEyeTrace().HitPos):Length() < self.MaxRange
+	local PlaySound = self:GetFlameTime() >= CurTime() and (ply:GetShootPos() - ply:GetEyeTrace().HitPos):Length() < self.MaxRange
 
 	if PlaySound then
 		self:PlaySND()
