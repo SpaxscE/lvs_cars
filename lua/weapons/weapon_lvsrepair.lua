@@ -116,10 +116,10 @@ if CLIENT then
 		cam.End2D()
 	end
 
-	function SWEP:PostDrawViewModel( vm, weapon, ply )
-		local ID = vm:LookupAttachment( "muzzle" )
+	function SWEP:DrawEffects( weapon, ply )
+		local ID = weapon:LookupAttachment( "muzzle" )
 
-		local Muzzle = vm:GetAttachment( ID )
+		local Muzzle = weapon:GetAttachment( ID )
 
 		if not Muzzle then return end
 
@@ -148,46 +148,28 @@ if CLIENT then
 			effectdata:SetOrigin( trace.HitPos )
 			effectdata:SetNormal( trace.HitNormal * 0.15 )
 		util.Effect( "manhacksparks", effectdata, true, true )
+
+		local dlight = DynamicLight( self:EntIndex() )
+
+		if not dlight then return end
+
+		dlight.pos = (trace.HitPos + ShootPos) * 0.5
+		dlight.r = 206
+		dlight.g = 253
+		dlight.b = 255
+		dlight.brightness = 3
+		dlight.decay = 1000
+		dlight.size = 256
+		dlight.dietime = CurTime() + 0.1
+	end
+
+	function SWEP:PostDrawViewModel( vm, weapon, ply )
+		self:DrawEffects( vm, ply )
 	end
 
 	function SWEP:DrawWorldModel( flags )
 		self:DrawModel( flags )
-
-		local ply = self:GetOwner()
-
-		if not IsValid( ply ) then return end
-
-		local ID = self:LookupAttachment( "muzzle" )
-
-		local Muzzle = self:GetAttachment( ID )
-
-		if not Muzzle then return end
-
-		local T = CurTime()
-
-		if self:GetFlameTime() < T or (self._NextFX1 or 0) > T then return end
-
-		self._NextFX1 = T + 0.02
-
-		local effectdata = EffectData()
-		effectdata:SetOrigin( Muzzle.Pos )
-		effectdata:SetAngles( Muzzle.Ang )
-		effectdata:SetScale( 0.5 )
-		util.Effect( "MuzzleEffect", effectdata, true, true )
-
-		if (self._NextFX2 or 0) > T then return end
-
-		self._NextFX2 = T + 0.06
-
-		local trace = ply:GetEyeTrace()
-		local ShootPos = ply:GetShootPos()
-
-		if (ShootPos - trace.HitPos):Length() > self.MaxRange then return end
-
-		local effectdata = EffectData()
-			effectdata:SetOrigin( trace.HitPos )
-			effectdata:SetNormal( trace.HitNormal * 0.15 )
-		util.Effect( "manhacksparks", effectdata, true, true )
+		self:DrawEffects( self, self:GetOwner() )
 	end
 
 	function SWEP:DrawHUD()
@@ -315,7 +297,7 @@ function SWEP:PlaySND()
 	if not IsValid( ply ) then return end
 
 	self._snd = CreateSound( ply, "lvs/weldingtorch_loop.wav" )
-	self._snd:Play()
+	self._snd:PlayEx(1, 70 )
 end
 
 function SWEP:OnRemove()
