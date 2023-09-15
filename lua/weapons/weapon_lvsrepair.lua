@@ -21,6 +21,10 @@ SWEP.Secondary.Ammo		= "none"
 
 SWEP.MaxRange = 250
 
+function SWEP:SetupDataTables()
+	self:NetworkVar( "Float",0, "FlameTime" )
+end
+
 function SWEP:GetLVS()
 	local ply = self:GetOwner()
 
@@ -119,13 +123,9 @@ if CLIENT then
 
 		if not Muzzle then return end
 
-		local Fire = ply:KeyDown( IN_ATTACK )
-
-		if not Fire then return end
-
 		local T = CurTime()
 
-		if (self._NextFX1 or 0) > T then return end
+		if self:GetFlameTime() < T or (self._NextFX1 or 0) > T then return end
 
 		self._NextFX1 = T + 0.02
 
@@ -163,13 +163,9 @@ if CLIENT then
 
 		if not Muzzle then return end
 
-		local Fire = ply:KeyDown( IN_ATTACK )
-
-		if not Fire then return end
-
 		local T = CurTime()
 
-		if (self._NextFX1 or 0) > T then return end
+		if self:GetFlameTime() < T or (self._NextFX1 or 0) > T then return end
 
 		self._NextFX1 = T + 0.02
 
@@ -242,7 +238,11 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
-	self:SetNextPrimaryFire( CurTime() + 0.15 )
+	local T = CurTime()
+
+	self:SetNextPrimaryFire( T + 0.15 )
+
+	self:SetFlameTime( T + 0.3 )
 
 	local ArmorMode = true
 	local Target = self:FindClosest()
@@ -263,8 +263,6 @@ function SWEP:PrimaryAttack()
 		local trace = ply:GetEyeTrace()
 
 		if HP ~= MaxHP then
-			Target:EmitSound("ambient/energy/spark"..math.random(1,6)..".wav",65,math.Rand(90,110),1)
-
 			local effectdata = EffectData()
 			effectdata:SetOrigin( trace.HitPos )
 			effectdata:SetNormal( trace.HitNormal )
@@ -278,8 +276,53 @@ function SWEP:PrimaryAttack()
 
 	if not ArmorMode then return end
 
-	if Target:GetDestroyed() then Target:SetDestroyed( false ) end
+	if Target:GetDestroyed() then Target:SetDestroyed( false ) Target:OnRepaired() end
 end
 
 function SWEP:SecondaryAttack()
+end
+
+function SWEP:Think()
+	local PlaySound = self:GetFlameTime() >= CurTime() and IsValid( self:GetLVS() )
+
+	if PlaySound then
+		self:PlaySND()
+	else
+		self:StopSND()
+	end
+end
+
+function SWEP:StopSND()
+	if CLIENT then return end
+
+	if not self._snd then return end
+
+	self._snd:Stop()
+	self._snd = nil
+end
+
+function SWEP:PlaySND()
+	if CLIENT then return end
+
+	if self._snd then return end
+
+	local ply = self:GetOwner()
+
+	if not IsValid( ply ) then return end
+
+	self._snd = CreateSound( ply, "lvs/weldingtorch_loop.wav" )
+	self._snd:Play()
+end
+
+function SWEP:OnRemove()
+	self:StopSND()
+end
+
+function SWEP:OnDrop()
+	self:StopSND()
+end
+
+function SWEP:Holster( wep )
+	self:StopSND()
+	return true
 end

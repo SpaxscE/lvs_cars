@@ -38,6 +38,9 @@ if SERVER then
 		if old == new then return end
 	end
 
+	function ENT:OnRepaired()
+	end
+
 	function ENT:OnDestroyed( dmginfo )
 	end
 
