@@ -1,7 +1,9 @@
 
+ENT.OpticsFov = 30
+ENT.OpticsEnable = true
+ENT.OpticsZoomOnly = true
 ENT.OpticsFirstPerson = true
 ENT.OpticsThirdPerson = false
-ENT.OpticsEnable = true
 ENT.OpticsPodIndex = {
 	[1] = true,
 }
@@ -12,15 +14,17 @@ local circle = Material( "lvs/circle_hollow.png" )
 local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
 local pointer = Material( "gui/point.png" )
-function ENT:PaintOptics( Pos2D, Col, PodIndex )
-	surface.SetDrawColor( 0, 0, 0, 200 )
+function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
+	surface.SetDrawColor( 255, 255, 255, 5 )
 	surface.SetMaterial( tri1 )
+	surface.DrawTexturedRect( Pos2D.x - 17, Pos2D.y - 1, 32, 32 )
+	surface.SetDrawColor( 0, 0, 0, 255 )
 	surface.DrawTexturedRect( Pos2D.x - 16, Pos2D.y, 32, 32 )
 
-	if self:GetSelectedWeapon() == 1 then
+	if Type == 1 then
 		self:DrawRotatedText( "MG", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
 	else
-		self:DrawRotatedText( self:GetUseHighExplosive() and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+		self:DrawRotatedText( Type == 3 and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
 	end
 
 	local ScrW = ScrW()
@@ -30,8 +34,13 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		if i == 0 then continue end
 
 		surface.SetMaterial( tri2 )
+		surface.SetDrawColor( 255, 255, 255, 5 )
+		surface.DrawTexturedRect( Pos2D.x - 11 + i * 32, Pos2D.y - 1, 20, 20 )
+		surface.SetDrawColor( 0, 0, 0, 255 )
 		surface.DrawTexturedRect( Pos2D.x - 10 + i * 32, Pos2D.y, 20, 20 )
 	end
+
+	surface.SetDrawColor( 0, 0, 0, 200 )
 
 	local TargetOffset = self:GetSelectedWeapon() == 1 and 150 or 0
 
@@ -56,21 +65,21 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		local y = math.sin( math.rad( ang ) )
 
 		if i == 2 then
-			self:DrawRotatedText( "8.8", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
+			self:DrawRotatedText( "8.8", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 		if i == 3 then
-			self:DrawRotatedText( "cm", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
+			self:DrawRotatedText( "cm", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 		if i == 5 then
-			self:DrawRotatedText( "Pzgr", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
+			self:DrawRotatedText( "Pzgr", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 	
 		surface.SetMaterial( circle )
-		surface.DrawTexturedRectRotated( Pos2D.x + x * R, ScrH * 0.5 + y * R, 16, 16, 0 )
+		surface.DrawTexturedRectRotated( Pos2D.x + x * R, Pos2D.y + y * R, 16, 16, 0 )
 
-		surface.DrawLine( Pos2D.x + x * R1, ScrH * 0.5 + y * R1, Pos2D.x + x * R2, ScrH * 0.5 + y * R2 )
+		surface.DrawLine( Pos2D.x + x * R1, Pos2D.y + y * R1, Pos2D.x + x * R2, Pos2D.y + y * R2 )
 
-		self:DrawRotatedText( i, Pos2D.x + x * R3, ScrH * 0.5 + y * R3, "LVS_FONT_PANEL", Color(0,0,0,255), ang + 90)
+		self:DrawRotatedText( i, Pos2D.x + x * R3, Pos2D.y + y * R3, "LVS_FONT_PANEL", Color(0,0,0,255), ang + 90)
 
 		if i == 40 then continue end
 
@@ -79,7 +88,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		local x = math.cos( math.rad( ang ) )
 		local y = math.sin( math.rad( ang ) )
 
-		surface.DrawLine( Pos2D.x + x * R1, ScrH * 0.5 + y * R1, Pos2D.x + x * R4, ScrH * 0.5 + y * R4 )
+		surface.DrawLine( Pos2D.x + x * R1, Pos2D.y + y * R1, Pos2D.x + x * R4, Pos2D.y + y * R4 )
 	end
 
 	for i = 0, 13 do
@@ -89,15 +98,15 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		local y = math.sin( math.rad( ang ) )
 
 		if i == 1 then
-			self:DrawRotatedText( "MG", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
+			self:DrawRotatedText( "MG", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 
 		surface.SetMaterial( circle )
-		surface.DrawTexturedRectRotated( Pos2D.x + x * R, ScrH * 0.5 + y * R, 16, 16, 0 )
+		surface.DrawTexturedRectRotated( Pos2D.x + x * R, Pos2D.y + y * R, 16, 16, 0 )
 
-		surface.DrawLine( Pos2D.x + x * R1, ScrH * 0.5 + y * R1, Pos2D.x + x * R2, ScrH * 0.5 + y * R2 )
+		surface.DrawLine( Pos2D.x + x * R1, Pos2D.y + y * R1, Pos2D.x + x * R2, Pos2D.y + y * R2 )
 
-		self:DrawRotatedText( i, Pos2D.x + x * R3, ScrH * 0.5 + y * R3, "LVS_FONT_PANEL", Color(0,0,0,255), ang + 90)
+		self:DrawRotatedText( i, Pos2D.x + x * R3, Pos2D.y + y * R3, "LVS_FONT_PANEL", Color(0,0,0,255), ang + 90)
 	end
 
 	surface.SetDrawColor( 0, 0, 0, 100 )

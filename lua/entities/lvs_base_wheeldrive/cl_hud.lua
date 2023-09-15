@@ -9,8 +9,11 @@ local zoom = 0
 local zoom_mat = Material( "vgui/zoom" )
 local zoom_switch = 0
 local zoom_blinder = 0
-
 local TargetZoom = 0
+
+ENT.ZoomInSound = "weapons/sniper/sniper_zoomin.wav"
+ENT.ZoomOutSound =  "weapons/sniper/sniper_zoomout.wav"
+
 function ENT:GetZoom()
 	return TargetZoom
 end
@@ -21,16 +24,28 @@ function ENT:PaintZoom( X, Y, ply )
 	zoom = zoom + (TargetZoom - zoom) * RealFrameTime() * 10
 
 	if self.OpticsEnable then
-		if zoom_switch ~= TargetZoom then
-			zoom_switch = TargetZoom
+		if self:GetOpticsEnabled() then
+			if zoom_switch ~= TargetZoom then
+				zoom_switch = TargetZoom
 
-			zoom_blinder = 1
+				zoom_blinder = 1
+
+				if TargetZoom == 1 then
+					surface.PlaySound( self.ZoomInSound )
+				else
+					surface.PlaySound( self.ZoomOutSound )
+				end
+			end
+
+			zoom_blinder = zoom_blinder - zoom_blinder * RealFrameTime() * 5
+
+			surface.SetDrawColor( Color(0,0,0,255 * zoom_blinder) )
+			surface.DrawRect( 0, 0, X, Y )
+
+			self.ZoomFov = self.OpticsFov
+		else
+			self.ZoomFov = nil
 		end
-
-		zoom_blinder = zoom_blinder - zoom_blinder * RealFrameTime() * 10
-
-		surface.SetDrawColor( Color(0,0,0,255 * zoom_blinder) )
-		surface.DrawRect( 0, 0, X, Y )
 	end
 
 	X = X * 0.5

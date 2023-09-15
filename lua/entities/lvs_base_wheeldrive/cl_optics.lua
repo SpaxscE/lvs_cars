@@ -1,14 +1,16 @@
 
 DEFINE_BASECLASS( "lvs_base" )
 
-ENT.OpticsFirstPerson = true
-ENT.OpticsThirdPerson = false
+ENT.OpticsFov = 30
 ENT.OpticsEnable = false
+ENT.OpticsZoomOnly = true
+ENT.OpticsFirstPerson = true
+ENT.OpticsThirdPerson = true
 ENT.OpticsPodIndex = {
 	[1] = true,
 }
 
-function ENT:UseOptics()
+function ENT:GetOpticsEnabled()
 	if not self.OpticsEnable then return false end
 
 	local ply = LocalPlayer()
@@ -32,11 +34,17 @@ function ENT:UseOptics()
 	return false
 end
 
+function ENT:UseOptics()
+	if self.OpticsZoomOnly and self:GetZoom() ~= 1 then return false end
+
+	return self:GetOpticsEnabled()
+end
+
 function ENT:PaintCrosshairCenter( Pos2D, Col )
 
 	if self:UseOptics() then
 
-		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ) )
+		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 1 )
 
 		return
 	end
@@ -47,7 +55,7 @@ end
 function ENT:PaintCrosshairOuter( Pos2D, Col )
 	if self:UseOptics() then
 
-		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ) )
+		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 2 )
 
 		return
 	end
@@ -58,7 +66,7 @@ end
 function ENT:PaintCrosshairSquare( Pos2D, Col )
 	if self:UseOptics() then
 
-		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ) )
+		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 3 )
 
 		return
 	end
@@ -87,5 +95,5 @@ function ENT:DrawRotatedText( text, x, y, font, color, ang)
 	render.PopFilterMin()
 end
 
-function ENT:PaintOptics( Pos2D, Col, PodIndex )
+function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 end
