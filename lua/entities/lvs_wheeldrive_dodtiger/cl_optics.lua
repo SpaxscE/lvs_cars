@@ -17,6 +17,12 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 	surface.SetMaterial( tri1 )
 	surface.DrawTexturedRect( Pos2D.x - 16, Pos2D.y, 32, 32 )
 
+	if self:GetSelectedWeapon() == 1 then
+		self:DrawRotatedText( "MG", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	else
+		self:DrawRotatedText( self:GetUseHighExplosive() and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	end
+
 	local ScrW = ScrW()
 	local ScrH = ScrH()
 
@@ -27,7 +33,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		surface.DrawTexturedRect( Pos2D.x - 10 + i * 32, Pos2D.y, 20, 20 )
 	end
 
-	local TargetOffset = (self:GetSelectedWeapon() == 1 and 150 or (self:GetUseHighExplosive() and -90 or 0))
+	local TargetOffset = self:GetSelectedWeapon() == 1 and 150 or 0
 
 	if OldTargetOffset ~= TargetOffset then
 		OldTargetOffset = TargetOffset
@@ -49,13 +55,13 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		local x = math.cos( math.rad( ang ) )
 		local y = math.sin( math.rad( ang ) )
 
-		if i == 0 then
+		if i == 2 then
 			self:DrawRotatedText( "8.8", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
-		if i == 1 then
+		if i == 3 then
 			self:DrawRotatedText( "cm", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
-		if i == 20 then
+		if i == 5 then
 			self:DrawRotatedText( "Pzgr", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 	
@@ -82,7 +88,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex )
 		local x = math.cos( math.rad( ang ) )
 		local y = math.sin( math.rad( ang ) )
 
-		if i == 0 then
+		if i == 1 then
 			self:DrawRotatedText( "MG", Pos2D.x + x * R0, ScrH * 0.5 + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 
