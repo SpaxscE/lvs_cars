@@ -2,6 +2,11 @@ include("shared.lua")
 include("cl_effects.lua")
 include("cl_skidmarks.lua")
 
+function ENT:Initialize()
+	local Mins, Maxs = self:GetRenderBounds()
+	self:SetRenderBounds( Mins, Maxs, Vector( 200, 200, 200 ) )
+end
+
 function ENT:Draw()
 	if self:GetHideModel() then return end
 
