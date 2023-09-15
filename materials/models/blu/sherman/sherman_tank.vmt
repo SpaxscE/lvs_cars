@@ -2,4 +2,9 @@
 {
 	"$baseTexture" "models/blu/sherman/sherman_tank"
 	"$bumpmap" "models/blu/sherman/sherman_tank_normal"
+
+	"$phong" "1"
+	"$phongexponent"  "20"
+	"$phongboost" "2"
+	"$phongfresnelranges" "[.1 .5 1]"
 }
