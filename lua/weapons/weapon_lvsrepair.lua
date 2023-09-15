@@ -283,7 +283,11 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Think()
-	local PlaySound = self:GetFlameTime() >= CurTime() and IsValid( self:GetLVS() )
+	local ply = self:GetOwner()
+
+	if not IsValid( ply ) then self:StopSND() return end
+
+	local PlaySound = self:GetFlameTime() >= CurTime() and IsValid( self:GetLVS() ) and (ply:GetShootPos() - ply:GetEyeTrace().HitPos):Length() < self.MaxRange
 
 	if PlaySound then
 		self:PlaySND()
