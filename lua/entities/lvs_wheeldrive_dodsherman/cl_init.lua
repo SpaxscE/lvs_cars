@@ -1,6 +1,7 @@
 include("shared.lua")
 include("sh_turret.lua")
 include("sh_tracks.lua")
+include("cl_optics.lua")
 
 function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel, oil, ammeter )
 	self:CalcTurret()
