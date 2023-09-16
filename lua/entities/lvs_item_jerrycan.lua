@@ -108,7 +108,15 @@ if SERVER then
 
 		local FuelCap = FuelTank:GetDoorHandler()
 
-		if not IsValid( FuelCap ) or not FuelCap:IsOpen() then return end
+		if not IsValid( FuelCap ) then
+			if FuelTank:GetFuel() ~= 1 then
+				FuelTank:SetFuel( math.min( FuelTank:GetFuel() + amount, 1 ) )
+			end
+
+			return
+		end
+
+		if not FuelCap:IsOpen() then return end
 
 		if FuelTank:GetFuel() ~= 1 and (trace.HitPos - FuelCap:GetPos()):Length() < 50 then
 			FuelTank:SetFuel( math.min( FuelTank:GetFuel() + amount, 1 ) )
