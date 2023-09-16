@@ -123,10 +123,8 @@ ENT.Lights = {
 }
 
 function ENT:OnSetupDataTables()
-	self:AddTurretDT()
 	self:AddDT( "Entity", "GunnerSeat" )
 end
-
 
 function ENT:InitWeapons()
 	local weapon = {}

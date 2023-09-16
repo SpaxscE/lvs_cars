@@ -60,7 +60,6 @@ ENT.EngineSounds = {
 
 function ENT:OnSetupDataTables()
 	self:AddTracksDT()
-	self:AddTurretDT()
 end
 
 ENT.Lights = {

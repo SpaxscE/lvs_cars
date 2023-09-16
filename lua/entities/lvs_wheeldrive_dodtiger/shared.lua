@@ -92,7 +92,6 @@ function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "UseHighExplosive" )
 
 	self:AddTracksDT()
-	self:AddTurretDT()
 end
 
 function ENT:InitWeapons()

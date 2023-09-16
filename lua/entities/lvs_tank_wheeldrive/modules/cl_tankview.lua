@@ -1,3 +1,4 @@
+if SERVER then return end
 
 function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 	return pos, angles, fov

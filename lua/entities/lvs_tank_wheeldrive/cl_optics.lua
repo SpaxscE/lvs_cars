@@ -2,7 +2,6 @@
 AddCSLuaFile( "cl_optics.lua" )
 --include("cl_optics.lua")
 
-
 DEFINE_BASECLASS( "lvs_base" )
 
 ENT.UseOptics = false

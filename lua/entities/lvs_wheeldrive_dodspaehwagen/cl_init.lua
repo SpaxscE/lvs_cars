@@ -2,8 +2,7 @@ include("shared.lua")
 include("sh_turret.lua")
 
 
-
-include("entities/lvs_tank_wheeldrive/cl_tankview.lua")
+include("entities/lvs_tank_wheeldrive/modules/cl_tankview.lua")
 function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 	if ply == self:GetDriver() and not pod:GetThirdPersonMode() then
 		local ID = self:LookupAttachment( "seat1" )
@@ -33,7 +32,7 @@ function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
 	return LVS:CalcView( self, ply, pos, angles, fov, pod )
 end
 
-include("entities/lvs_tank_wheeldrive/cl_attachable_playermodels.lua")
+include("entities/lvs_tank_wheeldrive/modules/cl_attachable_playermodels.lua")
 function ENT:DrawDriver()
 	local pod = self:GetDriverSeat()
 

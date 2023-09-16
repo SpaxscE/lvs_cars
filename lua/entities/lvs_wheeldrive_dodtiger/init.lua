@@ -1,11 +1,11 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "sh_turret.lua" )
 AddCSLuaFile( "sh_tracks.lua" )
 AddCSLuaFile( "cl_optics.lua" )
+AddCSLuaFile( "sh_turret.lua" )
 include("shared.lua")
-include("sh_turret.lua")
 include("sh_tracks.lua")
+include("sh_turret.lua")
 
 function ENT:OnSpawn( PObj )
 	local ID = self:LookupAttachment( "muzzle_machinegun" )

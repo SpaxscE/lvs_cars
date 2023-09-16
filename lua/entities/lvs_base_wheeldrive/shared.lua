@@ -103,6 +103,11 @@ function ENT:SetupDataTables()
 	self:AddDT( "Entity", "Compressor" )
 
 	self:AddDT( "Vector", "AIAimVector" )
+
+	self:TurretSystemDT()
+end
+
+function ENT:TurretSystemDT()
 end
 
 function ENT:StabilityAssist()

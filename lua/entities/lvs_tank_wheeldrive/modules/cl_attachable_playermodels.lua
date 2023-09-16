@@ -1,3 +1,4 @@
+if SERVER then return end
 
 function ENT:GetPlayerModel( name )
 	if not istable( self._PlayerModels ) then return end
