@@ -1,6 +1,28 @@
 
 AccessorFunc(ENT, "axle", "Axle", FORCE_NUMBER)
 
+function ENT:Destroy()
+	if self:GetDestroyed() then return end
+
+	self:SetDestroyed( true )
+
+	if not self._torqueFactor then return end
+
+	self.old_torqueFactor = self._torqueFactor
+	self._torqueFactor = 0
+end
+
+function ENT:Repair()
+	if not self:GetDestroyed() then return end
+
+	self:SetDestroyed( false )
+
+	if not self.old_torqueFactor then return end
+
+	self._torqueFactor = self.old_torqueFactor
+	self.old_torqueFactor = nil
+end
+
 function ENT:SetMaster( master )
 	self._Master = master
 end

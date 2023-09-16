@@ -138,8 +138,21 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 		return
 	end
 
+	local RPM = math.abs( self:GetRPM() )
 
-	if math.abs( self:GetRPM() ) > 50 then
+	if self:GetDestroyed() and RPM > 30 then
+		local mag = math.min( RPM  / 400, 1 )
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( self:GetPos() + Base:GetUp() * (self:GetRadius() - 5) * (math.random(0,1) == 1 and -1 or 1) )
+		effectdata:SetNormal( self:GetRight() )
+		effectdata:SetMagnitude( mag )
+		util.Effect( "lvs_physics_scrape", effectdata, true, true )
+
+		Base:DoTireSound( "damage_layer" )
+	end
+
+	if RPM > 50 then
 		if traceWater.Hit then
 			Base:DoTireSound( "roll_wet" )
 

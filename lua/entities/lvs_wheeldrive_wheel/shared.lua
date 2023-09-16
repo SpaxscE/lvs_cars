@@ -22,6 +22,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Bool", 0, "HideModel" )
 
+	self:NetworkVar( "Bool", 1, "Destroyed" )
+
 	if SERVER then
 		self:SetWidth( 3 )
 	end

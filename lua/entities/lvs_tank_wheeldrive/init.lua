@@ -26,6 +26,26 @@ function ENT:CreateWheelChain( wheels )
 		local Rope = constraint.Rope(prev,cur,0,0,vector_origin,vector_origin,(prev:GetPos() - cur:GetPos()):Length(), 0, 0, 0,"cable/cable2", false)
 		Rope.DoNotDuplicate = true
 	end
+
+	local WheelChain = {}
+
+	WheelChain.OnDestroyed = function()
+		for _, wheel in pairs( wheels ) do
+			if not IsValid( wheel ) then continue end
+
+			wheel:Destroy()
+		end
+	end
+
+	WheelChain.OnRepaired = function()
+		for _, wheel in pairs( wheels ) do
+			if not IsValid( wheel ) then continue end
+
+			wheel:Repair()
+		end
+	end
+
+	return WheelChain
 end
 
 function ENT:AddAmmoRack( pos, ang, mins, maxs )

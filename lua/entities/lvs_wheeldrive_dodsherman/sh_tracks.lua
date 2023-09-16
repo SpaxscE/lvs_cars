@@ -13,7 +13,7 @@ if SERVER then
 		local L4 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(0,42,45), mdl = WheelModel } )
 		local L5 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(-35,42,45), mdl = WheelModel } )
 		local L6 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(-70,42,45), mdl = WheelModel } )
-		self:CreateWheelChain( {L1, L2, L3, L4, L5, L6} )
+		local LeftWheelChain = self:CreateWheelChain( {L1, L2, L3, L4, L5, L6} )
 		self:SetTrackDriveWheelLeft( L4 )
 
 		local R1 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(100,-42,55), mdl = WheelModel } )
@@ -22,8 +22,16 @@ if SERVER then
 		local R4 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(0,-42,45), mdl = WheelModel } )
 		local R5 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(-35,-42,45), mdl = WheelModel } )
 		local R6 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(-70,-42,45), mdl = WheelModel} )
-		self:CreateWheelChain( {R1, R2, R3, R4, R5, R6} )
+		local RightWheelChain = self:CreateWheelChain( {R1, R2, R3, R4, R5, R6} )
 		self:SetTrackDriveWheelRight( R4 )
+
+		local LeftTracksArmor = self:AddArmor( Vector(40,45,40), Angle(0,0,0), Vector(-150,-15,-40), Vector(0,15,0), 500, self.FrontArmor )
+		LeftTracksArmor.OnDestroyed = LeftWheelChain.OnDestroyed
+		LeftTracksArmor.OnRepaired = LeftWheelChain.OnRepaired
+
+		local RightTracksArmor = self:AddArmor( Vector(40,-45,40), Angle(0,0,0), Vector(-150,-15,-40), Vector(0,15,0), 500, self.FrontArmor )
+		RightTracksArmor.OnDestroyed = RightWheelChain.OnDestroyed
+		RightTracksArmor.OnRepaired = RightWheelChain.OnRepaired
 
 		self:DefineAxle( {
 			Axle = {
