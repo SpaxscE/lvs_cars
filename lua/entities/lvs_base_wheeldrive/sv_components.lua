@@ -179,7 +179,7 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 			if not IsValid( Armor ) then return true end
 
 			local DamageRemaining = math.max( dmginfo:GetDamage() - Armor:GetHP(), 0 )
-			local DidDamage = Armor:OnTakeDamage( dmginfo )
+			local DidDamage = Armor:TakeTransmittedDamage( dmginfo )
 
 			if DidDamage then
 				dmginfo:SetDamage( DamageRemaining )

@@ -48,6 +48,9 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
+	end
+
+	function ENT:TakeTransmittedDamage( dmginfo )
 		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce()
 
