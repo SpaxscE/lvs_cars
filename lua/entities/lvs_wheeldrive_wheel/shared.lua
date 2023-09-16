@@ -16,6 +16,9 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Float", 5, "RPM" )
 
+	self:NetworkVar( "Float", 6, "HP" )
+	self:NetworkVar( "Float", 7, "MaxHP" )
+
 	self:NetworkVar( "Angle", 0, "AlignmentAngle" )
 
 	self:NetworkVar( "Entity", 0, "Base" )
@@ -25,6 +28,9 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Bool", 1, "Destroyed" )
 
 	if SERVER then
+		self:SetMaxHP( 100 )
+		self:SetHP( 100 )
+
 		self:SetWidth( 3 )
 	end
 end

@@ -1,7 +1,17 @@
 
 AccessorFunc(ENT, "axle", "Axle", FORCE_NUMBER)
 
+function ENT:SetDamageAllowed( allow )
+	self._AllowDamage = allow
+end
+
+function ENT:GetDamageAllowed()
+	return self._AllowDamage == true
+end
+
 function ENT:Destroy()
+	if not self:GetDamageAllowed() then return end
+
 	if self:GetDestroyed() then return end
 
 	self:SetDestroyed( true )
@@ -14,6 +24,8 @@ end
 
 function ENT:Repair()
 	if not self:GetDestroyed() then return end
+
+	self:SetHP( self:GetMaxHP() )
 
 	self:SetDestroyed( false )
 

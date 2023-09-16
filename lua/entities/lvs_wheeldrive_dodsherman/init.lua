@@ -44,15 +44,15 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(105,0,30), Angle(-45,0,0), Vector(-10,-55,-15), Vector(15,55,10), 1200, self.FrontArmor )
 
 	-- front bottom wedge
-	self:AddArmor( Vector(100,0,15), Angle(0,0,0), Vector(-40,-55,-10), Vector(0,55,10), 1200, self.FrontArmor )
+	self:AddArmor( Vector(110,0,22), Angle(-10,0,0), Vector(-40,-55,-10), Vector(0,55,10), 1200, self.FrontArmor )
 
 	-- front side wedge
-	self:AddArmor( Vector(40,45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
-	self:AddArmor( Vector(40,-45,20), Angle(0,0,0), Vector(0,-15,-20), Vector(80,15,55), 500, self.FrontArmor )
+	self:AddArmor( Vector(40,45,85), Angle(30,0,0), Vector(0,-15,-35), Vector(80,15,0), 500, self.FrontArmor )
+	self:AddArmor( Vector(40,-45,85), Angle(30,0,0), Vector(0,-15,-35), Vector(80,15,0), 500, self.FrontArmor )
 
 	-- side armor
-	self:AddArmor( Vector(40,45,40), Angle(0,0,0), Vector(-150,-15,0), Vector(0,15,35), 500, self.SideArmor )
-	self:AddArmor( Vector(40,-45,40), Angle(0,0,0), Vector(-150,-15,0), Vector(0,15,35), 500, self.SideArmor )
+	self:AddArmor( Vector(40,45,40), Angle(0,0,0), Vector(-150,-15,0), Vector(10,15,40), 500, self.SideArmor )
+	self:AddArmor( Vector(40,-45,40), Angle(0,0,0), Vector(-150,-15,0), Vector(10,15,40), 500, self.SideArmor )
 
 	-- turret
 	self:AddArmor( Vector(1.5,0,70), Angle(0,0,0), Vector(-50,-40,0), Vector(40,40,40), 1500, self.TurretArmor )

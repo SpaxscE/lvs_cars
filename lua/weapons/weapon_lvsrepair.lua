@@ -195,7 +195,7 @@ if CLIENT then
 			local boxMaxs = Target:GetMaxs()
 
 			if ply:KeyDown( IN_ATTACK ) then
-				DrawText( ply:GetEyeTrace().HitPos, (Target:GetIgnoreForce() / 100).."mm Armor Plate\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+				DrawText( ply:GetEyeTrace().HitPos, (Target:GetIgnoreForce() / 100).."mm "..Target:GetLabel().."\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
 
 			else
 				cam.Start3D()
@@ -203,7 +203,7 @@ if CLIENT then
 					render.DrawBox( boxOrigin, boxAngles, boxMins, boxMaxs, ColorSelect )
 				cam.End3D()
 
-				DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm Armor Plate\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+				DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm "..Target:GetLabel().."\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
 			end
 		else
 			local Pos = ply:GetEyeTrace().HitPos
@@ -258,7 +258,9 @@ function SWEP:PrimaryAttack()
 
 	if not ArmorMode then return end
 
-	if Target:GetDestroyed() then Target:SetDestroyed( false ) Target:OnRepaired() end
+	if Target:GetDestroyed() then Target:SetDestroyed( false ) end
+
+	Target:OnRepaired()
 end
 
 function SWEP:SecondaryAttack()

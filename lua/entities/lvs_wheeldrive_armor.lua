@@ -17,9 +17,12 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Bool",0, "Destroyed" )
 
+	self:NetworkVar( "String",0, "Label" )
+
 	if SERVER then
 		self:SetMaxHP( 100 )
 		self:SetHP( 100 )
+		self:SetLabel( "Armor Plate" )
 	end
 end
 

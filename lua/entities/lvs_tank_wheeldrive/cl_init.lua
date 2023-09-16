@@ -111,7 +111,7 @@ function ENT:TireSoundThink()
 			local pitch = 100 + math.Clamp((speed - 400) / 200,0,155)
 
 			if snd == "damage_layer" then
-				volume = math.min( speed / 400, 1 ) * T
+				volume = T
 			end
 
 			sound:ChangeVolume( volume, 0 )

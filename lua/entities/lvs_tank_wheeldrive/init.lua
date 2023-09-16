@@ -14,6 +14,12 @@ function ENT:CreateWheelChain( wheels )
 
 	local Lock = 0.0001
 
+	for _, wheel in pairs( wheels ) do
+		if not IsValid( wheel ) then continue end
+
+		wheel:SetDamageAllowed( true )
+	end
+
 	for i = 2, #wheels do
 		local prev = wheels[ i - 1 ]
 		local cur = wheels[ i ]
