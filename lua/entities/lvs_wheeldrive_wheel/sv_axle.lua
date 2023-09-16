@@ -9,7 +9,7 @@ function ENT:Destroy()
 	if not self._torqueFactor then return end
 
 	self.old_torqueFactor = self._torqueFactor
-	self._torqueFactor = 0
+	self._torqueFactor = self._torqueFactor * 0.1
 end
 
 function ENT:Repair()
