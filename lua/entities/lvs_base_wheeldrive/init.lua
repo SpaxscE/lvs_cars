@@ -53,7 +53,12 @@ local function IsServerOK( class )
 	return true
 end
 
+function ENT:TracksCreate( PObj )
+end
+
 function ENT:PostInitialize( PObj )
+
+	self:TracksCreate( PObj )
 
 	if not IsServerOK( self:GetClass() ) then
 		self:Remove()

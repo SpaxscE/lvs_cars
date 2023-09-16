@@ -90,8 +90,6 @@ ENT.ExhaustPositions = {
 function ENT:OnSetupDataTables()
 	self:AddDT( "Entity", "GunnerSeat" )
 	self:AddDT( "Bool", "UseHighExplosive" )
-
-	self:AddTracksDT()
 end
 
 function ENT:InitWeapons()

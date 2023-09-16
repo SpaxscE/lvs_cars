@@ -1,9 +1,4 @@
 
-function ENT:AddTracksDT()
-	self:AddDT( "Entity", "DriveWheelFL" )
-	self:AddDT( "Entity", "DriveWheelFR" )
-end
-
 if SERVER then
 	ENT.PivotSteerEnable = true
 	ENT.PivotSteerByBrake = false
@@ -91,6 +86,9 @@ if SERVER then
 	end
 else
 
+	ENT.TrackSystemEnable = true
+
+	ENT.TrackScrollTexture = "models/blu/tiger/track"
 	ENT.ScrollTextureData = {
 		["$bumpmap"] = "models/blu/tiger/track_nm",
 		["$phong"] = "1",
@@ -112,6 +110,18 @@ else
 		}
 	}
 
+	ENT.TrackLeftSubMaterialID = 1
+	ENT.TrackLeftSubMaterialMul = Vector(0,-0.075,0)
+
+	ENT.TrackRightSubMaterialID = 2
+	ENT.TrackRightSubMaterialMul = Vector(0,-0.075,0)
+
+	ENT.TrackPoseParameterLeft = "spin_wheels_left"
+	ENT.TrackPoseParameterLeftMul =  -1.252
+
+	ENT.TrackPoseParameterRight = "spin_wheels_right"
+	ENT.TrackPoseParameterRightMul =  -1.252
+
 	ENT.TrackSounds = "lvs/vehicles/tiger/tracks_loop.wav"
 	ENT.TrackHull = Vector(20,20,20)
 	ENT.TrackData = {}
@@ -132,26 +142,6 @@ else
 				}
 			}
 			table.insert( ENT.TrackData, data )
-		end
-	end
-
-	function ENT:CalcTrackScrollTexture()
-		local DriveWheelFL = self:GetDriveWheelFL()
-		if IsValid( DriveWheelFL ) then
-			local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r
-			local scroll = self:CalcScroll( "scroll_left", rotation )
-
-			self:SetPoseParameter("spin_wheels_left", -scroll * 1.252 )
-			self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/tiger/track", Vector(0,-scroll * 0.075,0) ) )
-		end
-
-		local DriveWheelFR = self:GetDriveWheelFR()
-		if IsValid( DriveWheelFR ) then
-			local rotation = self:WorldToLocalAngles( DriveWheelFR:GetAngles() ).r
-			local scroll = self:CalcScroll( "scroll_right", rotation )
-
-			self:SetPoseParameter("spin_wheels_right", -scroll * 1.252 )
-			self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/tiger/track", Vector(0,-scroll * 0.075,0) ) )
 		end
 	end
 end

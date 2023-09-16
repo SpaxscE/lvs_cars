@@ -1,15 +1,10 @@
 
-function ENT:AddTracksDT()
-	self:AddDT( "Entity", "DriveWheelFL" )
-	self:AddDT( "Entity", "DriveWheelFR" )
-end
-
 if SERVER then
 	ENT.PivotSteerEnable = true
 	ENT.PivotSteerByBrake = true
 	ENT.PivotSteerWheelRPM = 40
 
-	function ENT:CreateTracks()
+	function ENT:TracksCreate( PObj )
 		local WheelModel = "models/props_vehicles/tire001b_truck.mdl"
 
 		local L1 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(100,42,55), mdl = WheelModel } )
@@ -19,7 +14,7 @@ if SERVER then
 		local L5 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(-35,42,45), mdl = WheelModel } )
 		local L6 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(-70,42,45), mdl = WheelModel } )
 		self:CreateWheelChain( {L1, L2, L3, L4, L5, L6} )
-		self:SetDriveWheelFL( L4 )
+		self:SetTrackDriveWheelLeft( L4 )
 
 		local R1 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(100,-42,55), mdl = WheelModel } )
 		local R2 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(70,-42,35), mdl = WheelModel } )
@@ -28,7 +23,7 @@ if SERVER then
 		local R5 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(-35,-42,45), mdl = WheelModel } )
 		local R6 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(-70,-42,45), mdl = WheelModel} )
 		self:CreateWheelChain( {R1, R2, R3, R4, R5, R6} )
-		self:SetDriveWheelFR( R4 )
+		self:SetTrackDriveWheelRight( R4 )
 
 		self:DefineAxle( {
 			Axle = {
@@ -90,6 +85,38 @@ if SERVER then
 		} )
 	end
 else
+	ENT.TrackSystemEnable = true
+
+	ENT.TrackScrollTexture = "models/blu/track_sherman"
+	ENT.ScrollTextureData = {
+		["$alphatest"] = "1",
+		["$translate"] = "[0.0 0.0 0.0]",
+		["$colorfix"] = "{255 255 255}",
+		["Proxies"] = {
+			["TextureTransform"] = {
+				["translateVar"] = "$translate",
+				["centerVar"]    = "$center",
+				["resultVar"]    = "$basetexturetransform",
+			},
+			["Equals"] = {
+				["srcVar1"] =  "$colorfix",
+				["resultVar"] = "$color",
+			}
+		}
+	}
+
+	ENT.TrackLeftSubMaterialID = 1
+	ENT.TrackLeftSubMaterialMul = Vector(0,0.0065,0)
+
+	ENT.TrackRightSubMaterialID = 2
+	ENT.TrackRightSubMaterialMul = Vector(0,0.0065,0)
+
+	ENT.TrackPoseParameterLeft = "spin_wheels_left"
+	ENT.TrackPoseParameterLeftMul =  -1.252
+
+	ENT.TrackPoseParameterRight = "spin_wheels_right"
+	ENT.TrackPoseParameterRightMul =  -1.252
+
 	ENT.TrackSounds = "lvs/vehicles/sherman/tracks_loop.wav"
 	ENT.TrackHull = Vector(20,20,20)
 	ENT.TrackData = {}
@@ -110,26 +137,6 @@ else
 				}
 			}
 			table.insert( ENT.TrackData, data )
-		end
-	end
-
-	function ENT:CalcTrackScrollTexture()
-		local DriveWheelFL = self:GetDriveWheelFL()
-		if IsValid( DriveWheelFL ) then
-			local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r
-			local scroll = self:CalcScroll( "scroll_left", rotation )
-
-			self:SetPoseParameter("spin_wheels_left", -scroll * 1.252 )
-			self:SetSubMaterial( 1, self:ScrollTexture( "left", "models/blu/track_sherman", Vector(0,scroll * 0.0065,0) ) )
-		end
-
-		local DriveWheelFR = self:GetDriveWheelFR()
-		if IsValid( DriveWheelFR ) then
-			local rotation = self:WorldToLocalAngles( DriveWheelFR:GetAngles() ).r
-			local scroll = self:CalcScroll( "scroll_right", rotation )
-
-			self:SetPoseParameter("spin_wheels_right", -scroll * 1.252 )
-			self:SetSubMaterial( 2, self:ScrollTexture( "right", "models/blu/track_sherman", Vector(0,scroll * 0.0065,0) ) )
 		end
 	end
 end

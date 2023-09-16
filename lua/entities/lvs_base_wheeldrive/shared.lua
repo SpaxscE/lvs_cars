@@ -105,9 +105,13 @@ function ENT:SetupDataTables()
 	self:AddDT( "Vector", "AIAimVector" )
 
 	self:TurretSystemDT()
+	self:TrackSystemDT()
 end
 
 function ENT:TurretSystemDT()
+end
+
+function ENT:TrackSystemDT()
 end
 
 function ENT:StabilityAssist()

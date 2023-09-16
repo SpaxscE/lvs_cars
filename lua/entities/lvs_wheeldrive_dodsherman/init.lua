@@ -36,8 +36,6 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(-79.66,0,70), Angle(0,180,0) )
 	self:AddFuelTank( Vector(-75,0,20), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-30,0),Vector(10,30,40) )
 
-	self:CreateTracks()
-
 	-- front upper wedge
 	self:AddArmor( Vector(90,0,60), Angle(30,0,0), Vector(-40,-55,-15), Vector(25,55,-2), 1200, self.FrontArmor )
 
