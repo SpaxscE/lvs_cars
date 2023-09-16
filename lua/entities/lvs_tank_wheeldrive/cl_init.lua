@@ -17,7 +17,7 @@ function ENT:CalcTrackScrollTexture()
 		local scroll = self:CalcScroll( "scroll_left", rotation )
 
 		self:SetPoseParameter(self.TrackPoseParameterLeft, scroll * self.TrackPoseParameterLeftMul )
-		self:SetSubMaterial( 1, self:ScrollTexture( "left", self.TrackScrollTexture, self.TrackLeftSubMaterialMul * scroll ) )
+		self:SetSubMaterial( self.TrackLeftSubMaterialID, self:ScrollTexture( "left", self.TrackScrollTexture, self.TrackLeftSubMaterialMul * scroll ) )
 	end
 
 	local DriveWheelFR = self:GetTrackDriveWheelRight()
@@ -26,7 +26,7 @@ function ENT:CalcTrackScrollTexture()
 		local scroll = self:CalcScroll( "scroll_right", rotation )
 
 		self:SetPoseParameter(self.TrackPoseParameterRight, scroll * self.TrackPoseParameterRightMul )
-		self:SetSubMaterial( 2, self:ScrollTexture( "right", self.TrackScrollTexture, self.TrackRightSubMaterialMul * scroll ) )
+		self:SetSubMaterial( self.TrackRightSubMaterialID, self:ScrollTexture( "right", self.TrackScrollTexture, self.TrackRightSubMaterialMul * scroll ) )
 	end
 end
 

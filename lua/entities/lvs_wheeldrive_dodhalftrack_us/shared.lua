@@ -58,10 +58,6 @@ ENT.EngineSounds = {
 	},
 }
 
-function ENT:OnSetupDataTables()
-	self:AddTracksDT()
-end
-
 ENT.Lights = {
 	{
 		Trigger = "main",

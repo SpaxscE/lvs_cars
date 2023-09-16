@@ -75,8 +75,6 @@ function ENT:OnSpawn( PObj )
 			SpringRelativeDamping = 2000,
 		},
 	} )
-
-	self:CreateTracks()
 end
 
 function ENT:OnEngineActiveChanged( Active )

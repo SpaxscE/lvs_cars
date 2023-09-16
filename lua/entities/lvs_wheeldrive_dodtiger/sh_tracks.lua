@@ -4,7 +4,7 @@ if SERVER then
 	ENT.PivotSteerByBrake = false
 	ENT.PivotSteerWheelRPM = 40
 
-	function ENT:CreateTracks()
+	function ENT:TracksCreate( PObj )
 		local WheelModel = "models/props_vehicles/tire001b_truck.mdl"
 
 		local L1 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(115,55,45), mdl = WheelModel } )
@@ -14,7 +14,7 @@ if SERVER then
 		local L5 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(-45,55,35), mdl = WheelModel } )
 		local L6 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_LEFT, pos = Vector(-85,55,35), mdl = WheelModel } )
 		self:CreateWheelChain( {L1, L2, L3, L4, L5, L6} )
-		self:SetDriveWheelFL( L4 )
+		self:SetTrackDriveWheelLeft( L4 )
 
 		local R1 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(115,-55,45), mdl = WheelModel } )
 		local R2 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(75,-55,25), mdl = WheelModel } )
@@ -23,7 +23,7 @@ if SERVER then
 		local R5 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(-45,-55,35), mdl = WheelModel } )
 		local R6 = self:AddWheel( { hide = true, wheeltype = LVS.WHEELTYPE_RIGHT, pos = Vector(-85,-55,35), mdl = WheelModel} )
 		self:CreateWheelChain( {R1, R2, R3, R4, R5, R6} )
-		self:SetDriveWheelFR( R4 )
+		self:SetTrackDriveWheelRight( R4 )
 
 		self:DefineAxle( {
 			Axle = {

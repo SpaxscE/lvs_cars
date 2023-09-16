@@ -1,22 +1,17 @@
 
-function ENT:AddTracksDT()
-	self:AddDT( "Entity", "DriveWheelFL" )
-	self:AddDT( "Entity", "DriveWheelFR" )
-end
-
 if SERVER then
-	function ENT:CreateTracks()
+	function ENT:TracksCreate( PObj )
 		local WheelModel = "models/diggercars/m5m16/m5_wheel.mdl"
 
 		local L1 = self:AddWheel( { hide = true, pos = Vector(-37,32,23), mdl = WheelModel } )
 		local L2 = self:AddWheel( { hide = true, pos = Vector(-75,32,23), mdl = WheelModel } )
 		self:CreateWheelChain( {L1, L2} )
-		self:SetDriveWheelFL( L1 )
+		self:SetTrackDriveWheelLeft( L1 )
 
 		local R1 = self:AddWheel( { hide = true, pos = Vector(-37,-32,23), mdl = WheelModel, mdl_ang = Angle(0,180,0) } )
 		local R2 = self:AddWheel( { hide = true, pos = Vector(-75,-32,23), mdl = WheelModel, mdl_ang = Angle(0,180,0) } )
 		self:CreateWheelChain( {R1, R2} )
-		self:SetDriveWheelFR( R1 )
+		self:SetTrackDriveWheelRight( R1 )
 
 		self:DefineAxle( {
 			Axle = {
@@ -38,7 +33,9 @@ if SERVER then
 		} )
 	end
 else
+	ENT.TrackSystemEnable = true
 
+	ENT.TrackScrollTexture = "models/diggercars/m5m16/m5_tracks_right"
 	ENT.ScrollTextureData = {
 		["$bumpmap"] = "models/diggercars/shared/skin_nm",
 		["$phong"] = "1",
@@ -59,6 +56,18 @@ else
 			}
 		}
 	}
+
+	ENT.TrackLeftSubMaterialID = 5
+	ENT.TrackLeftSubMaterialMul = Vector(-0.0725,0,0)
+
+	ENT.TrackRightSubMaterialID = 6
+	ENT.TrackRightSubMaterialMul = Vector(-0.0725,0,0)
+
+	ENT.TrackPoseParameterLeft = "spin_wheels_left"
+	ENT.TrackPoseParameterLeftMul = -2
+
+	ENT.TrackPoseParameterRight = "spin_wheels_right"
+	ENT.TrackPoseParameterRightMul = -2
 
 	ENT.TrackSounds = "lvs/vehicles/halftrack/tracks_loop.wav"
 	ENT.TrackHull = Vector(5,5,5)
@@ -81,26 +90,6 @@ else
 				}
 			}
 			table.insert( ENT.TrackData, data )
-		end
-	end
-
-	function ENT:CalcTrackScrollTexture()
-		local DriveWheelFL = self:GetDriveWheelFL()
-		if IsValid( DriveWheelFL ) then
-			local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r
-			local scroll = self:CalcScroll( "scroll_left", rotation )
-
-			self:SetPoseParameter("spin_wheels_left", -scroll * 2 )
-			self:SetSubMaterial( 5, self:ScrollTexture( "left", "models/diggercars/m5m16/m5_tracks_right", Vector(-scroll * 0.0725,0,0) ) )
-		end
-
-		local DriveWheelFR = self:GetDriveWheelFR()
-		if IsValid( DriveWheelFR ) then
-			local rotation = self:WorldToLocalAngles( DriveWheelFR:GetAngles() ).r
-			local scroll = self:CalcScroll( "scroll_right", rotation )
-
-			self:SetPoseParameter("spin_wheels_right", -scroll * 2 )
-			self:SetSubMaterial( 6, self:ScrollTexture( "right", "models/diggercars/m5m16/m5_tracks_right", Vector(-scroll * 0.0725,0,0) ) )
 		end
 	end
 end
