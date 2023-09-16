@@ -1,5 +1,7 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
+AddCSLuaFile( "cl_tankview.lua" )
+AddCSLuaFile( "cl_attached_playermodels.lua" )
 AddCSLuaFile( "sh_turret.lua" )
 include("shared.lua")
 include("sh_turret.lua")

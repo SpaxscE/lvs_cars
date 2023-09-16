@@ -1,23 +1,8 @@
 include("shared.lua")
 include("sh_tracks.lua")
-include("cl_optics.lua")
 include("sh_turret.lua")
-
-include("entities/lvs_tank_wheeldrive/cl_tankview.lua")
-function ENT:TankViewOverride( ply, pos, angles, fov, pod )
-	if ply == self:GetDriver() and not pod:GetThirdPersonMode() then
-		local ID = self:LookupAttachment( "turret_cannon" )
-
-		local Muzzle = self:GetAttachment( ID )
-
-		if Muzzle then
-			pos =  Muzzle.Pos - Muzzle.Ang:Up() * 65 - Muzzle.Ang:Forward() * 10 - Muzzle.Ang:Right() * 8
-		end
-
-	end
-
-	return pos, angles, fov
-end
+include("cl_optics.lua")
+include("cl_tankview.lua")
 
 local switch = Material("lvs/weapons/change_ammo.png")
 local AP = Material("lvs/weapons/bullet_ap.png")
