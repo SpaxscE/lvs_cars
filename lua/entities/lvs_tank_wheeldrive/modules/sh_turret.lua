@@ -3,7 +3,7 @@ ENT.TurretAimRate = 25
 ENT.TurretRotationSound = "vehicles/tank_turret_loop1.wav"
 
 ENT.TurretFakeBarrel = false
-ENT.TurretRotationCenter = vector_origin
+ENT.TurretFakeBarrelRotationCenter = vector_origin
 
 ENT.TurretPitchPoseParameterName = "turret_pitch"
 ENT.TurretPitchMin = -15
@@ -123,7 +123,7 @@ function ENT:AimTurret()
 	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
 
 	if self.TurretFakeBarrel then
-		AimAngles = self:WorldToLocalAngles( (self:LocalToWorld( self.TurretRotationCenter ) - self:GetEyeTrace().HitPos):Angle() )
+		AimAngles = self:WorldToLocalAngles( (self:LocalToWorld( self.TurretFakeBarrelRotationCenter ) - self:GetEyeTrace().HitPos):Angle() )
 	end
 
 	local AimRate = self.TurretAimRate * FrameTime() 

@@ -4,7 +4,7 @@ include("entities/lvs_tank_wheeldrive/modules/sh_turret.lua")
 ENT.TurretAimRate = 50
 
 ENT.TurretFakeBarrel = true
-ENT.TurretRotationCenter =  Vector(-63,0,85)
+ENT.TurretFakeBarrelRotationCenter =  Vector(-63,0,85)
 
 ENT.TurretRotationSound = "vehicles/tank_turret_loop1.wav"
 
