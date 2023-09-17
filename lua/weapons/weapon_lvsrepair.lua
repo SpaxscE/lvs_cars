@@ -240,7 +240,7 @@ function SWEP:PrimaryAttack()
 		local ent = ply:GetEyeTrace().Entity
 
 		if IsValid( ent ) and (ent:GetPos() - ply:GetShootPos()):Length() < self.MaxRange and ent:GetClass() == "lvs_item_mine" then
-			if SERVER then timer.Simple(0, function() if not IsValid( ent ) then return end ent:Detonate( true ) end ) end
+			if SERVER then timer.Simple(0, function() if not IsValid( ent ) then return end ent:Detonate() end ) end
 		end
 		return
 	end

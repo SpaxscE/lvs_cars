@@ -47,7 +47,7 @@ if SERVER then
 	function ENT:Use( ply )
 	end
 
-	function ENT:Detonate( nodamage )
+	function ENT:Detonate()
 		if self.IsExploded then return end
 
 		self.IsExploded = true
@@ -61,12 +61,6 @@ if SERVER then
 			util.Effect( "WaterSurfaceExplosion", effectdata, true, true )
 		else
 			util.Effect( "lvs_defence_explosion", effectdata )
-		end
-
-		if nodamage then
-			self:Remove()
-
-			return
 		end
 
 		self:SetNoDraw( true )
