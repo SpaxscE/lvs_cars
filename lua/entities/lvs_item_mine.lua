@@ -102,7 +102,13 @@ if SERVER then
 			self.IgnoreEnt = HitEnt
 		end
 
-		if HitEnt == self.IgnoreEnt then return end
+		if HitEnt == self.IgnoreEnt then
+			if data.Speed > 60 and data.DeltaTime > 0.1 then
+				self:EmitSound( "weapon.ImpactHard" )
+			end
+
+			return
+		end
 
 		PhysObj:SetVelocity( data.OurOldVelocity * 0.5 )
 
