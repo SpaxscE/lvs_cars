@@ -40,6 +40,8 @@ if SERVER then
 		self:SetSolid( SOLID_VPHYSICS )
 		self:SetUseType( SIMPLE_USE )
 		self:SetCollisionGroup( COLLISION_GROUP_WEAPON  )
+
+		self.First = true
 	end
 
 	function ENT:Use( ply )
@@ -95,6 +97,13 @@ if SERVER then
 	function ENT:PhysicsCollide( data, PhysObj )
 		local HitEnt = data.HitEntity
 
+		if self.First then
+			self.First = nil
+			self.IgnoreEnt = HitEnt
+		end
+
+		if HitEnt == self.IgnoreEnt then return end
+
 		PhysObj:SetVelocity( data.OurOldVelocity * 0.5 )
 
 		if not IsValid( HitEnt ) or HitEnt:IsWorld() then 
@@ -105,7 +114,7 @@ if SERVER then
 			return
 		end
 
-		if not HitEnt:IsPlayer() and PhysObj:GetStress() > 10 then
+		if not HitEnt:IsPlayer() and PhysObj:GetStress() > 10 and HitEnt:GetClass() ~= self:GetClass() then
 			self.ShouldDetonate = true
 		else
 			if data.Speed > 60 and data.DeltaTime > 0.1 then
