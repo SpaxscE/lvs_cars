@@ -52,6 +52,10 @@ if SERVER then
 	end
 
 	function ENT:Detonate()
+		if self.IsExploded then return end
+
+		self.IsExploded = true
+
 		local Pos = self:GetPos()
 
 		local effectdata = EffectData()
