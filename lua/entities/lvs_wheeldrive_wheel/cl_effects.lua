@@ -147,7 +147,8 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 		effectdata:SetOrigin( self:GetPos() + Base:GetUp() * (self:GetRadius() - 5) * (math.random(0,1) == 1 and -1 or 1) )
 		effectdata:SetNormal( self:GetRight() )
 		effectdata:SetMagnitude( mag )
-		util.Effect( "lvs_physics_scrape", effectdata, true, true )
+		effectdata:SetRadius( 8 * mag )
+		util.Effect( "Sparks", effectdata, true, true )
 
 		Base:DoTireSound( "damage_layer" )
 	end

@@ -48,7 +48,11 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(0,-50,30), Angle(0,0,0), Vector(-120,-15,0), Vector(80,15,45), 1500, self.SideArmor )
 
 	-- turret
-	self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 3000, self.TurretArmor )
+	local TurretArmor = self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 3000, self.TurretArmor )
+	TurretArmor.OnDestroyed = function( ent, dmginfo ) if not IsValid( self ) then return end self:SetTurretDestroyed( true ) end
+	TurretArmor.OnRepaired = function( ent ) if not IsValid( self ) then return end self:SetTurretDestroyed( false ) end
+	TurretArmor:SetLabel( "Turret" )
+	self:SetTurretArmor( TurretArmor )
 
 	-- rear
 	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-45,0),Vector(10,45,65), 500, self.RearArmor )
@@ -57,5 +61,5 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverViewPort( Vector(105,21,55), Angle(0,0,0), Vector(-1,-7,-1), Vector(1,7,1) )
 
 	-- ammo rack weakspot
-	self:AddAmmoRack( Vector(0,0,75), Angle(0,0,0), Vector(-15,-30,-20), Vector(15,30,20) )
+	self:AddAmmoRack( Vector(0,0,65), Angle(0,0,0), Vector(-15,-30,-40), Vector(15,30,0) )
 end

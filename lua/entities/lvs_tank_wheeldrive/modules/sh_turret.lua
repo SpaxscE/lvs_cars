@@ -1,6 +1,7 @@
 ENT.TurretAimRate = 25
 
 ENT.TurretRotationSound = "vehicles/tank_turret_loop1.wav"
+ENT.TurretRotationSoundDamaged = "physics/metal/metal_box_scrape_rough_loop1.wav"
 
 ENT.TurretFakeBarrel = false
 ENT.TurretFakeBarrelRotationCenter = vector_origin
@@ -19,6 +20,8 @@ function ENT:TurretSystemDT()
 	self:AddDT( "Float", "TurretPitch" )
 	self:AddDT( "Float", "TurretYaw" )
 	self:AddDT( "Bool", "TurretEnabled" )
+	self:AddDT( "Bool", "TurretDestroyed" )
+	self:AddDT( "Entity", "TurretArmor" )
 
 	if SERVER then
 		self:SetTurretEnabled( true )
@@ -55,8 +58,42 @@ else
 		local PlayPitch = PitchVolume > 0.95
 		local PlayYaw = YawVolume > 0.95
 
-		if  PlayPitch or PlayYaw then
+		local TurretArmor = self:GetTurretArmor()
+		local Destroyed = self:GetTurretDestroyed()
+
+		if Destroyed and (PlayPitch or PlayYaw) and IsValid( TurretArmor ) then
+			local T = CurTime()
+
+			if (self._NextTurDMGfx or 0) < T then
+				self._NextTurDMGfx = T + 0.25
+
+				local Maxs = TurretArmor:GetMaxs()
+				local Radius = math.max( Maxs.x, Maxs.y )
+
+				for i = 0, 360, 120 do
+					local Ang = Yaw +  i
+
+					local X = math.cos( math.rad( Ang ) ) * Radius * 0.8
+					local Y = math.sin( math.rad( Ang ) ) * Radius * 0.8
+
+					local StartPos = TurretArmor:GetPos()
+					local EndPos = TurretArmor:LocalToWorld( Vector(X,Y,5) )
+
+					local effectdata = EffectData()
+					effectdata:SetOrigin( EndPos )
+					effectdata:SetNormal( (EndPos - StartPos):GetNormalized() )
+					effectdata:SetRadius( 0 )
+					util.Effect( "cball_bounce", effectdata, true, true )
+				end
+			end
+		end
+
+		if PlayPitch or PlayYaw then
 			self:DoTurretSound()
+
+			if Destroyed then self:StartTurretSoundDMG() end
+		else
+			self:StopTurretSoundDMG()
 		end
 
 		local T = self:GetTurretSoundTime()
@@ -67,7 +104,7 @@ else
 			local pitch = 90 + 10 * (1 - volume)
 
 			sound:ChangeVolume( volume * 0.25, 0.25 )
-			sound:ChangePitch( pitch, 0.25 ) 
+			sound:ChangePitch( pitch, 0.25 )
 		else
 			self:StopTurretSound()
 		end
@@ -87,8 +124,25 @@ else
 
 	function ENT:StopTurretSound()
 		if not self._turretSND then return end
+
 		self._turretSND:Stop()
 		self._turretSND = nil
+	end
+
+	function ENT:StartTurretSoundDMG()
+		if self._turretSNDdmg then return self._turretSNDdmg end
+
+		self._turretSNDdmg = CreateSound( self, self.TurretRotationSoundDamaged  )
+		self._turretSNDdmg:PlayEx(0.5, 100)
+
+		return self._turretSNDdmg
+	end
+
+	function ENT:StopTurretSoundDMG()
+		if not self._turretSNDdmg then return end
+
+		self._turretSNDdmg:Stop()
+		self._turretSNDdmg = nil
 	end
 
 	function ENT:StartTurretSound()
@@ -102,6 +156,7 @@ else
 
 	function ENT:OnRemoved()
 		self:StopTurretSound()
+		self:StopTurretSoundDMG()
 	end
 
 	function ENT:OnTick()
@@ -118,7 +173,7 @@ function ENT:IsTurretEnabled()
 end
 
 function ENT:AimTurret()
-	if not self:IsTurretEnabled() then if SERVER then self:StopTurretSound() end return end
+	if not self:IsTurretEnabled() then if SERVER then self:StopTurretSound() self:StopTurretSoundDMG() end return end
 
 	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
 
@@ -127,6 +182,10 @@ function ENT:AimTurret()
 	end
 
 	local AimRate = self.TurretAimRate * FrameTime() 
+
+	if self:GetTurretDestroyed() then
+		AimRate = AimRate * 0.25
+	end
 
 	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), self.TurretPitchMin, self.TurretPitchMax )
 	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
