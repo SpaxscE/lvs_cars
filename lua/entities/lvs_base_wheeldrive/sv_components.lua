@@ -56,11 +56,16 @@ function ENT:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs )
 
 	self:TransferCPPI( FuelTank )
 
+	mins = mins or Vector(-15,-15,-5)
+	maxs = maxs or Vector(15,15,5)
+
+	debugoverlay.BoxAngles( self:LocalToWorld( pos ), mins, maxs, self:LocalToWorldAngles( ang ), 15, Color( 255, 255, 0, 255 ) )
+
 	self:AddDS( {
 		pos = pos,
 		ang = ang,
-		mins = (mins or Vector(-15,-15,-5)),
-		maxs =  (maxs or Vector(15,15,5)),
+		mins = mins,
+		maxs =  maxs,
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( FuelTank ) then return end
 

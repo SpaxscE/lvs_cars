@@ -11,6 +11,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Bool",0, "Destroyed" )
 
+	self:NetworkVar( "Vector",0, "EffectPosition" )
+
 	if SERVER then
 		self:SetMaxHP( 500 )
 		self:SetHP( 500 )
@@ -140,9 +142,11 @@ function ENT:Think()
 
 	local Scale = math.min( (T - (self.StartFireTime or T)) / 2, 1 )
 
+	local Base = self:GetBase()
+
 	local effectdata = EffectData()
-		effectdata:SetOrigin( self:GetPos() )
-		effectdata:SetEntity( self:GetBase() )
+		effectdata:SetOrigin( Base:LocalToWorld( self:GetEffectPosition() ) )
+		effectdata:SetEntity( Base )
 		effectdata:SetMagnitude( Scale )
 	util.Effect( "lvs_ammorack_fire", effectdata )
 

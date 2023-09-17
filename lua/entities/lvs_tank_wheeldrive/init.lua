@@ -54,7 +54,7 @@ function ENT:CreateWheelChain( wheels )
 	return WheelChain
 end
 
-function ENT:AddAmmoRack( pos, ang, mins, maxs )
+function ENT:AddAmmoRack( pos, fxpos, ang, mins, maxs )
 	local AmmoRack = ents.Create( "lvs_wheeldrive_ammorack" )
 
 	if not IsValid( AmmoRack ) then
@@ -71,16 +71,22 @@ function ENT:AddAmmoRack( pos, ang, mins, maxs )
 	AmmoRack:Activate()
 	AmmoRack:SetParent( self )
 	AmmoRack:SetBase( self )
+	AmmoRack:SetEffectPosition( fxpos )
 
 	self:DeleteOnRemove( AmmoRack )
 
 	self:TransferCPPI( AmmoRack )
 
+	mins = mins or Vector(-30,-30,-30)
+	maxs = maxs or Vector(30,30,30)
+
+	debugoverlay.BoxAngles( self:LocalToWorld( pos ), mins, maxs, self:LocalToWorldAngles( ang ), 15, Color( 255, 0, 0, 255 ) )
+
 	self:AddDS( {
 		pos = pos,
 		ang = ang,
-		mins = (mins or Vector(-30,-30,-30)),
-		maxs =  (maxs or Vector(30,30,30)),
+		mins = mins,
+		maxs =  maxs,
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( AmmoRack ) then return end
 

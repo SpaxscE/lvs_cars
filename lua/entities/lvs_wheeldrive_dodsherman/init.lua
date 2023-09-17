@@ -35,7 +35,7 @@ function ENT:OnSpawn( PObj )
 	self:SetGunnerSeat( GunnerSeat )
 
 	self:AddEngine( Vector(-79.66,0,70), Angle(0,180,0) )
-	self:AddFuelTank( Vector(-75,0,20), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-10,-30,0),Vector(10,30,40) )
+	self:AddFuelTank( Vector(-75,0,40), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL, Vector(0,-20,-18),Vector(18,20,18) )
 
 	-- front upper wedge
 	self:AddArmor( Vector(90,0,60), Angle(30,0,0), Vector(-40,-55,-15), Vector(25,55,-2), 1200, self.FrontArmor )
@@ -68,5 +68,6 @@ function ENT:OnSpawn( PObj )
 	self:AddDriverViewPort( Vector(90,21,58), Angle(0,0,0), Vector(-2,-7,-2), Vector(2,7,2) )
 
 	-- ammo rack weakspot
-	self:AddAmmoRack( Vector(-5,0,70), Angle(0,0,0), Vector(-15,-30,-15), Vector(0,30,0) )
+	self:AddAmmoRack( Vector(0,40,64), Vector(-5,0,70), Angle(0,0,0), Vector(-18,-6,-9), Vector(18,6,9) )
+	self:AddAmmoRack( Vector(0,-40,64), Vector(-5,0,70), Angle(0,0,0), Vector(-18,-6,-9), Vector(18,6,9) )
 end
