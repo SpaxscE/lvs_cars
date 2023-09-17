@@ -148,6 +148,7 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 		effectdata:SetNormal( self:GetRight() )
 		effectdata:SetMagnitude( mag )
 		effectdata:SetRadius( 8 * mag )
+		effectdata:SetScale( mag )
 		util.Effect( "Sparks", effectdata, true, true )
 
 		Base:DoTireSound( "damage_layer" )
