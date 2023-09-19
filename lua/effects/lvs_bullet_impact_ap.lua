@@ -97,44 +97,18 @@ function EFFECT:Init( data )
 
 			if not particle then continue end
 
-			particle:SetVelocity( (dir * 50 * i + VectorRand() * 25) )
+			particle:SetVelocity( (dir * 25 * i + VectorRand() * 25) )
 			particle:SetDieTime( (i / 8) * DieTime )
 			particle:SetAirResistance( 10 ) 
 			particle:SetStartAlpha( 255 )
-			particle:SetStartSize( 10 )
-			particle:SetEndSize( 20 * i )
+			particle:SetStartSize( 5 )
+			particle:SetEndSize( 10 * i )
 			particle:SetRollDelta( math.Rand(-1,1) )
 			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 			particle:SetGravity( Vector(0,0,-600) )
 			particle:SetCollide( false )
 		end
 	end
-
-	--[[
-	for i = 1,12 do
-		local particle = emitter:Add( self.DustMat[ math.random(1,#self.DustMat) ] , pos )
-		
-		if particle then
-			local ang = i * 30
-			local X = math.cos( math.rad(ang) )
-			local Y = math.sin( math.rad(ang) )
-
-			local Vel = Vector(X,Y,0) * math.Rand(200,1600) + Vector(0,0,50)
-			Vel:Rotate( dir:Angle() + Angle(90,0,0) )
-
-			particle:SetVelocity( Vel * 0.5 )
-			particle:SetDieTime( DieTime )
-			particle:SetAirResistance( 500 ) 
-			particle:SetStartAlpha( 100 )
-			particle:SetStartSize( 20 )
-			particle:SetEndSize( 100 )
-			particle:SetRollDelta( math.Rand(-1,1) )
-			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
-			particle:SetGravity( Vector(0,0,30) )
-			particle:SetCollide( true )
-		end
-	end
-	]]
 
 	emitter:Finish()
 end
