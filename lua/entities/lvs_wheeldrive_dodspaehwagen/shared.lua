@@ -257,7 +257,7 @@ function ENT:InitWeapons()
 		end
 	end
 	weapon.OnOverheat = function( ent )
-		ent:EmitSound("lvs/overheat.wav")
+		ent:EmitSound("lvs/vehicles/222/cannon_overheat.wav")
 	end
 	self:AddWeapon( weapon )
 
