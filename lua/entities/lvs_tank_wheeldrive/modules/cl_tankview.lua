@@ -54,6 +54,10 @@ function ENT:CalcTankView( ply, original_pos, original_ang, original_fov, pod )
 end
 
 function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
+	if not pod:GetThirdPersonMode() then
+		angles = pod:LocalToWorldAngles( ply:EyeAngles() )
+	end
+
 	return self:CalcTankView( ply, pos, angles, fov, pod )
 end
 
@@ -62,5 +66,9 @@ function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
 end
 
 function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
+	if not pod:GetThirdPersonMode() then
+		angles = pod:LocalToWorldAngles( ply:EyeAngles() )
+	end
+
 	return self:CalcTankView( ply, pos, angles, fov, pod )
 end
