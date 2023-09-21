@@ -67,7 +67,7 @@ PLEASE READ:
 ENT.MaxVelocity = 1400 -- max velocity in forward direction in gmod-units/second
 --ENT.MaxVelocityReverse = 700 -- max velocity in reverse
 
---ENT.EngineCurve = 0.65 -- value goes from 0 to 1. Get into a car and type "developer 1" into the console to see the currents engine curve
+--ENT.EngineCurve = 0.65 -- value goes from 0 to 1. Get into a car and type "developer 1" into the console to see the current engine curve
 ENT.EngineTorque = 150
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000
@@ -89,9 +89,9 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 
 --ENT.FastSteerActiveVelocity = 500 -- at which velocity the steering will clamp the steer angle
 --ENT.FastSteerAngleClamp = 10 -- to which the steering angle is clamped to when speed is above ENT.FastSteerActiveVelocity
---ENT.FastSteerDeactivationDriftAngle = 7 -- drift angle where ENT.FastSteerActiveVelocity is ignored and the steering becomes unclamped
+--ENT.FastSteerDeactivationDriftAngle = 7 -- allowed drift angle until ENT.FastSteerActiveVelocity is ignored and the steering becomes unclamped
 
---ENT.SteerAssistDeadZoneAngle = 1 -- changed how much drift the counter steer system allows before interfering. 1 = 1° of drift without interfering
+--ENT.SteerAssistDeadZoneAngle = 1 -- changes how much drift the counter steer system allows before interfering. 1 = 1° of drift without interfering
 --ENT.SteerAssistMaxAngle = 15 -- max steering angle the counter steer system is allowed to help the player
 --ENT.SteerAssistExponent = 1.5 -- an exponent to the counter steering curve. Just leave it at 1.5
 --ENT.SteerAssistMultiplier = 3 -- how "quick" the counter steer system is steering
@@ -110,8 +110,8 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.WheelPhysicsMass = 100 -- do not mess with this unless you can balance everything yourself again.
 --ENT.WheelPhysicsInertia = Vector(10,8,10) -- do not mess with this unless you can balance everything yourself again.
 
---ENT.WheelBrakeAutoLockup = false -- set this to true for offroad vehicles. Autobrakes the vehicle so you dont have to keep holding the brake/handbrake button
---ENT.WheelBrakeLockupRPM = 50 -- rpm in which the auto-brake is enabled
+--ENT.WheelBrakeAutoLockup = false -- set this to true for offroad vehicles. This will engage the brake automatically so you dont have to keep holding the brake/handbrake button
+--ENT.WheelBrakeLockupRPM = 50 -- wheel rpm in which the auto-brake is enabled
 
 --ENT.WheelBrakeForce = 400 -- how strong the brakes are. Just leave at 400. Allows for good braking while still allowing some turning. It has some build in ABS but it isnt perfect because even tho velocities say it isnt sliding the wheel will still visually slide in source...
 
