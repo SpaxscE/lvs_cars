@@ -13,3 +13,7 @@ function ENT:TrackSystemDT()
 	self:AddDT( "Entity", "TrackDriveWheelLeft" )
 	self:AddDT( "Entity", "TrackDriveWheelRight" )
 end
+
+function ENT:GetVehicleType()
+	return "tank"
+end
