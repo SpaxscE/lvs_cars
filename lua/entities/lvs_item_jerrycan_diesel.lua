@@ -12,9 +12,10 @@ ENT.AdminOnly		= false
 
 ENT.AutomaticFrameAdvance = true
 
+ENT.FuelAmount = 120 -- seconds
 ENT.FuelType = LVS.FUELTYPE_DIESEL
 
-ENT.lvsGasStationFillSpeed = 0.01
+ENT.lvsGasStationFillSpeed = 0.05
 ENT.lvsGasStationRefillMe = true
 
 if SERVER then
