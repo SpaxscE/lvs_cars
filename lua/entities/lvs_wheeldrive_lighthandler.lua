@@ -162,6 +162,22 @@ function ENT:CreateSubMaterial( SubMaterialID, name )
 	return CreateMaterial( name..SubMaterialID..base:GetClass()..base:EntIndex(), "VertexLitGeneric", util.KeyValuesToTable( string_data ) )
 end
 
+function ENT:ResetSubMaterials()
+	local base = self:GetBase()
+
+	if not IsValid( base ) then return end
+
+	local data = base.Lights
+
+	if not istable( data ) then return end
+
+	for typeid, typedata in pairs( data ) do
+		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
+
+		base:SetSubMaterial(typedata.SubMaterialID, "")
+	end
+end
+
 function ENT:CreateProjectedTexture( id, mat, col, brightness, shadows, nearz, farz, fov )
 	if not mat then return end
 
@@ -533,6 +549,7 @@ end
 
 function ENT:OnRemove()
 	self:ClearProjectedTextures()
+	self:ResetSubMaterials()
 end
 
 function ENT:Draw()
