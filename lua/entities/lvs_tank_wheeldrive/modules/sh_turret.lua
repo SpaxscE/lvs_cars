@@ -65,26 +65,13 @@ else
 			local T = CurTime()
 
 			if (self._NextTurDMGfx or 0) < T then
-				self._NextTurDMGfx = T + 0.25
+				self._NextTurDMGfx = T + 0.1
 
-				local Maxs = TurretArmor:GetMaxs()
-				local Radius = math.max( Maxs.x, Maxs.y )
-
-				for i = 0, 360, 120 do
-					local Ang = Yaw +  i
-
-					local X = math.cos( math.rad( Ang ) ) * Radius * 0.8
-					local Y = math.sin( math.rad( Ang ) ) * Radius * 0.8
-
-					local StartPos = TurretArmor:GetPos()
-					local EndPos = TurretArmor:LocalToWorld( Vector(X,Y,5) )
-
-					local effectdata = EffectData()
-					effectdata:SetOrigin( EndPos )
-					effectdata:SetNormal( (EndPos - StartPos):GetNormalized() )
-					effectdata:SetRadius( 0 )
-					util.Effect( "cball_bounce", effectdata, true, true )
-				end
+				local effectdata = EffectData()
+				effectdata:SetOrigin( TurretArmor:GetPos() )
+				effectdata:SetNormal( self:GetUp() )
+				effectdata:SetRadius( 0 )
+				util.Effect( "cball_bounce", effectdata, true, true )
 			end
 		end
 
