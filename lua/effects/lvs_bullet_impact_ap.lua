@@ -11,6 +11,7 @@ EFFECT.SparkSurface = {
 	["metalvehicle"] = true,
 	["metal"] = true,
 	["metalgrate"] = true,
+	["rubbertire"] = true,
 }
 
 EFFECT.DustSurface = {
