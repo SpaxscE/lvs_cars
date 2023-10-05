@@ -14,8 +14,8 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Vector",0, "EffectPosition" )
 
 	if SERVER then
-		self:SetMaxHP( 500 )
-		self:SetHP( 500 )
+		self:SetMaxHP( 100 )
+		self:SetHP( 100 )
 	end
 end
 
