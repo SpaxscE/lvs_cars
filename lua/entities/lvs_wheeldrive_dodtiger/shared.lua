@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_tank_wheeldrive"
 
-ENT.PrintName = "DOD:S Tiger"
+ENT.PrintName = "Panzer VI Tiger"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
