@@ -14,7 +14,7 @@ function ENT:DrawDriver()
 	local ID = self:LookupAttachment( "seat1" )
 	local Att = self:GetAttachment( ID )
 
-	if not Att then self:RemovePlayerModel() return end
+	if not Att then self:RemovePlayerModel( "driver" ) return end
 
 	local Pos,Ang = LocalToWorld( Vector(10,-5,0), Angle(0,20,-90), Att.Pos, Att.Ang )
 
@@ -39,7 +39,7 @@ function ENT:DrawGunner()
 	local ID = self:LookupAttachment( "seat2" )
 	local Att = self:GetAttachment( ID )
 
-	if not Att then self:RemovePlayerModel() return end
+	if not Att then self:RemovePlayerModel( "passenger" ) return end
 
 	local Pos,Ang = LocalToWorld( Vector(10,-5,0), Angle(0,20,-90), Att.Pos, Att.Ang )
 
