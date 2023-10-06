@@ -1,19 +1,17 @@
 [quote]
 [h1][b]YOU NEED [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2912816023][LVS] - Framework[/url] FOR THIS ADDON TO WORK[/b][/h1]
 [/quote]
-
-[h1][b]You can get more cars [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3027256228]Here[/url][/b][/h1]
 [img]https://i.imgur.com/rTv7Qel.png[/img]
 
 Main purpose of this Vehicle system is to be a solid base for wheeled ground vehicles following the LVS vehicle standard.
 
-It uses real props with spherical collisions that are attached to the body using a traditional rigid rope suspension with adv ballsockets.
-It uses the collective knowledge of the entire sandbox vehicle building community from the past ~15 years and is tweaked for maximum performance and smoothness.
-To my knowledge, this is the peak of what you can sequeeze out of a legitimate prop based chassis with proper rotating wheels without falling back to fake physics such as simfphys uses (non-rotating sliding wheels/hoverwheels).
+To achieve this, it uses real props as wheels with spherical collisions that are attached to the body using a [url=https://youtu.be/Flex-2so_Zs]traditional rigid rope suspension with adv ballsockets[/url].
+It uses the collective knowledge of the entire sandbox vehicle building community from the past ~15 years using all the little tricks and tweaks needed to make it perform well.
+To my knowledge, this is the peak of what you can sequeeze out of a legitimate prop based chassis with proper rotating wheels without falling back to fake physics such as simfphys uses (non-rotating, sliding wheels) or raycast hover wheels.
 
 This system should give you the best offroading experience aswell assuming the suspension is adjusted for it. No more sideways slide on hills ect. It is also tweaked to handle drifting.
 
-Also includes a Armorsystem, Fuelsystem and a Lightingsystem. Everything is still WIP and could be subject for change.
+Also includes a Armorsystem and a SWEP to repair said Armorsystem, a Fuelsystem and a Lightingsystem. Everything is still WIP and could be subject for change.
 
 [img]https://i.imgur.com/rTv7Qel.png[/img]
 
@@ -31,10 +29,12 @@ For Base-Controls see [url=https://steamcommunity.com/sharedfiles/filedetails/?i
 [*] [phys_swap] (Hold) = Turn Off Lights / Turn On FogLights
 [*] [phys_swap] (Quick Press) = Turn On Lights / Toggle Highbeams if available
 [*] B = Open Turn Signal Menu
-[*] V = Toggle Reverse
+[*] V = Toggle Reverse / Hold for 1 Second = Toggle Parking Brake
 [/list]
 
 You can switch between direct-input and mouse-aim using the [url=https://steamuserimages-a.akamaihd.net/ugc/5077278535594422537/E45346B4CE6E9E3900BE666BE926B1B45DB2B4BA/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false]control panel[/url]
+
+Minelimit can be changed using "sbox_maxlvsmine"
 
 [img]https://i.imgur.com/rTv7Qel.png[/img]
 
