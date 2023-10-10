@@ -14,6 +14,8 @@ local circle = Material( "lvs/circle_hollow.png" )
 local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
 local pointer = Material( "gui/point.png" )
+local scope = Material( "lvs/scope.png" )
+
 function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	surface.SetDrawColor( 255, 255, 255, 5 )
 	surface.SetMaterial( tri1 )
@@ -116,4 +118,11 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	local Y = Pos2D.y + 64
 	local height = ScrH - Y
 	surface.DrawRect( Pos2D.x - 2,  Y, 4, height )
+
+	local diameter = ScrH
+	local radius = diameter * 0.5
+
+	surface.SetMaterial( scope )
+	surface.SetDrawColor( 0, 0, 0, 50 )
+	surface.DrawTexturedRect( Pos2D.x - radius, Pos2D.y - radius, diameter, diameter )
 end
