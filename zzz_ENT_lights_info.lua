@@ -15,6 +15,7 @@ ENT.Lights = {
 ]]
 
 		--SubMaterialID = 1, -- link this trigger to submaterial ID 1 for use with the blend-submaterial system
+		--SubMaterialBrightness = 1, -- multiplier for the submaterial's $blendfactor
 
 --[[
 		Sprites = { -- add sprites

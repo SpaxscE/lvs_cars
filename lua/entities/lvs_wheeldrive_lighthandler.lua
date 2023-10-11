@@ -92,6 +92,7 @@ function ENT:InitializeLights( base )
 
 		if typedata.SubMaterialID then
 			data[typeid].SubMaterial = self:CreateSubMaterial( typedata.SubMaterialID, typedata.Trigger )
+			data[typeid].SubMaterialBrightness = typedata.SubMaterialBrightness or 1
 		end
 
 		if typedata.Sprites then
@@ -302,7 +303,7 @@ function ENT:LightsThink( base )
 
 		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
 
-		typedata.SubMaterial:SetFloat("$detailblendfactor", mul )
+		typedata.SubMaterial:SetFloat("$detailblendfactor", mul * typedata.SubMaterialBrightness )
 
 		if typedata.SubMaterialValue ~= active then
 			data[typeid].SubMaterialValue = active
