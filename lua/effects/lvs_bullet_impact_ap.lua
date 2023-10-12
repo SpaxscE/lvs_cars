@@ -4,6 +4,25 @@ EFFECT.DustMat = {
 	"particle/particle_debris_02",
 }
 
+EFFECT.SmokeMat = {
+	"particle/smokesprites_0001",
+	"particle/smokesprites_0002",
+	"particle/smokesprites_0003",
+	"particle/smokesprites_0004",
+	"particle/smokesprites_0005",
+	"particle/smokesprites_0006",
+	"particle/smokesprites_0007",
+	"particle/smokesprites_0008",
+	"particle/smokesprites_0009",
+	"particle/smokesprites_0010",
+	"particle/smokesprites_0011",
+	"particle/smokesprites_0012",
+	"particle/smokesprites_0013",
+	"particle/smokesprites_0014",
+	"particle/smokesprites_0015",
+	"particle/smokesprites_0016"
+}
+
 EFFECT.SparkSurface = {
 	["chainlink"] = true,
 	["canister"] = true,
@@ -29,6 +48,7 @@ EFFECT.SmokeSurface = {
 	["plastic"] = true,
 	["default"] = true,
 	["glass"] = true,
+	["brick"] = true,
 }
 
 function EFFECT:Init( data )
@@ -85,14 +105,66 @@ function EFFECT:Init( data )
 	end
 
 	if self.SmokeSurface[ surfaceName ] then
-		local effectdata = EffectData()
-		effectdata:SetOrigin( pos )
-		util.Effect( "GlassImpact", effectdata, true, true )
+		for i = 1, 24 do
+			local particle = emitter:Add( self.SmokeMat[ math.random(1, #self.SmokeMat ) ], pos )
+
+			if not particle then continue end
+
+			particle:SetStartAlpha( math.Rand(33, 66) )
+			particle:SetEndAlpha( 0 )
+			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
+			particle:SetGravity( Vector(0,0,-math.Rand(33, 66)) )
+			particle:SetRollDelta( math.random(0, 0.5 * math.pi) )
+			particle:SetAirResistance( 175 )
+
+			particle:SetStartSize( 15 )
+			particle:SetDieTime( math.Rand(0.5, 1) )
+			particle:SetEndSize( math.Rand(45, 90) )
+			particle:SetVelocity( dir * math.Rand(40, 200) + VectorRand() * 150)
+		end
+
+		for i = 1,15 do
+			local particle = emitter:Add("effects/fleck_cement" .. math.random(1, 2), pos + dir * 8)
+
+			if not particle then continue end
+
+			particle:SetStartAlpha( 255 )
+			particle:SetEndAlpha( 0 )
+			particle:SetCollide( true )
+			particle:SetBounce( math.Rand(0,1) )
+			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
+			particle:SetGravity(Vector(0,0,-600))
+			particle:SetRollDelta( math.random(0, 0.5*math.pi) )
+
+			particle:SetEndSize( 2 )
+			particle:SetStartSize( 2 )
+
+			particle:SetDieTime( math.Rand(1, 2) )
+			particle:SetVelocity( dir * math.Rand(40, 200) + VectorRand() * 500 )
+		end
 	end
 
 	if not self.DustSurface[ surfaceName ] then return end
 
 	for i = 1, 10 do
+		for i = 1, 15 do
+			local particle = emitter:Add( self.SmokeMat[ math.random(1, #self.SmokeMat ) ], pos )
+
+			if not particle then continue end
+
+			particle:SetStartAlpha( math.Rand(40, 80) )
+			particle:SetEndAlpha(0)
+			particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
+			particle:SetGravity( Vector(0,0,-math.Rand(75, 150)) )
+			particle:SetRollDelta( math.random(0, 0.5*math.pi) )
+			particle:SetAirResistance( 175 )
+
+			particle:SetStartSize( 5 )
+			particle:SetDieTime( math.Rand(0.5, 1) )
+			particle:SetEndSize( math.Rand(15, 30) )
+			particle:SetVelocity( (dir * math.Rand(40, 200) + VectorRand() * 50) * 1.5 )
+		end
+    
 		for n = 0,6 do
 			local particle = emitter:Add( self.DustMat[ math.random(1,#self.DustMat) ] , pos )
 
