@@ -200,7 +200,7 @@ function ENT:InitWeapons()
 		ent.SNDTurretMG:EmitSound( "lvs/vehicles/halftrack/mc_lastshot.wav" )
 	end
 	weapon.OnOverheat = function( ent )
-		ent:EmitSound("lvs/overheat.wav")
+		ent:EmitSound("lvs/vehicles/222/cannon_overheat.wav")
 	end
 	weapon.HudPaint = function( ent, X, Y, ply )
 		local Pos2D = ent:GetEyeTrace().HitPos:ToScreen()
