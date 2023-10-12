@@ -18,6 +18,7 @@ function ENT:CreateWheelChain( wheels )
 		if not IsValid( wheel ) then continue end
 
 		wheel:SetDamageAllowed( true )
+		wheel:SetWidth( 0 )
 	end
 
 	for i = 2, #wheels do
