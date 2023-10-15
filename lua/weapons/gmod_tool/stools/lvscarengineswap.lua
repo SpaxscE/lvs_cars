@@ -15,8 +15,9 @@ if CLIENT then
 	language.Add( "tool.lvscarengineswap.right", "Copy Engine Sound" )
 end
 
-function TOOL:SwapEngine( ent )
-	if CLIENT then return end
+
+local function SwapEngine( ent, data )
+	if not IsValid( ent ) or not istable( data ) then return end
 
 	local originalEngine = ent:GetEngine()
 
@@ -29,7 +30,7 @@ function TOOL:SwapEngine( ent )
 	Engine:Activate()
 	Engine:SetParent( ent )
 	Engine:SetBase( ent )
-	Engine.EngineSounds = self.EngineSounds
+	Engine.EngineSounds = data
 
 	ent:SetEngine( Engine )
 
@@ -38,6 +39,27 @@ function TOOL:SwapEngine( ent )
 	ent:TransferCPPI( Engine )
 
 	originalEngine:Remove()
+
+	if not duplicator or not duplicator.StoreEntityModifier then return end
+
+	duplicator.StoreEntityModifier( ent, "lvsCarSwapEngine", data )
+end
+
+local function DuplicatorSwapEngine( ply, ent, data )
+	timer.Simple(0.1, function()
+		if not IsValid( ent ) then return end
+
+		SwapEngine( ent, data )
+	end )
+end
+if duplicator and duplicator.RegisterEntityModifier then
+	duplicator.RegisterEntityModifier( "lvsCarSwapEngine", DuplicatorSwapEngine )
+end
+
+function TOOL:SwapEngine( ent )
+	if CLIENT then return end
+
+	SwapEngine( ent, self.EngineSounds )
 end
 
 function TOOL:IsValidTarget( ent )
