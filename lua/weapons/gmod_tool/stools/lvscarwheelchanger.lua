@@ -41,6 +41,66 @@ if CLIENT then
 
 end
 
+local function DuplicatorSaveCarWheels( ent )
+	if CLIENT then return end
+
+	local base = ent:GetBase()
+
+	if not IsValid( base ) then return end
+
+	local data = {}
+
+	for id, wheel in pairs( base:GetWheels() ) do
+		if not IsValid( wheel ) then continue end
+
+		local wheeldata = {}
+		wheeldata.ID = id
+		wheeldata.Model = wheel:GetModel()
+		wheeldata.ModelScale = wheel:GetModelScale()
+		wheeldata.Skin = wheel:GetSkin()
+		wheeldata.Camber = wheel:GetCamber()
+		wheeldata.Caster = wheel:GetCaster()
+		wheeldata.Toe = wheel:GetToe()
+		wheeldata.AlignmentAngle = wheel:GetAlignmentAngle()
+		wheeldata.Color = wheel:GetColor()
+
+		table.insert( data, wheeldata )
+	end
+ 
+	if not duplicator or not duplicator.StoreEntityModifier then return end
+
+	duplicator.StoreEntityModifier( base, "lvsCarWheels", data )
+end
+
+local function DuplicatorApplyCarWheels( ply, ent, data )
+	if CLIENT then return end
+
+	timer.Simple(0.1, function()
+		if not IsValid( ent ) then return end
+
+		for id, wheel in pairs( ent:GetWheels() ) do
+			for _, wheeldata in pairs( data ) do
+				if not wheeldata or wheeldata.ID ~= id then continue end
+
+				if wheeldata.Model then wheel:SetModel( wheeldata.Model ) end
+				if wheeldata.ModelScale then wheel:SetModelScale( wheeldata.ModelScale ) end
+				if wheeldata.Skin then wheel:SetSkin( wheeldata.Skin ) end
+				if wheeldata.Camber then wheel:SetCamber( wheeldata.Camber ) end
+				if wheeldata.Caster then wheel:SetCaster( wheeldata.Caster ) end
+				if wheeldata.Toe then wheel:SetToe( wheeldata.Toe ) end
+				if wheeldata.AlignmentAngle then wheel:SetAlignmentAngle( wheeldata.AlignmentAngle ) end
+				if wheeldata.Color then wheel:SetColor( wheeldata.Color ) end
+
+				wheel:CheckAlignment()
+				wheel:PhysWake()
+			end
+		end
+	end)
+end
+if duplicator and duplicator.RegisterEntityModifier then
+	duplicator.RegisterEntityModifier( "lvsCarWheels", DuplicatorApplyCarWheels )
+end
+
 function TOOL:IsValidTarget( ent )
 	if not IsValid( ent ) then return false end
 
@@ -97,8 +157,14 @@ function TOOL:SetData( ent )
 			if not IsValid( ent ) then return end
 
 			ent:SetModelScale( ent:GetRadius() / self.radius )
-		end )
+		end)
 	end
+
+	timer.Simple(0.1, function()
+		if not IsValid( ent ) then return end
+
+		DuplicatorSaveCarWheels( ent )
+	end)
 end
 
 function TOOL:LeftClick( trace )
@@ -125,6 +191,8 @@ function TOOL:Reload( trace )
 	ent:SetToe( self:GetClientInfo("toe") )
 	ent:CheckAlignment()
 	ent:PhysWake()
+
+	DuplicatorSaveCarWheels( ent )
 
 	return true
 end
