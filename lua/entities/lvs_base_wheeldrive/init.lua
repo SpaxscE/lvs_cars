@@ -56,6 +56,18 @@ end
 function ENT:TracksCreate( PObj )
 end
 
+local function DontDuplicatePaintSheme( ply, ent, data )
+	ent.RandomColor = nil
+
+	if not duplicator or not duplicator.StoreEntityModifier then return end
+
+	duplicator.StoreEntityModifier( ent, "lvsVehiclePaintSheme", data )
+end
+
+if duplicator and duplicator.RegisterEntityModifier then
+	duplicator.RegisterEntityModifier( "lvsVehiclePaintSheme", DontDuplicatePaintSheme )
+end
+
 function ENT:PostInitialize( PObj )
 
 	self:TracksCreate( PObj )
@@ -83,6 +95,8 @@ function ENT:PostInitialize( PObj )
 				self._WheelColor = data.Wheels.Color or color_white
 			end
 		end
+
+		DontDuplicatePaintSheme( NULL, self, {} )
 	end
 
 	BaseClass.PostInitialize( self, PObj )
