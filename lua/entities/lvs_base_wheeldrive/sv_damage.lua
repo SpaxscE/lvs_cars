@@ -105,6 +105,8 @@ function ENT:Explode()
 	end
 
 	for _, ent in pairs( self:GetChildren() ) do
+		if not IsValid( ent ) then continue end
+
 		ent:Remove()
 	end
 
