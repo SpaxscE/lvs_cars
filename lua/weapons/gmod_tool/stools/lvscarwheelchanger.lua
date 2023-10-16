@@ -3,7 +3,7 @@
 TOOL.Category		= "LVS"
 TOOL.Name			= "#Wheel Editor"
 
-TOOL.ClientConVar[ "model" ] = ""
+TOOL.ClientConVar[ "model" ] = "models/diggercars/kubel/kubelwagen_wheel.mdl"
 TOOL.ClientConVar[ "camber" ] = 0
 TOOL.ClientConVar[ "caster" ] = 0
 TOOL.ClientConVar[ "toe" ] = 0
