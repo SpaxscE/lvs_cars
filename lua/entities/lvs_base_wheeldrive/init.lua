@@ -53,6 +53,15 @@ local function IsServerOK( class )
 	return true
 end
 
+function ENT:PostEntityPaste( Player, Ent, CreatedEntities )
+	BaseClass.PostEntityPaste( self, Player, Ent, CreatedEntities )
+
+	-- fixes standard gmod duplicator bullshit
+	Ent._WheelEnts = {}
+	Ent._WheelAxleID = 0
+	Ent._WheelAxleData = {}
+end
+
 function ENT:TracksCreate( PObj )
 end
 
@@ -98,11 +107,6 @@ function ENT:PostInitialize( PObj )
 
 		DontDuplicatePaintSheme( NULL, self, {} )
 	end
-
-	-- fixes standard gmod duplicator bullshit
-	self._WheelEnts = {}
-	self._WheelAxleID = 0
-	self._WheelAxleData = {}
 
 	BaseClass.PostInitialize( self, PObj )
 
