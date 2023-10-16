@@ -120,8 +120,13 @@ if CLIENT then
 	cvars.AddChangeCallback( "lvscarwheelchanger_model", function( convar, oldValue, newValue ) 
 		if oldValue ~= newValue and newValue ~= "" then
 			SetModel( newValue )
-			LocalPlayer():ConCommand( [[lvscarwheelchanger_bodygroups ""]] )
-			LocalPlayer():ConCommand( [[lvscarwheelchanger_skin 0]] )
+
+			local ply = LocalPlayer()
+
+			if not IsValid( ply ) or not ply.ConCommand then return end
+
+			ply:ConCommand( [[lvscarwheelchanger_bodygroups ""]] )
+			ply:ConCommand( [[lvscarwheelchanger_skin 0]] )
 		end
 	end)
 
