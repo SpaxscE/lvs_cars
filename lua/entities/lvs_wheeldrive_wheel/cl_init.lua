@@ -15,7 +15,6 @@ end
 function ENT:Draw()
 	if self:GetHideModel() then return end
 
-	--self:SetRenderOrigin( self:LocalToWorld( Vector(25,0,0) ) )
 	self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 	self:DrawModel()
 end
