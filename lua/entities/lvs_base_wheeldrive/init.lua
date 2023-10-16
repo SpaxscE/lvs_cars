@@ -99,6 +99,11 @@ function ENT:PostInitialize( PObj )
 		DontDuplicatePaintSheme( NULL, self, {} )
 	end
 
+	-- fixes standard gmod duplicator bullshit
+	self._WheelEnts = {}
+	self._WheelAxleID = 0
+	self._WheelAxleData = {}
+
 	BaseClass.PostInitialize( self, PObj )
 
 	if isstring( self.HornSound ) and isvector( self.HornPos ) then

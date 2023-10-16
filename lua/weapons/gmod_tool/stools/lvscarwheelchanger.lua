@@ -7,6 +7,21 @@ TOOL.ClientConVar[ "model" ] = ""
 TOOL.ClientConVar[ "camber" ] = 0
 TOOL.ClientConVar[ "caster" ] = 0
 TOOL.ClientConVar[ "toe" ] = 0
+TOOL.ClientConVar[ "skin" ] = 0
+TOOL.ClientConVar[ "bodygroup0" ] = 0
+TOOL.ClientConVar[ "bodygroup1" ] = 0
+TOOL.ClientConVar[ "bodygroup2" ] = 0
+TOOL.ClientConVar[ "bodygroup3" ] = 0
+TOOL.ClientConVar[ "bodygroup4" ] = 0
+TOOL.ClientConVar[ "bodygroup5" ] = 0
+TOOL.ClientConVar[ "bodygroup6" ] = 0
+TOOL.ClientConVar[ "bodygroup7" ] = 0
+TOOL.ClientConVar[ "bodygroup8" ] = 0
+TOOL.ClientConVar[ "bodygroup9" ] = 0
+TOOL.ClientConVar[ "r" ] = 255
+TOOL.ClientConVar[ "g" ] = 255
+TOOL.ClientConVar[ "b" ] = 255
+TOOL.ClientConVar[ "a" ] = 255
 
 TOOL.Information = {
 	{ name = "left" },
@@ -21,24 +36,100 @@ if CLIENT then
 	language.Add( "tool.lvscarwheelchanger.right", "Copy wheel" )
 	language.Add( "tool.lvscarwheelchanger.reload", "Apply camber/caster/toe settings" )
 
-	local ConVarsDefault = TOOL:BuildConVarList()
-	function TOOL.BuildCPanel( panel )
-		panel:AddControl( "Header", { Text = "#tool.lvscarwheelchanger.name", Description = "#tool.lvscarwheelchanger.desc" } )
-		panel:AddControl( "ComboBox", { MenuButton = 1, Folder = "lvswheels", Options = { [ "#preset.default" ] = ConVarsDefault }, CVars = table.GetKeys( ConVarsDefault ) } )
+	local ContextMenuPanel
 
-		panel:AddControl("Slider", { Label = "Camber", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_camber" } )
-		panel:AddControl("Slider", { Label = "Caster", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_caster" } )
-		panel:AddControl("Slider", { Label = "Toe", Type = "float", Min = "-30", Max = "30", Command = "lvscarwheelchanger_toe" } )
+	local cvarmdl = GetConVar( "lvscarwheelchanger_model" )
+	local mdl = cvarmdl and cvarmdl:GetString() or ""
+	local skins = 0
+	local bodygroups = {}
+
+	local ConVarsDefault = TOOL:BuildConVarList()
+	local function BuildContextMenu()
+		if not IsValid( ContextMenuPanel ) then return end
+
+		ContextMenuPanel:Clear()
+
+		ContextMenuPanel:AddControl( "Header", { Text = "#tool.lvscarwheelchanger.name", Description = "#tool.lvscarwheelchanger.desc" } )
+		ContextMenuPanel:AddControl( "ComboBox", { MenuButton = 1, Folder = "lvswheels", Options = { [ "#preset.default" ] = ConVarsDefault }, CVars = table.GetKeys( ConVarsDefault ) } )
+
+		ContextMenuPanel:ColorPicker( "Wheel Color", "lvscarwheelchanger_r", "lvscarwheelchanger_g", "lvscarwheelchanger_b", "lvscarwheelchanger_a" )
+
+		if #bodygroups > 0 then
+			ContextMenuPanel:AddControl( "Label",  { Text = "" } )
+			ContextMenuPanel:AddControl( "Label",  { Text = "BodyGroup" } )
+	
+			for group, data in pairs( bodygroups ) do
+				ContextMenuPanel:AddControl("Slider", { Label = data.name, Type = "int", Min = "0", Max = tostring( data.submodels ), Command = "lvscarwheelchanger_bodygroup"..group } )
+			end
+		end
+
+		if skins > 0 then
+			ContextMenuPanel:AddControl( "Label",  { Text = "" } )
+			ContextMenuPanel:AddControl( "Label",  { Text = "Skins" } )
+			ContextMenuPanel:AddControl("Slider", { Label = "Skin", Type = "int", Min = "0", Max = tostring( skins ), Command = "lvscarwheelchanger_skin" } )
+		end
+
+		ContextMenuPanel:AddControl( "Label",  { Text = "" } )
+		ContextMenuPanel:AddControl( "Label",  { Text = "Wheel Alignment Specs" } )
+		ContextMenuPanel:AddControl("Slider", { Label = "Camber", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_camber" } )
+		ContextMenuPanel:AddControl("Slider", { Label = "Caster", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_caster" } )
+		ContextMenuPanel:AddControl("Slider", { Label = "Toe", Type = "float", Min = "-30", Max = "30", Command = "lvscarwheelchanger_toe" } )
 
 		-- purpose: avoid bullshit concommand system and avoid players abusing it
 		for mdl, _ in pairs( list.Get( "lvs_wheels" ) or {} ) do
 			list.Set( "lvs_wheels_selection", mdl, {} )
 		end
-		panel:AddControl( "Label",  { Text = "" } )
-		panel:AddControl( "Label",  { Text = "Wheel Models" } )
-		panel:AddControl( "PropSelect", { Label = "", ConVar = "lvscarwheelchanger_model", Height = 0, Models = list.Get( "lvs_wheels_selection" ) } )
+		ContextMenuPanel:AddControl( "Label",  { Text = "" } )
+		ContextMenuPanel:AddControl( "Label",  { Text = "Wheel Models" } )
+		ContextMenuPanel:AddControl( "PropSelect", { Label = "", ConVar = "lvscarwheelchanger_model", Height = 0, Models = list.Get( "lvs_wheels_selection" ) } )
 	end
 
+	local function SetModel( name )
+		local ModelInfo = util.GetModelInfo( name )
+
+		if ModelInfo and ModelInfo.SkinCount then
+			skins = ModelInfo.SkinCount - 1
+		else
+			skins = 0
+		end
+
+		local bgroupmdl = ents.CreateClientProp()
+		bgroupmdl:SetModel( name )
+		bgroupmdl:Spawn()
+
+		table.Empty( bodygroups )
+
+		for _, bgroup in pairs( bgroupmdl:GetBodyGroups() ) do
+			bodygroups[ bgroup.id ] = {
+				name = bgroup.name,
+				submodels = #bgroup.submodels,
+			}
+		end
+
+		bgroupmdl:Remove()
+
+		BuildContextMenu()
+	end
+
+	function TOOL.BuildCPanel( panel )
+		ContextMenuPanel = panel
+
+		BuildContextMenu()
+	end
+
+	cvars.AddChangeCallback( "lvscarwheelchanger_model", function( convar, oldValue, newValue ) 
+		if oldValue ~= newValue and newValue ~= "" then
+			SetModel( newValue )
+			LocalPlayer():ConCommand( [[lvscarwheelchanger_bodygroups ""]] )
+			LocalPlayer():ConCommand( [[lvscarwheelchanger_skin 0]] )
+		end
+	end)
+
+	net.Receive( "lvscarwheelchanger_updatemodel", function( len )
+		SetModel( net.ReadString() )
+	end )
+else
+	util.AddNetworkString( "lvscarwheelchanger_updatemodel" )
 end
 
 local function DuplicatorSaveCarWheels( ent )
@@ -63,6 +154,11 @@ local function DuplicatorSaveCarWheels( ent )
 		wheeldata.Toe = wheel:GetToe()
 		wheeldata.AlignmentAngle = wheel:GetAlignmentAngle()
 		wheeldata.Color = wheel:GetColor()
+
+		wheeldata.BodyGroups = {}
+		for id = 0, 9 do
+			wheeldata.BodyGroups[ id ] = wheel:GetBodygroup( id )
+		end
 
 		table.insert( data, wheeldata )
 	end
@@ -91,6 +187,14 @@ local function DuplicatorApplyCarWheels( ply, ent, data )
 				if wheeldata.AlignmentAngle then wheel:SetAlignmentAngle( wheeldata.AlignmentAngle ) end
 				if wheeldata.Color then wheel:SetColor( wheeldata.Color ) end
 
+				if wheeldata.BodyGroups then
+					for group, subgroup in pairs( wheeldata.BodyGroups ) do
+						if subgroup == 0 then continue end
+
+						wheel:SetBodygroup( group, subgroup )
+					end
+				end
+
 				wheel:CheckAlignment()
 				wheel:PhysWake()
 			end
@@ -112,18 +216,37 @@ end
 function TOOL:GetData( ent )
 	if CLIENT then return end
 
+	local ply = self:GetOwner()
+
 	if self:IsValidTarget( ent ) then
 		self.radius = ent:GetRadius() * (1 / ent:GetModelScale())
 		self.ang = ent:GetAlignmentAngle()
 		self.mdl = ent:GetModel()
 
-		self:GetOwner():ConCommand( [[lvscarwheelchanger_model ""]] )
+		ply:ConCommand( [[lvscarwheelchanger_model ""]] )
+
+		net.Start( "lvscarwheelchanger_updatemodel" )
+			net.WriteString( self.mdl )
+		net.Send( ply )
 	else
 		local data = list.Get( "lvs_wheels" )[ mdl ]
 
 		if data then
-			self:GetOwner():ConCommand( [[lvscarwheelchanger_model "]]..mdl..[["]] )
+			ply:ConCommand( [[lvscarwheelchanger_model "]]..mdl..[["]] )
 		end
+	end
+
+	ply:ConCommand( "lvscarwheelchanger_skin "..ent:GetSkin() )
+
+	local clr = ent:GetColor()
+	ply:ConCommand( "lvscarwheelchanger_r " .. clr.r )
+	ply:ConCommand( "lvscarwheelchanger_g " .. clr.g )
+	ply:ConCommand( "lvscarwheelchanger_b " .. clr.b )
+	ply:ConCommand( "lvscarwheelchanger_a " .. clr.a )
+
+	for id = 0, 9 do
+		local group = ent:GetBodygroup( id ) or 0
+		ply:ConCommand( "lvscarwheelchanger_bodygroup"..id.." "..group )
 	end
 end
 
@@ -143,6 +266,18 @@ function TOOL:SetData( ent )
 	end
 
 	if not isstring( self.mdl ) or not isangle( self.ang ) or not isnumber( self.radius ) then return end
+
+	local r = self:GetClientNumber( "r", 0 )
+	local g = self:GetClientNumber( "g", 0 )
+	local b = self:GetClientNumber( "b", 0 )
+	local a = self:GetClientNumber( "a", 0 )
+
+	ent:SetColor( Color( r, g, b, a ) )
+	ent:SetSkin( self:GetClientNumber( "skin", 0 ) )
+
+	for id = 0, 9 do
+		ent:SetBodygroup( id, self:GetClientNumber( "bodygroup"..id, 0 ) )
+	end
 
 	if ent:GetModel() == self.mdl then
 		local Ang = ent:GetAlignmentAngle()
