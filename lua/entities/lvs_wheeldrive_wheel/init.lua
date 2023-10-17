@@ -14,6 +14,22 @@ function ENT:SetWheelType( wheel_type )
 	self._WheelType = wheel_type
 end
 
+function ENT:SetSuspensionHeight( newheight )
+	newheight = newheight and math.Clamp( newheight, -1, 1 ) or 0
+
+	self._SuspensionHeightMultiplier = newheight
+
+	if not IsValid( self.SuspensionConstraintElastic ) then return end
+
+	local Length = self.SuspensionConstraintElastic:GetTable().length or 25
+
+	self.SuspensionConstraintElastic:Fire( "SetSpringLength", Length + Length * newheight )
+end
+
+function ENT:GetSuspensionHeight()
+	return self._SuspensionHeightMultiplier or 0
+end
+
 function ENT:Initialize()
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )

@@ -195,6 +195,8 @@ function ENT:DefineAxle( data )
 	for id, Wheel in ipairs( data.Wheels ) do
 		local Elastic = self:CreateSuspension( Wheel, AxleCenter, self:LocalToWorldAngles( data.Axle.ForwardAngle ), data.Suspension )
 
+		Wheel.SuspensionConstraintElastic = Elastic
+
 		debugoverlay.Line( AxleCenter, Wheel:GetPos(), 5, Color(150,0,0), true )
 		debugoverlay.Text( Wheel:GetPos(), "Axle "..self._WheelAxleID.." Wheel "..id, 5, true )
 
