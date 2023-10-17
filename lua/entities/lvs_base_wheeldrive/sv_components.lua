@@ -102,7 +102,9 @@ function ENT:AddLights()
 end
 
 function ENT:AddTurboCharger()
-	if IsValid( self:GetTurbo() ) then return end
+	local Ent = self:GetTurbo()
+
+	if IsValid( Ent ) then return Ent end
 
 	local Turbo = ents.Create( "lvs_item_turbo" )
 
@@ -126,7 +128,9 @@ function ENT:AddTurboCharger()
 end
 
 function ENT:AddSuperCharger()
-	if IsValid( self:GetCompressor() ) then return end
+	local Ent = self:GetCompressor()
+
+	if IsValid( Ent ) then return Ent end
 
 	local SuperCharger = ents.Create( "lvs_item_compressor" )
 

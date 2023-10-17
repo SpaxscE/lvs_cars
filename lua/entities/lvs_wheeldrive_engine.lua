@@ -28,6 +28,14 @@ if SERVER then
 		return TRANSMIT_ALWAYS
 	end
 
+	function ENT:OnRemove()
+		local base = self:GetBase()
+
+		if not IsValid( base ) or base.ExplodedAlready then return end
+
+		base:SetMaxThrottle( 1 )
+	end
+
 	return
 end
 

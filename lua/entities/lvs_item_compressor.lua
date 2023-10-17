@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-ENT.Type            = "anim"
+ENT.Base = "lvs_wheeldrive_engine_mod"
 
 ENT.PrintName = "Supercharger"
 ENT.Author = "Luna"
@@ -10,36 +10,6 @@ ENT.Category = "[LVS] - Cars - Items"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.DoNotDuplicate = true
-
-ENT._LVS = true
-
-ENT.Editable = true
-
-function ENT:SetupDataTables()
-	self:NetworkVar( "Entity",0, "Base" )
-
-	self:NetworkVar( "Float",0, "EngineCurve", { KeyName = "addpower", Edit = { type = "Float",	 order = 1,min = 0, max = 0.5, category = "Upgrade Settings"} } )
-	self:NetworkVar( "Int",1, "EngineTorque", { KeyName = "addtorque", Edit = { type = "Int", order = 2,min = 0, max = 100, category = "Upgrade Settings"} } )
-
-	self:NetworkVar( "Bool",0, "Visible", { KeyName = "modelvisible",	 Edit = { type = "Boolean",	order = 0,	category = "Visuals"} } )
-
-	if SERVER then
-		self:SetVisible( true )
-		self:SetEngineCurve( 0.25 )
-		self:SetEngineTorque( 50 )
-
-		self:NetworkVarNotify( "EngineCurve", self.OnEngineCurveChanged )
-		self:NetworkVarNotify( "EngineTorque", self.OnEngineTorqueChanged )
-	end
-end
-
-function ENT:GetBoost()
-	if not self._smBoost then return 0 end
-
-	return self._smBoost
-end
-
 if SERVER then
 	function ENT:Initialize()	
 		self:SetModel("models/diggercars/dodge_charger/blower_animated.mdl")
@@ -48,93 +18,57 @@ if SERVER then
 		self:PhysWake()
 	end
 
-	function ENT:Think()
-		return false
+	function ENT:CanLink( ent )
+		if not ent.AllowSuperCharger or IsValid( ent:GetCompressor() ) then return false end
+
+		return true
 	end
 
-	function ENT:LinkTo( ent )
-		if not IsValid( ent ) or not ent.LVS or not ent.AllowSuperCharger or IsValid( ent:GetCompressor() ) then return end
+	local function SaveCompressor( ply, ent, data )
+		if not duplicator or not duplicator.StoreEntityModifier then return end
 
-		local engine = ent:GetEngine()
+		timer.Simple( 0.1, function()
+			if not IsValid( ent ) then return end
 
-		if not IsValid( engine ) then return end
+			local compressor = ent:AddSuperCharger()
+			if IsValid( compressor ) then
+				if data.Curve then compressor:SetEngineCurve( data.Curve ) end
+				if data.Torque then compressor:SetEngineTorque( data.Torque ) end
+			end
+		end )
 
-		self:PhysicsDestroy()
-		self:SetSolid( SOLID_NONE )
-		self:SetMoveType( MOVETYPE_NONE )
+		duplicator.StoreEntityModifier( ent, "lvsCarCompressor", data )
+	end
 
-		self:SetPos( engine:GetPos() )
-		self:SetAngles( engine:GetAngles() )
+	if duplicator and duplicator.RegisterEntityModifier then
+		duplicator.RegisterEntityModifier( "lvsCarCompressor", SaveCompressor )
+	end
 
-		self:SetParent( engine )
-
-		self:SetBase( ent )
-
-		ent.EngineCurve = ent.EngineCurve + self:GetEngineCurve()
-		ent.EngineTorque = ent.EngineTorque + self:GetEngineTorque()
-		self:UpdateVehicle()
-
+	function ENT:OnLinked( ent )
 		ent:OnSuperCharged( true )
-	
 		ent:SetCompressor( self )
 	end
 
-	function ENT:PhysicsCollide( data )
-		self:LinkTo( data.HitEntity )
+	function ENT:OnUnLinked( ent )
+		ent:OnSuperCharged( false )
+
+		if not duplicator or not duplicator.ClearEntityModifier then return end
+
+		duplicator.ClearEntityModifier( ent, "lvsCarCompressor" )
 	end
 
-	function ENT:OnRemove()
-		local base = self:GetBase()
+	function ENT:OnVehicleUpdated( ent )
+		if not duplicator or not duplicator.ClearEntityModifier or not duplicator.StoreEntityModifier then return end
 
-		if not IsValid( base ) or base.ExplodedAlready then return end
-
-		base.EngineCurve = base.EngineCurve - self:GetEngineCurve()
-		base.EngineTorque = base.EngineTorque - self:GetEngineTorque()
-		self:UpdateVehicle()
-
-		base:OnSuperCharged( false )
-	end
-
-	function ENT:OnEngineCurveChanged( name, old, new )
-		if old == new then return end
-
-		local ent = self:GetBase()
-
-		if not IsValid( ent ) then return end
-
-		ent.EngineCurve = ent.EngineCurve - old + new
-
-		self:UpdateVehicle()
-	end
-
-	function ENT:OnEngineTorqueChanged( name, old, new )
-		if old == new then return end
-
-		local ent = self:GetBase()
-
-		if not IsValid( ent ) then return end
-
-		ent.EngineTorque = ent.EngineTorque - old + new
-
-		self:UpdateVehicle()
-	end
-
-	function ENT:UpdateVehicle()
-		local ent = self:GetBase()
-
-		if not IsValid( ent ) then return end
-
-		net.Start( "lvs_car_performanceupdates" )
-			net.WriteEntity( ent )
-			net.WriteFloat( ent.EngineCurve )
-			net.WriteInt( ent.EngineTorque, 14 )
-		net.Broadcast()
+		duplicator.ClearEntityModifier( ent, "lvsCarCompressor" )
+		local data = {
+			Curve = self:GetEngineCurve(),
+			Torque = self:GetEngineTorque(),
+		}
+		duplicator.StoreEntityModifier( ent, "lvsCarCompressor", data )
 	end
 
 	return
-end
-
-function ENT:Initialize()
 end
 
 function ENT:OnEngineActiveChanged( Active, soundname )
@@ -208,14 +142,12 @@ function ENT:Draw( flags )
 	local vehicle = self:GetBase()
 
 	if not IsValid( vehicle ) then
-		self:DrawModel()
+		self:DrawModel( flags )
 
 		return
 	end
 
 	if not vehicle.SuperChargerVisible then return end
-
-	if not self:GetVisible() then return end
 
 	self:DrawModel( flags )
 end

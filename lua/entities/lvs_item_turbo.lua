@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-ENT.Type            = "anim"
+ENT.Base = "lvs_wheeldrive_engine_mod"
 
 ENT.PrintName = "Turbo"
 ENT.Author = "Luna"
@@ -10,33 +10,6 @@ ENT.Category = "[LVS] - Cars - Items"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.DoNotDuplicate = true
-
-ENT._LVS = true
-
-ENT.Editable = true
-
-function ENT:SetupDataTables()
-	self:NetworkVar( "Entity",0, "Base" )
-
-	self:NetworkVar( "Float",0, "EngineCurve", { KeyName = "addpower", Edit = { type = "Float",	 order = 1,min = 0, max = 0.5, category = "Upgrade Settings"} } )
-	self:NetworkVar( "Int",1, "EngineTorque", { KeyName = "addtorque", Edit = { type = "Int", order = 2,min = 0, max = 100, category = "Upgrade Settings"} } )
-
-	if SERVER then
-		self:SetEngineCurve( 0.5 )
-		self:SetEngineTorque( 25 )
-
-		self:NetworkVarNotify( "EngineCurve", self.OnEngineCurveChanged )
-		self:NetworkVarNotify( "EngineTorque", self.OnEngineTorqueChanged )
-	end
-end
-
-function ENT:GetBoost()
-	if not self._smBoost then return 0 end
-
-	return self._smBoost
-end
-
 if SERVER then
 	function ENT:Initialize()	
 		self:SetModel("models/diggercars/dodge_charger/turbo.mdl")
@@ -45,93 +18,57 @@ if SERVER then
 		self:PhysWake()
 	end
 
-	function ENT:Think()
-		return false
-	end
-
-	function ENT:LinkTo( ent )
-		if not IsValid( ent ) or not ent.LVS or not ent.AllowTurbo or IsValid( ent:GetTurbo() ) then return end
-
-		local engine = ent:GetEngine()
-
-		if not IsValid( engine ) then return end
-
-		self:PhysicsDestroy()
-		self:SetSolid( SOLID_NONE )
-		self:SetMoveType( MOVETYPE_NONE )
-
-		self:SetPos( engine:GetPos() )
-		self:SetAngles( engine:LocalToWorldAngles( Angle(0,-90,0) ) )
-
-		self:SetParent( engine )
-
-		self:SetBase( ent )
-
-		ent.EngineCurve = ent.EngineCurve + self:GetEngineCurve()
-		ent.EngineTorque = ent.EngineTorque + self:GetEngineTorque()
-		self:UpdateVehicle()
-
+	function ENT:OnLinked( ent )
 		ent:OnTurboCharged( true )
-
 		ent:SetTurbo( self )
 	end
 
-	function ENT:PhysicsCollide( data )
-		self:LinkTo( data.HitEntity )
+	function ENT:OnUnLinked( ent )
+		ent:OnTurboCharged( false )
+
+		if not duplicator or not duplicator.ClearEntityModifier then return end
+
+		duplicator.ClearEntityModifier( ent, "lvsCarTurbo" )
 	end
 
-	function ENT:OnRemove()
-		local base = self:GetBase()
+	function ENT:CanLink( ent )
+		if not ent.AllowTurbo or IsValid( ent:GetTurbo() ) then return false end
 
-		if not IsValid( base ) or base.ExplodedAlready then return end
-
-		base.EngineCurve = base.EngineCurve - self:GetEngineCurve()
-		base.EngineTorque = base.EngineTorque - self:GetEngineTorque()
-		self:UpdateVehicle()
-
-		base:OnTurboCharged( false )
+		return true
 	end
 
-	function ENT:OnEngineCurveChanged( name, old, new )
-		if old == new then return end
+	local function SaveTurbo( ply, ent, data )
+		if not duplicator or not duplicator.StoreEntityModifier then return end
 
-		local ent = self:GetBase()
+		timer.Simple( 0.1, function()
+			if not IsValid( ent ) then return end
 
-		if not IsValid( ent ) then return end
+			local turbo = ent:AddTurboCharger()
+			if IsValid( turbo ) then
+				if data.Curve then turbo:SetEngineCurve( data.Curve ) end
+				if data.Torque then turbo:SetEngineTorque( data.Torque ) end
+			end
+		end )
 
-		ent.EngineCurve = ent.EngineCurve - old + new
-
-		self:UpdateVehicle()
+		duplicator.StoreEntityModifier( ent, "lvsCarTurbo", data )
 	end
 
-	function ENT:OnEngineTorqueChanged( name, old, new )
-		if old == new then return end
-
-		local ent = self:GetBase()
-
-		if not IsValid( ent ) then return end
-
-		ent.EngineTorque = ent.EngineTorque - old + new
-
-		self:UpdateVehicle()
+	if duplicator and duplicator.RegisterEntityModifier then
+		duplicator.RegisterEntityModifier( "lvsCarTurbo", SaveTurbo )
 	end
 
-	function ENT:UpdateVehicle()
-		local ent = self:GetBase()
+	function ENT:OnVehicleUpdated( ent )
+		if not duplicator or not duplicator.ClearEntityModifier or not duplicator.StoreEntityModifier then return end
 
-		if not IsValid( ent ) then return end
-
-		net.Start( "lvs_car_performanceupdates" )
-			net.WriteEntity( ent )
-			net.WriteFloat( ent.EngineCurve )
-			net.WriteInt( ent.EngineTorque, 14 )
-		net.Broadcast()
+		duplicator.ClearEntityModifier( ent, "lvsCarTurbo" )
+		local data = {
+			Curve = self:GetEngineCurve(),
+			Torque = self:GetEngineTorque(),
+		}
+		duplicator.StoreEntityModifier( ent, "lvsCarTurbo", data )
 	end
 
 	return
-end
-
-function ENT:Initialize()
 end
 
 function ENT:OnEngineActiveChanged( Active, soundname )
