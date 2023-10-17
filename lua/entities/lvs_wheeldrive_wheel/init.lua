@@ -30,6 +30,25 @@ function ENT:GetSuspensionHeight()
 	return self._SuspensionHeightMultiplier or 0
 end
 
+function ENT:SetSuspensionStiffness( new )
+	new = new and math.Clamp( new, -1, 1 ) or 0
+
+	self._SuspensionStiffnessMultiplier = new
+
+	if not IsValid( self.SuspensionConstraintElastic ) then return end
+
+	local data = self.SuspensionConstraintElastic:GetTable()
+	local damping = data.damping or 2000
+	local constant = data.constant or 20000
+
+	self.SuspensionConstraintElastic:Fire( "SetSpringConstant", constant + constant * new, 0 )
+	self.SuspensionConstraintElastic:Fire( "SetSpringDamping", damping + damping * new, 0 )
+end
+
+function ENT:GetSuspensionStiffness()
+	return self._SuspensionStiffnessMultiplier or 0
+end
+
 function ENT:Initialize()
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )

@@ -8,6 +8,7 @@ TOOL.ClientConVar[ "camber" ] = 0
 TOOL.ClientConVar[ "caster" ] = 0
 TOOL.ClientConVar[ "toe" ] = 0
 TOOL.ClientConVar[ "height" ] = 0
+TOOL.ClientConVar[ "stiffness" ] = 0
 TOOL.ClientConVar[ "skin" ] = 0
 TOOL.ClientConVar[ "bodygroup0" ] = 0
 TOOL.ClientConVar[ "bodygroup1" ] = 0
@@ -75,7 +76,8 @@ if CLIENT then
 		ContextMenuPanel:AddControl("Slider", { Label = "Camber", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_camber" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Caster", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_caster" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Toe", Type = "float", Min = "-30", Max = "30", Command = "lvscarwheelchanger_toe" } )
-		ContextMenuPanel:AddControl("Slider", { Label = "Suspension Height", Type = "float", Min = "-1", Max = "1", Command = "lvscarwheelchanger_height" } )
+		ContextMenuPanel:AddControl("Slider", { Label = "Height", Type = "float", Min = "-1", Max = "1", Command = "lvscarwheelchanger_height" } )
+		ContextMenuPanel:AddControl("Slider", { Label = "Stiffness", Type = "float", Min = "-1", Max = "1", Command = "lvscarwheelchanger_stiffness" } )
 
 		-- purpose: avoid bullshit concommand system and avoid players abusing it
 		for mdl, _ in pairs( list.Get( "lvs_wheels" ) or {} ) do
@@ -160,6 +162,7 @@ local function DuplicatorSaveCarWheels( ent )
 		wheeldata.Caster = wheel:GetCaster()
 		wheeldata.Toe = wheel:GetToe()
 		wheeldata.Height = wheel:GetSuspensionHeight()
+		wheeldata.Stiffness = wheel:GetSuspensionStiffness()
 		wheeldata.AlignmentAngle = wheel:GetAlignmentAngle()
 		wheeldata.Color = wheel:GetColor()
 
@@ -195,6 +198,7 @@ local function DuplicatorApplyCarWheels( ply, ent, data )
 				if wheeldata.AlignmentAngle then wheel:SetAlignmentAngle( wheeldata.AlignmentAngle ) end
 				if wheeldata.Color then wheel:SetColor( wheeldata.Color ) end
 				if wheeldata.Height then wheel:SetSuspensionHeight( wheeldata.Height ) end
+				if wheeldata.Stiffness then wheel:SetSuspensionStiffness( wheeldata.Stiffness ) end
 
 				if wheeldata.BodyGroups then
 					for group, subgroup in pairs( wheeldata.BodyGroups ) do
@@ -337,6 +341,7 @@ function TOOL:Reload( trace )
 	ent:SetToe( self:GetClientInfo("toe") )
 	ent:CheckAlignment()
 	ent:SetSuspensionHeight( self:GetClientInfo("height") )
+	ent:SetSuspensionStiffness( self:GetClientInfo("stiffness") )
 	ent:PhysWake()
 
 	DuplicatorSaveCarWheels( ent )
