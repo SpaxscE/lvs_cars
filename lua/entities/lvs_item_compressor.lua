@@ -204,7 +204,7 @@ function ENT:OnRemove()
 	self:StopSounds()
 end
 
-function ENT:Draw()
+function ENT:Draw( flags )
 	local vehicle = self:GetBase()
 
 	if not IsValid( vehicle ) then
@@ -217,5 +217,5 @@ function ENT:Draw()
 
 	if not self:GetVisible() then return end
 
-	self:DrawModel()
+	self:DrawModel( flags )
 end

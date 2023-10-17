@@ -219,8 +219,8 @@ function ENT:OnRemove()
 	self:StopSounds()
 end
 
-function ENT:Draw()
+function ENT:Draw( flags )
 	if IsValid( self:GetBase() ) then return end
 
-	self:DrawModel()
+	self:DrawModel( flags )
 end
