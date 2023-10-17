@@ -180,7 +180,7 @@ if CLIENT then
 			local Pos = ply:GetEyeTrace().HitPos
 
 			if IsValid( lvsEnt ) and (Pos - ply:GetShootPos()):Length() < self.MaxRange and not ply:InVehicle() then
-				DrawText( ply:GetEyeTrace().HitPos, "Frame\nHealth: "..lvsEnt:GetHP().."/"..lvsEnt:GetMaxHP(), ColorText )
+				DrawText( ply:GetEyeTrace().HitPos, "Frame\nHealth: "..math.Round(lvsEnt:GetHP()).."/"..lvsEnt:GetMaxHP(), ColorText )
 			end
 
 			return
@@ -195,7 +195,7 @@ if CLIENT then
 			local boxMaxs = Target:GetMaxs()
 
 			if ply:KeyDown( IN_ATTACK ) then
-				DrawText( ply:GetEyeTrace().HitPos, (Target:GetIgnoreForce() / 100).."mm "..Target:GetLabel().."\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+				DrawText( ply:GetEyeTrace().HitPos, (Target:GetIgnoreForce() / 100).."mm "..Target:GetLabel().."\nHealth: "..math.Round(Target:GetHP()).."/"..Target:GetMaxHP(), ColorText )
 
 			else
 				cam.Start3D()
@@ -203,7 +203,7 @@ if CLIENT then
 					render.DrawBox( boxOrigin, boxAngles, boxMins, boxMaxs, ColorSelect )
 				cam.End3D()
 
-				DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm "..Target:GetLabel().."\nHealth: "..Target:GetHP().."/"..Target:GetMaxHP(), ColorText )
+				DrawText( Target:LocalToWorld( (boxMins + boxMaxs) * 0.5 ), (Target:GetIgnoreForce() / 100).."mm "..Target:GetLabel().."\nHealth: "..math.Round(Target:GetHP()).."/"..Target:GetMaxHP(), ColorText )
 			end
 		else
 			local Pos = ply:GetEyeTrace().HitPos
