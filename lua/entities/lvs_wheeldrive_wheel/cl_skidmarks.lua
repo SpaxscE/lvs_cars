@@ -3,7 +3,6 @@ ENT.SkidmarkTraceAdd = Vector(0,0,10)
 ENT.SkidmarkDelay = 0.05
 ENT.SkidmarkLifetime = 10
 
-ENT.SkidmarkTexture = Material( "vgui/white" )
 ENT.SkidmarkRed = 0
 ENT.SkidmarkGreen = 0
 ENT.SkidmarkBlue = 0
@@ -73,7 +72,7 @@ function ENT:CalcSkidmark( trace, Filter )
 
 	local W = self:GetWidth()
 
-	local cur = trace.HitPos + self.SkidmarkTraceAdd
+	local cur = trace.HitPos + self.SkidmarkTraceAdd * 0.5
 
 	local prev = CurActive.positions[ #CurActive.positions ]
 
@@ -98,6 +97,7 @@ function ENT:CalcSkidmark( trace, Filter )
 			p1 = t1.HitPos + t1.HitNormal,
 			p2 = t2.HitPos + t2.HitNormal,
 			lifetime = T + self.SkidmarkLifetime - self.SkidmarkDelay,
+			alpha = 0,
 		}
 	end
 
@@ -116,18 +116,19 @@ function ENT:CalcSkidmark( trace, Filter )
 	local t1 = util.TraceLine( { start = p1, endpos = p1 - self.SkidmarkTraceAdd, filter = Filter, } )
 	local t2 = util.TraceLine( { start = p2, endpos = p2 - self.SkidmarkTraceAdd, filter = Filter, } )
 
-	CurActive.positions[ #CurActive.positions + 1 ] = {
+	local nextID = #CurActive.positions + 1
+
+	CurActive.positions[ nextID ] = {
 		px = cur,
 		p1 = t1.HitPos + t1.HitNormal,
 		p2 = t2.HitPos + t2.HitNormal,
 		lifetime = T + self.SkidmarkLifetime,
+		alpha = math.min( nextID / 10, 1 ),
 	}
 end
 
 function ENT:RenderSkidMarks()
 	local T = CurTime()
-
-	render.SetMaterial( self.SkidmarkTexture )
 
 	for id, skidmark in pairs( self:GetSkidMarks() ) do
 		local prev
@@ -145,7 +146,7 @@ function ENT:RenderSkidMarks()
 
 			if Mul > 0 then
 				AmountDrawn = AmountDrawn + 1
-				render.DrawQuad( data.p2, data.p1, prev.p1, prev.p2, Color( self.SkidmarkRed, self.SkidmarkGreen, self.SkidmarkBlue, math.min(255 * Mul,self.SkidmarkAlpha) ) )
+				render.DrawQuad( data.p2, data.p1, prev.p1, prev.p2, Color( self.SkidmarkRed, self.SkidmarkGreen, self.SkidmarkBlue, math.min(255 * Mul * data.alpha,self.SkidmarkAlpha) ) )
 			end
 
 			prev = data
@@ -157,8 +158,10 @@ function ENT:RenderSkidMarks()
 	end
 end
 
-hook.Add("PreDrawOpaqueRenderables", "!!!!lvs_skidmarks", function( bDrawingDepth, bDrawingSkybox, isDraw3DSkybox )
-	if isDraw3DSkybox then return end
+hook.Add( "PreDrawTranslucentRenderables", "!!!!lvs_skidmarks", function( bDepth, bSkybox )
+	if bSkybox then return end
+
+	render.SetColorMaterial()
 
 	for _, wheel in ipairs( ents.FindByClass("lvs_wheeldrive_wheel") ) do
 		wheel:RenderSkidMarks()
