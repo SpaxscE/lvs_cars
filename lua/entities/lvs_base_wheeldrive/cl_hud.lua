@@ -270,7 +270,22 @@ function ENT:DrawDeveloperInfo()
 	surface.DrawLine( X, Y, X, Y + SizeY )
 	surface.DrawLine( X, Y + SizeY, X + SizeX, Y + SizeY )
 
-	local torque = self.EngineTorque / 5
+	local EngineCurve = self.EngineCurve
+	local EngineTorque = self.EngineTorque
+
+	local Turbo = self:GetTurbo()
+	if IsValid( Turbo ) then
+		EngineCurve = EngineCurve + Turbo:GetEngineCurve()
+		EngineTorque = EngineTorque + Turbo:GetEngineTorque()
+	end
+
+	local Compressor = self:GetCompressor()
+	if IsValid( Compressor ) then
+		EngineCurve = EngineCurve + Compressor:GetEngineCurve()
+		EngineTorque = EngineTorque + Compressor:GetEngineTorque()
+	end
+
+	local torque = EngineTorque / 5
 	local target = self.MaxVelocity
 	local boost = (target / self.TransGears) * 0.5
 
@@ -279,8 +294,7 @@ function ENT:DrawDeveloperInfo()
 		boost = (target / self.TransGearsReverse) * 0.5
 	end
 
-	local power = target * self.EngineCurve
-
+	local power = target * EngineCurve
 
 	surface.SetDrawColor( 0, 255, 255, 255 )
 

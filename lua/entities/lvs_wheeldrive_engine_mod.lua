@@ -97,8 +97,8 @@ if SERVER then
 
 		ent.EngineCurve = ent.EngineCurve + self:GetEngineCurve()
 		ent.EngineTorque = ent.EngineTorque + self:GetEngineTorque()
-		self:UpdateVehicle()
 
+		self:OnVehicleUpdated( ent )
 		self:OnLinked( ent )
 	end
 
@@ -113,7 +113,8 @@ if SERVER then
 
 		base.EngineCurve = base.EngineCurve - self:GetEngineCurve()
 		base.EngineTorque = base.EngineTorque - self:GetEngineTorque()
-		self:UpdateVehicle()
+
+		self:OnVehicleUpdated( base )
 
 		self:OnUnLinked( base )
 	end
@@ -127,7 +128,7 @@ if SERVER then
 
 		ent.EngineCurve = ent.EngineCurve - old + new
 
-		self:UpdateVehicle()
+		self:OnVehicleUpdated( ent )
 	end
 
 	function ENT:OnEngineTorqueChanged( name, old, new )
@@ -138,20 +139,6 @@ if SERVER then
 		if not IsValid( ent ) then return end
 
 		ent.EngineTorque = ent.EngineTorque - old + new
-
-		self:UpdateVehicle()
-	end
-
-	function ENT:UpdateVehicle()
-		local ent = self:GetBase()
-
-		if not IsValid( ent ) then return end
-
-		net.Start( "lvs_car_performanceupdates" )
-			net.WriteEntity( ent )
-			net.WriteFloat( ent.EngineCurve )
-			net.WriteInt( ent.EngineTorque, 14 )
-		net.Broadcast()
 
 		self:OnVehicleUpdated( ent )
 	end
