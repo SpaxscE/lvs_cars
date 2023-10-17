@@ -82,7 +82,7 @@ function ENT:CalcThrottle( ply )
 	local KeyThrottle = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBrakes = ply:lvsKeyDown( "CAR_BRAKE" )
 
-	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and 1 or 0.5
+	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and self:GetMaxThrottle() or 0.5
 	local Throttle = KeyThrottle and ThrottleValue or 0
 
 	if not self:IsLegalInput() then

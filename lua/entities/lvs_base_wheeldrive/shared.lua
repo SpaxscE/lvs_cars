@@ -84,6 +84,7 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Float", "Steer" )
 	self:AddDT( "Float", "Throttle" )
+	self:AddDT( "Float", "MaxThrottle" )
 	self:AddDT( "Float", "Brake" )
 
 	self:AddDT( "Float", "NWMaxSteer" )
@@ -106,6 +107,10 @@ function ENT:SetupDataTables()
 
 	self:TurretSystemDT()
 	self:TrackSystemDT()
+
+	if SERVER then
+		self:SetMaxThrottle( 1 )
+	end
 end
 
 function ENT:TurretSystemDT()
