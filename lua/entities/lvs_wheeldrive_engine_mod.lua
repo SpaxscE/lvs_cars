@@ -2,8 +2,6 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.DoNotDuplicate = true
-
 ENT._LVS = true
 
 ENT.Editable = true
@@ -71,6 +69,8 @@ if SERVER then
 		local engine = ent:GetEngine()
 
 		if not IsValid( engine ) then return end
+
+		self.DoNotDuplicate = true
 
 		self:PhysicsDestroy()
 		self:SetSolid( SOLID_NONE )
