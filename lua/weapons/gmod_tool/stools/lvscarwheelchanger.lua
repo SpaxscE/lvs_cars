@@ -36,7 +36,7 @@ if CLIENT then
 	language.Add( "tool.lvscarwheelchanger.desc", "A tool used to edit [LVS-Cars] Wheels" )
 	language.Add( "tool.lvscarwheelchanger.left", "Apply wheel. Click again to flip 180 degrees" )
 	language.Add( "tool.lvscarwheelchanger.right", "Copy wheel" )
-	language.Add( "tool.lvscarwheelchanger.reload", "Apply Wheel Alignment Specs (camber/caster/toe/height)" )
+	language.Add( "tool.lvscarwheelchanger.reload", "Apply Alignment Specs (camber/caster/toe/height)" )
 
 	local ContextMenuPanel
 
@@ -72,10 +72,12 @@ if CLIENT then
 		end
 
 		ContextMenuPanel:AddControl( "Label",  { Text = "" } )
-		ContextMenuPanel:AddControl( "Label",  { Text = "Wheel Alignment Specs" } )
+		ContextMenuPanel:AddControl( "Label",  { Text = "Alignment Specs" } )
+		ContextMenuPanel:AddControl( "Label",  { Text = "- Wheel" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Camber", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_camber" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Caster", Type = "float", Min = "-15", Max = "15", Command = "lvscarwheelchanger_caster" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Toe", Type = "float", Min = "-30", Max = "30", Command = "lvscarwheelchanger_toe" } )
+		ContextMenuPanel:AddControl( "Label",  { Text = "- Suspension" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Height", Type = "float", Min = "-1", Max = "1", Command = "lvscarwheelchanger_height" } )
 		ContextMenuPanel:AddControl("Slider", { Label = "Stiffness", Type = "float", Min = "-1", Max = "1", Command = "lvscarwheelchanger_stiffness" } )
 
