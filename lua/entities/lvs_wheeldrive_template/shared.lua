@@ -281,6 +281,7 @@ ENT.EngineSounds = {
 	},
 	{
 		sound = "vehicles/airboat/fan_motor_fullthrottle_loop1.wav",
+		--sound_int = "path/to/interior/sound.wav",
 		Volume = 1, -- adjust volume
 		Pitch = 50, -- start pitch value
 		PitchMul = 100, -- value that gets added to Pitch at max engine rpm
