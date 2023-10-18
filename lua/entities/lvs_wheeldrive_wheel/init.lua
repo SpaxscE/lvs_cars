@@ -55,6 +55,19 @@ function ENT:Initialize()
 	self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
 end
 
+function ENT:StartThink()
+	if self.AutomaticFrameAdvance then return end
+
+	self.AutomaticFrameAdvance = true
+
+	self.Think = function( self )
+		self:NextThink( CurTime() )
+		return true
+	end
+
+	self:Think()
+end
+
 function ENT:Think()
 	return false
 end
