@@ -18,6 +18,7 @@ include("sv_riggedwheels.lua")
 include("sv_wheelsystem.lua")
 include("sv_damage.lua")
 include("sv_pivotsteer.lua")
+include("sv_duping.lua")
 include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
@@ -51,15 +52,6 @@ local function IsServerOK( class )
 	end
 
 	return true
-end
-
-function ENT:PostEntityPaste( Player, Ent, CreatedEntities )
-	BaseClass.PostEntityPaste( self, Player, Ent, CreatedEntities )
-
-	-- fixes standard gmod duplicator bullshit
-	Ent._WheelEnts = {}
-	Ent._WheelAxleID = 0
-	Ent._WheelAxleData = {}
 end
 
 function ENT:TracksCreate( PObj )
