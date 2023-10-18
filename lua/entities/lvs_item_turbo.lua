@@ -40,7 +40,7 @@ if SERVER then
 	local function SaveTurbo( ply, ent, data )
 		if not duplicator or not duplicator.StoreEntityModifier then return end
 
-		timer.Simple( 0.1, function()
+		timer.Simple( 0.2, function()
 			if not IsValid( ent ) then return end
 
 			local turbo = ent:AddTurboCharger()
