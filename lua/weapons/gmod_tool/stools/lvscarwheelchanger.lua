@@ -46,7 +46,7 @@ if CLIENT then
 	language.Add( "tool.lvscarwheelchanger.desc", "A tool used to edit [LVS-Cars] Wheels" )
 	language.Add( "tool.lvscarwheelchanger.left", "Apply wheel. Click again to flip 180 degrees" )
 	language.Add( "tool.lvscarwheelchanger.right", "Copy wheel" )
-	language.Add( "tool.lvscarwheelchanger.reload", "Apply Alignment Specs (camber/caster/toe/height)" )
+	language.Add( "tool.lvscarwheelchanger.reload", "Apply camber/caster/toe/height/stiffness. Click again to flip camber and toe" )
 
 	local ContextMenuPanel
 
@@ -501,16 +501,20 @@ function TOOL:Reload( trace )
 
 	if CLIENT then return true end
 
-	local camber = tonumber( self:GetClientInfo("camber") )
+	local camber = math.Round( tonumber( self:GetClientInfo("camber") ), 2 )
+	local caster = math.Round( tonumber( self:GetClientInfo("caster") ), 2 )
+	local toe = math.Round( tonumber( self:GetClientInfo("toe") ), 2 )
 
-	if ent:GetCamber() == camber then
+	if math.Round( ent:GetCamber(), 2 ) == camber and math.Round( ent:GetToe(), 2 ) == toe and math.Round( ent:GetCaster(), 2 ) == caster then
 		ent:SetCamber( -camber )
+		ent:SetToe( -toe )
 	else
 		ent:SetCamber( camber )
+		ent:SetToe( toe )
 	end
 
-	ent:SetCaster( self:GetClientInfo("caster") )
-	ent:SetToe( self:GetClientInfo("toe") )
+	ent:SetCaster( caster )
+
 	ent:CheckAlignment()
 	ent:SetSuspensionHeight( self:GetClientInfo("height") )
 	ent:SetSuspensionStiffness( self:GetClientInfo("stiffness") )
