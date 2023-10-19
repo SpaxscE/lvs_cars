@@ -315,14 +315,17 @@ local function DuplicatorApplyCarWheels( ply, ent, data )
 							wheel:SetPoseParameter( name, pose )
 
 							if name == "#scale" then
+								local min, max = wheel:GetPoseParameterRange( id )
 								local num = wheel:GetBoneCount() - 1
+
+								local bonescale = math.Clamp( pose, min, max )
 
 								for boneid = 0, num do
 									local bonename = wheel:GetBoneName( boneid )
 
 									if not bonename or bonename == "__INVALIDBONE__" or not string.StartsWith( bonename, "#" ) then continue end
 
-									wheel:ManipulateBoneScale( boneid, Vector(pose,pose,1) )
+									wheel:ManipulateBoneScale( boneid, Vector(bonescale,bonescale,1) )
 								end
 
 								continue
@@ -426,14 +429,17 @@ function TOOL:SetData( ent )
 				ent:SetPoseParameter( name, pose )
 
 				if name == "#scale" then
+					local min, max = ent:GetPoseParameterRange( id )
 					local num = ent:GetBoneCount() - 1
+
+					local bonescale = math.Clamp( pose, min, max )
 
 					for boneid = 0, num do
 						local bonename = ent:GetBoneName( boneid )
 
 						if not bonename or bonename == "__INVALIDBONE__" or not string.StartsWith( bonename, "#" ) then continue end
 
-						ent:ManipulateBoneScale( boneid, Vector(pose,pose,1) )
+						ent:ManipulateBoneScale( boneid, Vector(bonescale,bonescale,1) )
 					end
 
 					continue
