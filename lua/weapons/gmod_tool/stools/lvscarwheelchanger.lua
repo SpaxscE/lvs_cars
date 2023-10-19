@@ -382,6 +382,13 @@ function TOOL:GetData( ent )
 
 		ply:ConCommand( "lvscarwheelchanger_pp"..id.." "..pp )
 	end
+
+	ply:ConCommand( "lvscarwheelchanger_camber "..ent:GetCamber() )
+	ply:ConCommand( "lvscarwheelchanger_caster "..ent:GetCaster() )
+	ply:ConCommand( "lvscarwheelchanger_toe "..ent:GetToe() )
+
+	ply:ConCommand( "lvscarwheelchanger_height "..ent:GetSuspensionHeight() )
+	ply:ConCommand( "lvscarwheelchanger_stiffness "..ent:GetSuspensionStiffness() )
 end
 
 function TOOL:SetData( ent )
@@ -494,7 +501,14 @@ function TOOL:Reload( trace )
 
 	if CLIENT then return true end
 
-	ent:SetCamber( self:GetClientInfo("camber") )
+	local camber = tonumber( self:GetClientInfo("camber") )
+
+	if ent:GetCamber() == camber then
+		ent:SetCamber( -camber )
+	else
+		ent:SetCamber( camber )
+	end
+
 	ent:SetCaster( self:GetClientInfo("caster") )
 	ent:SetToe( self:GetClientInfo("toe") )
 	ent:CheckAlignment()
