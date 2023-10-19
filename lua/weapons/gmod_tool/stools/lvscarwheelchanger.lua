@@ -116,6 +116,23 @@ if CLIENT then
 			end
 
 			for id, data in pairs( poseparameters ) do
+				if id > 9 then break end
+
+				if data.name == "#scale" then
+					local bonescale = math.Clamp( GetConVar( "lvscarwheelchanger_pp"..id ):GetFloat(), data.min, data.max )
+					local num = ent:GetBoneCount() - 1
+
+					for boneid = 0, num do
+						local bonename = ent:GetBoneName( boneid )
+
+						if not bonename or bonename == "__INVALIDBONE__" or not string.StartsWith( bonename, "#" ) then continue end
+
+						ent:ManipulateBoneScale( boneid, Vector(bonescale,bonescale,1) )
+					end
+
+					continue
+				end
+
 				ent:SetPoseParameter( data.name, GetConVar( "lvscarwheelchanger_pp"..id ):GetFloat() )
 			end
 		end
@@ -292,8 +309,24 @@ local function DuplicatorApplyCarWheels( ply, ent, data )
 
 					if wheeldata.PoseParameters and wheel:GetNumPoseParameters() > 0 then
 						for id, pose in pairs( wheeldata.PoseParameters ) do
+							local name = wheel:GetPoseParameterName( id )
+
 							wheel:StartThink()
-							wheel:SetPoseParameter( wheel:GetPoseParameterName( id ), pose )
+							wheel:SetPoseParameter( name, pose )
+
+							if name == "#scale" then
+								local num = wheel:GetBoneCount() - 1
+
+								for boneid = 0, num do
+									local bonename = wheel:GetBoneName( boneid )
+
+									if not bonename or bonename == "__INVALIDBONE__" or not string.StartsWith( bonename, "#" ) then continue end
+
+									wheel:ManipulateBoneScale( boneid, Vector(pose,pose,1) )
+								end
+
+								continue
+							end
 						end
 					end
 				end)
@@ -385,9 +418,26 @@ function TOOL:SetData( ent )
 			for id = 0, 9 do
 				if id > num - 1 then break end
 
-				ent:StartThink()
+				local name = ent:GetPoseParameterName( id )
 
-				ent:SetPoseParameter( ent:GetPoseParameterName( id ), self:GetClientNumber( "pp"..id, 0 ) )
+				local pose = self:GetClientNumber( "pp"..id, 0 )
+
+				ent:StartThink()
+				ent:SetPoseParameter( name, pose )
+
+				if name == "#scale" then
+					local num = ent:GetBoneCount() - 1
+
+					for boneid = 0, num do
+						local bonename = ent:GetBoneName( boneid )
+
+						if not bonename or bonename == "__INVALIDBONE__" or not string.StartsWith( bonename, "#" ) then continue end
+
+						ent:ManipulateBoneScale( boneid, Vector(pose,pose,1) )
+					end
+
+					continue
+				end
 			end
 		end
 	end)
