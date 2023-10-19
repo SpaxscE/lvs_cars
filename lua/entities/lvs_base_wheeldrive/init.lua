@@ -95,6 +95,12 @@ function ENT:PostInitialize( PObj )
 				self._WheelSkin = data.Wheels.Skin or 0
 				self._WheelColor = data.Wheels.Color or color_white
 			end
+
+			if istable( data.BodyGroups ) then
+				for id, subgroup in pairs( data.BodyGroups ) do
+					self:SetBodygroup( id, subgroup )
+				end
+			end
 		end
 
 		DontDuplicatePaintSheme( NULL, self, {} )

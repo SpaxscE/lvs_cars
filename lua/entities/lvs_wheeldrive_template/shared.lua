@@ -149,6 +149,10 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 		{
 			Skin = 1,
 			Color = Color(255,255,255),
+			BodyGroups = {
+				[1] = 3, -- set bodygroup 1 to 3
+				[5] = 7, -- set bodygroup 5 to 7
+			},
 		},
 		{
 			Skin = 2,
