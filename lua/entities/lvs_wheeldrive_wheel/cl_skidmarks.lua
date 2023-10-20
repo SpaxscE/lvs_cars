@@ -13,6 +13,7 @@ ENT.SkidmarkSurfaces = {
 	["tile"] = true,
 	["metal"] = true,
 	["boulder"] = true,
+	["default"] = true,
 }
 
 ENT.DustEffectSurfaces = {
