@@ -262,9 +262,16 @@ function ENT:LightsThink( base )
 				local id = typeid.."-"..projid
 
 				local proj = self:GetProjectedTexture( id )
+				local proj_active = active
+
+				if proj_active and istable( projdata.bodygroup ) then
+					if not base:BodygroupIsValid( projdata.bodygroup.name, projdata.bodygroup.active ) then
+						proj_active = false
+					end
+				end
 
 				if IsValid( proj ) then
-					if active then
+					if proj_active then
 						proj:SetBrightness( projdata.brightness * mul ) 
 						proj:SetPos( base:LocalToWorld( projdata.pos ) )
 						proj:SetAngles( base:LocalToWorldAngles( projdata.ang ) )
@@ -273,7 +280,7 @@ function ENT:LightsThink( base )
 						self:RemoveProjectedTexture( id )
 					end
 				else
-					if active then
+					if proj_active then
 						self:CreateProjectedTexture( id, projdata.mat, projdata.color, projdata.brightness, projdata.shadows, projdata.nearz, projdata.farz, projdata.fov )
 					else
 						self:RemoveProjectedTexture( id )
@@ -467,6 +474,10 @@ function ENT:RenderLights( base, data )
 
 		if typedata.ProjectedTextures and DoMagic[ typedata.Trigger ] then
 			for projid, projdata in pairs( typedata.ProjectedTextures ) do
+				if istable( projdata.bodygroup ) then
+					if not base:BodygroupIsValid( projdata.bodygroup.name, projdata.bodygroup.active ) then continue end
+				end
+
 				local pos = base:LocalToWorld( projdata.pos )
 				local dir = base:LocalToWorldAngles( projdata.ang ):Forward()
 
