@@ -208,8 +208,19 @@ if CLIENT then
 			for i = 0, num - 1 do
 				local min, max = bgroupmdl:GetPoseParameterRange( i )
 
+				local name = bgroupmdl:GetPoseParameterName( i )
+
+				local pp_cvar = GetConVar( "lvscarwheelchanger_pp"..i )
+				if name == "#scale" and pp_cvar then
+					local val = pp_cvar:GetFloat()
+
+					if val > max or val < min then
+						pp_cvar:SetFloat( math.Clamp( 1, min, max ) )
+					end
+				end
+
 				poseparameters[ i ] = {
-					name = bgroupmdl:GetPoseParameterName( i ),
+					name = name,
 					min = min,
 					max = max,
 				}
