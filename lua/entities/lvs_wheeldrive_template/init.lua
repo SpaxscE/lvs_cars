@@ -231,11 +231,67 @@ function ENT:OnSpawn( PObj )
 	]]
 
 
--- example 3, prop_vehicle_jeep rigged model method:
+-- example 3, prop_vehicle_jeep rigged model method using
 --[[
 	local FrontRadius = 15
 	local RearRadius = 15
 	local FL, FR, RL, RR, ForwardAngle = self:AddWheelsUsingRig( FrontRadius, RearRadius )
+
+	local FrontAxle = self:DefineAxle( {
+		Axle = {
+			ForwardAngle = ForwardAngle,
+			SteerType = LVS.WHEEL_STEER_FRONT,
+			SteerAngle = 30,
+			TorqueFactor = 0,
+			BrakeFactor = 1,
+		},
+		Wheels = {FL,FR},
+		Suspension = {
+			Height = 10,
+			MaxTravel = 7,
+			ControlArmLength = 25,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
+
+	local RearAxle = self:DefineAxle( {
+		Axle = {
+			ForwardAngle = ForwardAngle,
+			SteerType = LVS.WHEEL_STEER_NONE,
+			TorqueFactor = 1,
+			BrakeFactor = 1,
+			UseHandbrake = true,
+		},
+		Wheels = {RL,RR},
+		Suspension = {
+			Height = 15,
+			MaxTravel = 7,
+			ControlArmLength = 25,
+			SpringConstant = 20000,
+			SpringDamping = 2000,
+			SpringRelativeDamping = 2000,
+		},
+	} )
+]]
+
+-- example 4, rigged wheels with visible prop wheels:
+--[[
+	local data = {
+		mdl_fr = "models/diggercars/dodge_charger/wh.mdl",
+		mdl_ang_fr = Angle(0,0,0),
+		mdl_fl = "models/diggercars/dodge_charger/wh.mdl",
+		mdl_ang_fl = Angle(0,180,0),
+		mdl_rl = "models/diggercars/dodge_charger/wh.mdl",
+		mdl_ang_rl = Angle(0,0,0),
+		mdl_rr = "models/diggercars/dodge_charger/wh.mdl",
+		mdl_ang_rr = Angle(0,180,0),
+	}
+
+	local FrontRadius = 15
+	local RearRadius = 15
+	local FL, FR, RL, RR, ForwardAngle = self:AddWheelsUsingRig( FrontRadius, RearRadius, data )
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {

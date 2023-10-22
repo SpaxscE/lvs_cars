@@ -37,7 +37,9 @@ function ENT:CreateRigControler( name, wheelEntity, min, max )
 	return RigHandler
 end
 
-function ENT:AddWheelsUsingRig( FrontRadius, RearRadius )
+function ENT:AddWheelsUsingRig( FrontRadius, RearRadius, data )
+	if not istable( data ) then data = {} end
+
 	local Body = ents.Create( "prop_dynamic" )
 	Body:SetModel( self:GetModel() )
 	Body:SetPos( self:GetPos() )
@@ -72,10 +74,10 @@ function ENT:AddWheelsUsingRig( FrontRadius, RearRadius )
 	ForwardAngle.r = 0
 	ForwardAngle:Normalize() 
 
-	local FL = self:AddWheel( { hide = true, pos = pFL0, radius = FrontRadius } )
-	local FR = self:AddWheel( { hide = true, pos = pFR0, radius = FrontRadius } )
-	local RL = self:AddWheel( { hide = true, pos = pRL0, radius = RearRadius } )
-	local RR = self:AddWheel( { hide = true, pos = pRR0, radius = RearRadius } )
+	local FL = self:AddWheel( { hide = (not isstring( data.mdl_fl )), pos = pFL0, radius = FrontRadius, mdl = data.mdl_fl, mdl_ang = data.mdl_ang_fl } )
+	local FR = self:AddWheel( { hide = (not isstring( data.mdl_fr )), pos = pFR0, radius = FrontRadius, mdl = data.mdl_fr, mdl_ang = data.mdl_ang_fr } )
+	local RL = self:AddWheel( { hide = (not isstring( data.mdl_rl )), pos = pRL0, radius = RearRadius, mdl = data.mdl_rl, mdl_ang = data.mdl_ang_rl } )
+	local RR = self:AddWheel( { hide = (not isstring( data.mdl_rr )), pos = pRR0, radius = RearRadius, mdl = data.mdl_rr, mdl_ang = data.mdl_ang_rr } )
 
 	SetAll( Body, 1 )
 
