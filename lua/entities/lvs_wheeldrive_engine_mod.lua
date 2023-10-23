@@ -36,8 +36,6 @@ if SERVER then
 	end
 
 	function ENT:CanLink( ent )
-		if not ent.AllowSuperCharger or IsValid( ent:GetCompressor() ) then return false end
-
 		return true
 	end
 
