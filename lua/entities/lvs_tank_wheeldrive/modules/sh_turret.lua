@@ -17,8 +17,6 @@ ENT.TurretYawMul = 1
 ENT.TurretYawOffset = 0
 
 function ENT:TurretSystemDT()
-	self:AddDT( "Float", "TurretPitch" )
-	self:AddDT( "Float", "TurretYaw" )
 	self:AddDT( "Bool", "TurretEnabled" )
 	self:AddDT( "Bool", "TurretDestroyed" )
 	self:AddDT( "Entity", "TurretArmor" )
@@ -28,6 +26,22 @@ function ENT:TurretSystemDT()
 		self:SetTurretPitch( self.TurretPitchOffset )
 		self:SetTurretYaw( self.TurretYawOffset )
 	end
+end
+
+function ENT:SetTurretPitch( num )
+	self._turretPitch = num
+end
+
+function ENT:SetTurretYaw( num )
+	self._turretYaw = num
+end
+
+function ENT:GetTurretPitch()
+	return (self._turretPitch or self.TurretPitchOffset)
+end
+
+function ENT:GetTurretYaw()
+	return (self._turretYaw or self.TurretYawOffset)
 end
 
 if CLIENT then
