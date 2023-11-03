@@ -105,18 +105,12 @@ function ENT:CalcWheelEffects()
 
 	if traceWater.Hit and trace.HitPos.z < traceWater.HitPos.z then 
 		if math.abs( self:GetRPM() ) > 25 then
-			--if traceWater.Fraction > 0 then
-				local effectdata = EffectData()
-					effectdata:SetOrigin( traceWater.HitPos )
-					effectdata:SetEntity( Base )
-					effectdata:SetMagnitude( self:BoundingRadius() )
-					effectdata:SetFlags( 0 )
-				util.Effect( "lvs_physics_wheelwatersplash", effectdata )
-
-			--	self:StopWheelEffects()
-
-			--	return
-			--end
+			local effectdata = EffectData()
+				effectdata:SetOrigin(  traceWater.Fraction > 0.5 and traceWater.HitPos or Pos )
+				effectdata:SetEntity( Base )
+				effectdata:SetMagnitude( self:BoundingRadius() )
+				effectdata:SetFlags( 0 )
+			util.Effect( "lvs_physics_wheelwatersplash", effectdata )
 		end
 	end
 
