@@ -39,7 +39,7 @@ function EFFECT:Init( data )
 	local VecCol = render.GetLightColor( pos + dir ) * 0.5
 
 	if underwater then
-		VecCol = (VecCol + Vector(0.5,0.5,0.5)) * 255
+		VecCol = (VecCol * 0.25 + Vector(0.75,0.75,0.75)) * 255
 	else
 		VecCol = (VecCol + Vector(0.3,0.25,0.15)) * 255
 	end
@@ -75,7 +75,7 @@ function EFFECT:Init( data )
 		particle:SetStartSize( 10 * scale )
 		particle:SetEndSize( 20 * i * scale )
 		particle:SetRollDelta( math.Rand(-1,1) )
-		particle:SetColor( VecCol.r, VecCol.g, VecCol.b )
+		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetGravity( Vector(0,0,-600) * scale )
 		particle:SetCollide( false )
 	end
