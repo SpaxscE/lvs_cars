@@ -377,6 +377,16 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	if self:GetBrake() > 0 then
 		self:SetBrake( 0 )
 		self:EnableHandbrake()
+		self:StopEngine()
+		self:SetTurnMode( 0 )
+
+		local LightsHandler = self:GetLightsHandler()
+
+		if IsValid( LightsHandler ) then
+			LightsHandler:SetActive( false )
+			LightsHandler:SetHighActive( false )
+			LightsHandler:SetFogActive( false )
+		end
 	end
 
 	self:SetReverse( false )

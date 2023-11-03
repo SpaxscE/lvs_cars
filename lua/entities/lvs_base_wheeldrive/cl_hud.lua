@@ -68,6 +68,10 @@ end
 ENT.IconEngine = Material( "lvs/engine.png" )
 ENT.IconFuel = Material( "lvs/fuel.png" )
 
+local WaveScale = 0
+local WaveMaterial = Material( "effects/select_ring" )
+local oldThrottleActive = false
+
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	self:DrawDeveloperInfo()
 
@@ -106,8 +110,32 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 		draw.SimpleText( "X" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	else
 		if self:GetParkingBrake() then
-			draw.SimpleText( "P" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			local ThrottleActive = Throttle == 0 or Throttle == 1
+
+			if oldThrottleActive ~= ThrottleActive then
+				oldThrottleActive = ThrottleActive
+				if ThrottleActive then
+					WaveScale = 1
+				end
+			end
+
+			if WaveScale > 0 then
+				WaveScale = math.max( WaveScale - RealFrameTime() * 2, 0 )
+	
+				local WaveRadius = (1 - WaveScale) * H * 1.5
+
+				surface.SetDrawColor( 255, 0, 0, 255 * WaveScale )
+				surface.SetMaterial( WaveMaterial )
+	
+				surface.DrawTexturedRectRotated( hX, hY, WaveRadius, WaveRadius, 0 )
+
+				draw.SimpleText( "P" , "LVS_FONT",  hX, hY, Color(255,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			else
+				draw.SimpleText( "P" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			end
 		else
+			oldThrottleActive = false
+
 			if self:GetReverse() then
 				draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
