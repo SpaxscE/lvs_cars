@@ -227,9 +227,14 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local ForceAngle = vector_origin
 
+	local Throttle = self:GetThrottle()
+
 	local TorqueFactor = ent:GetTorqueFactor()
 
-	if self:GetBrake() > 0 then
+	local IsBraking = self:GetBrake() > 0
+	local IsBrakingWheel = (TorqueFactor * Throttle) <= 0.99
+
+	if IsBraking and IsBrakingWheel then
 		if ent:IsRotationLocked() then
 			ForceAngle = vector_origin
 		else
@@ -246,8 +251,6 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	else
-		local Throttle = self:GetThrottle()
-
 		if self.WheelBrakeAutoLockup then
 			if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
 				ent:LockRotation()
@@ -340,6 +343,10 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 				return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION
 			end
 		end
+	end
+
+	if IsBraking and not IsBrakingWheel then
+		return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION
 	end
 
 	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / 500, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
