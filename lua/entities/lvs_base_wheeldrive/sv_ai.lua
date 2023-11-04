@@ -52,6 +52,30 @@ function ENT:RunAI()
 
 	if IsValid( Target ) then
 		GotoPos = Target:GetPos()
+	else
+		if self:GetAITEAM() ~= 0 then
+			local TraceFilter = self:GetCrosshairFilterEnts()
+
+			local Front = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + Pod:GetForward() * RangerLength } )
+			local FrontLeft = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,15,0) ):Right() * RangerLength } )
+			local FrontRight = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-15,0) ):Right() * RangerLength } )
+			local FrontLeft1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,60,0) ):Right() * RangerLength } )
+			local FrontRight1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-60,0) ):Right() * RangerLength } )
+			local FrontLeft2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,85,0) ):Right() * RangerLength } )
+			local FrontRight2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-85,0) ):Right() * RangerLength } )
+
+			GotoPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
+
+			if self:GetReverse() then
+				if Front.Fraction < 0.03 then
+					GotoPos = StartPos - Pod:GetForward() * 1000
+				end
+			else
+				if Front.Fraction < 0.01 then
+					GotoPos = StartPos - Pod:GetForward() * 1000
+				end
+			end
+		end
 	end
 
 	local TargetPosLocal = Pod:WorldToLocal( GotoPos )
