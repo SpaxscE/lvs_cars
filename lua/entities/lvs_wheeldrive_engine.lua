@@ -164,6 +164,7 @@ function ENT:HandleEngineSounds( vehicle )
 	local ply = LocalPlayer()
 	local pod = ply:GetVehicle()
 	local Throttle = vehicle:GetThrottle()
+	local MaxThrottle = vehicle:GetMaxThrottle()
 	local Doppler = vehicle:CalcDoppler( ply )
 
 	local DrivingMe = ply:lvsGetVehicle() == vehicle
@@ -308,7 +309,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue
 
-		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * 0.6)
+		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * 0.6) * MaxThrottle
 
 		local Pitch = data.Pitch + PitchAdd + (data.PitchMul - PitchAdd) * Ratio + Wobble
 		local PitchMul = data.UseDoppler and Doppler or 1
