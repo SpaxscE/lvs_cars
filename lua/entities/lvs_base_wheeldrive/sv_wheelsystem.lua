@@ -226,6 +226,8 @@ function ENT:DefineAxle( data )
 			nocollide_constraint.DoNotDuplicate = true
 		end
 	end
+
+	return self._WheelAxleData[ self._WheelAxleID ]
 end
 
 function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
