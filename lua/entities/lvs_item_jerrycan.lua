@@ -4,7 +4,7 @@ ENT.Type            = "anim"
 
 ENT.PrintName = "Jerry Can (Petrol)"
 ENT.Author = "Luna"
-ENT.Category = "[LVS] - Cars - Items"
+ENT.Category = "[LVS]"
 
 ENT.Spawnable		= true
 ENT.AdminOnly		= false

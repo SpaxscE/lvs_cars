@@ -5,7 +5,7 @@ ENT.Type            = "anim"
 ENT.PrintName		= "Mine"
 ENT.Author		= "Blu-x92"
 ENT.Information		= "Immobilize Tanks"
-ENT.Category		= "[LVS] - Cars - Items"
+ENT.Category = "[LVS]"
 
 ENT.Spawnable       = false
 ENT.AdminSpawnable  = false

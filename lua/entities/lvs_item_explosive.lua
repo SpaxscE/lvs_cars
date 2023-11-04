@@ -4,7 +4,7 @@ ENT.Type            = "anim"
 
 ENT.PrintName = "Explosive"
 ENT.Author = "Luna"
-ENT.Category = "[LVS] - Cars - Items"
+ENT.Category = "[LVS]"
 
 ENT.Spawnable		= false
 ENT.AdminOnly		= false

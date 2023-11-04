@@ -5,7 +5,7 @@ ENT.Base = "lvs_wheeldrive_engine_mod"
 ENT.PrintName = "Supercharger"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
-ENT.Category = "[LVS] - Cars - Items"
+ENT.Category = "[LVS]"
 
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false

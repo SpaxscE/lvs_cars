@@ -5,7 +5,7 @@ DEFINE_BASECLASS( "lvs_item_jerrycan" )
 
 ENT.PrintName = "Jerry Can (Diesel)"
 ENT.Author = "Luna"
-ENT.Category = "[LVS] - Cars - Items"
+ENT.Category = "[LVS]"
 
 ENT.Spawnable		= true
 ENT.AdminOnly		= false
