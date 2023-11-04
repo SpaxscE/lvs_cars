@@ -215,7 +215,7 @@ function SWEP:Refuel( trace )
 	end
 
 	if FuelTank:GetFuel() ~= 1 then
-		FuelTank:SetFuel( math.min( FuelTank:GetFuel() + (entity.lvsGasStationFillSpeed or 0.005), 1 ) )
+		FuelTank:SetFuel( math.min( FuelTank:GetFuel() + (entity.lvsGasStationFillSpeed or 0.05), 1 ) )
 		entity:OnRefueled()
 	end
 end
