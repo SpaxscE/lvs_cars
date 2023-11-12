@@ -126,8 +126,6 @@ function ENT:PostInitialize( PObj )
 end
 
 function ENT:StartEngine()
-	self:PhysWake()
-
 	for _, wheel in pairs( self:GetWheels() ) do
 		if not IsValid( wheel ) then continue end
 
