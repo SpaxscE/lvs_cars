@@ -232,3 +232,26 @@ function ENT:AddDriverViewPort( pos, ang, mins, maxs )
 		end
 	} )
 end
+
+function ENT:AddTrailerHitch( pos )
+	local TrailerHitch = ents.Create( "lvs_wheeldrive_trailerhitch" )
+
+	if not IsValid( TrailerHitch ) then
+		self:Remove()
+
+		print("LVS: Failed to create trailerhitch entity. Vehicle terminated.")
+
+		return
+	end
+
+	TrailerHitch:SetPos( self:LocalToWorld( pos ) )
+	TrailerHitch:SetAngles( self:GetAngles() )
+	TrailerHitch:Spawn()
+	TrailerHitch:Activate()
+	TrailerHitch:SetParent( self )
+	TrailerHitch:SetBase( self )
+
+	self:TransferCPPI( TrailerHitch )
+
+	return TrailerHitch
+end

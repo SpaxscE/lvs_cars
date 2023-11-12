@@ -105,4 +105,6 @@ function ENT:OnSpawn( PObj )
 			SpringRelativeDamping = 2000,
 		},
 	} )
+
+	self:AddTrailerHitch( Vector(-74,0,16.5) )
 end

@@ -253,6 +253,13 @@ function ENT:CreateSuspension( Wheel, CenterPos, DirectionAngle, data )
 	local RopeSize = 0
 	local RopeLength = data.ControlArmLength
 
+	if height == 0 or maxtravel == 0 or RopeLength == 0 then
+		local ballsocket = constraint.Ballsocket( self, Wheel, 0, 0, Vector(0,0,0), 0, 0, 1 )
+		ballsocket.DoNotDuplicate = true
+
+		return
+	end
+
 	local P1 = Pos + Forward * RopeLength * 0.5 + Right * RopeLength
 	local P2 = Pos
 	local Rope1 = constraint.Rope(self, Wheel,0,0,self:WorldToLocal( P1 ), Vector(0,0,0), Vector(RopeLength * 0.5,RopeLength,0):Length(), 0, 0, RopeSize,"cable/cable2", true )
