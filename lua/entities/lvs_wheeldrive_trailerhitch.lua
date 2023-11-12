@@ -7,6 +7,7 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Int",0, "HitchType" )
 end
 
 if SERVER then
