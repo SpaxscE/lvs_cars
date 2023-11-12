@@ -15,13 +15,13 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(47.2,31,16.27),
+				pos = Vector(47.2,31,19),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,90,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(47.2,-31,16.27),
+				pos = Vector(47.2,-31,19),
 				mdl = WheelModel,
 				mdl_ang = Angle(0,-90,0),
 
@@ -33,6 +33,8 @@ function ENT:OnSpawn( PObj )
 			ControlArmLength = 0,
 		},
 	} )
+
+	self:AddTrailerHitch( Vector(-94.29,0,2.16) )
 end
 	
 function ENT:PhysicsSimulate( phys, deltatime )
