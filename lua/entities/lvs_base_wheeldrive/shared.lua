@@ -105,11 +105,15 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Vector", "AIAimVector" )
 
+	self:AddDT( "Int", "HitchType" )
+	self:AddDT( "Vector", "HitchPos" )
+
 	self:TurretSystemDT()
 	self:TrackSystemDT()
 
 	if SERVER then
 		self:SetMaxThrottle( 1 )
+		self:SetHitchType( LVS.HITCHTYPE_NONE or -1 )
 	end
 end
 

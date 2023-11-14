@@ -34,18 +34,14 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 
-	self:AddTrailerHitch( Vector(-94.29,0,2.16) )
+	self:AddTrailerHitch( Vector(-94.29,0,2.16), LVS.HITCHTYPE_FEMALE )
 end
-	
+
 function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 
 	if ent == self then
-		if not self:StabilityAssist() or not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
-
-		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
-
-		return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+		return vector_origin, vector_origin, SIM_NOTHING
 	end
 
 	return self:SimulateRotatingWheel( ent, phys, deltatime )

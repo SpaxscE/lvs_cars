@@ -9,10 +9,13 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.DeleteOnExplode = false
+ENT.DeleteOnExplode = true
 
 ENT.lvsAllowEngineTool = false
 ENT.lvsShowInSpawner = false
+
+ENT.AllowSuperCharger = false
+ENT.AllowTurbo = false
 
 ENT.MDL = "models/blu/pak40.mdl"
 
@@ -22,7 +25,6 @@ ENT.WheelPhysicsInertia = Vector(10,8,10)
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
-	self:AddDT( "Entity", "Hitch" )
 	self:AddDT( "Entity", "LightsHandler" )
 	self:AddDT( "Vector", "AIAimVector" )
 end

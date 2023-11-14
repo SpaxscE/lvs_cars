@@ -233,7 +233,16 @@ function ENT:AddDriverViewPort( pos, ang, mins, maxs )
 	} )
 end
 
-function ENT:AddTrailerHitch( pos )
+function ENT:AddTrailerHitch( pos, hitchtype )
+	if not hitchtype or hitchtype == LVS.HITCHTYPE_MALE then
+		self:SetHitchType( LVS.HITCHTYPE_MALE )
+		self:SetHitchPos( pos )
+
+		return
+	end
+
+	if IsValid( self._TrailerHitchEnt ) then return end
+
 	local TrailerHitch = ents.Create( "lvs_wheeldrive_trailerhitch" )
 
 	if not IsValid( TrailerHitch ) then
@@ -250,8 +259,9 @@ function ENT:AddTrailerHitch( pos )
 	TrailerHitch:Activate()
 	TrailerHitch:SetParent( self )
 	TrailerHitch:SetBase( self )
+	TrailerHitch:SetHitchType( LVS.HITCHTYPE_FEMALE )
 
 	self:TransferCPPI( TrailerHitch )
 
-	return TrailerHitch
+	self._TrailerHitchEnt = TrailerHitch
 end

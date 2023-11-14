@@ -106,5 +106,5 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 
-	self:AddTrailerHitch( Vector(-74,0,16.5) )
+	self:AddTrailerHitch( Vector(-74,0,16.5), LVS.HITCHTYPE_MALE )
 end
