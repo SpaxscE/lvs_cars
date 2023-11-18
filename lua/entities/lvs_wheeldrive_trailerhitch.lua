@@ -5,10 +5,11 @@ ENT.DoNotDuplicate = true
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 
+ENT.HookupDistance = 50
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
-	self:NetworkVar( "Entity",1, "Player" )
-	self:NetworkVar( "Entity",2, "HitchTarget" )
+	self:NetworkVar( "Entity",1, "TargetBase" )
 	self:NetworkVar( "Int",0, "HitchType" )
 
 	if SERVER then
@@ -23,6 +24,95 @@ if SERVER then
 		self:DrawShadow( false )
 	end
 
+	function ENT:Decouple()
+		local TargetBase = self:GetTargetBase()
+
+		self:SetTargetBase( NULL )
+
+		if not IsValid( self.HitchConstraint ) then return end
+
+		local base = self:GetBase()
+
+		if IsValid( base ) then
+			base:OnDecoupled( TargetBase, self.HitchTarget )
+		end
+
+		self.HitchConstraint:Remove()
+
+		self.HitchTarget = nil
+	end
+
+	function ENT:CoupleTo( target )
+		if not IsValid( target ) or IsValid( self.HitchConstraint ) then return end
+
+		local base = self:GetBase()
+
+		if self.IsLinkInProgress or not IsValid( base ) or IsValid( self.PosEnt ) then return end
+
+		self.IsLinkInProgress = true
+
+		if self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE or target:GetHitchType() ~= LVS.HITCHTYPE_MALE then self.IsLinkInProgress = nil return end
+
+		self.PosEnt = ents.Create( "prop_physics" )
+
+		if not IsValid( self.PosEnt ) then self.IsLinkInProgress = nil return end
+
+		self.PosEnt:SetModel( "models/Combine_Helicopter/helicopter_bomb01.mdl" )
+		self.PosEnt:SetPos( self:GetPos() )
+		self.PosEnt:SetAngles( self:GetAngles() )
+		self.PosEnt:SetCollisionGroup( COLLISION_GROUP_WORLD )
+		self.PosEnt:Spawn()
+		self.PosEnt:Activate()
+		self.PosEnt:SetNoDraw( true ) 
+		self:DeleteOnRemove( self.PosEnt )
+
+		local PhysObj = self.PosEnt:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then self.IsLinkInProgress = nil return end
+
+		PhysObj:SetMass( 50000 )
+		PhysObj:EnableMotion( false )
+
+		constraint.Ballsocket( base, self.PosEnt, 0, 0, vector_origin, 0, 0, 1 )
+
+		local targetBase = target:GetBase()
+
+		base:OnCoupled( targetBase, target )
+
+		timer.Simple( 0, function()
+			if not IsValid( self.PosEnt ) then
+				self.IsLinkInProgress = nil
+
+				return
+			end
+	
+			if not IsValid( target ) or not IsValid( targetBase ) then
+				self.PosEnt:Remove()
+	
+				self.IsLinkInProgress = nil
+	
+				return
+			end
+	
+			self.PosEnt:SetPos( target:GetPos() )
+
+			constraint.Weld( self.PosEnt, targetBase, 0, 0, 0, false, false )
+
+			timer.Simple( 0.25, function()
+				if not IsValid( base ) or not IsValid( targetBase ) or not IsValid( self.PosEnt ) then self.IsLinkInProgress = nil return end
+
+				self.HitchTarget = target
+				self.HitchConstraint = constraint.Ballsocket( base, targetBase, 0, 0, targetBase:WorldToLocal( self.PosEnt:GetPos() ), 0, 0, 1 )
+
+				self:SetTargetBase( targetBase )
+
+				self.PosEnt:Remove()
+
+				self.IsLinkInProgress = nil 
+			end )
+		end )
+	end
+
 	function ENT:Think()
 		return false
 	end
@@ -31,28 +121,6 @@ if SERVER then
 	end
 
 	function ENT:OnRemove()
-	end
-
-	function ENT:UpdateLink( target, enable )
-		local base = self:GetBase()
-
-		if not IsValid( base ) or target == base then return end
-
-		if not enable then
-			if target == self:GetHitchTarget() then
-				self:SetHitchTarget( NULL )
-			end
-	
-			return
-		end
-
-		if not IsValid( target ) or not target.LVS or not target.GetHitchType then return end
-
-		local TargetHitchType = target:GetHitchType()
-
-		if TargetHitchType == LVS.HITCHTYPE_NONE or self:GetHitchType() == TargetHitchType then return end -- no gay sex allowed
-
-		self:SetHitchTarget( target )
 	end
 
 	return
@@ -90,6 +158,10 @@ local radius = 6
 local Col = Color(255,191,0,255)
 
 function ENT:DrawTranslucent()
+	local ply = LocalPlayer()
+
+	--if not IsValid( ply ) or not IsValid( ply:lvsGetVehicle() ) then return end
+
 	local HitchType = self:GetHitchType()
 
 	if HitchType ~= LVS.HITCHTYPE_MALE then return end
@@ -132,7 +204,7 @@ function ENT:DrawTranslucent()
 			surface.SetDrawColor( 0, 0, 0, 80 )
 			DrawDiamond( tX + 1, tY + 1, radius )
 
-			if dist > 50 then continue end
+			if dist > self.HookupDistance then continue end
 
 			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
 			surface.DrawLine( X, Y, tX, tY )

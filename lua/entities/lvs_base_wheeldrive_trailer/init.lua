@@ -37,6 +37,12 @@ function ENT:OnSpawn( PObj )
 	self:AddTrailerHitch( Vector(-94.29,0,2.16), LVS.HITCHTYPE_FEMALE )
 end
 
+function ENT:OnCollision( data, physobj )
+	if self:WorldToLocal( data.HitPos ).z < 19 then return true end -- dont detect collision  when the lower part of the model touches the ground
+
+	return false
+end
+
 function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 

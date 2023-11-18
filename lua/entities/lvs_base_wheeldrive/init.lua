@@ -445,3 +445,15 @@ function ENT:ApproachTargetAngle( TargetAngle )
 
 	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
 end
+
+function ENT:OnCoupled( targetVehicle, targetHitch )
+	if not IsValid( targetHitch ) then return end
+
+	targetHitch:EmitSound("doors/door_metal_medium_open1.wav")
+end
+
+function ENT:OnDecoupled( targetVehicle, targetHitch )
+	if not IsValid( targetHitch ) then return end
+
+	targetHitch:EmitSound("ambient/machines/catapult_throw.wav")
+end
