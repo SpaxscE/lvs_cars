@@ -7,7 +7,8 @@ ENT.RenderGroup = RENDERGROUP_BOTH
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
-	self:NetworkVar( "Entity",1, "HitchTarget" )
+	self:NetworkVar( "Entity",1, "Player" )
+	self:NetworkVar( "Entity",2, "HitchTarget" )
 	self:NetworkVar( "Int",0, "HitchType" )
 
 	if SERVER then
@@ -54,15 +55,24 @@ if SERVER then
 		self:SetHitchTarget( target )
 	end
 
-	--self:UpdateLink( entity, true )
-
 	return
 end
 
+local HitchEnts = {}
+
 function ENT:Initialize()
+	table.insert( HitchEnts, self )
 end
 
 function ENT:OnRemove()
+	for id, e in pairs( HitchEnts ) do
+		if IsValid( e ) then continue end
+
+		HitchEnts[ id ] = nil
+	end
+end
+
+function ENT:Draw()
 end
 
 local function DrawDiamond( X, Y, radius )
@@ -75,64 +85,57 @@ local function DrawDiamond( X, Y, radius )
 	end
 end
 
-function ENT:Draw()
-end
-
-local boxMins = Vector(-15,-15,-15)
-local boxMaxs = Vector(15,15,15)
-
-local function DrawText( x, y, text, col )
-	local font = "TargetIDSmall"
-
-	draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-end
+local circle = Material( "vgui/circle" )
+local radius = 6
+local Col = Color(255,191,0,255)
 
 function ENT:DrawTranslucent()
-	local ply = LocalPlayer()
+	local HitchType = self:GetHitchType()
 
-	if not IsValid( ply ) or ply:InVehicle() then return end
+	if HitchType ~= LVS.HITCHTYPE_MALE then return end
 
-	local shootPos = ply:GetShootPos()
+	local pos = self:GetPos()
+	local scr = pos:ToScreen()
 
-	local boxOrigin = self:GetPos()
-	local boxAngles = self:GetAngles()
-
-	if (boxOrigin - shootPos):LengthSqr() > 250000 then return end
-
-	local HitPos, _, _ = util.IntersectRayWithOBB( shootPos, ply:GetAimVector() * 150, boxOrigin, boxAngles, boxMins, boxMaxs )
-
-	local scr = boxOrigin:ToScreen()
+	if not scr.visible then return end
 
 	local X = scr.x
 	local Y = scr.y
 
-	local radius = 25
-	local Col = Color(255,191,0,255)
-
-	if HitPos then
-		if ply:KeyDown( IN_USE ) then
-			Col = Color(255,0,0,255)
-			radius = radius + 5
-			-- send attach command
-		else
-			radius = radius + math.cos( CurTime() * 10 ) * 2
-		end
-	end
-
 	cam.Start2D()
+		for id, ent in pairs( HitchEnts ) do
+			if ent == self then continue end
 
-		surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			local tpos = ent:GetPos()
 
-		DrawDiamond( X, Y, radius )
+			local dist = (tpos - pos):Length()
 
-		surface.SetDrawColor( 0, 0, 0, 80 )
+			if dist > 200 then continue end
 
-		DrawDiamond( X + 1, Y + 1, radius )
+			surface.SetMaterial( circle )
+			surface.SetDrawColor( 0, 0, 0, 80 )
+			surface.DrawTexturedRect( X - radius * 0.5 + 1, Y - radius * 0.5 + 1, radius, radius )
 
-		local Key = input.LookupBinding( "+use" )
-		if not isstring( Key ) then Key = "[+use not bound]" end
-		DrawText( X, Y + 35, "press "..Key.." to attach cock!", Col )
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			surface.DrawTexturedRect( X - radius * 0.5, Y - radius * 0.5, radius, radius )
+
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+
+			local tscr = tpos:ToScreen()
+
+			if not tscr.visible then continue end
+
+			local tX = tscr.x
+			local tY = tscr.y
+
+			DrawDiamond( tX, tY, radius )
+			surface.SetDrawColor( 0, 0, 0, 80 )
+			DrawDiamond( tX + 1, tY + 1, radius )
+
+			if dist > 50 then continue end
+
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			surface.DrawLine( X, Y, tX, tY )
+		end
 	cam.End2D()
 end
