@@ -5,7 +5,7 @@ ENT.DoNotDuplicate = true
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 
-ENT.HookupDistance = 50
+ENT.HookupDistance = 80
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
@@ -22,6 +22,7 @@ if SERVER then
 		self:SetSolid( SOLID_NONE )
 		self:SetMoveType( MOVETYPE_NONE )
 		self:DrawShadow( false )
+		PrintChat(self)
 	end
 
 	function ENT:Decouple()
@@ -160,7 +161,7 @@ local Col = Color(255,191,0,255)
 function ENT:DrawTranslucent()
 	local ply = LocalPlayer()
 
-	--if not IsValid( ply ) or not IsValid( ply:lvsGetVehicle() ) then return end
+	if not IsValid( ply ) or IsValid( ply:lvsGetVehicle() ) then return end
 
 	local HitchType = self:GetHitchType()
 
@@ -177,6 +178,8 @@ function ENT:DrawTranslucent()
 	cam.Start2D()
 		for id, ent in pairs( HitchEnts ) do
 			if ent == self then continue end
+
+			if not IsValid( ent ) then continue end
 
 			local tpos = ent:GetPos()
 
