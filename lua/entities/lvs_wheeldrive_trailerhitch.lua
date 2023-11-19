@@ -5,9 +5,11 @@ ENT.DoNotDuplicate = true
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 
+ENT.HookupDistance = 50
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
-	self:NetworkVar( "Entity",1, "HitchTarget" )
+	self:NetworkVar( "Entity",1, "TargetBase" )
 	self:NetworkVar( "Int",0, "HitchType" )
 
 	if SERVER then
@@ -22,6 +24,95 @@ if SERVER then
 		self:DrawShadow( false )
 	end
 
+	function ENT:Decouple()
+		local TargetBase = self:GetTargetBase()
+
+		self:SetTargetBase( NULL )
+
+		if not IsValid( self.HitchConstraint ) then return end
+
+		local base = self:GetBase()
+
+		if IsValid( base ) then
+			base:OnDecoupled( TargetBase, self.HitchTarget )
+		end
+
+		self.HitchConstraint:Remove()
+
+		self.HitchTarget = nil
+	end
+
+	function ENT:CoupleTo( target )
+		if not IsValid( target ) or IsValid( self.HitchConstraint ) then return end
+
+		local base = self:GetBase()
+
+		if self.IsLinkInProgress or not IsValid( base ) or IsValid( self.PosEnt ) then return end
+
+		self.IsLinkInProgress = true
+
+		if self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE or target:GetHitchType() ~= LVS.HITCHTYPE_MALE then self.IsLinkInProgress = nil return end
+
+		self.PosEnt = ents.Create( "prop_physics" )
+
+		if not IsValid( self.PosEnt ) then self.IsLinkInProgress = nil return end
+
+		self.PosEnt:SetModel( "models/Combine_Helicopter/helicopter_bomb01.mdl" )
+		self.PosEnt:SetPos( self:GetPos() )
+		self.PosEnt:SetAngles( self:GetAngles() )
+		self.PosEnt:SetCollisionGroup( COLLISION_GROUP_WORLD )
+		self.PosEnt:Spawn()
+		self.PosEnt:Activate()
+		self.PosEnt:SetNoDraw( true ) 
+		self:DeleteOnRemove( self.PosEnt )
+
+		local PhysObj = self.PosEnt:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then self.IsLinkInProgress = nil return end
+
+		PhysObj:SetMass( 50000 )
+		PhysObj:EnableMotion( false )
+
+		constraint.Ballsocket( base, self.PosEnt, 0, 0, vector_origin, 0, 0, 1 )
+
+		local targetBase = target:GetBase()
+
+		base:OnCoupled( targetBase, target )
+
+		timer.Simple( 0, function()
+			if not IsValid( self.PosEnt ) then
+				self.IsLinkInProgress = nil
+
+				return
+			end
+	
+			if not IsValid( target ) or not IsValid( targetBase ) then
+				self.PosEnt:Remove()
+	
+				self.IsLinkInProgress = nil
+	
+				return
+			end
+	
+			self.PosEnt:SetPos( target:GetPos() )
+
+			constraint.Weld( self.PosEnt, targetBase, 0, 0, 0, false, false )
+
+			timer.Simple( 0.25, function()
+				if not IsValid( base ) or not IsValid( targetBase ) or not IsValid( self.PosEnt ) then self.IsLinkInProgress = nil return end
+
+				self.HitchTarget = target
+				self.HitchConstraint = constraint.Ballsocket( base, targetBase, 0, 0, targetBase:WorldToLocal( self.PosEnt:GetPos() ), 0, 0, 1 )
+
+				self:SetTargetBase( targetBase )
+
+				self.PosEnt:Remove()
+
+				self.IsLinkInProgress = nil 
+			end )
+		end )
+	end
+
 	function ENT:Think()
 		return false
 	end
@@ -32,37 +123,24 @@ if SERVER then
 	function ENT:OnRemove()
 	end
 
-	function ENT:UpdateLink( target, enable )
-		local base = self:GetBase()
-
-		if not IsValid( base ) or target == base then return end
-
-		if not enable then
-			if target == self:GetHitchTarget() then
-				self:SetHitchTarget( NULL )
-			end
-	
-			return
-		end
-
-		if not IsValid( target ) or not target.LVS or not target.GetHitchType then return end
-
-		local TargetHitchType = target:GetHitchType()
-
-		if TargetHitchType == LVS.HITCHTYPE_NONE or self:GetHitchType() == TargetHitchType then return end -- no gay sex allowed
-
-		self:SetHitchTarget( target )
-	end
-
-	--self:UpdateLink( entity, true )
-
 	return
 end
 
+local HitchEnts = {}
+
 function ENT:Initialize()
+	table.insert( HitchEnts, self )
 end
 
 function ENT:OnRemove()
+	for id, e in pairs( HitchEnts ) do
+		if IsValid( e ) then continue end
+
+		HitchEnts[ id ] = nil
+	end
+end
+
+function ENT:Draw()
 end
 
 local function DrawDiamond( X, Y, radius )
@@ -75,64 +153,61 @@ local function DrawDiamond( X, Y, radius )
 	end
 end
 
-function ENT:Draw()
-end
-
-local boxMins = Vector(-15,-15,-15)
-local boxMaxs = Vector(15,15,15)
-
-local function DrawText( x, y, text, col )
-	local font = "TargetIDSmall"
-
-	draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-end
+local circle = Material( "vgui/circle" )
+local radius = 6
+local Col = Color(255,191,0,255)
 
 function ENT:DrawTranslucent()
 	local ply = LocalPlayer()
 
-	if not IsValid( ply ) or ply:InVehicle() then return end
+	--if not IsValid( ply ) or not IsValid( ply:lvsGetVehicle() ) then return end
 
-	local shootPos = ply:GetShootPos()
+	local HitchType = self:GetHitchType()
 
-	local boxOrigin = self:GetPos()
-	local boxAngles = self:GetAngles()
+	if HitchType ~= LVS.HITCHTYPE_MALE then return end
 
-	if (boxOrigin - shootPos):LengthSqr() > 250000 then return end
+	local pos = self:GetPos()
+	local scr = pos:ToScreen()
 
-	local HitPos, _, _ = util.IntersectRayWithOBB( shootPos, ply:GetAimVector() * 150, boxOrigin, boxAngles, boxMins, boxMaxs )
-
-	local scr = boxOrigin:ToScreen()
+	if not scr.visible then return end
 
 	local X = scr.x
 	local Y = scr.y
 
-	local radius = 25
-	local Col = Color(255,191,0,255)
-
-	if HitPos then
-		if ply:KeyDown( IN_USE ) then
-			Col = Color(255,0,0,255)
-			radius = radius + 5
-			-- send attach command
-		else
-			radius = radius + math.cos( CurTime() * 10 ) * 2
-		end
-	end
-
 	cam.Start2D()
+		for id, ent in pairs( HitchEnts ) do
+			if ent == self then continue end
 
-		surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			local tpos = ent:GetPos()
 
-		DrawDiamond( X, Y, radius )
+			local dist = (tpos - pos):Length()
 
-		surface.SetDrawColor( 0, 0, 0, 80 )
+			if dist > 200 then continue end
 
-		DrawDiamond( X + 1, Y + 1, radius )
+			surface.SetMaterial( circle )
+			surface.SetDrawColor( 0, 0, 0, 80 )
+			surface.DrawTexturedRect( X - radius * 0.5 + 1, Y - radius * 0.5 + 1, radius, radius )
 
-		local Key = input.LookupBinding( "+use" )
-		if not isstring( Key ) then Key = "[+use not bound]" end
-		DrawText( X, Y + 35, "press "..Key.." to attach cock!", Col )
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			surface.DrawTexturedRect( X - radius * 0.5, Y - radius * 0.5, radius, radius )
+
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+
+			local tscr = tpos:ToScreen()
+
+			if not tscr.visible then continue end
+
+			local tX = tscr.x
+			local tY = tscr.y
+
+			DrawDiamond( tX, tY, radius )
+			surface.SetDrawColor( 0, 0, 0, 80 )
+			DrawDiamond( tX + 1, tY + 1, radius )
+
+			if dist > self.HookupDistance then continue end
+
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			surface.DrawLine( X, Y, tX, tY )
+		end
 	cam.End2D()
 end
