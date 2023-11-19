@@ -6,7 +6,7 @@ ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
-ENT.Spawnable			= true
+ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
 ENT.DeleteOnExplode = true
@@ -16,11 +16,6 @@ ENT.lvsShowInSpawner = false
 
 ENT.AllowSuperCharger = false
 ENT.AllowTurbo = false
-
-ENT.MDL = "models/blu/pak40.mdl"
-
-ENT.WheelPhysicsMass = 350
-ENT.WheelPhysicsInertia = Vector(10,8,10)
 
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = true

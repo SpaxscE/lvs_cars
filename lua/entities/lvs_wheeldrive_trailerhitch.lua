@@ -30,6 +30,11 @@ if SERVER then
 
 		if IsValid( ent:GetTargetBase() ) then
 			ent:Decouple()
+			timer.Simple( 0.1, function()
+				if not IsValid( ent ) or not IsValid( ply ) then return end
+
+				ent:StartDrag( ply )
+			end )
 		else
 			ent:StartDrag( ply )
 		end
@@ -42,7 +47,7 @@ if SERVER then
 
 		local base = self:GetBase()
 
-		if not IsValid( ply ) or not ply:KeyDown( IN_USE ) or (ply:GetShootPos() - self:GetPos()):Length() > GrabDistance or not IsValid( base ) then return end
+		if not IsValid( ply ) or not ply:Alive() or ply:InVehicle() or ply:GetObserverMode() ~= OBS_MODE_NONE or not ply:KeyDown( IN_USE ) or (ply:GetShootPos() - self:GetPos()):Length() > GrabDistance or not IsValid( base ) then return end
 
 		self.GrabEnt = ents.Create( "prop_physics" )
 
@@ -102,7 +107,11 @@ if SERVER then
 	end
 
 	function ENT:Drag( ply )
-		if not IsValid( self.GrabEnt ) or not ply:KeyDown( IN_USE ) then self:StopDrag() return end
+		if not IsValid( self.GrabEnt ) or ply:InVehicle() or not ply:KeyDown( IN_USE ) or not ply:Alive() or ply:GetObserverMode() ~= OBS_MODE_NONE then
+			self:StopDrag()
+
+			return
+		end
 
 		local TargetPos = ply:GetShootPos() + ply:GetAimVector() * 80
 
