@@ -28,11 +28,17 @@ if SERVER then
 
 		if not IsValid( ent ) or not isfunction( ent.StartDrag ) then return end
 
-		ent:StartDrag( ply )
+		if IsValid( ent:GetTargetBase() ) then
+			ent:Decouple()
+		else
+			ent:StartDrag( ply )
+		end
 	end )
 
 	function ENT:StartDrag( ply )
 		if IsValid( self.GrabEnt ) then return end
+
+		if self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE then return end
 
 		local base = self:GetBase()
 
@@ -81,6 +87,18 @@ if SERVER then
 		end
 
 		self:SetDragTarget( NULL )
+
+		for _, ent in ipairs( ents.FindByClass( "lvs_wheeldrive_trailerhitch" ) ) do
+			if ent:GetHitchType() ~= LVS.HITCHTYPE_MALE then continue end
+
+			local dist = (self:GetPos() - ent:GetPos()):Length()
+
+			if dist > HookupDistance then continue end
+
+			self:CoupleTo( ent )
+
+			break
+		end
 	end
 
 	function ENT:Drag( ply )
@@ -91,6 +109,12 @@ if SERVER then
 		if (self:GetPos() - TargetPos):Length() > GrabDistance then self:StopDrag() return end
 
 		self.GrabEnt:SetPos( TargetPos )
+
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return end
+
+		base:PhysWake()
 	end
 
 	function ENT:Initialize()	
@@ -253,7 +277,7 @@ local Col = Color(255,191,0,255)
 local boxMins = Vector(-5,-5,-5)
 local boxMaxs = Vector(5,5,5)
 
-function ENT:DrawInfo( ply )
+function ENT:DrawInfoCoupled( ply )
 	local boxOrigin = self:GetPos()
 	local scr = boxOrigin:ToScreen()
 
@@ -271,81 +295,154 @@ function ENT:DrawInfo( ply )
 	local Y = scr.y
 
 	cam.Start2D()
+		if HitPos then
+			surface.SetDrawColor( 255, 255, 255, 255 )
 
-	for id, ent in pairs( HitchEnts ) do
-		if ent == self then continue end
+			local Key = input.LookupBinding( "+use" )
 
-		if not IsValid( ent ) or ent:GetHitchType() ~= LVS.HITCHTYPE_MALE then continue end
+			if not isstring( Key ) then Key = "[+use not bound]" end
 
-		local tpos = ent:GetPos()
+			DrawText( X, Y + 20, "press "..Key.." to decouple!",Color(255,255,255,255) )
 
-		local dist = (tpos - boxOrigin):Length()
+			local KeyUse = ply:KeyDown( IN_USE )
 
-		if dist > IgnoreDistance then continue end
+			if self.OldKeyUse ~= KeyUse then
+				self.OldKeyUse = KeyUse
 
-		local tscr = tpos:ToScreen()
+				if KeyUse then
+					surface.PlaySound("common/wpn_select.wav")
 
-		if not tscr.visible then continue end
+					net.Start( "lvs_trailerhitch" )
+						net.WriteEntity( self )
+					net.SendToServer()
+				end
+			end
+		else
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+		end
 
-		local tX = tscr.x
-		local tY = tscr.y
-
-		surface.SetMaterial( circle )
+		DrawDiamond( X, Y, radius )
 		surface.SetDrawColor( 0, 0, 0, 80 )
-		surface.DrawTexturedRect( tX - radius * 0.5 + 1, tY - radius * 0.5 + 1, radius, radius )
-		surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
-		surface.DrawTexturedRect( tX - radius * 0.5, tY - radius * 0.5, radius, radius )
+		DrawDiamond( X + 1, Y + 1, radius )
+	cam.End2D()
+end
 
-		if dist > HookupDistance then continue end
+function ENT:DrawInfo( ply )
+	local boxOrigin = self:GetPos()
+	local scr = boxOrigin:ToScreen()
 
-		surface.DrawLine( X, Y, tX, tY )
-	end
+	if not scr.visible then return end
+
+	local shootPos = ply:GetShootPos()
+
+	local boxAngles = self:GetAngles()
+
+	if (boxOrigin - shootPos):Length() > 250 then return end
+
+	local HitPos, _, _ = util.IntersectRayWithOBB( shootPos, ply:GetAimVector() * GrabDistance, boxOrigin, boxAngles, boxMins, boxMaxs )
+
+	local X = scr.x
+	local Y = scr.y
 
 	local DragTarget = self:GetDragTarget()
+	local IsBeingDragged = IsValid( DragTarget )
+	local HasTarget = false
 
-	if IsValid( DragTarget ) then
+	if IsBeingDragged then
+		cam.Start2D()
+
+		for id, ent in pairs( HitchEnts ) do
+			if ent == self then continue end
+
+			if not IsValid( ent ) or ent:GetHitchType() ~= LVS.HITCHTYPE_MALE then continue end
+
+			local tpos = ent:GetPos()
+
+			local dist = (tpos - boxOrigin):Length()
+
+			if dist > IgnoreDistance then continue end
+
+			local tscr = tpos:ToScreen()
+
+			if not tscr.visible then continue end
+
+			local tX = tscr.x
+			local tY = tscr.y
+
+			if dist < HookupDistance and IsBeingDragged then
+				HasTarget = true
+			end
+
+			surface.SetMaterial( circle )
+			surface.SetDrawColor( 0, 0, 0, 80 )
+			surface.DrawTexturedRect( tX - radius * 0.5 + 1, tY - radius * 0.5 + 1, radius, radius )
+
+			if HasTarget then
+				surface.SetDrawColor( 0, 255, 0, 255 )
+			else
+				surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+			end
+
+			surface.DrawTexturedRect( tX - radius * 0.5, tY - radius * 0.5, radius, radius )
+
+			if not HasTarget then continue end
+
+			surface.DrawLine( X, Y, tX, tY )
+		end
+
 		local radiusB = 25 + math.cos( CurTime() * 10 ) * 2
 
-		surface.SetDrawColor( 255, 0, 0, 255 )
+		if HasTarget then
+			surface.SetDrawColor( 0, 255, 0, 255 )
+		else
+			surface.SetDrawColor( 255, 0, 0, 255 )
+		end
+
 		DrawDiamond( X, Y, radiusB )
 		surface.SetDrawColor( 0, 0, 0, 80 )
 		DrawDiamond( X + 1, Y + 1, radiusB )
 
-		DrawText( X, Y + 35, "in use by "..DragTarget:GetName(),Color(255,0,0,255) )
+		if HasTarget then
+			DrawText( X, Y + 35, "release to couple",Color(0,255,0,255) )
+		else
+			DrawText( X, Y + 35, "in use by "..DragTarget:GetName(),Color(255,0,0,255) )
+		end
 
 		cam.End2D()
 
 		return
 	end
 
-	if HitPos then
-		surface.SetDrawColor( 0, 255, 0, 255 )
+	cam.Start2D()
+		if HitPos then
+			surface.SetDrawColor( 255, 255, 255, 255 )
 
-		local Key = input.LookupBinding( "+use" )
+			local Key = input.LookupBinding( "+use" )
 
-		if not isstring( Key ) then Key = "[+use not bound]" end
+			if not isstring( Key ) then Key = "[+use not bound]" end
 
-		DrawText( X, Y + 20, "hold "..Key.." to drag!",Color(0,255,0,255) )
+			DrawText( X, Y + 20, "hold "..Key.." to drag!",Color(255,255,255,255) )
 
-		local KeyUse = ply:KeyDown( IN_USE )
+			local KeyUse = ply:KeyDown( IN_USE )
 
-		if self.OldKeyUse ~= KeyUse then
-			self.OldKeyUse = KeyUse
+			if self.OldKeyUse ~= KeyUse then
+				self.OldKeyUse = KeyUse
 
-			if KeyUse then
-				net.Start( "lvs_trailerhitch" )
-					net.WriteEntity( self )
-				net.SendToServer()
+				if KeyUse then
+					surface.PlaySound("common/wpn_select.wav")
+
+					net.Start( "lvs_trailerhitch" )
+						net.WriteEntity( self )
+					net.SendToServer()
+				end
 			end
+		else
+			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
 		end
-	else
-		surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
-	end
 
-	DrawDiamond( X, Y, radius )
-	surface.SetDrawColor( 0, 0, 0, 80 )
-	DrawDiamond( X + 1, Y + 1, radius )
-
+		DrawDiamond( X, Y, radius )
+		surface.SetDrawColor( 0, 0, 0, 80 )
+		DrawDiamond( X + 1, Y + 1, radius )
 	cam.End2D()
 end
 
@@ -353,6 +450,12 @@ function ENT:DrawTranslucent()
 	local ply = LocalPlayer()
 
 	if not IsValid( ply ) or IsValid( ply:lvsGetVehicle() ) or self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE then return end
+
+	if IsValid( self:GetTargetBase() ) then
+		self:DrawInfoCoupled( ply )
+
+		return
+	end
 
 	self:DrawInfo( ply )
 end
