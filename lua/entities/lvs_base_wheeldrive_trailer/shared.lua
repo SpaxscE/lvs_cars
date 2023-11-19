@@ -22,6 +22,9 @@ ENT.MDL = "models/blu/pak40.mdl"
 ENT.WheelPhysicsMass = 350
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 
+ENT.PhysicsDampingForward = true
+ENT.PhysicsDampingReverse = true
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
