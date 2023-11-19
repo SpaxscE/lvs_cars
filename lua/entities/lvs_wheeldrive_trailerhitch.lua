@@ -5,11 +5,14 @@ ENT.DoNotDuplicate = true
 
 ENT.RenderGroup = RENDERGROUP_BOTH
 
-ENT.HookupDistance = 80
+local IgnoreDistance = 200
+local GrabDistance = 150
+local HookupDistance = 32
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
 	self:NetworkVar( "Entity",1, "TargetBase" )
+	self:NetworkVar( "Entity",2, "DragTarget" )
 	self:NetworkVar( "Int",0, "HitchType" )
 
 	if SERVER then
@@ -18,11 +21,82 @@ function ENT:SetupDataTables()
 end
 
 if SERVER then
+	util.AddNetworkString( "lvs_trailerhitch" )
+
+	net.Receive( "lvs_trailerhitch", function( len, ply )
+		local ent = net.ReadEntity()
+
+		if not IsValid( ent ) or not isfunction( ent.StartDrag ) then return end
+
+		ent:StartDrag( ply )
+	end )
+
+	function ENT:StartDrag( ply )
+		if IsValid( self.GrabEnt ) then return end
+
+		local base = self:GetBase()
+
+		if not IsValid( ply ) or not ply:KeyDown( IN_USE ) or (ply:GetShootPos() - self:GetPos()):Length() > GrabDistance or not IsValid( base ) then return end
+
+		self.GrabEnt = ents.Create( "prop_physics" )
+
+		if not IsValid( self.GrabEnt ) then return end
+
+		self.GrabEnt:SetModel( "models/Combine_Helicopter/helicopter_bomb01.mdl" )
+		self.GrabEnt:SetPos( self:GetPos() )
+		self.GrabEnt:SetAngles( self:GetAngles() )
+		self.GrabEnt:SetCollisionGroup( COLLISION_GROUP_WORLD )
+		self.GrabEnt:Spawn()
+		self.GrabEnt:Activate()
+		self.GrabEnt:SetNoDraw( true ) 
+		self:DeleteOnRemove( self.GrabEnt )
+
+		self:SetDragTarget( ply )
+
+		local PhysObj = self.GrabEnt:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then return end
+
+		PhysObj:SetMass( 50000 )
+		PhysObj:EnableMotion( false )
+
+		constraint.Ballsocket( base, self.GrabEnt, 0, 0, vector_origin, 0, 0, 1 )
+
+		self.GrabEnt:SetSolid( SOLID_NONE )
+
+		base:OnStartDrag( self, ply )
+
+		self:NextThink( CurTime() )
+	end
+
+	function ENT:StopDrag()
+		if IsValid( self.GrabEnt ) then
+			self.GrabEnt:Remove()
+		end
+
+		local base = self:GetBase()
+
+		if IsValid( base ) then
+			base:OnStopDrag( self, self:GetDragTarget() )
+		end
+
+		self:SetDragTarget( NULL )
+	end
+
+	function ENT:Drag( ply )
+		if not IsValid( self.GrabEnt ) or not ply:KeyDown( IN_USE ) then self:StopDrag() return end
+
+		local TargetPos = ply:GetShootPos() + ply:GetAimVector() * 80
+
+		if (self:GetPos() - TargetPos):Length() > GrabDistance then self:StopDrag() return end
+
+		self.GrabEnt:SetPos( TargetPos )
+	end
+
 	function ENT:Initialize()	
 		self:SetSolid( SOLID_NONE )
 		self:SetMoveType( MOVETYPE_NONE )
 		self:DrawShadow( false )
-		PrintChat(self)
 	end
 
 	function ENT:Decouple()
@@ -80,6 +154,8 @@ if SERVER then
 
 		base:OnCoupled( targetBase, target )
 
+		self.PosEnt:SetSolid( SOLID_NONE )
+
 		timer.Simple( 0, function()
 			if not IsValid( self.PosEnt ) then
 				self.IsLinkInProgress = nil
@@ -115,13 +191,22 @@ if SERVER then
 	end
 
 	function ENT:Think()
-		return false
-	end
 
-	function ENT:OnTakeDamage( dmginfo )
+		local ply = self:GetDragTarget()
+
+		if IsValid( ply ) then
+			self:Drag( ply )
+
+			self:NextThink( CurTime() )
+		else
+			self:NextThink( CurTime() + 9999 )
+		end
+
+		return true
 	end
 
 	function ENT:OnRemove()
+		self:StopDrag()
 	end
 
 	return
@@ -154,63 +239,120 @@ local function DrawDiamond( X, Y, radius )
 	end
 end
 
+local function DrawText( x, y, text, col )
+	local font = "TargetIDSmall"
+	draw.SimpleText( text, font, x + 1, y + 1, Color( 0, 0, 0, 120 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( text, font, x + 2, y + 2, Color( 0, 0, 0, 50 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+end
+
 local circle = Material( "vgui/circle" )
 local radius = 6
 local Col = Color(255,191,0,255)
 
-function ENT:DrawTranslucent()
-	local ply = LocalPlayer()
+local boxMins = Vector(-5,-5,-5)
+local boxMaxs = Vector(5,5,5)
 
-	if not IsValid( ply ) or IsValid( ply:lvsGetVehicle() ) then return end
-
-	local HitchType = self:GetHitchType()
-
-	if HitchType ~= LVS.HITCHTYPE_MALE then return end
-
-	local pos = self:GetPos()
-	local scr = pos:ToScreen()
+function ENT:DrawInfo( ply )
+	local boxOrigin = self:GetPos()
+	local scr = boxOrigin:ToScreen()
 
 	if not scr.visible then return end
+
+	local shootPos = ply:GetShootPos()
+
+	local boxAngles = self:GetAngles()
+
+	if (boxOrigin - shootPos):Length() > 250 then return end
+
+	local HitPos, _, _ = util.IntersectRayWithOBB( shootPos, ply:GetAimVector() * GrabDistance, boxOrigin, boxAngles, boxMins, boxMaxs )
 
 	local X = scr.x
 	local Y = scr.y
 
 	cam.Start2D()
-		for id, ent in pairs( HitchEnts ) do
-			if ent == self then continue end
 
-			if not IsValid( ent ) then continue end
+	for id, ent in pairs( HitchEnts ) do
+		if ent == self then continue end
 
-			local tpos = ent:GetPos()
+		if not IsValid( ent ) or ent:GetHitchType() ~= LVS.HITCHTYPE_MALE then continue end
 
-			local dist = (tpos - pos):Length()
+		local tpos = ent:GetPos()
 
-			if dist > 200 then continue end
+		local dist = (tpos - boxOrigin):Length()
 
-			surface.SetMaterial( circle )
-			surface.SetDrawColor( 0, 0, 0, 80 )
-			surface.DrawTexturedRect( X - radius * 0.5 + 1, Y - radius * 0.5 + 1, radius, radius )
+		if dist > IgnoreDistance then continue end
 
-			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
-			surface.DrawTexturedRect( X - radius * 0.5, Y - radius * 0.5, radius, radius )
+		local tscr = tpos:ToScreen()
 
-			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+		if not tscr.visible then continue end
 
-			local tscr = tpos:ToScreen()
+		local tX = tscr.x
+		local tY = tscr.y
 
-			if not tscr.visible then continue end
+		surface.SetMaterial( circle )
+		surface.SetDrawColor( 0, 0, 0, 80 )
+		surface.DrawTexturedRect( tX - radius * 0.5 + 1, tY - radius * 0.5 + 1, radius, radius )
+		surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+		surface.DrawTexturedRect( tX - radius * 0.5, tY - radius * 0.5, radius, radius )
 
-			local tX = tscr.x
-			local tY = tscr.y
+		if dist > HookupDistance then continue end
 
-			DrawDiamond( tX, tY, radius )
-			surface.SetDrawColor( 0, 0, 0, 80 )
-			DrawDiamond( tX + 1, tY + 1, radius )
+		surface.DrawLine( X, Y, tX, tY )
+	end
 
-			if dist > self.HookupDistance then continue end
+	local DragTarget = self:GetDragTarget()
 
-			surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
-			surface.DrawLine( X, Y, tX, tY )
+	if IsValid( DragTarget ) then
+		local radiusB = 25 + math.cos( CurTime() * 10 ) * 2
+
+		surface.SetDrawColor( 255, 0, 0, 255 )
+		DrawDiamond( X, Y, radiusB )
+		surface.SetDrawColor( 0, 0, 0, 80 )
+		DrawDiamond( X + 1, Y + 1, radiusB )
+
+		DrawText( X, Y + 35, "in use by "..DragTarget:GetName(),Color(255,0,0,255) )
+
+		cam.End2D()
+
+		return
+	end
+
+	if HitPos then
+		surface.SetDrawColor( 0, 255, 0, 255 )
+
+		local Key = input.LookupBinding( "+use" )
+
+		if not isstring( Key ) then Key = "[+use not bound]" end
+
+		DrawText( X, Y + 20, "hold "..Key.." to drag!",Color(0,255,0,255) )
+
+		local KeyUse = ply:KeyDown( IN_USE )
+
+		if self.OldKeyUse ~= KeyUse then
+			self.OldKeyUse = KeyUse
+
+			if KeyUse then
+				net.Start( "lvs_trailerhitch" )
+					net.WriteEntity( self )
+				net.SendToServer()
+			end
 		end
+	else
+		surface.SetDrawColor( Col.r, Col.g, Col.b, Col.a )
+	end
+
+	DrawDiamond( X, Y, radius )
+	surface.SetDrawColor( 0, 0, 0, 80 )
+	DrawDiamond( X + 1, Y + 1, radius )
+
 	cam.End2D()
+end
+
+function ENT:DrawTranslucent()
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) or IsValid( ply:lvsGetVehicle() ) or self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE then return end
+
+	self:DrawInfo( ply )
 end

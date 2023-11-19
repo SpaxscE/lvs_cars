@@ -457,3 +457,9 @@ function ENT:OnDecoupled( targetVehicle, targetHitch )
 
 	targetHitch:EmitSound("ambient/machines/catapult_throw.wav")
 end
+
+function ENT:OnStartDrag( caller, activator )
+end
+
+function ENT:OnStopDrag( caller, activator )
+end
