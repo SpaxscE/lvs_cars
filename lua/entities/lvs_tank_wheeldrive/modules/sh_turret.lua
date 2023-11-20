@@ -191,6 +191,10 @@ function ENT:AimTurret()
 	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), self.TurretPitchMin, self.TurretPitchMax )
 	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
 
+	if self.TurretYawMin and self.TurretYawMax then
+		Yaw = math.Clamp( Yaw, self.TurretYawMin, self.TurretYawMax )
+	end
+
 	if SERVER then
 		self:CalcTurretSound( Pitch, Yaw, AimRate )
 	end

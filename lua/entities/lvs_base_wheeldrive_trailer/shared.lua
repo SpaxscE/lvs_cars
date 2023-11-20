@@ -27,6 +27,9 @@ function ENT:SetupDataTables()
 	self:AddDT( "Entity", "InputTarget" )
 	self:AddDT( "Entity", "LightsHandler" )
 	self:AddDT( "Vector", "AIAimVector" )
+
+	self:TurretSystemDT()
+	self:TrackSystemDT()
 end
 
 function ENT:GetVehicleType()
@@ -37,6 +40,12 @@ function ENT:StartCommand( ply, cmd )
 end
 
 function ENT:SetNWHandBrake()
+end
+
+function ENT:SetThrottle()
+end
+
+function ENT:SetReverse()
 end
 
 function ENT:GetEngine()
