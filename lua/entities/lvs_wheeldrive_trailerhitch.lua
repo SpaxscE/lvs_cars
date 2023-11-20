@@ -55,6 +55,7 @@ if SERVER then
 		self.GrabEnt:Spawn()
 		self.GrabEnt:Activate()
 		self.GrabEnt:SetNoDraw( true ) 
+		self.GrabEnt.DoNotDuplicate = true
 		self:DeleteOnRemove( self.GrabEnt )
 
 		self:SetDragTarget( ply )
@@ -169,6 +170,7 @@ if SERVER then
 		self.PosEnt:Spawn()
 		self.PosEnt:Activate()
 		self.PosEnt:SetNoDraw( true ) 
+		self.PosEnt.DoNotDuplicate = true
 		self:DeleteOnRemove( self.PosEnt )
 
 		local PhysObj = self.PosEnt:GetPhysicsObject()

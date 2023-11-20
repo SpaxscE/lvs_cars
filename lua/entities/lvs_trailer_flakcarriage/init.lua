@@ -34,4 +34,48 @@ function ENT:OnSpawn( PObj )
 	} )
 
 	self:AddTrailerHitch( Vector(-86.5,0,18), LVS.HITCHTYPE_FEMALE )
+
+	local SupportEnt = ents.Create( "prop_physics" )
+
+	if not IsValid( SupportEnt ) then return end
+
+	SupportEnt:SetModel( "models/props_junk/PopCan01a.mdl" )
+	SupportEnt:SetPos( self:LocalToWorld( Vector(-57,0,-14) ) )
+	SupportEnt:SetAngles( self:GetAngles() )
+	SupportEnt:Spawn()
+	SupportEnt:Activate()
+	SupportEnt:SetNoDraw( true ) 
+	SupportEnt:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
+	SupportEnt.DoNotDuplicate = true
+	self:DeleteOnRemove( SupportEnt )
+
+	constraint.Weld( self, SupportEnt, 0, 0, 0, false, true )
+
+	self.SupportEnt = SupportEnt:GetPhysicsObject()
+
+	if not IsValid( self.SupportEnt ) then return end
+
+	self.SupportEnt:SetMass( 250 )
+	self.SupportEnt:SetMaterial( "default_silent" )
+end
+
+
+function ENT:OnCoupled( targetVehicle, targetHitch )
+	if not IsValid( self.SupportEnt ) then return end
+	self.SupportEnt:SetMass( 1 )
+end
+
+function ENT:OnDecoupled( targetVehicle, targetHitch )
+	if not IsValid( self.SupportEnt ) then return end
+	self.SupportEnt:SetMass( 250 )
+end
+
+function ENT:OnStartDrag( caller, activator )
+	if not IsValid( self.SupportEnt ) then return end
+	self.SupportEnt:SetMass( 1 )
+end
+
+function ENT:OnStopDrag( caller, activator )
+	if not IsValid( self.SupportEnt ) then return end
+	self.SupportEnt:SetMass( 250 )
 end
