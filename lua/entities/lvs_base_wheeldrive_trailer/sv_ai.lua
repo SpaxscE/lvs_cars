@@ -1,4 +1,6 @@
 
+ENT.AISearchCone = 180
+
 function ENT:OnCreateAI()
 end
 
@@ -6,7 +8,7 @@ function ENT:OnRemoveAI()
 end
 
 function ENT:RunAI()
-	local Target = self:AIGetTarget( 180 )
+	local Target = self:AIGetTarget( self.AISearchCone )
 
 	local StartPos = self:LocalToWorld( self:OBBCenter() )
 
@@ -14,6 +16,11 @@ function ENT:RunAI()
 
 	if IsValid( Target ) then
 		TargetPos = Target:GetPos()
+
+		if not self:AITargetInFront( Target, self.AISearchCone ) then
+			Target = NULL
+			self._LastAITarget = NULL
+		end
 	end
 
 	self._AIFireInput = false
