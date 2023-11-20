@@ -10,7 +10,11 @@ function ENT:RunAI()
 
 	local StartPos = self:LocalToWorld( self:OBBCenter() )
 
-	local TargetPos = Target:GetPos()
+	local TargetPos = StartPos
+
+	if IsValid( Target ) then
+		TargetPos = Target:GetPos()
+	end
 
 	self._AIFireInput = false
 

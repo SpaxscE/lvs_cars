@@ -97,7 +97,7 @@ function ENT:DoReloadSequence()
 	timer.Simple(0.25, function()
 		if not IsValid( self ) then return end
 
-		self:EmitSound("lvs/vehicles/pak40/cannon_unload.wav", 75, 100, 1, CHAN_WEAPON )
+		self:EmitSound("lvs/vehicles/pak40/cannon_unload.wav", 75, 100, 0.5, CHAN_WEAPON )
 	end)
 
 	timer.Simple(1, function()
