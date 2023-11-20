@@ -40,10 +40,11 @@ function ENT:OnSpawn( PObj )
 	if not IsValid( SupportEnt ) then return end
 
 	SupportEnt:SetModel( "models/props_junk/PopCan01a.mdl" )
-	SupportEnt:SetPos( self:LocalToWorld( Vector(-57,0,-14) ) )
+	SupportEnt:SetPos( self:LocalToWorld( Vector(-57,0,-13) ) )
 	SupportEnt:SetAngles( self:GetAngles() )
 	SupportEnt:Spawn()
 	SupportEnt:Activate()
+	SupportEnt:PhysicsInitSphere( 5, "default_silent" )
 	SupportEnt:SetNoDraw( true ) 
 	SupportEnt:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
 	SupportEnt.DoNotDuplicate = true
@@ -56,7 +57,6 @@ function ENT:OnSpawn( PObj )
 	if not IsValid( self.SupportEnt ) then return end
 
 	self.SupportEnt:SetMass( 250 )
-	self.SupportEnt:SetMaterial( "default_silent" )
 end
 
 
