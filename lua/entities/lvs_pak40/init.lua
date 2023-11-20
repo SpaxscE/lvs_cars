@@ -127,7 +127,7 @@ end
 function ENT:AITargetInFront( ent, range )
 	if not IsValid( ent ) then return false end
 
-	range = 40
+	range = 10
 
 	local DirToTarget = (ent:GetPos() - self:GetPos()):GetNormalized()
 
