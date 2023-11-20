@@ -3,6 +3,21 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 include("sv_ai.lua")
 
+function ENT:OnTick()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return end
+
+	local InputLightsHandler = InputTarget:GetLightsHandler()
+	local LightsHandler = self:GetLightsHandler()
+
+	if not IsValid( InputLightsHandler ) or not IsValid( LightsHandler ) then return end
+
+	LightsHandler:SetActive( InputLightsHandler:GetActive() )
+	LightsHandler:SetHighActive( InputLightsHandler:GetHighActive() )
+	LightsHandler:SetFogActive( InputLightsHandler:GetFogActive() )
+end
+
 function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 
@@ -72,15 +87,27 @@ function ENT:AddSuperCharger()
 end
 
 function ENT:OnCoupled( targetVehicle, targetHitch )
+	self:SetInputTarget( targetVehicle )
+
 	if not IsValid( targetHitch ) then return end
 
 	targetHitch:EmitSound("doors/door_metal_medium_open1.wav")
 end
 
 function ENT:OnDecoupled( targetVehicle, targetHitch )
+	self:SetInputTarget( NULL )
+
 	if not IsValid( targetHitch ) then return end
 
 	targetHitch:EmitSound("ambient/machines/catapult_throw.wav")
+
+	local LightsHandler = self:GetLightsHandler()
+
+	if not IsValid( LightsHandler ) then return end
+
+	LightsHandler:SetActive( false )
+	LightsHandler:SetHighActive( false )
+	LightsHandler:SetFogActive( false )
 end
 
 function ENT:OnStartDrag( caller, activator )

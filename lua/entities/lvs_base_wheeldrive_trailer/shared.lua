@@ -23,6 +23,7 @@ ENT.PhysicsDampingReverse = true
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
+	self:AddDT( "Entity", "InputTarget" )
 	self:AddDT( "Entity", "LightsHandler" )
 	self:AddDT( "Vector", "AIAimVector" )
 end
@@ -35,32 +36,60 @@ function ENT:StartCommand( ply, cmd )
 end
 
 function ENT:GetSteer()
-	return 0
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetSteer()
 end
 
 function ENT:GetNWMaxSteer()
-	return 1
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 1 end
+
+	return InputTarget:GetNWMaxSteer()
 end
 
 function ENT:GetTurnMode()
-	return 0
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetTurnMode()
 end
 
 function ENT:GetReverse()
-	return false
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return false end
+
+	return InputTarget:GetReverse()
 end
 
 function ENT:GetNWHandBrake()
-	return false
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return false end
+
+	return InputTarget:GetNWHandBrake()
 end
 
 function ENT:SetNWHandBrake()
 end
 
 function ENT:GetParkingBrake()
-	return false
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return false end
+
+	return InputTarget:GetParkingBrake()
 end
 
 function ENT:GetBrake()
-	return 0
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetBrake()
 end
