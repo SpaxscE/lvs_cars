@@ -33,12 +33,27 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 
-	self:AddTrailerHitch( Vector(-94.29,0,2.16), LVS.HITCHTYPE_FEMALE )
-	--self:AddTrailerHitch( Vector(80,0,2.16), LVS.HITCHTYPE_MALE )
+	self:AddTrailerHitch( Vector(-98,0,2), LVS.HITCHTYPE_FEMALE )
 end
 
 function ENT:OnCollision( data, physobj )
 	if self:WorldToLocal( data.HitPos ).z < 19 then return true end -- dont detect collision  when the lower part of the model touches the ground
 
 	return false
+end
+
+function ENT:OnCoupled( targetVehicle, targetHitch )
+	self:SetProngs( true )
+end
+
+function ENT:OnDecoupled( targetVehicle, targetHitch )
+	self:SetProngs( false )
+end
+
+function ENT:OnStartDrag( caller, activator )
+	self:SetProngs( true )
+end
+
+function ENT:OnStopDrag( caller, activator )
+	self:SetProngs( false )
 end
