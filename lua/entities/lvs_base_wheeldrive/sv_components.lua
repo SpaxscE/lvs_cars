@@ -187,10 +187,17 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( Armor ) then return true end
 
-			local DamageRemaining = math.max( dmginfo:GetDamage() - Armor:GetHP(), 0 )
+			local Damage = dmginfo:GetDamage()
+			local DamageRemaining = math.max( Damage - Armor:GetHP(), 0 )
 			local DidDamage = Armor:TakeTransmittedDamage( dmginfo )
 
 			if DidDamage then
+				if DamageRemaining <= 0 then
+					net.Start( "lvs_hurtmarker" )
+						net.WriteFloat( math.min( Damage / 50, 1 ) )
+					net.Send( self:GetEveryone() )
+				end
+
 				dmginfo:SetDamage( DamageRemaining )
 			else
 				dmginfo:ScaleDamage( 0 )
