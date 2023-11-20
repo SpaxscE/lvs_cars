@@ -10,7 +10,7 @@ function ENT:RunAI()
 
 	local StartPos = self:LocalToWorld( self:OBBCenter() )
 
-	local TargetPos = StartPos
+	local TargetPos = StartPos + self:GetForward() * 150
 
 	if IsValid( Target ) then
 		TargetPos = Target:GetPos()

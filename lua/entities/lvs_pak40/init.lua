@@ -123,3 +123,15 @@ function ENT:DoAttackSequence()
 	self:PlayAnimation("fire2")
 	self:DoReloadSequence()
 end
+
+function ENT:AITargetInFront( ent, range )
+	if not IsValid( ent ) then return false end
+
+	range = 40
+
+	local DirToTarget = (ent:GetPos() - self:GetPos()):GetNormalized()
+
+	local InFront = math.deg( math.acos( math.Clamp( self:GetForward():Dot( DirToTarget ) ,-1,1) ) ) < range
+
+	return InFront
+end
