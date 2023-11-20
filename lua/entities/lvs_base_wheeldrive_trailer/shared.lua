@@ -17,12 +17,14 @@ ENT.lvsShowInSpawner = false
 ENT.AllowSuperCharger = false
 ENT.AllowTurbo = false
 
+ENT.PhysicsDampingSpeed = 1000
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = true
 
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 
+	self:AddDT( "Entity", "InputTarget" )
 	self:AddDT( "Entity", "LightsHandler" )
 	self:AddDT( "Vector", "AIAimVector" )
 end
@@ -34,33 +36,85 @@ end
 function ENT:StartCommand( ply, cmd )
 end
 
-function ENT:GetSteer()
-	return 0
-end
-
-function ENT:GetNWMaxSteer()
-	return 1
-end
-
-function ENT:GetTurnMode()
-	return 0
-end
-
-function ENT:GetReverse()
-	return false
-end
-
-function ENT:GetNWHandBrake()
-	return false
-end
-
 function ENT:SetNWHandBrake()
 end
 
+function ENT:GetEngine()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return NULL end
+
+	return InputTarget:GetEngine()
+end
+
+function ENT:GetFuelTank()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return NULL end
+
+	return InputTarget:GetFuelTank()
+end
+
+function ENT:GetThrottle()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetThrottle()
+end
+
+function ENT:GetSteer()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetSteer()
+end
+
+function ENT:GetNWMaxSteer()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 1 end
+
+	return InputTarget:GetNWMaxSteer()
+end
+
+function ENT:GetTurnMode()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetTurnMode()
+end
+
+function ENT:GetReverse()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return false end
+
+	return InputTarget:GetReverse()
+end
+
+function ENT:GetNWHandBrake()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return false end
+
+	return InputTarget:GetNWHandBrake()
+end
+
 function ENT:GetParkingBrake()
-	return false
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return false end
+
+	return InputTarget:GetParkingBrake()
 end
 
 function ENT:GetBrake()
-	return 0
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetBrake()
 end

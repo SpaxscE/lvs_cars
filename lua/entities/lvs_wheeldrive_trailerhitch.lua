@@ -30,11 +30,6 @@ if SERVER then
 
 		if IsValid( ent:GetTargetBase() ) then
 			ent:Decouple()
-			timer.Simple( 0.1, function()
-				if not IsValid( ent ) or not IsValid( ply ) then return end
-
-				ent:StartDrag( ply )
-			end )
 		else
 			ent:StartDrag( ply )
 		end
@@ -76,6 +71,7 @@ if SERVER then
 		self.GrabEnt:SetSolid( SOLID_NONE )
 
 		base:OnStartDrag( self, ply )
+		base:SetOwner( ply )
 
 		self:NextThink( CurTime() )
 	end
@@ -89,6 +85,7 @@ if SERVER then
 
 		if IsValid( base ) then
 			base:OnStopDrag( self, self:GetDragTarget() )
+			base:SetOwner( NULL )
 		end
 
 		self:SetDragTarget( NULL )
@@ -142,7 +139,7 @@ if SERVER then
 		local base = self:GetBase()
 
 		if IsValid( base ) then
-			base:OnDecoupled( TargetBase, self.HitchTarget )
+			base:OnCoupleChanged( TargetBase, self.HitchTarget, false )
 		end
 
 		self.HitchConstraint:Remove()
@@ -185,7 +182,7 @@ if SERVER then
 
 		local targetBase = target:GetBase()
 
-		base:OnCoupled( targetBase, target )
+		base:OnCoupleChanged( targetBase, target, true )
 
 		self.PosEnt:SetSolid( SOLID_NONE )
 
@@ -307,13 +304,13 @@ function ENT:DrawInfoCoupled( ply )
 		if HitPos then
 			surface.SetDrawColor( 255, 255, 255, 255 )
 
-			local Key = input.LookupBinding( "+use" )
+			local Key = input.LookupBinding( "+walk" )
 
-			if not isstring( Key ) then Key = "[+use not bound]" end
+			if not isstring( Key ) then Key = "[+walk not bound]" end
 
 			DrawText( X, Y + 20, "press "..Key.." to decouple!",Color(255,255,255,255) )
 
-			local KeyUse = ply:KeyDown( IN_USE )
+			local KeyUse = ply:KeyDown( IN_WALK )
 
 			if self.OldKeyUse ~= KeyUse then
 				self.OldKeyUse = KeyUse
