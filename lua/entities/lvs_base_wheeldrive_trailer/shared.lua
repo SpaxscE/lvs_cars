@@ -17,6 +17,7 @@ ENT.lvsShowInSpawner = false
 ENT.AllowSuperCharger = false
 ENT.AllowTurbo = false
 
+ENT.PhysicsDampingSpeed = 1000
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = true
 
@@ -33,6 +34,33 @@ function ENT:GetVehicleType()
 end
 
 function ENT:StartCommand( ply, cmd )
+end
+
+function ENT:SetNWHandBrake()
+end
+
+function ENT:GetEngine()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return NULL end
+
+	return InputTarget:GetEngine()
+end
+
+function ENT:GetFuelTank()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return NULL end
+
+	return InputTarget:GetFuelTank()
+end
+
+function ENT:GetThrottle()
+	local InputTarget = self:GetInputTarget()
+
+	if not IsValid( InputTarget ) then return 0 end
+
+	return InputTarget:GetThrottle()
 end
 
 function ENT:GetSteer()
@@ -73,9 +101,6 @@ function ENT:GetNWHandBrake()
 	if not IsValid( InputTarget ) then return false end
 
 	return InputTarget:GetNWHandBrake()
-end
-
-function ENT:SetNWHandBrake()
 end
 
 function ENT:GetParkingBrake()

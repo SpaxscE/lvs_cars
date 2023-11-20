@@ -446,10 +446,7 @@ function ENT:ApproachTargetAngle( TargetAngle )
 	self:SteerTo( Reversed and Steer or -Steer, self:GetMaxSteerAngle() )
 end
 
-function ENT:OnCoupled( targetVehicle, targetHitch )
-end
-
-function ENT:OnDecoupled( targetVehicle, targetHitch )
+function ENT:OnCoupleChanged( targetVehicle, targetHitch, active )
 end
 
 function ENT:OnStartDrag( caller, activator )

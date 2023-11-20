@@ -2,6 +2,7 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 include("sv_ai.lua")
+include("sv_kill_functions.lua")
 
 function ENT:OnTick()
 	local InputTarget = self:GetInputTarget()
@@ -22,7 +23,11 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	local ent = phys:GetEntity()
 
 	if ent == self then
-		return vector_origin, vector_origin, SIM_NOTHING
+		if not self:StabilityAssist() or not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
+
+		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
+
+		return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
 	end
 
 	return self:SimulateRotatingWheel( ent, phys, deltatime )
@@ -58,56 +63,38 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	return vector_origin, vector_origin, SIM_NOTHING
 end
 
-function ENT:IsEngineStartAllowed()
-	return false
-end
+function ENT:OnCoupleChanged( targetVehicle, targetHitch, active )
+	if active then
+		self:OnCoupled( targetVehicle, targetHitch )
 
-function ENT:OnEngineActiveChanged( Active )
-end
+		self:SetInputTarget( targetVehicle )
 
-function ENT:StartEngine()
-end
+		if not IsValid( targetHitch ) then return end
 
-function ENT:StopEngine()
-end
+		targetHitch:EmitSound("doors/door_metal_medium_open1.wav")
+	else
+		self:OnDecoupled( targetVehicle, targetHitch )
 
-function ENT:ToggleEngine()
-end
+		self:SetInputTarget( NULL )
 
-function ENT:HandleStart()
-end
+		if not IsValid( targetHitch ) then return end
 
-function ENT:AddEngine()
-end
+		targetHitch:EmitSound("buttons/lever8.wav")
 
-function ENT:AddTurboCharger()
-end
+		local LightsHandler = self:GetLightsHandler()
 
-function ENT:AddSuperCharger()
+		if not IsValid( LightsHandler ) then return end
+
+		LightsHandler:SetActive( false )
+		LightsHandler:SetHighActive( false )
+		LightsHandler:SetFogActive( false )
+	end
 end
 
 function ENT:OnCoupled( targetVehicle, targetHitch )
-	self:SetInputTarget( targetVehicle )
-
-	if not IsValid( targetHitch ) then return end
-
-	targetHitch:EmitSound("doors/door_metal_medium_open1.wav")
 end
 
 function ENT:OnDecoupled( targetVehicle, targetHitch )
-	self:SetInputTarget( NULL )
-
-	if not IsValid( targetHitch ) then return end
-
-	targetHitch:EmitSound("ambient/machines/catapult_throw.wav")
-
-	local LightsHandler = self:GetLightsHandler()
-
-	if not IsValid( LightsHandler ) then return end
-
-	LightsHandler:SetActive( false )
-	LightsHandler:SetHighActive( false )
-	LightsHandler:SetFogActive( false )
 end
 
 function ENT:OnStartDrag( caller, activator )
