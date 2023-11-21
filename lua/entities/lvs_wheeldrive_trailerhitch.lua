@@ -36,7 +36,7 @@ if SERVER then
 	end )
 
 	function ENT:StartDrag( ply )
-		if IsValid( self.GrabEnt ) then return end
+		if IsValid( self.GrabEnt ) or IsValid( ply._HitchGrabEnt ) then return end
 
 		if self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE then return end
 
@@ -45,6 +45,8 @@ if SERVER then
 		if not IsValid( ply ) or not ply:Alive() or ply:InVehicle() or ply:GetObserverMode() ~= OBS_MODE_NONE or not ply:KeyDown( IN_USE ) or (ply:GetShootPos() - self:GetPos()):Length() > GrabDistance or not IsValid( base ) then return end
 
 		self.GrabEnt = ents.Create( "prop_physics" )
+
+		ply._HitchGrabEnt = self.GrabEnt
 
 		if not IsValid( self.GrabEnt ) then return end
 
@@ -187,7 +189,7 @@ if SERVER then
 	end
 
 	function ENT:CoupleTo( target )
-		if not IsValid( target ) or IsValid( self.HitchConstraint ) then return end
+		if not IsValid( target ) or IsValid( target.HitchConstraint ) or IsValid( self.HitchConstraint ) then return end
 
 		local base = self:GetBase()
 
@@ -250,6 +252,8 @@ if SERVER then
 
 				self.HitchTarget = target
 				self.HitchConstraint = constraint.Ballsocket( base, targetBase, 0, 0, targetBase:WorldToLocal( self.PosEnt:GetPos() ), 0, 0, 1 )
+
+				target.HitchConstraint = self.HitchConstraint
 
 				self:SetTargetBase( targetBase )
 
