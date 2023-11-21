@@ -16,7 +16,7 @@ ENT.AITEAM = 1
 ENT.WheelPhysicsMass = 350
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 
-ENT.CannonArmorPenetration = 15000
+ENT.CannonArmorPenetration = 9600
 
 function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "Prongs" )
@@ -47,9 +47,9 @@ function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = true
 	weapon.Ammo = 100
-	weapon.Delay = 2
+	weapon.Delay = 3
 	weapon.HeatRateUp = 1
-	weapon.HeatRateDown = 0.5
+	weapon.HeatRateDown = 0.3
 	weapon.OnThink = function( ent )
 		local ply = ent:GetDriver()
 
@@ -84,15 +84,15 @@ function ENT:InitWeapons()
 			bullet.Force	= 500
 			bullet.HullSize 	= 15
 			bullet.Damage	= 250
-			bullet.SplashDamage = 1000
-			bullet.SplashDamageRadius = 250
+			bullet.SplashDamage = 750
+			bullet.SplashDamageRadius = 200
 			bullet.SplashDamageEffect = "lvs_bullet_impact_explosive"
 			bullet.SplashDamageType = DMG_BLAST
 			bullet.Velocity = 13000
 		else
 			bullet.Force	= ent.CannonArmorPenetration
 			bullet.HullSize 	= 0
-			bullet.Damage	= 650
+			bullet.Damage	= 1000
 			bullet.Velocity = 16000
 		end
 

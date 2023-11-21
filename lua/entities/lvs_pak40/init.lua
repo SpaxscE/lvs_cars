@@ -89,6 +89,30 @@ function ENT:OnStopDrag( caller, activator )
 	self:SetProngs( false )
 end
 
+function ENT:SpawnShell()
+	local ID = self:LookupAttachment( "muzzle" )
+	local Muzzle = self:GetAttachment( ID )
+
+	if not Muzzle then return end
+
+	local Shell = ents.Create( "lvs_item_shell" )
+
+	if not IsValid( Shell ) then return end
+
+	Shell:SetPos( Muzzle.Pos - Muzzle.Ang:Up() * 140 )
+	Shell:SetAngles( Muzzle.Ang + Angle(0,0,90) )
+	Shell:Spawn()
+	Shell:Activate()
+	Shell:SetOwner( self )
+
+	local PhysObj = Shell:GetPhysicsObject()
+
+	if not IsValid( PhysObj ) then return end
+
+	PhysObj:SetVelocityInstantaneous( Shell:GetRight() * 250 - Shell:GetUp() * 20 )
+	PhysObj:SetAngleVelocityInstantaneous( Vector(-80,0,0) )
+end
+
 function ENT:DoReloadSequence()
 	if self._ReloadActive then return end
 
@@ -96,13 +120,20 @@ function ENT:DoReloadSequence()
 
 	self:SetBodygroup(1, 1)
 
-	timer.Simple(0.25, function()
+	timer.Simple(1, function()
 		if not IsValid( self ) then return end
 
+		self:PlayAnimation("breach")
+
 		self:EmitSound("lvs/vehicles/pak40/cannon_unload.wav", 75, 100, 0.5, CHAN_WEAPON )
+
+		timer.Simple(0.3, function()
+			if not IsValid( self ) then return end
+			self:SpawnShell()
+		end)
 	end)
 
-	timer.Simple(1, function()
+	timer.Simple(2, function()
 		if not IsValid( self ) then return end
 
 		self:PlayAnimation("reload")
@@ -122,6 +153,7 @@ function ENT:DoAttackSequence()
 
 	self.SNDTurret:PlayOnce( 100 + math.cos( CurTime() + self:EntIndex() * 1337 ) * 5 + math.Rand(-1,1), 1 )
 
-	self:PlayAnimation("fire2")
+	self:PlayAnimation("fire")
+
 	self:DoReloadSequence()
 end
