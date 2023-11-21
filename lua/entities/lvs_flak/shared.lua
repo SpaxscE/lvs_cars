@@ -11,6 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/flak38.mdl"
 
+ENT.AITEAM = 1
+
 ENT.PhysicsWeightScale = 0
 ENT.PhysicsMass = 450
 ENT.PhysicsInertia = Vector(475,452,162)
@@ -25,9 +27,10 @@ function ENT:InitWeapons()
 	weapon.Delay = 0.25
 	weapon.HeatRateUp = 0.25
 	weapon.HeatRateDown = 0.5
-		weapon.Attack = function( ent )
+	weapon.Attack = function( ent )
+
 		if not ent:TurretInRange() then
-			return false
+			return true
 		end
 
 		local ID = ent:LookupAttachment( "muzzle" )
@@ -44,11 +47,11 @@ function ENT:InitWeapons()
 		bullet.Dir 	= Dir
 		bullet.Spread 	= Vector(0,0,0)
 		bullet.TracerName = "lvs_tracer_autocannon"
-		bullet.Force	= 0
-		bullet.HullSize 	= math.min( 200 * math.abs( Dir.z ), 70 )
-		bullet.Damage	= 0
-		bullet.SplashDamage = 50
-		bullet.SplashDamageRadius = 300
+		bullet.Force	= 1500
+		bullet.HullSize 	= math.Round( math.min( 200 * math.abs( Dir.z ), 50 ), 0 )
+		bullet.Damage	= 5
+		bullet.SplashDamage = 75
+		bullet.SplashDamageRadius = 180
 		bullet.SplashDamageEffect = "lvs_defence_explosion"
 		bullet.SplashDamageType = DMG_BLAST
 		bullet.Velocity = 30000

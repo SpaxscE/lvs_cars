@@ -10,7 +10,7 @@ ENT.TurretRotationSound = "common/null.wav"
 
 ENT.TurretPitchPoseParameterName = "cannon_pitch"
 ENT.TurretPitchMin = 0
-ENT.TurretPitchMax = 90
+ENT.TurretPitchMax = 70
 ENT.TurretPitchMul = 1
 ENT.TurretPitchOffset = 0
 
