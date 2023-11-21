@@ -62,7 +62,7 @@ function ENT:InitWeapons()
 
 			if SwitchType then
 				ent:SetUseHighExplosive( not ent:GetUseHighExplosive() )
-				ent:DoReloadSequence()
+				ent:DoReloadSequence( 0 )
 				ent:SetHeat( 1 )
 				ent:SetOverheated( true )
 			end

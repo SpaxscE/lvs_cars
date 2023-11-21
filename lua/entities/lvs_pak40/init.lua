@@ -113,14 +113,14 @@ function ENT:SpawnShell()
 	PhysObj:SetAngleVelocityInstantaneous( Vector(-80,0,0) )
 end
 
-function ENT:DoReloadSequence()
+function ENT:DoReloadSequence( delay )
 	if self._ReloadActive then return end
 
 	self._ReloadActive = true
 
 	self:SetBodygroup(1, 1)
 
-	timer.Simple(1, function()
+	timer.Simple(delay, function()
 		if not IsValid( self ) then return end
 
 		self:PlayAnimation("breach")
@@ -155,5 +155,5 @@ function ENT:DoAttackSequence()
 
 	self:PlayAnimation("fire")
 
-	self:DoReloadSequence()
+	self:DoReloadSequence( 1 )
 end
