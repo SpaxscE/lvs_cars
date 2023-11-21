@@ -461,6 +461,10 @@ function ENT:DrawTranslucent()
 
 	if not IsValid( ply ) or IsValid( ply:lvsGetVehicle() ) or self:GetHitchType() ~= LVS.HITCHTYPE_FEMALE then return end
 
+	local wep = ply:GetActiveWeapon()
+
+	if IsValid( wep ) and wep:GetClass() == "gmod_camera" then return end
+
 	if IsValid( self:GetTargetBase() ) then
 		self:DrawInfoCoupled( ply )
 
