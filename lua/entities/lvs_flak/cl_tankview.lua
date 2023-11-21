@@ -11,8 +11,7 @@ function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 
 		if Att1 and Att2 then
 			local dir = Att2.Ang:Right()
-			dir.z = 0
-			pos =  Att1.Pos - Att1.Ang:Right() * 30 + dir * 3
+			pos =  Att1.Pos - Att1.Ang:Right() * 27 + dir * 1.5
 		end
 
 	end
