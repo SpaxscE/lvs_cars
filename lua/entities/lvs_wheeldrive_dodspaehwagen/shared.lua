@@ -201,7 +201,6 @@ function ENT:InitWeapons()
 	weapon.Delay = 0.25
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.2
-
 	weapon.Attack = function( ent )
 		local ID = ent:LookupAttachment( "muzzle_turret" )
 
