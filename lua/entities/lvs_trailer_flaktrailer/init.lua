@@ -60,7 +60,6 @@ function ENT:OnSpawn( PObj )
 	self.SupportEnt:SetMass( 250 )
 end
 
-
 function ENT:OnCoupled( targetVehicle, targetHitch )
 	self:SetProng( true )
 
@@ -87,4 +86,69 @@ function ENT:OnStopDrag( caller, activator )
 
 	if not IsValid( self.SupportEnt ) then return end
 	self.SupportEnt:SetMass( 250 )
+end
+
+function ENT:Mount( ent )
+	if IsValid( self._MountEnt ) or ent._IsMounted then return end
+
+	if ent:IsPlayerHolding() then return end
+ 
+	ent:SetOwner( self )
+	ent:SetPos( self:GetPos() )
+	ent:SetAngles( self:GetAngles() )
+
+	ent._MountOriginalCollision = ent:GetCollisionGroup()
+	self._MountEnt = ent
+	ent._IsMounted = true
+
+	ent:SetCollisionGroup( COLLISION_GROUP_WORLD )
+
+	self._MountConstraint = constraint.Weld( ent, self, 0, 0, 0, false, false )
+
+	ent.CrosshairFilterEnts = nil
+end
+
+function ENT:Dismount()
+	if not IsValid( self._MountEnt ) or not IsValid( self._MountConstraint ) then return end
+
+	self._MountConstraint:Remove()
+
+	self._MountEnt._IsMounted = nil
+
+	local ent = self._MountEnt
+
+	timer.Simple(1, function()
+		if not IsValid( ent ) then return end
+
+		ent:SetOwner( NULL )
+
+		if ent._MountOriginalCollision then
+			ent:SetCollisionGroup( ent._MountOriginalCollision )
+
+			ent._MountOriginalCollision = nil
+		end
+
+	end)
+
+	self._MountEnt.CrosshairFilterEnts = nil
+
+	self._MountEnt = nil
+end
+
+function ENT:OnCollision( data, physobj )
+	local ent = data.HitEntity
+
+	if not IsValid( ent ) or ent:GetClass() ~= "lvs_trailer_flak" then return end
+
+	timer.Simple(0, function()
+		if not IsValid( self ) or not IsValid( ent ) then return end
+
+		self:Mount( ent )
+	end)
+end
+
+function ENT:OnTick()
+	if not IsValid( self._MountEnt ) or not self._MountEnt:IsPlayerHolding() then return end
+
+	self:Dismount()
 end

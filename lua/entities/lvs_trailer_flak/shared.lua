@@ -13,7 +13,7 @@ ENT.MDL = "models/blu/flak38.mdl"
 
 ENT.AITEAM = 1
 
-ENT.PhysicsWeightScale = 0
+ENT.PhysicsWeightScale = 1
 ENT.PhysicsMass = 450
 ENT.PhysicsInertia = Vector(475,452,162)
 ENT.PhysicsDampingSpeed = 4000
