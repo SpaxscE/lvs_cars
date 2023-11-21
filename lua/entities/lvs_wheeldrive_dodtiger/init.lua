@@ -65,4 +65,7 @@ function ENT:OnSpawn( PObj )
 	self:AddAmmoRack( Vector(0,-50,55), Vector(0,0,65), Angle(0,0,0), Vector(-54,-12,-6), Vector(54,12,6) )
 	self:AddAmmoRack( Vector(0,30,30), Vector(0,0,65), Angle(0,0,0), Vector(-30,-6,-12), Vector(30,6,12) )
 	self:AddAmmoRack( Vector(0,-30,30), Vector(0,0,65), Angle(0,0,0), Vector(-30,-6,-12), Vector(30,6,12) )
+
+	-- trailer hitch
+	self:AddTrailerHitch( Vector(-112,0,22), LVS.HITCHTYPE_MALE )
 end

@@ -396,6 +396,8 @@ function ENT:DrawInfo( ply )
 			if not HasTarget then continue end
 
 			surface.DrawLine( X, Y, tX, tY )
+
+			break
 		end
 
 		local radiusB = 25 + math.cos( CurTime() * 10 ) * 2

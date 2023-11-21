@@ -11,6 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/flakcarriage.mdl"
 
+ENT.AITEAM = 1
+
 function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "Prong" )
 end

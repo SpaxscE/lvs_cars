@@ -49,6 +49,7 @@ function ENT:OnSpawn( PObj )
 	SupportEnt:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
 	SupportEnt.DoNotDuplicate = true
 	self:DeleteOnRemove( SupportEnt )
+	SupportEnt:SetOwner( self )
 
 	constraint.Weld( self, SupportEnt, 0, 0, 0, false, true )
 

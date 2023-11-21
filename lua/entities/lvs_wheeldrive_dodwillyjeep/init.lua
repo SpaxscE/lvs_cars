@@ -73,4 +73,7 @@ function ENT:OnSpawn( PObj )
 			SpringRelativeDamping = 2000,
 		},
 	} )
+
+	-- trailer hitch
+	self:AddTrailerHitch( Vector(-68,0,17), LVS.HITCHTYPE_MALE )
 end
