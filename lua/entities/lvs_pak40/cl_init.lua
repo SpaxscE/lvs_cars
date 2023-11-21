@@ -30,5 +30,5 @@ function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake
 
 	local ProngsActive = (self._ProngTime or 0) > T
 
-	self:SetPoseParameter( "prong", self:QuickLerp( "pront", (ProngsActive and 1 or 0), 10 ) )
+	self:SetPoseParameter( "prong", self:QuickLerp( "prong", (ProngsActive and 1 or 0), 10 ) )
 end

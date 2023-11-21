@@ -61,21 +61,29 @@ end
 
 
 function ENT:OnCoupled( targetVehicle, targetHitch )
+	self:SetProng( true )
+
 	if not IsValid( self.SupportEnt ) then return end
 	self.SupportEnt:SetMass( 1 )
 end
 
 function ENT:OnDecoupled( targetVehicle, targetHitch )
+	self:SetProng( false )
+
 	if not IsValid( self.SupportEnt ) then return end
 	self.SupportEnt:SetMass( 250 )
 end
 
 function ENT:OnStartDrag( caller, activator )
+	self:SetProng( true )
+
 	if not IsValid( self.SupportEnt ) then return end
 	self.SupportEnt:SetMass( 1 )
 end
 
 function ENT:OnStopDrag( caller, activator )
+	self:SetProng( false )
+
 	if not IsValid( self.SupportEnt ) then return end
 	self.SupportEnt:SetMass( 250 )
 end

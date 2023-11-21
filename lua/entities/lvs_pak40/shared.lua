@@ -13,6 +13,8 @@ ENT.MDL = "models/blu/pak40.mdl"
 
 ENT.AITEAM = 1
 
+ENT.MaxHealth = 1500
+
 ENT.WheelPhysicsMass = 350
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 

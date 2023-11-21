@@ -10,3 +10,7 @@ ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/flakcarriage.mdl"
+
+function ENT:OnSetupDataTables()
+	self:AddDT( "Bool", "Prong" )
+end

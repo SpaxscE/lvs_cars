@@ -10,20 +10,6 @@ ENT.AISearchCone = 30
 function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,15,-5), Angle(0,-90,0) )
 
-	self:AddDS( {
-		pos = Vector(0,15,0),
-		ang = Angle(0,0,0),
-		mins = Vector(-16,-16,5),
-		maxs = Vector(16,16,50),
-		Callback = function( tbl, ent, dmginfo )
-			local ply = ent:GetDriver()
-
-			if not IsValid( ply ) then return end
-
-			ent:HurtPlayer( ply, dmginfo:GetDamage(), dmginfo:GetAttacker(), dmginfo:GetInflictor() )
-		end
-	} )
-
 	local ID = self:LookupAttachment( "muzzle" )
 	local Muzzle = self:GetAttachment( ID )
 	self.SNDTurret = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/pak40/cannon_fire.wav", "lvs/vehicles/pak40/cannon_fire.wav" )
