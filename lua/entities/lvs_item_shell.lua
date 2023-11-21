@@ -104,9 +104,10 @@ function ENT:Think()
 		particle:SetStartAlpha( 10 )
 		particle:SetStartSize( 0 )
 		particle:SetEndSize( 40 )
-		particle:SetRollDelta( math.Rand(-1,1) )
+		particle:SetRollDelta( math.Rand(-1,1) * 5 )
 		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetCollide( true )
+		particle:SetGravity( Vector(0,0,60) )
 		particle:SetBounce( 1 )
 	end
 
