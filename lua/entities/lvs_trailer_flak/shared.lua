@@ -1,7 +1,7 @@
 
 ENT.Base = "lvs_base_wheeldrive_trailer"
 
-ENT.PrintName = "FlaK"
+ENT.PrintName = "FlaK 38"
 ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS]"
