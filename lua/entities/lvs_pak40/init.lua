@@ -5,7 +5,7 @@ AddCSLuaFile( "cl_optics.lua" )
 include("shared.lua")
 include("sh_turret.lua")
 
-ENT.AISearchCone = 20
+ENT.AISearchCone = 30
 
 function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(0,15,-5), Angle(0,-90,0) )
