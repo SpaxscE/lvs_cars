@@ -39,19 +39,15 @@ function ENT:InitWeapons()
 		local Pos = Muzzle.Pos
 		local Dir = (ent:GetEyeTrace().HitPos - Pos):GetNormalized()
 
-		local HullSize = math.min( 200 * math.abs( Dir.z ), 70 )
-
-		PrintChat( HullSize )
-
 		local bullet = {}
 		bullet.Src 	= Pos
 		bullet.Dir 	= Dir
 		bullet.Spread 	= Vector(0,0,0)
 		bullet.TracerName = "lvs_tracer_autocannon"
 		bullet.Force	= 0
-		bullet.HullSize 	= HullSize
+		bullet.HullSize 	= math.min( 200 * math.abs( Dir.z ), 70 )
 		bullet.Damage	= 0
-		bullet.SplashDamage = 100
+		bullet.SplashDamage = 50
 		bullet.SplashDamageRadius = 300
 		bullet.SplashDamageEffect = "lvs_defence_explosion"
 		bullet.SplashDamageType = DMG_BLAST
