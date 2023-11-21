@@ -152,3 +152,9 @@ function ENT:OnTick()
 
 	self:Dismount()
 end
+
+function ENT:Use( ply )
+	if not IsValid( self._MountEnt ) then return end
+
+	self:Dismount()
+end

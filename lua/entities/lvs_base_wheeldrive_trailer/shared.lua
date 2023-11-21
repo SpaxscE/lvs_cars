@@ -11,6 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.DeleteOnExplode = true
 
+ENT.DoNotDuplicate = true
+
 ENT.lvsAllowEngineTool = false
 ENT.lvsShowInSpawner = false
 

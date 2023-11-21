@@ -72,7 +72,18 @@ if SERVER then
 		self.GrabEnt:SetSolid( SOLID_NONE )
 
 		base:OnStartDrag( self, ply )
-		base:SetOwner( ply )
+
+		base._DragOriginalCollisionGroup = base:GetCollisionGroup()
+		base:SetCollisionGroup( COLLISION_GROUP_WORLD )
+
+		if base.GetWheels then
+			for _, wheel in pairs( base:GetWheels() ) do
+				if not IsValid( wheel ) then continue end
+
+				wheel._DragOriginalCollisionGroup = base:GetCollisionGroup()
+				wheel:SetCollisionGroup( COLLISION_GROUP_WORLD )
+			end
+		end
 
 		self:NextThink( CurTime() )
 	end
@@ -85,8 +96,35 @@ if SERVER then
 		local base = self:GetBase()
 
 		if IsValid( base ) then
-			base:OnStopDrag( self, self:GetDragTarget() )
-			base:SetOwner( NULL )
+			local ply = self:GetDragTarget()
+
+			base:OnStopDrag( self, ply )
+
+			local PhysObj = base:GetPhysicsObject()
+			if IsValid( PhysObj ) then
+				PhysObj:SetAngleVelocity( -PhysObj:GetAngleVelocity() )
+				PhysObj:SetVelocity( -PhysObj:GetVelocity() )
+			end
+
+			if IsValid( ply ) then base:SetPhysicsAttacker( ply ) end
+	
+			if base._DragOriginalCollisionGroup then
+				base:SetCollisionGroup( base._DragOriginalCollisionGroup )
+				base._DragOriginalCollisionGroup = nil
+			end
+
+			if base.GetWheels then
+				for _, wheel in pairs( base:GetWheels() ) do
+					if not IsValid( wheel ) then continue end
+
+					if IsValid( ply ) then wheel:SetPhysicsAttacker( ply ) end
+
+					if wheel._DragOriginalCollisionGroup then
+						wheel:SetCollisionGroup( wheel._DragOriginalCollisionGroup )
+						wheel._DragOriginalCollisionGroup = nil
+					end
+				end
+			end
 		end
 
 		self:SetDragTarget( NULL )
