@@ -18,7 +18,7 @@ ENT.MaxHealth = 1500
 ENT.WheelPhysicsMass = 350
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 
-ENT.CannonArmorPenetration = 9600
+ENT.CannonArmorPenetration = 14500
 
 function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "Prongs" )
