@@ -178,3 +178,14 @@ function ENT:OnEngineActiveChanged( Active )
 		self:EmitSound( "vehicles/jetski/jetski_off.wav", 75, 100,  LVS.EngineVolume )
 	end
 end
+
+function ENT:DoExhaustFX( Magnitude )
+	for _, data in ipairs( self.ExhaustPositions ) do
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:LocalToWorld( data.pos ) )
+			effectdata:SetNormal( self:LocalToWorldAngles( data.ang ):Forward() )
+			effectdata:SetMagnitude( Magnitude )
+			effectdata:SetEntity( self )
+		util.Effect( "lvs_exhaust", effectdata )
+	end
+end

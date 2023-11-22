@@ -465,16 +465,7 @@ function ENT:ExhaustFX( vehicle )
 
 	self.nextEFX = T + 0.1
 
-	local Mag = (self:GetRPM() / vehicle.EngineMaxRPM) * 0.5 + 0.5 * vehicle:GetThrottle()
-
-	for _, data in ipairs( vehicle.ExhaustPositions ) do
-		local effectdata = EffectData()
-			effectdata:SetOrigin( vehicle:LocalToWorld( data.pos ) )
-			effectdata:SetNormal( vehicle:LocalToWorldAngles( data.ang ):Forward() )
-			effectdata:SetMagnitude( Mag )
-			effectdata:SetEntity( vehicle )
-		util.Effect( "lvs_exhaust", effectdata )
-	end
+	vehicle:DoExhaustFX( (self:GetRPM() / vehicle.EngineMaxRPM) * 0.5 + 0.5 * vehicle:GetThrottle() )
 end
 
 function ENT:DamageFX( vehicle )
