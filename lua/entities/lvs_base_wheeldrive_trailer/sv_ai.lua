@@ -16,11 +16,6 @@ function ENT:RunAI()
 
 	if IsValid( Target ) then
 		TargetPos = Target:GetPos()
-
-		if not self:AITargetInFront( Target, self.AISearchCone ) then
-			Target = NULL
-			self._LastAITarget = NULL
-		end
 	end
 
 	self._AIFireInput = false
