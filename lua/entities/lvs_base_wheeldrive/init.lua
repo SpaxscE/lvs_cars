@@ -204,9 +204,15 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	if (ent._lvsNextSimulate or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
 
+	local RotationAxis = ent:GetRotationAxis()
+
+	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
+
 	local forceMul = 1
 
-	if tickdelta < 1 / 30 then
+	local Throttle = self:GetThrottle()
+
+	if tickdelta < 1 / 30 and not (Throttle > 0 and math.abs( curRPM ) < 50) then
 		local deltatimeNew = 1 / 15
 
 		ent._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
@@ -217,15 +223,9 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		forceMul = Tick1 / Tick2
 	end
 
-	local RotationAxis = ent:GetRotationAxis()
-
-	local curRPM = self:VectorSplitNormal( RotationAxis,  phys:GetAngleVelocity() ) / 6
-
 	ent:SetRPM( curRPM )
 
 	local ForceAngle = vector_origin
-
-	local Throttle = self:GetThrottle()
 
 	local TorqueFactor = ent:GetTorqueFactor()
 
