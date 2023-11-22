@@ -61,6 +61,12 @@ function ENT:OnSpawn( PObj )
 end
 
 function ENT:OnCoupled( targetVehicle, targetHitch )
+	timer.Simple(0.2, function()
+		if not IsValid( self ) or not IsValid( self._MountEnt ) then return end
+
+		self._MountEnt:RebuildCrosshairFilterEnts()
+	end)
+
 	self:SetProng( true )
 
 	if not IsValid( self.SupportEnt ) then return end
@@ -68,6 +74,12 @@ function ENT:OnCoupled( targetVehicle, targetHitch )
 end
 
 function ENT:OnDecoupled( targetVehicle, targetHitch )
+	timer.Simple(0.2, function()
+		if not IsValid( self ) or not IsValid( self._MountEnt ) then return end
+
+		self._MountEnt:RebuildCrosshairFilterEnts()
+	end)
+
 	self:SetProng( false )
 
 	if not IsValid( self.SupportEnt ) then return end
@@ -105,7 +117,7 @@ function ENT:Mount( ent )
 
 	self._MountConstraint = constraint.Weld( ent, self, 0, 0, 0, false, false )
 
-	ent.CrosshairFilterEnts = nil
+	ent:RebuildCrosshairFilterEnts()
 end
 
 function ENT:Dismount()

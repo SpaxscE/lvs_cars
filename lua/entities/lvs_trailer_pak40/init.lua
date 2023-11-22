@@ -61,10 +61,22 @@ end
 
 function ENT:OnCoupled( targetVehicle, targetHitch )
 	self:SetProngs( true )
+
+	timer.Simple( 0.2, function()
+		if not IsValid( self ) then return end
+
+		self:RebuildCrosshairFilterEnts()
+	end )
 end
 
 function ENT:OnDecoupled( targetVehicle, targetHitch )
 	self:SetProngs( false )
+
+	timer.Simple( 0.2, function()
+		if not IsValid( self ) then return end
+
+		self:RebuildCrosshairFilterEnts()
+	end )
 end
 
 function ENT:OnStartDrag( caller, activator )
