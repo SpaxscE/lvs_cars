@@ -97,7 +97,7 @@ function ENT:SpawnShell()
 
 	if not IsValid( Shell ) then return end
 
-	Shell.MDL = "models/props_debris/shellcasing_single1.mdl"
+	Shell.MDL = "models/props_debris/shellcasing_10.mdl"
 	Shell.CollisionSounds = {
 		"lvs/vehicles/pak40/shell_impact1.wav",
 		"lvs/vehicles/pak40/shell_impact2.wav"

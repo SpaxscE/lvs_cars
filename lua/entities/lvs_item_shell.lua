@@ -3,7 +3,7 @@ AddCSLuaFile()
 ENT.Type            = "anim"
 
 if SERVER then
-	ENT.MDL = "models/props_debris/shellcasing_single1.mdl"
+	ENT.MDL = "models/props_debris/shellcasing_10.mdl"
 	ENT.CollisionSounds = {
 		"lvs/vehicles/pak40/shell_impact1.wav",
 		"lvs/vehicles/pak40/shell_impact2.wav"
