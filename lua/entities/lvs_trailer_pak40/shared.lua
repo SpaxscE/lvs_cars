@@ -27,15 +27,13 @@ ENT.DSArmorIgnoreForce = 1000
 ENT.GibModels = {
 	"models/blu/pak40_wheel.mdl",
 	"models/blu/pak40_wheel.mdl",
+	"models/blu/pak40_gib1.mdl",
+	"models/blu/pak40_gib2.mdl",
+	"models/blu/pak40_gib3.mdl",
 	"models/gibs/manhack_gib01.mdl",
 	"models/gibs/manhack_gib02.mdl",
 	"models/gibs/manhack_gib03.mdl",
 	"models/gibs/manhack_gib04.mdl",
-	"models/props_c17/oildrumchunk01a.mdl",
-	"models/props_c17/oildrumchunk01b.mdl",
-	"models/props_c17/oildrumchunk01c.mdl",
-	"models/props_c17/oildrumchunk01d.mdl",
-	"models/props_c17/oildrumchunk01e.mdl",
 
 }
 
