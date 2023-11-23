@@ -13,12 +13,16 @@ ENT.MDL = "models/blu/pak40.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 1500
-
 ENT.WheelPhysicsMass = 350
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 
 ENT.CannonArmorPenetration = 14500
+
+ENT.lvsShowInSpawner = false
+
+ENT.MaxHealth = 800
+
+ENT.DSArmorIgnoreForce = 1000
 
 ENT.GibModels = {
 	"models/blu/pak40_wheel.mdl",

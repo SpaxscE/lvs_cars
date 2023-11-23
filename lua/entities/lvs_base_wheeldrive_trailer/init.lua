@@ -107,16 +107,9 @@ function ENT:OnStartExplosion()
 end
 
 function ENT:OnFinishExplosion()
-	local pos = self:LocalToWorld( self:OBBCenter() )
-
 	local effectdata = EffectData()
-		effectdata:SetOrigin( pos )
-	util.Effect( "cball_explode", effectdata, true, true )
-
-	local effectdata = EffectData()
-		effectdata:SetOrigin( pos )
-		effectdata:SetNormal( Vector(0,0,1) )
-	util.Effect( "manhacksparks", effectdata, true, true )
+		effectdata:SetOrigin( self:LocalToWorld( self:OBBCenter() ) )
+	util.Effect( "lvs_trailer_explosion", effectdata, true, true )
 
 	self:EmitSound("physics/metal/metal_box_break"..math.random(1,2)..".wav",75,100,1)
 

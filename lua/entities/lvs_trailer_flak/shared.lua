@@ -11,6 +11,8 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/flak38.mdl"
 
+ENT.lvsShowInSpawner = false
+
 ENT.AITEAM = 1
 
 ENT.PhysicsWeightScale = 1
@@ -19,6 +21,10 @@ ENT.PhysicsInertia = Vector(475,452,162)
 ENT.PhysicsDampingSpeed = 4000
 ENT.PhysicsDampingForward = false
 ENT.PhysicsDampingReverse = false
+
+ENT.MaxHealth = 400
+
+ENT.DSArmorIgnoreForce = 1000
 
 function ENT:InitWeapons()
 	local weapon = {}

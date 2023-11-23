@@ -13,6 +13,12 @@ ENT.MDL = "models/blu/flakcarriage.mdl"
 
 ENT.AITEAM = 1
 
+ENT.MaxHealth = 200
+
+ENT.DSArmorIgnoreForce = 1000
+
+ENT.lvsShowInSpawner = false
+
 function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "Prong" )
 end
