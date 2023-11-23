@@ -9,9 +9,9 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.DeleteOnExplode = true
-
 ENT.DoNotDuplicate = true
+
+ENT.DeleteOnExplode = true
 
 ENT.lvsAllowEngineTool = false
 ENT.lvsShowInSpawner = false

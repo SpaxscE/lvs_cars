@@ -51,7 +51,7 @@ function ENT:OnSpawn( PObj )
 	self:DeleteOnRemove( SupportEnt )
 	SupportEnt:SetOwner( self )
 
-	constraint.Weld( self, SupportEnt, 0, 0, 0, false, true )
+	constraint.Weld( self, SupportEnt, 0, 0, 0, false, false )
 
 	self.SupportEnt = SupportEnt:GetPhysicsObject()
 

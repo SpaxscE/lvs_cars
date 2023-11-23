@@ -102,3 +102,125 @@ end
 
 function ENT:OnStopDrag( caller, activator )
 end
+
+function ENT:OnStartExplosion()
+end
+
+function ENT:OnFinishExplosion()
+	local pos = self:LocalToWorld( self:OBBCenter() )
+
+	local effectdata = EffectData()
+		effectdata:SetOrigin( pos )
+	util.Effect( "cball_explode", effectdata, true, true )
+
+	local effectdata = EffectData()
+		effectdata:SetOrigin( pos )
+		effectdata:SetNormal( Vector(0,0,1) )
+	util.Effect( "manhacksparks", effectdata, true, true )
+
+	self:EmitSound("physics/metal/metal_box_break"..math.random(1,2)..".wav",75,100,1)
+
+	for _, wheel in pairs( self:GetWheels() ) do
+		if not IsValid( wheel ) then continue end
+
+		local ent = ents.Create( "prop_physics" )
+
+		if not IsValid( ent ) then continue end
+
+		ent:SetPos( wheel:GetPos() )
+		ent:SetAngles( wheel:GetAngles() )
+		ent:SetModel( wheel:GetModel() )
+		ent:Spawn()
+		ent:Activate()
+		ent:SetRenderMode( RENDERMODE_TRANSALPHA )
+		ent:SetCollisionGroup( COLLISION_GROUP_WORLD )
+		ent.DoNotDuplicate = true
+
+		local PhysObj = ent:GetPhysicsObject()
+
+		if IsValid( PhysObj ) then
+			PhysObj:SetVelocityInstantaneous( Vector( math.Rand(-1,1), math.Rand(-1,1), 1.5 ):GetNormalized() * math.random(100,200) )
+			PhysObj:AddAngleVelocity( VectorRand() * 250 ) 
+		end
+
+		timer.Simple( 4.5, function()
+			if not IsValid( ent ) then return end
+
+			ent:SetRenderFX( kRenderFxFadeFast  ) 
+		end)
+
+		timer.Simple( 5, function()
+			if not IsValid( ent ) then return end
+
+			ent:Remove()
+		end)
+	end
+
+	self:SpawnGibs()
+end
+
+local gibs = {
+	"models/gibs/manhack_gib01.mdl",
+	"models/gibs/manhack_gib02.mdl",
+	"models/gibs/manhack_gib03.mdl",
+	"models/gibs/manhack_gib04.mdl",
+	"models/props_c17/canisterchunk01a.mdl",
+	"models/props_c17/canisterchunk01d.mdl",
+	"models/props_c17/oildrumchunk01a.mdl",
+	"models/props_c17/oildrumchunk01b.mdl",
+	"models/props_c17/oildrumchunk01c.mdl",
+	"models/props_c17/oildrumchunk01d.mdl",
+	"models/props_c17/oildrumchunk01e.mdl",
+}
+
+function ENT:SpawnGibs()
+	local pos = self:LocalToWorld( self:OBBCenter() )
+	local ang = self:GetAngles()
+
+	self.GibModels = istable( self.GibModels ) and self.GibModels or gibs
+
+	for _, v in pairs( self.GibModels ) do
+		local ent = ents.Create( "prop_physics" )
+
+		if not IsValid( ent ) then continue end
+
+		ent:SetPos( pos )
+		ent:SetAngles( ang )
+		ent:SetModel( v )
+		ent:Spawn()
+		ent:Activate()
+		ent:SetRenderMode( RENDERMODE_TRANSALPHA )
+		ent:SetCollisionGroup( COLLISION_GROUP_WORLD )
+
+		local PhysObj = ent:GetPhysicsObject()
+
+		if IsValid( PhysObj ) then
+			PhysObj:SetVelocityInstantaneous( Vector( math.Rand(-1,1), math.Rand(-1,1), 1.5 ):GetNormalized() * math.random(250,400)  )
+			PhysObj:AddAngleVelocity( VectorRand() * 500 ) 
+			PhysObj:EnableDrag( false ) 
+		end
+
+		timer.Simple( 4.5, function()
+			if not IsValid( ent ) then return end
+
+			ent:SetRenderFX( kRenderFxFadeFast  ) 
+		end)
+
+		timer.Simple( 5, function()
+			if not IsValid( ent ) then return end
+
+			ent:Remove()
+		end)
+	end
+end
+
+function ENT:OnStartFireTrail( PhysObj, ExplodeTime )
+end
+
+function ENT:OnExploded()
+	local PhysObj = self:GetPhysicsObject()
+
+	if not IsValid( PhysObj ) then return end
+
+	PhysObj:SetVelocity( self:GetVelocity() + Vector(math.random(-5,5),math.random(-5,5),math.random(150,250)) )
+end
