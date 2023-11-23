@@ -3,7 +3,7 @@ AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
-	local WheelModel = "models/diggercars/m5m16/m5_wheel.mdl"
+	local WheelModel = "models/blu/carriage_wheel.mdl"
 
 	local FrontAxle = self:DefineAxle( {
 		Axle = {
@@ -14,15 +14,15 @@ function ENT:OnSpawn( PObj )
 		},
 		Wheels = {
 			self:AddWheel( {
-				pos = Vector(3.41,35,2),
+				pos = Vector(3.41,33.5,2),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,180,0),
+				mdl_ang = Angle(0,0,0),
 			} ),
 
 			self:AddWheel( {
-				pos = Vector(3.41,-35,2),
+				pos = Vector(3.41,-33.5,2),
 				mdl = WheelModel,
-				mdl_ang = Angle(0,0,0),
+				mdl_ang = Angle(0,180,0),
 
 			} ),
 		},

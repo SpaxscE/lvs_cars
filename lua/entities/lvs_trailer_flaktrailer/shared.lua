@@ -19,8 +19,8 @@ end
 
 ENT.GibModels = {
 	"models/blu/flakcarriage.mdl",
-	"models/diggercars/m5m16/m5_wheel.mdl",
-	"models/diggercars/m5m16/m5_wheel.mdl",
+	"models/blu/carriage_wheel.mdl",
+	"models/blu/carriage_wheel.mdl",
 	"models/gibs/manhack_gib01.mdl",
 	"models/gibs/manhack_gib02.mdl",
 	"models/gibs/manhack_gib03.mdl",

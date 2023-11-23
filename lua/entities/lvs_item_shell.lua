@@ -26,7 +26,7 @@ if SERVER then
 		self:SetModel( self.MDL )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:PhysWake()
-		self:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
+		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
 		self:SetRenderMode( RENDERMODE_TRANSALPHA )
 
 		self.DieTime = CurTime() + self.LifeTime
