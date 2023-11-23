@@ -3,6 +3,12 @@ AddCSLuaFile()
 ENT.Type            = "anim"
 
 if SERVER then
+	ENT.MDL = "models/props_debris/shellcasing_single1.mdl"
+	ENT.CollisionSounds = {
+		"lvs/vehicles/pak40/shell_impact1.wav",
+		"lvs/vehicles/pak40/shell_impact2.wav"
+	}
+
 	function ENT:SpawnFunction( ply, tr, ClassName )
 		if not tr.Hit then return end
 
@@ -17,10 +23,10 @@ if SERVER then
 	ENT.LifeTime = 30
 
 	function ENT:Initialize()	
-		self:SetModel( "models/props_debris/shellcasing_single1.mdl" )
+		self:SetModel( self.MDL )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:PhysWake()
-		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
+		self:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
 		self:SetRenderMode( RENDERMODE_TRANSALPHA )
 
 		self.DieTime = CurTime() + self.LifeTime
@@ -44,7 +50,7 @@ if SERVER then
 
 	function ENT:PhysicsCollide( data, physobj )
 		if data.Speed > 30 and data.DeltaTime > 0.2 then
-			self:EmitSound( "lvs/vehicles/pak40/shell_impact"..math.random(1,2)..".wav" )
+			self:EmitSound( self.CollisionSounds[ math.random(1,#self.CollisionSounds) ] )
 		end
 	end
 
