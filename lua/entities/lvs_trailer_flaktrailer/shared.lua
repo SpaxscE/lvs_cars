@@ -16,3 +16,15 @@ ENT.AITEAM = 1
 function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "Prong" )
 end
+
+ENT.GibModels = {
+	"models/blu/flakcarriage.mdl",
+	"models/diggercars/m5m16/m5_wheel.mdl",
+	"models/diggercars/m5m16/m5_wheel.mdl",
+	"models/gibs/manhack_gib01.mdl",
+	"models/gibs/manhack_gib02.mdl",
+	"models/gibs/manhack_gib03.mdl",
+	"models/gibs/manhack_gib04.mdl",
+	"models/props_c17/canisterchunk01a.mdl",
+	"models/props_c17/canisterchunk01d.mdl",
+}

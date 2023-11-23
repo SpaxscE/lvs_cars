@@ -20,6 +20,21 @@ ENT.WheelPhysicsInertia = Vector(10,8,10)
 
 ENT.CannonArmorPenetration = 14500
 
+ENT.GibModels = {
+	"models/blu/pak40_wheel.mdl",
+	"models/blu/pak40_wheel.mdl",
+	"models/gibs/manhack_gib01.mdl",
+	"models/gibs/manhack_gib02.mdl",
+	"models/gibs/manhack_gib03.mdl",
+	"models/gibs/manhack_gib04.mdl",
+	"models/props_c17/oildrumchunk01a.mdl",
+	"models/props_c17/oildrumchunk01b.mdl",
+	"models/props_c17/oildrumchunk01c.mdl",
+	"models/props_c17/oildrumchunk01d.mdl",
+	"models/props_c17/oildrumchunk01e.mdl",
+
+}
+
 function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "Prongs" )
 	self:AddDT( "Bool", "UseHighExplosive" )

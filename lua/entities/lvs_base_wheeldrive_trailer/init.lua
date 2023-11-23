@@ -120,42 +120,6 @@ function ENT:OnFinishExplosion()
 
 	self:EmitSound("physics/metal/metal_box_break"..math.random(1,2)..".wav",75,100,1)
 
-	for _, wheel in pairs( self:GetWheels() ) do
-		if not IsValid( wheel ) then continue end
-
-		local ent = ents.Create( "prop_physics" )
-
-		if not IsValid( ent ) then continue end
-
-		ent:SetPos( wheel:GetPos() )
-		ent:SetAngles( wheel:GetAngles() )
-		ent:SetModel( wheel:GetModel() )
-		ent:Spawn()
-		ent:Activate()
-		ent:SetRenderMode( RENDERMODE_TRANSALPHA )
-		ent:SetCollisionGroup( COLLISION_GROUP_WORLD )
-		ent.DoNotDuplicate = true
-
-		local PhysObj = ent:GetPhysicsObject()
-
-		if IsValid( PhysObj ) then
-			PhysObj:SetVelocityInstantaneous( Vector( math.Rand(-1,1), math.Rand(-1,1), 1.5 ):GetNormalized() * math.random(100,200) )
-			PhysObj:AddAngleVelocity( VectorRand() * 250 ) 
-		end
-
-		timer.Simple( 4.5, function()
-			if not IsValid( ent ) then return end
-
-			ent:SetRenderFX( kRenderFxFadeFast  ) 
-		end)
-
-		timer.Simple( 5, function()
-			if not IsValid( ent ) then return end
-
-			ent:Remove()
-		end)
-	end
-
 	self:SpawnGibs()
 end
 
