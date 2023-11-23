@@ -24,8 +24,6 @@ ENT.PhysicsDampingReverse = false
 
 ENT.MaxHealth = 400
 
-ENT.DSArmorIgnoreForce = 1000
-
 function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/bullet_ap.png")
