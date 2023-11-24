@@ -11,6 +11,16 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/flak38.mdl"
 
+ENT.GibModels = {
+	"models/blu/flak_db.mdl",
+	"models/blu/flak_d1.mdl",
+	"models/blu/flak_d2.mdl",
+	"models/blu/flak_d3.mdl",
+	"models/blu/flak_d4.mdl",
+	"models/blu/flak_d5.mdl",
+	"models/blu/flak_d6.mdl",
+}
+
 ENT.lvsShowInSpawner = false
 
 ENT.AITEAM = 1

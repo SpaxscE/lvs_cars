@@ -25,16 +25,18 @@ ENT.MaxHealth = 800
 ENT.DSArmorIgnoreForce = 1000
 
 ENT.GibModels = {
+	"models/blu/pak_d1.mdl",
+	"models/blu/pak_d2.mdl",
+	"models/blu/pak_d3.mdl",
+	"models/blu/pak_d4.mdl",
+	"models/blu/pak_d5.mdl",
+	"models/blu/pak_d6.mdl",
 	"models/blu/pak40_wheel.mdl",
 	"models/blu/pak40_wheel.mdl",
-	"models/blu/pak40_gib1.mdl",
-	"models/blu/pak40_gib2.mdl",
-	"models/blu/pak40_gib3.mdl",
 	"models/gibs/manhack_gib01.mdl",
 	"models/gibs/manhack_gib02.mdl",
 	"models/gibs/manhack_gib03.mdl",
 	"models/gibs/manhack_gib04.mdl",
-
 }
 
 function ENT:OnSetupDataTables()

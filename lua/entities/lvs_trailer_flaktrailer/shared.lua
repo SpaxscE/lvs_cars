@@ -24,7 +24,6 @@ function ENT:OnSetupDataTables()
 end
 
 ENT.GibModels = {
-	"models/blu/flakcarriage.mdl",
 	"models/blu/carriage_wheel.mdl",
 	"models/blu/carriage_wheel.mdl",
 	"models/gibs/manhack_gib01.mdl",
@@ -33,4 +32,10 @@ ENT.GibModels = {
 	"models/gibs/manhack_gib04.mdl",
 	"models/props_c17/canisterchunk01a.mdl",
 	"models/props_c17/canisterchunk01d.mdl",
+	"models/blu/carriage_d1.mdl",
+	"models/blu/carriage_d2.mdl",
+	"models/blu/carriage_d3.mdl",
+	"models/blu/carriage_d4.mdl",
+	"models/blu/carriage_d5.mdl",
+	"models/blu/carriage_d6.mdl",
 }
