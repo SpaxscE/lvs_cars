@@ -328,6 +328,9 @@ function ENT:DrawDeveloperInfo()
 
 	local steps = target / SizeX * 2
 
+	local BoostMul = math.max( self.EngineCurveBoostLow, 0 )
+	local BoostStart = 1 + BoostMul
+
 	if self:GetEngineActive() then
 		local throttle = self:GetThrottle()
 
@@ -338,8 +341,8 @@ function ENT:DrawDeveloperInfo()
 			local powerCurve1 = (power + math.max( target - power,0) - math.max(curRPM - power,0)) / target
 			local powerCurve2 = (power + math.max( target - power,0) - math.max(nextRPM - power,0)) / target
 
-			local TorqueBoost1 = 2 - (math.min( math.max( curRPM - boost, 0 ), boost) / boost)
-			local TorqueBoost2 = 2 - (math.min( math.max( nextRPM - boost, 0 ), boost) / boost)
+			local TorqueBoost1 = BoostStart - (math.min( math.max( curRPM - boost, 0 ), boost) / boost) * BoostMul
+			local TorqueBoost2 = BoostStart - (math.min( math.max( nextRPM - boost, 0 ), boost) / boost) * BoostMul
 
 			local X1 = X + (curRPM / target) * SizeX
 			local Y1 = Y + SizeY - powerCurve1 * TorqueBoost1 * torque * throttle
@@ -362,8 +365,8 @@ function ENT:DrawDeveloperInfo()
 			local powerCurve1 = (power + math.max( target - power,0) - math.max(curRPM - power,0)) / target
 			local powerCurve2 = (power + math.max( target - power,0) - math.max(nextRPM - power,0)) / target
 
-			local TorqueBoost1 = 2 - (math.min( math.max( curRPM - boost, 0 ), boost) / boost)
-			local TorqueBoost2 = 2 - (math.min( math.max( nextRPM - boost, 0 ), boost) / boost)
+			local TorqueBoost1 = BoostStart - (math.min( math.max( curRPM - boost, 0 ), boost) / boost) * BoostMul
+			local TorqueBoost2 = BoostStart - (math.min( math.max( nextRPM - boost, 0 ), boost) / boost) * BoostMul
 
 			local X1 = X + (curRPM / target) * SizeX
 			local Y1 = Y + SizeY - powerCurve1 * TorqueBoost1 * torque

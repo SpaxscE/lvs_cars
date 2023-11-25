@@ -284,7 +284,10 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 				BoostRPM = ent:VelToRPM( self.MaxVelocity / self.TransGears ) * 0.5
 			end
 
-			local TorqueBoost = 2 - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM)
+			local BoostMul = math.max( self.EngineCurveBoostLow, 0 )
+			local BoostStart = 1 + BoostMul
+
+			local TorqueBoost = BoostStart - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM) * BoostMul
 
 			local curVelocity = self:VectorSplitNormal( ent:GetDirectionAngle():Forward(),  phys:GetVelocity() )
 

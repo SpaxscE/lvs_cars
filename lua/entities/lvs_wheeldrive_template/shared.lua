@@ -68,6 +68,7 @@ ENT.MaxVelocity = 1400 -- max velocity in forward direction in gmod-units/second
 --ENT.MaxVelocityReverse = 700 -- max velocity in reverse
 
 --ENT.EngineCurve = 0.65 -- value goes from 0 to 1. Get into a car and type "developer 1" into the console to see the current engine curve
+--ENT.EngineCurveBoostLow = 1 -- first gear torque boost multiplier
 ENT.EngineTorque = 150
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000

@@ -15,6 +15,7 @@ ENT.MaxVelocity = 1400
 ENT.MaxVelocityReverse = 700
 
 ENT.EngineCurve = 0.65
+ENT.EngineCurveBoostLow = 1
 ENT.EngineTorque = 350
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000
