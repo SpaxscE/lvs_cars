@@ -6,6 +6,9 @@ ENT.Author = "Luna"
 ENT.Information = "Luna's Vehicle Script"
 ENT.Category = "[LVS] - Cars"
 
+ENT.VehicleCategory = "Tanks"
+ENT.VehicleSubCategory = "Heavy"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
