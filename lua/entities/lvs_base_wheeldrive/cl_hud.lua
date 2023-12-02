@@ -71,6 +71,7 @@ ENT.IconFuel = Material( "lvs/fuel.png" )
 local WaveScale = 0
 local WaveMaterial = Material( "effects/select_ring" )
 local oldThrottleActive = false
+local oldReverse = false
 
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	self:DrawDeveloperInfo()
@@ -135,8 +136,31 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 			end
 		else
 			oldThrottleActive = false
+		
+			local Reverse = self:GetReverse()
 
-			if self:GetReverse() then
+			if oldReverse ~= Reverse then
+				oldReverse = Reverse
+
+				WaveScale = 1
+			end
+
+			if WaveScale > 0 then
+				WaveScale = math.max( WaveScale - RealFrameTime() * 2, 0 )
+	
+				local WaveRadius = (1 - WaveScale) * H * 1.5
+
+				surface.SetDrawColor( 0, 127, 255, 255 * WaveScale ^ 2 )
+				surface.SetMaterial( WaveMaterial )
+	
+				surface.DrawTexturedRectRotated( hX, hY, WaveRadius, WaveRadius, 0 )
+
+				if not Reverse then
+					draw.SimpleText( "D" , "LVS_FONT",  hX, hY, Color(0,0,0,math.min(800 * WaveScale ^ 2,255)), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				end
+			end
+
+			if Reverse then
 				draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
 		end
