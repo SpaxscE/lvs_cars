@@ -61,7 +61,26 @@ if CLIENT then
 
 		self:AimTurret()
 	end
+
+	net.Receive( "lvs_turret_sync_other", function( len )
+		local veh = net.ReadEntity()
+
+		if not IsValid( veh ) then return end
+
+		veh:SetTurretPitch( net.ReadFloat() )
+		veh:SetTurretYaw( net.ReadFloat() )
+	end )
 else
+	util.AddNetworkString( "lvs_turret_sync_other" )
+
+	function ENT:OnDriverExitVehicle( ply )
+		net.Start( "lvs_turret_sync_other" )
+			net.WriteEntity( self )
+			net.WriteFloat( self:GetTurretPitch() )
+			net.WriteFloat( self:GetTurretYaw() )
+		net.Broadcast()
+	end
+
 	function ENT:CalcTurretSound( Pitch, Yaw, AimRate )
 		local DeltaPitch = Pitch - self:GetTurretPitch()
 		local DeltaYaw = Yaw - self:GetTurretYaw()

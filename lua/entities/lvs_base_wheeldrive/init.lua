@@ -377,8 +377,21 @@ function ENT:SteerTo( TargetValue, MaxSteer )
 	end
 end
 
+function ENT:OnDriverEnterVehicle( ply )
+end
+
+function ENT:OnDriverExitVehicle( ply )
+end
+
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
-	if VehicleIsActive then return end
+	if VehicleIsActive then
+
+		self:OnDriverEnterVehicle( New )
+
+		return
+	end
+
+	self:OnDriverExitVehicle( Old )
 
 	self:SetThrottle( 0 )
 
