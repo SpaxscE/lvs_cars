@@ -164,7 +164,7 @@ if SERVER then
 		base:PhysWake()
 	end
 
-	function ENT:Initialize()	
+	function ENT:Initialize()
 		self:SetSolid( SOLID_NONE )
 		self:SetMoveType( MOVETYPE_NONE )
 		self:DrawShadow( false )
