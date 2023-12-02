@@ -58,6 +58,7 @@ ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 
 ENT.WheelBrakeAutoLockup = false
+ENT.WheelBrakeAutoLockupReverseVelocity = 50
 ENT.WheelBrakeLockupRPM = 50
 
 ENT.WheelBrakeForce = 400

@@ -112,6 +112,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.WheelPhysicsInertia = Vector(10,8,10) -- do not mess with this unless you can balance everything yourself again.
 
 --ENT.WheelBrakeAutoLockup = false -- set this to true for offroad vehicles. This will engage the brake automatically so you dont have to keep holding the brake/handbrake button
+--ENT.WheelBrakeAutoLockupReverseVelocity = 50 -- below/above this velocity, the transmission will auto shift into forward/reverse when ENT.WheelBrakeAutoLockup = true
 --ENT.WheelBrakeLockupRPM = 50 -- wheel rpm in which the auto-brake is enabled
 
 --ENT.WheelBrakeForce = 400 -- how strong the brakes are. Just leave at 400. Allows for good braking while still allowing some turning. It has some build in ABS but it isnt perfect because even tho velocities say it isnt sliding the wheel will still visually slide in source...

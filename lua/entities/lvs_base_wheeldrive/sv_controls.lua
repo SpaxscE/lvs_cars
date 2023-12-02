@@ -82,6 +82,13 @@ function ENT:CalcThrottle( ply )
 	local KeyThrottle = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBrakes = ply:lvsKeyDown( "CAR_BRAKE" )
 
+	if self.WheelBrakeAutoLockup then
+		if self:GetReverse() then
+			KeyThrottle = ply:lvsKeyDown( "CAR_BRAKE" )
+			KeyBrakes = ply:lvsKeyDown( "CAR_THROTTLE" )
+		end
+	end
+
 	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and self:GetMaxThrottle() or 0.5
 	local Throttle = KeyThrottle and ThrottleValue or 0
 
@@ -104,7 +111,42 @@ function ENT:CalcHandbrake( ply )
 	end
 end
 
+function ENT:CalcAutoTransmission( ply )
+	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() )
+
+	local KeyForward = ply:lvsKeyDown( "CAR_THROTTLE" )
+	local KeyBackward = ply:lvsKeyDown( "CAR_BRAKE" )
+
+	local ReverseVelocity = self.WheelBrakeAutoLockupReverseVelocity
+
+	if KeyForward and ForwardVelocity > -ReverseVelocity then
+		self:SetReverse( false )
+	end
+
+	if KeyBackward  and ForwardVelocity < ReverseVelocity then
+		self:SetReverse( true )
+	end
+
+	local Reverse = self:GetReverse()
+
+	if Reverse ~= self._oldKeyReverse then
+		self._oldKeyReverse = Reverse
+
+		self:EmitSound( self.TransShiftSound, 75 )
+	end
+end
+
 function ENT:CalcTransmission( ply )
+	if self.WheelBrakeAutoLockup then
+		if self:GetParkingBrake() then
+			self:SetParkingBrake( false )
+		end
+
+		self:CalcAutoTransmission( ply )
+
+		return
+	end
+
 	local KeyReverse = ply:lvsKeyDown( "CAR_REVERSE" )
 
 	if KeyReverse and self._KeyReversePressedTime then
