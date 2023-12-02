@@ -82,11 +82,9 @@ function ENT:CalcThrottle( ply )
 	local KeyThrottle = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBrakes = ply:lvsKeyDown( "CAR_BRAKE" )
 
-	if self.WheelBrakeAutoLockup then
-		if self:GetReverse() then
-			KeyThrottle = ply:lvsKeyDown( "CAR_BRAKE" )
-			KeyBrakes = ply:lvsKeyDown( "CAR_THROTTLE" )
-		end
+	if self:GetReverse() then
+		KeyThrottle = ply:lvsKeyDown( "CAR_BRAKE" )
+		KeyBrakes = ply:lvsKeyDown( "CAR_THROTTLE" )
 	end
 
 	local ThrottleValue = ply:lvsKeyDown( "CAR_THROTTLE_MOD" ) and self:GetMaxThrottle() or 0.5
@@ -119,11 +117,25 @@ function ENT:CalcAutoTransmission( ply )
 
 	local ReverseVelocity = self.WheelBrakeAutoLockupReverseVelocity
 
+	if KeyForward and KeyBackward then return end
+
+	if not KeyForward and not KeyBackward then
+		if ForwardVelocity > ReverseVelocity then
+			self:SetReverse( false )
+		end
+
+		if ForwardVelocity < -ReverseVelocity then
+			self:SetReverse( true )
+		end
+
+		return
+	end
+
 	if KeyForward and ForwardVelocity > -ReverseVelocity then
 		self:SetReverse( false )
 	end
 
-	if KeyBackward  and ForwardVelocity < ReverseVelocity then
+	if KeyBackward and ForwardVelocity < ReverseVelocity then
 		self:SetReverse( true )
 	end
 
