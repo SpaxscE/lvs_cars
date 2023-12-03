@@ -74,7 +74,7 @@ ENT.SuperChargerVisible = true
 ENT.AllowTurbo = true
 ENT.TurboVolume = 0.6
 ENT.TurboSound = "lvs/vehicles/generic/turbo_loop.wav"
-ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff1.wav"}
+ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff2.wav"}
 
 ENT.DeleteOnExplode = false
 

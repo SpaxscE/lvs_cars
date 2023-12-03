@@ -49,7 +49,7 @@ function EFFECT:Init( data )
 		dlight.DieTime = CurTime() + 0.2
 	end
 
-	sound.Play( "lvs/vehicles/generic/exhaust_backfire"..math.Round(math.random(1,3),1)..".ogg", Pos, 75, 100, 1 )
+	sound.Play( "lvs/vehicles/generic/exhaust_backfire"..math.random(1,3)..".ogg", Pos, 75, 100, 1 )
 
 	local vel = self.Ent:GetVelocity()
 	local dir = self.Ent:LocalToWorldAngles( self.Ang ):Forward()
