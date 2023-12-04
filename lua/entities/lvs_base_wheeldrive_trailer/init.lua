@@ -181,3 +181,6 @@ function ENT:OnExploded()
 
 	PhysObj:SetVelocity( self:GetVelocity() + Vector(math.random(-5,5),math.random(-5,5),math.random(150,250)) )
 end
+
+function ENT:OnDriverChanged( Old, New, VehicleIsActive )
+end
