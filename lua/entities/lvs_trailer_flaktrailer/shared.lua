@@ -19,6 +19,8 @@ ENT.MaxHealth = 200
 
 ENT.DSArmorIgnoreForce = 1000
 
+ENT.ForceAngleMultiplier = 2
+
 ENT.lvsShowInSpawner = false
 
 function ENT:OnSetupDataTables()
