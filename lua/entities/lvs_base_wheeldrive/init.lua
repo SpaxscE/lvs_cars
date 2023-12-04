@@ -212,7 +212,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local Throttle = self:GetThrottle()
 
-	if tickdelta < 1 / 30 and not (Throttle > 0 and math.abs( curRPM ) < 50) then
+	if tickdelta < 1 / 30 and (not (Throttle > 0 and math.abs( curRPM ) < 50) or self:PivotSteer()) then
 		local deltatimeNew = 1 / 15
 
 		ent._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
@@ -407,6 +407,11 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 			LightsHandler:SetActive( false )
 			LightsHandler:SetHighActive( false )
 			LightsHandler:SetFogActive( false )
+		end
+	else
+		if not self:GetEngineActive() then
+			self:SetBrake( 0 )
+			self:EnableHandbrake()
 		end
 	end
 
