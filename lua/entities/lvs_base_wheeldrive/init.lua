@@ -212,7 +212,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local Throttle = self:GetThrottle()
 
-	if tickdelta < 1 / 30 and (not (Throttle > 0 and math.abs( curRPM ) < 50) or self:PivotSteer()) then
+	if tickdelta < 1 / 30 and not (Throttle > 0 and math.abs( curRPM ) < 50) then
 		local deltatimeNew = 1 / 15
 
 		ent._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
@@ -312,7 +312,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 				powerCurve = math.Clamp((self.PivotSteerWheelRPM * RotationDirection - curRPM) / self.PivotSteerWheelRPM,-1,1)
 
-				Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle * 2
+				Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle * 2 * self.PivotSteerTorqueMul
 
 				ForceAngle = RotationAxis * Torque
 			end

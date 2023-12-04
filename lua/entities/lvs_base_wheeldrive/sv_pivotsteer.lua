@@ -2,6 +2,7 @@
 ENT.PivotSteerEnable = false
 ENT.PivotSteerByBrake = true
 ENT.PivotSteerWheelRPM = 40
+ENT.PivotSteerTorqueMul = 1
 
 function ENT:GetPivotSteer()
 	return self._PivotSteer or 0
@@ -33,6 +34,7 @@ function ENT:CalcPivotSteer( ply )
 
 	if ShouldSteer then
 		self._PivotSteer = (KeyRight and 1 or 0) - (KeyLeft and 1 or 0)
+		self:SetSteer( 0 )
 	end
 
 	if not ShouldSteer and self._ShouldSteer then
