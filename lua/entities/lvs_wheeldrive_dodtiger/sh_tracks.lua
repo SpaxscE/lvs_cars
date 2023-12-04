@@ -3,7 +3,6 @@ if SERVER then
 	ENT.PivotSteerEnable = true
 	ENT.PivotSteerByBrake = false
 	ENT.PivotSteerWheelRPM = 25
-	ENT.PivotSteerTorqueMul = 2
 
 	function ENT:TracksCreate( PObj )
 		local WheelModel = "models/props_vehicles/tire001b_truck.mdl"

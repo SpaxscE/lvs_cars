@@ -2,7 +2,7 @@
 ENT.PivotSteerEnable = false
 ENT.PivotSteerByBrake = true
 ENT.PivotSteerWheelRPM = 40
-ENT.PivotSteerTorqueMul = 1
+ENT.PivotSteerTorqueMul = 2
 
 function ENT:GetPivotSteer()
 	return self._PivotSteer or 0
