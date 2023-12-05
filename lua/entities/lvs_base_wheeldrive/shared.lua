@@ -20,6 +20,8 @@ ENT.EngineTorque = 350
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000
 
+ENT.ThrottleRate = 3.5
+
 ENT.ForceLinearMultiplier = 1
 ENT.ForceAngleMultiplier = 0.5
 
