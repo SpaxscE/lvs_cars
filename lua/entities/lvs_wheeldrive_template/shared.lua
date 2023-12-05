@@ -73,6 +73,8 @@ ENT.EngineTorque = 150
 ENT.EngineIdleRPM = 1000
 ENT.EngineMaxRPM = 6000
 
+--ENT.ThrottleRate = 3.5 -- modify the throttle update rate, see it as the speed with which you push the pedal
+
 --ENT.ForceLinearMultiplier = 1 -- multiply all linear forces (such as downforce, wheel side force, ect)
 --ENT.ForceAngleMultiplier = 0.5 -- multiply all angular forces such turn stability / inertia. Exception: Wheel/Engine torque. Those remain unchanged.
 
@@ -92,7 +94,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.FastSteerAngleClamp = 10 -- to which the steering angle is clamped to when speed is above ENT.FastSteerActiveVelocity
 --ENT.FastSteerDeactivationDriftAngle = 7 -- allowed drift angle until ENT.FastSteerActiveVelocity is ignored and the steering becomes unclamped
 
---ENT.SteerAssistDeadZoneAngle = 1 -- changes how much drift the counter steer system allows before interfering. 1 = 1° of drift without interfering
+--ENT.SteerAssistDeadZoneAngle = 1 -- changes how much drift the counter steer system allows before interfering. 1 = 1Â° of drift without interfering
 --ENT.SteerAssistMaxAngle = 15 -- max steering angle the counter steer system is allowed to help the player
 --ENT.SteerAssistExponent = 1.5 -- an exponent to the counter steering curve. Just leave it at 1.5
 --ENT.SteerAssistMultiplier = 3 -- how "quick" the counter steer system is steering
@@ -106,7 +108,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.PhysicsDampingSpeed = 4000 -- do not mess with this unless you can balance everything yourself again.
 
 --ENT.PhysicsDampingForward = true -- internal physics damping to reduce wobble. Just keep it enabled in forward direction.
---ENT.PhysicsDampingReverse = false -- disabling this in reverse allows for a reverse 180° turn. If you want to go fast in reverse you should set this to true in order to get good stability
+--ENT.PhysicsDampingReverse = false -- disabling this in reverse allows for a reverse 180Â° turn. If you want to go fast in reverse you should set this to true in order to get good stability
 
 --ENT.WheelPhysicsMass = 100 -- do not mess with this unless you can balance everything yourself again.
 --ENT.WheelPhysicsInertia = Vector(10,8,10) -- do not mess with this unless you can balance everything yourself again.
