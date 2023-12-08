@@ -82,7 +82,7 @@ if SERVER then
 			for _, wheel in pairs( base:GetWheels() ) do
 				if not IsValid( wheel ) then continue end
 
-				wheel._DragOriginalCollisionGroup = base:GetCollisionGroup()
+				wheel._DragOriginalCollisionGroup = wheel:GetCollisionGroup()
 				wheel:SetCollisionGroup( COLLISION_GROUP_WORLD )
 			end
 		end
