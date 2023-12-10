@@ -42,7 +42,9 @@ if SERVER then
 
 		local base = self:GetBase()
 
-		if not IsValid( ply ) or not ply:Alive() or ply:InVehicle() or ply:GetObserverMode() ~= OBS_MODE_NONE or not ply:KeyDown( IN_USE ) or (ply:GetShootPos() - self:GetPos()):Length() > GrabDistance or not IsValid( base ) then return end
+		if not IsValid( ply ) or not ply:Alive() or ply:InVehicle() or ply:GetObserverMode() ~= OBS_MODE_NONE or not ply:KeyDown( IN_WALK ) or (ply:GetShootPos() - self:GetPos()):Length() > GrabDistance or not IsValid( base ) then return end
+
+		ply:SprintDisable()
 
 		self.GrabEnt = ents.Create( "prop_physics" )
 
@@ -95,18 +97,17 @@ if SERVER then
 			self.GrabEnt:Remove()
 		end
 
+		local ply = self:GetDragTarget()
+
+		if IsValid( ply ) then
+			ply:SprintEnable()
+		end
+
 		local base = self:GetBase()
 
 		if IsValid( base ) then
-			local ply = self:GetDragTarget()
 
 			base:OnStopDrag( self, ply )
-
-			local PhysObj = base:GetPhysicsObject()
-			if IsValid( PhysObj ) then
-				PhysObj:SetAngleVelocity( -PhysObj:GetAngleVelocity() )
-				PhysObj:SetVelocity( -PhysObj:GetVelocity() )
-			end
 
 			if IsValid( ply ) then base:SetPhysicsAttacker( ply ) end
 	
@@ -145,13 +146,25 @@ if SERVER then
 	end
 
 	function ENT:Drag( ply )
-		if not IsValid( self.GrabEnt ) or ply:InVehicle() or not ply:KeyDown( IN_USE ) or not ply:Alive() or ply:GetObserverMode() ~= OBS_MODE_NONE then
+		if not IsValid( self.GrabEnt ) or ply:InVehicle() or not ply:KeyDown( IN_WALK ) or not ply:Alive() or ply:GetObserverMode() ~= OBS_MODE_NONE then
 			self:StopDrag()
 
 			return
 		end
 
-		local TargetPos = ply:GetShootPos() + ply:GetAimVector() * 80
+		if not self.GrabEnt.TargetAngle then
+			self.GrabEnt.TargetAngle = ply:EyeAngles().y
+		end
+
+		local TargetAngle = ply:EyeAngles()
+
+		self.GrabEnt.TargetAngle = math.ApproachAngle( self.GrabEnt.TargetAngle, TargetAngle.y, FrameTime() * 500 )
+
+		TargetAngle.p = math.max( TargetAngle.p, -15 )
+
+		TargetAngle.y = self.GrabEnt.TargetAngle
+
+		local TargetPos = ply:GetShootPos() + TargetAngle:Forward() * 80
 
 		if (self:GetPos() - TargetPos):Length() > GrabDistance then self:StopDrag() return end
 
@@ -162,6 +175,15 @@ if SERVER then
 		if not IsValid( base ) then return end
 
 		base:PhysWake()
+
+		if base:WheelsOnGround() then return end
+
+		local PhysObj = base:GetPhysicsObject()
+	
+		if not IsValid( PhysObj ) then return end
+	
+		PhysObj:SetAngleVelocity( PhysObj:GetAngleVelocity() * 0.8 )
+		PhysObj:SetVelocity( PhysObj:GetVelocity() * 0.8 )
 	end
 
 	function ENT:Initialize()
@@ -360,8 +382,6 @@ function ENT:DrawInfoCoupled( ply )
 				self.OldKeyUse = KeyUse
 
 				if KeyUse then
-					surface.PlaySound("common/wpn_select.wav")
-
 					net.Start( "lvs_trailerhitch" )
 						net.WriteEntity( self )
 					net.SendToServer()
@@ -469,13 +489,13 @@ function ENT:DrawInfo( ply )
 		if HitPos then
 			surface.SetDrawColor( 255, 255, 255, 255 )
 
-			local Key = input.LookupBinding( "+use" )
+			local Key = input.LookupBinding( "+walk" )
 
-			if not isstring( Key ) then Key = "[+use not bound]" end
+			if not isstring( Key ) then Key = "[+walk not bound]" end
 
 			DrawText( X, Y + 20, "hold "..Key.." to drag!",Color(255,255,255,255) )
 
-			local KeyUse = ply:KeyDown( IN_USE )
+			local KeyUse = ply:KeyDown( IN_WALK )
 
 			if self.OldKeyUse ~= KeyUse then
 				self.OldKeyUse = KeyUse
