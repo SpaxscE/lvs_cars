@@ -195,6 +195,9 @@ function ENT:AddGunnerWeapons()
 		base:PaintCrosshairCenter( Pos2D, Col )
 		base:LVSPaintHitMarker( Pos2D )
 	end
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
+	end
 	self:AddWeapon( weapon, 2 )
 end
 
@@ -308,6 +311,9 @@ function ENT:AddTopGunnerWeapons()
 
 		base:PaintCrosshairCenter( Pos2D, Col )
 		base:LVSPaintHitMarker( Pos2D )
+	end
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
 	end
 	self:AddWeapon( weapon, 3 )
 end
