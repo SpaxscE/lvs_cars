@@ -75,9 +75,22 @@ function ENT:Explode()
 	end
 
 	if self.MDL_DESTROYED then
+		local numpp = self:GetNumPoseParameters() - 1
+		local pps = {}
+
+		for i = 0, numpp do
+			local sPose = self:GetPoseParameterName( i )
+
+			pps[ sPose ] = self:GetPoseParameter( sPose )
+		end
+	
 		self:SetModel( self.MDL_DESTROYED )
 		self:PhysicsDestroy()
 		self:PhysicsInit( SOLID_VPHYSICS )
+
+		for pName, pValue in pairs( pps ) do
+			self:SetPoseParameter(pName, pValue)
+		end
 	else
 		for id, group in pairs( self:GetBodyGroups() ) do
 			for subid, subgroup in pairs( group.submodels ) do
