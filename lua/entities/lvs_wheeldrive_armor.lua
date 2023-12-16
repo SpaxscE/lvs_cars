@@ -82,7 +82,7 @@ if SERVER then
 			local Ax = math.acos( DotHitNormal )
 			local HitAngle = 90 - (180 - math.deg( Ax ))
 
-			if HitAngle > 30 then return false end
+			if HitAngle > 20 then return false end
 
 			local NewDir = dir - trace.HitNormal * math.cos( Ax ) * 2
 
