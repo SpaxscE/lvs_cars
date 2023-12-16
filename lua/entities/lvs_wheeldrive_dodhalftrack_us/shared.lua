@@ -140,8 +140,8 @@ function ENT:InitWeapons()
 	weapon.Icon = Material("lvs/weapons/bullet.png")
 	weapon.Ammo = 2000
 	weapon.Delay = 0.02
-	weapon.HeatRateUp = 0.1
-	weapon.HeatRateDown = 0.1
+	weapon.HeatRateUp = 0.25
+	weapon.HeatRateDown = 0.15
 	weapon.Attack = function( ent )
 		if not ent:TurretInRange() then
 			if IsValid( ent.SNDTurretMG ) then
