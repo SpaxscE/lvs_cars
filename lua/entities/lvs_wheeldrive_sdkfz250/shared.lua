@@ -53,7 +53,7 @@ ENT.EngineSounds = {
 		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
 	},
 	{
-		sound = "lvs/vehicles/pz2/eng_loop.wav",
+		sound = "lvs/vehicles/sdkfz250/eng_loop.wav",
 		Volume = 1,
 		Pitch = 20,
 		PitchMul = 100,
