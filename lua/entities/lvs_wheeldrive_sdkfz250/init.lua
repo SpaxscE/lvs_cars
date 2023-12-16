@@ -2,7 +2,6 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "sh_tracks.lua" )
 AddCSLuaFile( "cl_tankview.lua" )
-AddCSLuaFile( "cl_attached_playermodels.lua" )
 include("shared.lua")
 include("sh_tracks.lua")
 
@@ -27,7 +26,7 @@ function ENT:OnSpawn( PObj )
 
 	local DriverSeat = self:AddDriverSeat( Vector(-10,16,15), Angle(0,-90,0) )
 	local GunnerSeat = self:AddPassengerSeat( Vector(-30,0,25), Angle(0,-90,0) )
-	local TopGunnerSeat = self:AddPassengerSeat( Vector(-40,0,25), Angle(0,90,0) )
+	local TopGunnerSeat = self:AddPassengerSeat( Vector(-35,0,23), Angle(0,90,0) )
 	local PassengerSeat = self:AddPassengerSeat( Vector(0,-16,22), Angle(0,-90,10) )
 	local PassengerSeat = self:AddPassengerSeat( Vector(-43,-14,24), Angle(0,-90,10) )
 	local PassengerSeat = self:AddPassengerSeat( Vector(-50,14,32), Angle(0,180,0) )
@@ -36,9 +35,6 @@ function ENT:OnSpawn( PObj )
 
 	self:SetFrontGunnerSeat( GunnerSeat )
 	self:SetRearGunnerSeat( TopGunnerSeat )
-
-	GunnerSeat.HidePlayer = true
-	TopGunnerSeat.HidePlayer = true
 
 	local DoorHandler = self:AddDoorHandler( "trunk", Vector(-81.17,11.74,44.44), Angle(19,0,0), Vector(-1,-15,-15), Vector(1,15,15), Vector(-30,-15,-15), Vector(1,15,15) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )

@@ -311,3 +311,79 @@ function ENT:AddTopGunnerWeapons()
 	end
 	self:AddWeapon( weapon, 3 )
 end
+
+
+function ENT:CalcMainActivityPassenger( ply )
+	local FrontGunnerSeat = self:GetFrontGunnerSeat()
+	local RearGunnerSeat = self:GetRearGunnerSeat()
+
+	if not IsValid( FrontGunnerSeat ) or not IsValid( RearGunnerSeat ) then return end
+
+	if FrontGunnerSeat:GetDriver() ~= ply and RearGunnerSeat:GetDriver() ~= ply then return end
+
+	if ply.m_bWasNoclipping then 
+		ply.m_bWasNoclipping = nil 
+		ply:AnimResetGestureSlot( GESTURE_SLOT_CUSTOM ) 
+		
+		if CLIENT then 
+			ply:SetIK( true )
+		end 
+	end 
+
+	ply.CalcIdeal = ACT_STAND
+	ply.CalcSeqOverride = ply:LookupSequence( "cwalk_revolver" )
+
+	return ply.CalcIdeal, ply.CalcSeqOverride
+end
+
+function ENT:UpdateAnimation( ply, velocity, maxseqgroundspeed )
+	ply:SetPlaybackRate( 1 )
+
+	if CLIENT then
+		local FrontGunnerSeat = self:GetFrontGunnerSeat()
+		local RearGunnerSeat = self:GetRearGunnerSeat()
+
+		if ply == self:GetDriver() then
+			ply:SetPoseParameter( "vehicle_steer", self:GetSteer() /  self:GetMaxSteerAngle() )
+			ply:InvalidateBoneCache()
+		end
+
+		if IsValid( FrontGunnerSeat ) and FrontGunnerSeat:GetDriver() == ply then
+			local Pitch = math.Remap( self:GetPoseParameter( "f_pitch" ),0,1,-15,15)
+			local Yaw = math.Remap( self:GetPoseParameter( "f_yaw" ),0,1,-35,35) 
+
+			ply:SetPoseParameter( "aim_pitch", Pitch * 1.5 )
+			ply:SetPoseParameter( "aim_yaw", Yaw * 1.5 )
+
+			ply:SetPoseParameter( "head_pitch", -Pitch * 2 )
+			ply:SetPoseParameter( "head_yaw", -Yaw * 3 )
+
+			ply:SetPoseParameter( "move_x", 0 )
+			ply:SetPoseParameter( "move_y", 0 )
+
+			ply:InvalidateBoneCache()
+		end
+
+		if IsValid( RearGunnerSeat ) and RearGunnerSeat:GetDriver() == ply then
+			local Pitch = math.Remap( self:GetPoseParameter( "r_pitch" ),0,1,-15,15)
+			local Yaw = math.Remap( self:GetPoseParameter( "r_yaw" ),0,1,-35,35) 
+
+			ply:SetPoseParameter( "aim_pitch", Pitch * 3 - 10 )
+			ply:SetPoseParameter( "aim_yaw", Yaw * 1.5 )
+
+			ply:SetPoseParameter( "head_pitch", -Pitch * 2 )
+			ply:SetPoseParameter( "head_yaw", -Yaw * 3 )
+
+			ply:SetPoseParameter( "move_x", 0 )
+			ply:SetPoseParameter( "move_y", 0 )
+
+			ply:InvalidateBoneCache()
+		end
+
+		GAMEMODE:GrabEarAnimation( ply )
+		GAMEMODE:MouthMoveAnimation( ply )
+	end
+
+	return false
+end
+
