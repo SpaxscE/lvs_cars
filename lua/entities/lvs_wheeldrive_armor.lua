@@ -51,25 +51,13 @@ if SERVER then
 	end
 
 	function ENT:TakeTransmittedDamage( dmginfo )
-		local Damage = dmginfo:GetDamage()
 		local Force = dmginfo:GetDamageForce()
 
-		if dmginfo:IsDamageType( DMG_BURN ) then return true end
-
-		local IsBlastDamage = dmginfo:IsDamageType( DMG_BLAST )
-
-		if not IsBlastDamage then
-			if Force:Length() <= self:GetIgnoreForce() then return false end
-		end
+		local Damage = dmginfo:GetDamage()
+		local DamageForce = Force:Length()
 
 		local CurHealth = self:GetHP()
-
 		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
-
-		self:OnHealthChanged( dmginfo, CurHealth, NewHealth )
-		self:SetHP( NewHealth )
-
-		if not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER + DMG_DIRECT + DMG_BLAST ) then return end
 
 		local pos = dmginfo:GetDamagePosition()
 		local dir = Force:GetNormalized()
@@ -80,41 +68,48 @@ if SERVER then
 			filter = function( ent ) return ent == self:GetBase() end
 		} )
 
-		if trace.Entity == self:GetBase() and not IsBlastDamage then
-			local Ax = math.acos( math.Clamp( trace.HitNormal:Dot( dir ) ,-1,1) )
-			local Fx = math.cos( Ax )
+		local DotHitNormal = math.Clamp( trace.HitNormal:Dot( dir ) ,-1,1) 
 
+		local Armor = self:GetIgnoreForce()
+		local ArmorEffective = Armor / math.abs( DotHitNormal )
+
+		if DamageForce <= ArmorEffective then
+			if trace.Entity ~= self:GetBase() then return false end
+
+			local Ax = math.acos( DotHitNormal )
 			local HitAngle = 90 - (180 - math.deg( Ax ))
 
-			if HitAngle > 10 then
-				local hit_decal = ents.Create( "lvs_wheeldrive_armor_penetrate" )
-				hit_decal:SetPos( trace.HitPos )
-				hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
-				hit_decal:Spawn()
-				hit_decal:Activate()
-				hit_decal:SetParent( trace.Entity )
-			else
+			if HitAngle > 15 then return false end
 
-				local NewDir = dir - trace.HitNormal * Fx * 2
+			local NewDir = dir - trace.HitNormal * math.cos( Ax ) * 2
 
-				local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
-				hit_decal:SetPos( trace.HitPos )
-				hit_decal:SetAngles( NewDir:Angle() )
-				hit_decal:Spawn()
-				hit_decal:Activate()
-				hit_decal:EmitSound("lvs/armor_rico"..math.random(1,4)..".wav", 95, 100, math.min( dmginfo:GetDamage() / 1000, 1 ) )
+			local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
+			hit_decal:SetPos( trace.HitPos )
+			hit_decal:SetAngles( NewDir:Angle() )
+			hit_decal:Spawn()
+			hit_decal:Activate()
+			hit_decal:EmitSound("lvs/armor_rico"..math.random(1,4)..".wav", 95, 100, math.min( dmginfo:GetDamage() / 1000, 1 ) )
 
-				local PhysObj = hit_decal:GetPhysicsObject()
-				if IsValid( PhysObj ) then
-					PhysObj:EnableDrag( false )
-					PhysObj:SetVelocityInstantaneous( NewDir * 2000 + Vector(0,0,250) )
-					PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
-				end
+			local PhysObj = hit_decal:GetPhysicsObject()
+			if not IsValid( PhysObj ) then return false end
 
-				self:SetHP( CurHealth )
+			PhysObj:EnableDrag( false )
+			PhysObj:SetVelocityInstantaneous( NewDir * 2000 + Vector(0,0,250) )
+			PhysObj:SetAngleVelocityInstantaneous( VectorRand() * 250 )
 
-				return
-			end
+			return false
+		end
+
+		self:OnHealthChanged( dmginfo, CurHealth, NewHealth )
+		self:SetHP( NewHealth )
+
+		if trace.Entity == self:GetBase() then
+			local hit_decal = ents.Create( "lvs_wheeldrive_armor_penetrate" )
+			hit_decal:SetPos( trace.HitPos )
+			hit_decal:SetAngles( trace.HitNormal:Angle() + Angle(90,0,0) )
+			hit_decal:Spawn()
+			hit_decal:Activate()
+			hit_decal:SetParent( trace.Entity )
 		end
 
 		if NewHealth <= 0 then

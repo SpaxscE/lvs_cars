@@ -40,6 +40,9 @@ ENT.PhysicsDampingReverse = true
 
 ENT.lvsShowInSpawner = true
 
+ENT.WheelBrakeAutoLockup = true
+ENT.WheelBrakeLockupRPM = 15
+
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/222/eng_idle_loop.wav",

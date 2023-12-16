@@ -69,7 +69,7 @@ function EFFECT:Init( data )
 
 	if self.SparkSurface[ surfaceName ] then
 		if IsValid( ent ) and ent.LVS then
-			if (90 - math.deg( math.acos( math.Clamp( -dir:Dot( bullet_dir ) ,-1,1) ) )) > 10 then
+			if (90 - math.deg( math.acos( math.Clamp( -dir:Dot( bullet_dir ) ,-1,1) ) )) > 15 then
 				local effectdata = EffectData()
 				effectdata:SetOrigin( pos )
 				util.Effect( "cball_explode", effectdata, true, true )

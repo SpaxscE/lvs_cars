@@ -185,8 +185,8 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 		mins = mins,
 		maxs = maxs,
 		Callback = function( tbl, ent, dmginfo )
-			if not IsValid( Armor ) then return true end
-
+			if not IsValid( Armor ) or not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER ) then return true end
+	
 			local Damage = dmginfo:GetDamage()
 			local DamageRemaining = math.max( Damage - Armor:GetHP(), 0 )
 			local DidDamage = Armor:TakeTransmittedDamage( dmginfo )

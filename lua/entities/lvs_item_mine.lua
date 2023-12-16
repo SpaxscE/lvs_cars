@@ -71,7 +71,7 @@ if SERVER then
 			local dmginfo = DamageInfo()
 			dmginfo:SetDamage( self:GetDamage() )
 			dmginfo:SetAttacker( IsValid( self:GetAttacker() ) and self:GetAttacker() or self )
-			dmginfo:SetDamageType( DMG_DIRECT + DMG_BLAST )
+			dmginfo:SetDamageType( DMG_BLAST )
 			dmginfo:SetInflictor( self )
 			dmginfo:SetDamagePosition( Pos )
 
