@@ -57,7 +57,6 @@ if SERVER then
 		local DamageForce = Force:Length()
 
 		local CurHealth = self:GetHP()
-		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
 
 		local pos = dmginfo:GetDamagePosition()
 		local dir = Force:GetNormalized()
@@ -88,7 +87,7 @@ if SERVER then
 			hit_decal:SetAngles( NewDir:Angle() )
 			hit_decal:Spawn()
 			hit_decal:Activate()
-			hit_decal:EmitSound("lvs/armor_rico"..math.random(1,4)..".wav", 95, 100, math.min( dmginfo:GetDamage() / 1000, 1 ) )
+			hit_decal:EmitSound("lvs/armor_rico"..math.random(1,6)..".wav", 95, 100, math.min( dmginfo:GetDamage() / 1000, 1 ) )
 
 			local PhysObj = hit_decal:GetPhysicsObject()
 			if not IsValid( PhysObj ) then return false end
@@ -99,6 +98,8 @@ if SERVER then
 
 			return false
 		end
+
+		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
 
 		self:OnHealthChanged( dmginfo, CurHealth, NewHealth )
 		self:SetHP( NewHealth )
