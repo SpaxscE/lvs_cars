@@ -72,13 +72,17 @@ if SERVER then
 		local Armor = self:GetIgnoreForce()
 		local ArmorEffective = Armor / math.abs( DotHitNormal )
 
+		if math.abs( DotHitNormal ) > 0.9 then
+			ArmorEffective = Armor
+		end
+
 		if DamageForce <= ArmorEffective then
 			if trace.Entity ~= self:GetBase() then return false end
 
 			local Ax = math.acos( DotHitNormal )
 			local HitAngle = 90 - (180 - math.deg( Ax ))
 
-			if HitAngle > 15 then return false end
+			if HitAngle > 30 then return false end
 
 			local NewDir = dir - trace.HitNormal * math.cos( Ax ) * 2
 
