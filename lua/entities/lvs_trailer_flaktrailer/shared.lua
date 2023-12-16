@@ -13,7 +13,7 @@ ENT.AdminSpawnable		= false
 
 ENT.MDL = "models/blu/flakcarriage.mdl"
 
-ENT.AITEAM = 1
+ENT.AITEAM = 0
 
 ENT.MaxHealth = 200
 

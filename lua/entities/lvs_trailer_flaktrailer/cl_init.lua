@@ -1,5 +1,8 @@
 include("shared.lua")
 
+function ENT:LVSHudPaintVehicleIdentifier( X, Y, In_Col, target_ent )
+end
+
 function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel, oil, ammeter )
 	local Prongs = self:GetProng()
 
