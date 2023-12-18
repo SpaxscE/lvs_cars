@@ -59,6 +59,8 @@ function ENT:Initialize()
 	local Dir = self:GetUp()
 
 	self.emitter = ParticleEmitter( Pos, false )
+
+	self:EmitSound( "lvs/armor_takedamage_"..math.random(1,3)..".wav", 95 )
 end
 
 function ENT:Smoke()
