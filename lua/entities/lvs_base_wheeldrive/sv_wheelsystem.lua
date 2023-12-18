@@ -2,6 +2,17 @@ ENT._WheelEnts = {}
 ENT._WheelAxleID = 0
 ENT._WheelAxleData = {}
 
+function ENT:ClearWheels()
+	for _, ent in pairs( self:GetWheels() ) do
+		ent:Remove()
+	end
+
+	table.Empty( self._WheelEnts )
+	table.Empty( self._WheelAxleData )
+
+	self._WheelAxleID = 0
+end
+
 function ENT:GetWheels()
 	for id, ent in pairs( self._WheelEnts ) do
 		if IsValid( ent ) then continue end
