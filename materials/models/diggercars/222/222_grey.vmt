@@ -1,12 +1,18 @@
-"VertexLitGeneric"
+"VertexlitGeneric"
 {
 	"$baseTexture" "models/DiggerCars/222/222_grey"
 	"$bumpmap" "models/DiggerCars/222/222_nm"
+
+	"$detail" "models/diggercars/sdkfz250/panzerivg_detail_d"
+	"$detailscale" "10"
+	"$detailblendfactor" "2"
+	"$detailblendmode" "0"
+
 	"$phong" "1" 
-	"$phongboost" "0.04" 
+	"$phongboost" "0.08" 
 	"$phongexponent" 3
 	"$phongfresnelranges" "[1 1 1]" 
-	"$colorfix" "{255 255 255}"
+	"$colorfix" "{155 155 155}"
 	"Proxies"
 	{
 		"Equals"
@@ -16,6 +22,18 @@
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
