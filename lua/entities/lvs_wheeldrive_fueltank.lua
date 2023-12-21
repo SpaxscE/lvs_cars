@@ -53,7 +53,7 @@ if SERVER then
 				dmg:SetDamageType( DMG_BURN )
 				Base:TakeDamageInfo( dmg )
 
-				self:SetFuel( math.max( self:GetFuel() - 0.01, 0 ) )
+				self:SetFuel( math.max( self:GetFuel() - 0.05, 0 ) )
 			else
 				self:SetDestroyed( false )
 			end
