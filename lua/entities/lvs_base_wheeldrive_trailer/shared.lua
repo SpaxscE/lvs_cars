@@ -35,7 +35,7 @@ function ENT:SetupDataTables()
 end
 
 function ENT:GetVehicleType()
-	return "trailer"
+	return "LBaseTrailer"
 end
 
 function ENT:StartCommand( ply, cmd )
