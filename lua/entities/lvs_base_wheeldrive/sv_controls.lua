@@ -82,7 +82,7 @@ function ENT:CalcThrottle( ply )
 	local KeyThrottle = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBrakes = ply:lvsKeyDown( "CAR_BRAKE" )
 
-	if self.WheelBrakeAutoLockup and self:GetReverse() then
+	if self:GetReverse() then
 		KeyThrottle = ply:lvsKeyDown( "CAR_BRAKE" )
 		KeyBrakes = ply:lvsKeyDown( "CAR_THROTTLE" )
 	end
@@ -102,20 +102,20 @@ function ENT:CalcThrottle( ply )
 end
 
 function ENT:CalcHandbrake( ply )
-	if self:GetParkingBrake() or ply:lvsKeyDown( "CAR_HANDBRAKE" ) then
+	if ply:lvsKeyDown( "CAR_HANDBRAKE" ) then
 		self:EnableHandbrake()
 	else
 		self:ReleaseHandbrake()
 	end
 end
 
-function ENT:CalcAutoTransmission( ply )
+function ENT:CalcTransmission( ply )
 	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() )
 
 	local KeyForward = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBackward = ply:lvsKeyDown( "CAR_BRAKE" )
 
-	local ReverseVelocity = self.WheelBrakeAutoLockupReverseVelocity
+	local ReverseVelocity = self.AutoReverseVelocity
 
 	if KeyForward and KeyBackward then return end
 
@@ -144,58 +144,6 @@ function ENT:CalcAutoTransmission( ply )
 	if Reverse ~= self._oldKeyReverse then
 		self._oldKeyReverse = Reverse
 
-		self:EmitSound( self.TransShiftSound, 75 )
-	end
-end
-
-function ENT:CalcTransmission( ply )
-	if self.WheelBrakeAutoLockup then
-		if self:GetParkingBrake() then
-			self:SetParkingBrake( false )
-		end
-
-		self:CalcAutoTransmission( ply )
-
-		return
-	end
-
-	local KeyReverse = ply:lvsKeyDown( "CAR_REVERSE" )
-
-	if KeyReverse and self._KeyReversePressedTime then
-		local ForceHandbrake = (CurTime() - self._KeyReversePressedTime) > 1 and self:GetThrottle() == 0
-
-		if self._oldForceHandbrake ~= ForceHandbrake then
-			self._oldForceHandbrake = ForceHandbrake
-
-			if ForceHandbrake then
-				self:SetParkingBrake( not self:GetParkingBrake() )
-
-				if self:GetParkingBrake() then
-					self:SetReverse( false )
-				end
-			end
-		end
-	end
-
-	if KeyReverse ~= self._oldKeyReverse then
-		self._oldKeyReverse = KeyReverse
-
-		if KeyReverse then
-			if not self:GetParkingBrake() then
-				self._KeyReversePressedTime = CurTime()
-			end
-		else
-			self._KeyReversePressedTime = nil
-
-			return
-		end
-
-		if self:GetParkingBrake() then
-			self:SetParkingBrake( false )
-			return
-		end
-
-		self:SetReverse( not self:GetReverse() )
 		self:EmitSound( self.TransShiftSound, 75 )
 	end
 end

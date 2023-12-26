@@ -249,14 +249,8 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			end
 		end
 	else
-		if self.WheelBrakeAutoLockup then
-			if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
-				ent:LockRotation()
-			else
-				if ent:IsRotationLocked() then
-					ent:ReleaseRotation()
-				end
-			end
+		if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
+			ent:LockRotation()
 		else
 			if ent:IsRotationLocked() then
 				ent:ReleaseRotation()

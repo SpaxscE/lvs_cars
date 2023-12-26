@@ -59,9 +59,9 @@ ENT.PhysicsDampingReverse = false
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 
-ENT.WheelBrakeAutoLockup = false
-ENT.WheelBrakeAutoLockupReverseVelocity = 50
-ENT.WheelBrakeLockupRPM = 50
+ENT.AutoReverseVelocity = 50
+
+ENT.WheelBrakeLockupRPM = 20
 
 ENT.WheelBrakeForce = 400
 
@@ -98,7 +98,6 @@ function ENT:SetupDataTables()
 	self:AddDT( "Int", "TurnMode" )
 
 	self:AddDT( "Bool", "Reverse" )
-	self:AddDT( "Bool", "ParkingBrake" )
 	self:AddDT( "Bool", "NWHandBrake" )
 
 	self:AddDT( "Entity", "Engine" )

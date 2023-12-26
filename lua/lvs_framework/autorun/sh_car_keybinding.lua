@@ -30,13 +30,6 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			cmd = "lvs_car_handbrake"
 		},
 		{
-			name = "CAR_REVERSE",
-			category = "LVS-Car",
-			name_menu = "Toggle Reverse",
-			default = "noclip",
-			cmd = "lvs_car_toggle_reverse"
-		},
-		{
 			name = "CAR_STEER_LEFT",
 			category = "LVS-Car",
 			name_menu = "Steer Left",

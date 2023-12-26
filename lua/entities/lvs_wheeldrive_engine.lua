@@ -220,7 +220,7 @@ function ENT:HandleEngineSounds( vehicle )
 	local subGeared = vehVel - (self._smVelGeared or 0)
 	local VelocityGeared = vehVel
 
-	if wheelVel == 0 and vehicle:GetParkingBrake() then
+	if wheelVel == 0 and vehicle:GetNWHandBrake() then
 		VelocityGeared = PitchValue * Throttle
 		Vel = VelocityGeared
 	end

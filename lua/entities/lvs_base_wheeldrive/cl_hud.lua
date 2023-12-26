@@ -110,59 +110,33 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	if not self:GetEngineActive() then
 		draw.SimpleText( "X" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	else
-		if self:GetParkingBrake() then
-			local ThrottleActive = Throttle == 0 or Throttle == 1
-
-			if oldThrottleActive ~= ThrottleActive then
-				oldThrottleActive = ThrottleActive
-				if ThrottleActive then
-					WaveScale = 1
-				end
-			end
-
-			if WaveScale > 0 then
-				WaveScale = math.max( WaveScale - RealFrameTime() * 2, 0 )
+		oldThrottleActive = false
 	
-				local WaveRadius = (1 - WaveScale) * H * 1.5
+		local Reverse = self:GetReverse()
 
-				surface.SetDrawColor( 255, 0, 0, 255 * WaveScale )
-				surface.SetMaterial( WaveMaterial )
-	
-				surface.DrawTexturedRectRotated( hX, hY, WaveRadius, WaveRadius, 0 )
+		if oldReverse ~= Reverse then
+			oldReverse = Reverse
 
-				draw.SimpleText( "P" , "LVS_FONT",  hX, hY, Color(255,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			else
-				draw.SimpleText( "P" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			WaveScale = 1
+		end
+
+		if WaveScale > 0 then
+			WaveScale = math.max( WaveScale - RealFrameTime() * 2, 0 )
+
+			local WaveRadius = (1 - WaveScale) * H * 1.5
+
+			surface.SetDrawColor( 0, 127, 255, 255 * WaveScale ^ 2 )
+			surface.SetMaterial( WaveMaterial )
+
+			surface.DrawTexturedRectRotated( hX, hY, WaveRadius, WaveRadius, 0 )
+
+			if not Reverse then
+				draw.SimpleText( "D" , "LVS_FONT",  hX, hY, Color(0,0,0,math.min(800 * WaveScale ^ 2,255)), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
-		else
-			oldThrottleActive = false
-		
-			local Reverse = self:GetReverse()
+		end
 
-			if oldReverse ~= Reverse then
-				oldReverse = Reverse
-
-				WaveScale = 1
-			end
-
-			if WaveScale > 0 then
-				WaveScale = math.max( WaveScale - RealFrameTime() * 2, 0 )
-	
-				local WaveRadius = (1 - WaveScale) * H * 1.5
-
-				surface.SetDrawColor( 0, 127, 255, 255 * WaveScale ^ 2 )
-				surface.SetMaterial( WaveMaterial )
-	
-				surface.DrawTexturedRectRotated( hX, hY, WaveRadius, WaveRadius, 0 )
-
-				if not Reverse then
-					draw.SimpleText( "D" , "LVS_FONT",  hX, hY, Color(0,0,0,math.min(800 * WaveScale ^ 2,255)), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-				end
-			end
-
-			if Reverse then
-				draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			end
+		if Reverse then
+			draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 		end
 	end
 

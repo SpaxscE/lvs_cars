@@ -32,9 +32,6 @@ ENT.TransGearsReverse = 1
 
 ENT.lvsShowInSpawner = true
 
-ENT.WheelBrakeAutoLockup = true
-ENT.WheelBrakeLockupRPM = 15
-
 ENT.EngineSounds = {
 	{
 		sound = "lvs/vehicles/halftrack/eng_idle_loop.wav",

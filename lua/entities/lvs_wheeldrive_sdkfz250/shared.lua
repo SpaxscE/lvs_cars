@@ -37,9 +37,6 @@ ENT.TransGearsReverse = 1
 
 ENT.lvsShowInSpawner = true
 
-ENT.WheelBrakeAutoLockup = true
-ENT.WheelBrakeLockupRPM = 15
-
 ENT.HornSound = "lvs/horn1.wav"
 ENT.HornPos = Vector(70,0,40)
 
