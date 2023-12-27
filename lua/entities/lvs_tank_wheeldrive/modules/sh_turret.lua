@@ -1,3 +1,5 @@
+ENT.TurretPodIndex = 1 -- 1 = driver
+
 ENT.TurretAimRate = 25
 
 ENT.TurretRotationSound = "vehicles/tank_turret_loop1.wav"
@@ -50,7 +52,7 @@ if CLIENT then
 	end
 
 	function ENT:CalcTurret()
-		local pod = self:GetDriverSeat()
+		local pod = self:GetPassengerSeat( self.TurretPodIndex )
 
 		if not IsValid( pod ) then return end
 
@@ -189,16 +191,20 @@ function ENT:IsTurretEnabled()
 
 	if not self:GetTurretEnabled() then return false end
 
-	return IsValid( self:GetDriver() ) or self:GetAI()
+	return IsValid( self:GetPassenger( self.TurretPodIndex ) ) or self:GetAI()
 end
 
 function ENT:AimTurret()
 	if not self:IsTurretEnabled() then if SERVER then self:StopTurretSound() self:StopTurretSoundDMG() end return end
 
-	local AimAngles = self:WorldToLocalAngles( self:GetAimVector():Angle() )
+	local weapon = self:GetWeaponHandler( self.TurretPodIndex )
+
+	if not IsValid( weapon ) then return end
+
+	local AimAngles = self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
 
 	if self.TurretFakeBarrel then
-		AimAngles = self:WorldToLocalAngles( (self:LocalToWorld( self.TurretFakeBarrelRotationCenter ) - self:GetEyeTrace().HitPos):Angle() )
+		AimAngles = self:WorldToLocalAngles( (self:LocalToWorld( self.TurretFakeBarrelRotationCenter ) - weapon:GetEyeTrace().HitPos):Angle() )
 	end
 
 	local AimRate = self.TurretAimRate * FrameTime() 
