@@ -53,6 +53,22 @@ function ENT:CreateSteerMaster( TargetEntity )
 	return Master
 end
 
+function ENT:CreateRotationJoint( Wheel, Master )
+	local Lock = 0.0001
+
+	local B1 = constraint.AdvBallsocket( Wheel,Master,0,0,vector_origin,vector_origin,0,0,-180,-Lock,-Lock,180,Lock,Lock,0,0,0,1,1)
+	B1.DoNotDuplicate = true
+
+	local B2 = constraint.AdvBallsocket( Master,Wheel,0,0,vector_origin,vector_origin,0,0,-180,Lock,Lock,180,-Lock,-Lock,0,0,0,1,1)
+	B2.DoNotDuplicate = true
+
+	local B3 = constraint.AdvBallsocket( Wheel,Master,0,0,vector_origin,vector_origin,0,0,-180,Lock,Lock,180,-Lock,-Lock,0,0,0,1,1)
+	B3.DoNotDuplicate = true
+
+	local B4 = constraint.AdvBallsocket( Master,Wheel,0,0,vector_origin,vector_origin,0,0,-180,-Lock,-Lock,180,Lock,Lock,0,0,0,1,1)
+	B4.DoNotDuplicate = true
+end
+
 function ENT:AddWheel( data )
 	if not istable( data ) or not isvector( data.pos ) then return end
 
@@ -117,19 +133,7 @@ function ENT:AddWheel( data )
 
 	local Master = self:CreateSteerMaster( Wheel )
 
-	local Lock = 0.0001
-
-	local B1 = constraint.AdvBallsocket( Wheel,Master,0,0,vector_origin,vector_origin,0,0,-180,-Lock,-Lock,180,Lock,Lock,0,0,0,1,1)
-	B1.DoNotDuplicate = true
-
-	local B2 = constraint.AdvBallsocket( Master,Wheel,0,0,vector_origin,vector_origin,0,0,-180,Lock,Lock,180,-Lock,-Lock,0,0,0,1,1)
-	B2.DoNotDuplicate = true
-
-	local B3 = constraint.AdvBallsocket( Wheel,Master,0,0,vector_origin,vector_origin,0,0,-180,Lock,Lock,180,-Lock,-Lock,0,0,0,1,1)
-	B3.DoNotDuplicate = true
-
-	local B4 = constraint.AdvBallsocket( Master,Wheel,0,0,vector_origin,vector_origin,0,0,-180,-Lock,-Lock,180,Lock,Lock,0,0,0,1,1)
-	B4.DoNotDuplicate = true
+	self:CreateRotationJoint( Wheel, Master )
 
 	Wheel:SetMaster( Master )
 
