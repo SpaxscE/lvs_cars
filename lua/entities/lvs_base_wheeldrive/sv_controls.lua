@@ -110,6 +110,8 @@ function ENT:CalcHandbrake( ply )
 end
 
 function ENT:CalcTransmission( ply )
+	if not self.ForwardAngle then return end
+
 	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() )
 
 	local KeyForward = ply:lvsKeyDown( "CAR_THROTTLE" )
