@@ -75,7 +75,11 @@ if CLIENT then
 else
 	util.AddNetworkString( "lvs_turret_sync_other" )
 
-	function ENT:OnDriverExitVehicle( ply )
+	function ENT:OnPassengerChanged( Old, New, PodIndex )
+		if PodIndex ~= self.TurretPodIndex then return end
+
+		if IsValid( New ) then return end
+
 		net.Start( "lvs_turret_sync_other" )
 			net.WriteEntity( self )
 			net.WriteFloat( self:GetTurretPitch() )

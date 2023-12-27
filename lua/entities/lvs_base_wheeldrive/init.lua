@@ -378,6 +378,8 @@ function ENT:OnDriverExitVehicle( ply )
 end
 
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
+	self:OnPassengerChanged( Old, New, 1 )
+
 	if VehicleIsActive then
 
 		self:OnDriverEnterVehicle( New )
