@@ -116,17 +116,13 @@ function ENT:PostInitialize( PObj )
 		self.HornSND:SetDoppler( true )
 	end
 
-	self:PhysicsInitialize( PObj )
+	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
+	PObj:EnableDrag( false )
+	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 
 	SetMinimumAngularVelocityTo( 24000 )
 
 	self:EnableHandbrake()
-end
-
-function ENT:PhysicsInitialize( PObj )
-	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
-	PObj:EnableDrag( false )
-	PObj:SetInertia( self.PhysicsInertia * self.PhysicsWeightScale )
 end
 
 function ENT:StartEngine()
