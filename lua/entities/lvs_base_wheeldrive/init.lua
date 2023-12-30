@@ -429,9 +429,23 @@ end
 function ENT:OnMaintenance()
 	local FuelTank = self:GetFuelTank()
 
-	if not IsValid( FuelTank ) then return end
+	if IsValid( FuelTank ) then
+		FuelTank:ExtinguishAndRepair()
 
-	FuelTank:ExtinguishAndRepair()
+		if FuelTank:GetFuel() ~= 1 then
+			FuelTank:SetFuel( 1 )
+
+			self:OnRefueled()
+		end
+	end
+
+	for _, entity in pairs( self:GetChildren() ) do
+		if entity:GetClass() ~= "lvs_wheeldrive_armor" then continue end
+
+		entity:SetHP( entity:GetMaxHP() )
+		entity:SetDestroyed( false )
+		entity:OnRepaired()
+	end
 end
 
 function ENT:OnSuperCharged( enable )
