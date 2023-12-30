@@ -183,4 +183,14 @@ function ENT:OnExploded()
 end
 
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
+	self:OnPassengerChanged( Old, New, 1 )
+
+	if VehicleIsActive then
+
+		self:OnDriverEnterVehicle( New )
+
+		return
+	end
+
+	self:OnDriverExitVehicle( Old )
 end

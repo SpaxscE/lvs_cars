@@ -161,3 +161,10 @@ function ENT:DoAttackSequence()
 
 	self:DoReloadSequence( 1 )
 end
+
+function ENT:OnDriverEnterVehicle( ply )
+	ply:SetCollisionGroup(COLLISION_GROUP_PLAYER)
+end
+
+function ENT:OnDriverExitVehicle( ply )
+end

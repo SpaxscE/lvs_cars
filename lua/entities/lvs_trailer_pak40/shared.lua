@@ -58,7 +58,7 @@ function ENT:CalcMainActivity( ply )
 		end 
 	end 
 
-	ply.CalcIdeal = ACT_STAND
+	ply.CalcIdeal = ACT_CROUCHIDLE
 	ply.CalcSeqOverride = ply:LookupSequence( "cidle_knife" )
 
 	return ply.CalcIdeal, ply.CalcSeqOverride
