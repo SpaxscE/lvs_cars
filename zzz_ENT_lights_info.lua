@@ -4,8 +4,11 @@ ENT.Lights = {
 		Trigger = "main", --[[ Each table in ENT.Lights MUST have this! Everything below is optional.
 						valid triggers are:
 						"main"
+						"main+fog"
 						"main+high"
 						"main+brake"
+						"main+brake+turnright"
+						"main+brake+turnleft"
 						"high"
 						"brake"
 						"reverse"
