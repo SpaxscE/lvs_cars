@@ -70,7 +70,7 @@ if SERVER then
 
 		self.DoNotDuplicate = true
 
-		time.Simple(0, function()
+		timer.Simple(0, function()
 			if not IsValid( self ) then return end
 
 			self:PhysicsDestroy()
