@@ -70,7 +70,12 @@ if SERVER then
 
 		self.DoNotDuplicate = true
 
-		self:PhysicsDestroy()
+		time.Simple(0, function()
+			if not IsValid( self ) then return end
+
+			self:PhysicsDestroy()
+		end)
+
 		self:SetSolid( SOLID_NONE )
 		self:SetMoveType( MOVETYPE_NONE )
 
