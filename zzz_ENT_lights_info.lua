@@ -3,6 +3,7 @@ ENT.Lights = {
 	{
 		Trigger = "main", --[[ Each table in ENT.Lights MUST have this! Everything below is optional.
 						valid triggers are:
+						"active"
 						"main"
 						"main+fog"
 						"main+high"
