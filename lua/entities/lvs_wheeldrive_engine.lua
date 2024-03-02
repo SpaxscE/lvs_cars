@@ -299,6 +299,12 @@ function ENT:HandleEngineSounds( vehicle )
 		self._ClutchActive = false
 	end
 
+	if not self.EnginePitchStep then
+		self.EnginePitchStep = math.Clamp(vehicle.EngineMaxRPM / 10000, 0.6, 0.98)
+
+		return
+	end
+
 	for id, sound in pairs( self._ActiveSounds ) do
 		if not sound then continue end
 
@@ -309,7 +315,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue
 
-		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * 0.6) * MaxThrottle
+		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * self.EnginePitchStep) * MaxThrottle
 
 		local Pitch = data.Pitch + PitchAdd + (data.PitchMul - PitchAdd) * Ratio + Wobble
 		local PitchMul = data.UseDoppler and Doppler or 1
