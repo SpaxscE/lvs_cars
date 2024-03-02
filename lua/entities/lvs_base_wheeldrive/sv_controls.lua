@@ -133,12 +133,25 @@ function ENT:CalcTransmission( ply )
 		return
 	end
 
+	local T = CurTime()
+
 	if KeyForward and ForwardVelocity > -ReverseVelocity then
 		self:SetReverse( false )
 	end
 
 	if KeyBackward and ForwardVelocity < ReverseVelocity then
-		self:SetReverse( true )
+
+		if not self._toggleReverse then
+			self._toggleReverse = true
+
+			self._KeyBackTime = T + 0.4
+		end
+
+		if (self._KeyBackTime or 0) < T then
+			self:SetReverse( true )
+		end
+	else
+		self._toggleReverse = nil
 	end
 
 	local Reverse = self:GetReverse()
