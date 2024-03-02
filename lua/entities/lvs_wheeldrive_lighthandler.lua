@@ -357,6 +357,8 @@ function ENT:CalcTypeActivators( base )
 	local brake = base:GetBrake() > 0 and 1 or 0
 	local reverse = base:GetReverse() and 1 or 0
 
+	local engineActive = base:GetEngineActive() and 1 or 0
+
 	local Flasher = base:GetTurnFlasher()
 	local TurnMode = base:GetTurnMode()
 
@@ -365,6 +367,7 @@ function ENT:CalcTypeActivators( base )
 
 	local Rate = RealFrameTime() * 10
 
+	self:LerpActivator( "active", engineActive, Rate )
 	self:LerpActivator( "fog", fog, Rate )
 	self:LerpActivator( "brake", brake, Rate )
 	self:LerpActivator( "reverse", reverse, Rate )
