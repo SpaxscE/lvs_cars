@@ -373,18 +373,6 @@ function ENT:CalcTypeActivators( base )
 
 	local Rate = RealFrameTime() * 10
 
-	local T= CurTime() * 1500
-
-	local A = math.rad( T )
-	local B = math.rad( T + 90 )
-	local C = math.rad( T + 180 )
-	local D = math.rad( T + 270 )
-
-	self:LerpActivator( "siren_1", math.max( math.sin( A ) , 0 ), 1 )
-	self:LerpActivator( "siren_2", math.max( math.sin( B ) , 0 ), 1 )
-	self:LerpActivator( "siren_3", math.max( math.sin( C ) , 0 ), 1 )
-	self:LerpActivator( "siren_4", math.max( math.sin( D ) , 0 ), 1 )
-
 	self:LerpActivator( "active", engineActive, Rate )
 	self:LerpActivator( "fog", fog, Rate )
 	self:LerpActivator( "brake", brake, Rate )
