@@ -182,7 +182,7 @@ function ENT:CalcLights( ply )
 		end
 	end
 
-	if self._lights and (T - self._lightsPressedTime) > 0.3 then
+	if self._lights and (T - self._lightsPressedTime) > 0.4 then
 		lights = false
 	end
 
@@ -194,7 +194,7 @@ function ENT:CalcLights( ply )
 		else
 			if LightsHandler:GetActive() then
 				if self:HasHighBeams() then
-					if (T - (self._LightsPressedTime or 0)) >= 0.3 then
+					if (T - (self._LightsPressedTime or 0)) >= 0.4 then
 						LightsHandler:SetActive( false )
 						LightsHandler:SetHighActive( false )
 						LightsHandler:SetFogActive( false )
@@ -215,7 +215,7 @@ function ENT:CalcLights( ply )
 			else
 				self:EmitSound( "items/flashlight1.wav", 75, 100, 0.25 )
 
-				if self:HasFogLights() and (T - (self._LightsPressedTime or T)) >= 0.3 then
+				if self:HasFogLights() and (T - (self._LightsPressedTime or T)) >= 0.4 then
 					LightsHandler:SetFogActive( not LightsHandler:GetFogActive() )
 				else
 					LightsHandler:SetActive( true )

@@ -98,7 +98,13 @@ function ENT:InitializeLights( base )
 		if typedata.Sprites then
 			for lightsid, lightsdata in pairs( typedata.Sprites ) do
 				data[typeid].Sprites[ lightsid ].PixVis = util.GetPixelVisibleHandle()
-				data[typeid].Sprites[ lightsid ].pos = lightsdata.pos or vector_origin
+
+				if isstring( lightsdata.pos ) then
+					data[typeid].Sprites[ lightsid ].pos = base:LookupAttachment( lightsdata.pos )
+				else
+					data[typeid].Sprites[ lightsid ].pos = lightsdata.pos or vector_origin
+				end
+	
 				data[typeid].Sprites[ lightsid ].mat = isstring( lightsdata.mat ) and Material( lightsdata.mat ) or Material( "sprites/light_ignorez" )
 				data[typeid].Sprites[ lightsid ].width = lightsdata.width or 50
 				data[typeid].Sprites[ lightsid ].height = lightsdata.height or 50
@@ -367,6 +373,18 @@ function ENT:CalcTypeActivators( base )
 
 	local Rate = RealFrameTime() * 10
 
+	local T= CurTime() * 1500
+
+	local A = math.rad( T )
+	local B = math.rad( T + 90 )
+	local C = math.rad( T + 180 )
+	local D = math.rad( T + 270 )
+
+	self:LerpActivator( "siren_1", math.max( math.sin( A ) , 0 ), 1 )
+	self:LerpActivator( "siren_2", math.max( math.sin( B ) , 0 ), 1 )
+	self:LerpActivator( "siren_3", math.max( math.sin( C ) , 0 ), 1 )
+	self:LerpActivator( "siren_4", math.max( math.sin( D ) , 0 ), 1 )
+
 	self:LerpActivator( "active", engineActive, Rate )
 	self:LerpActivator( "fog", fog, Rate )
 	self:LerpActivator( "brake", brake, Rate )
@@ -533,7 +551,17 @@ function ENT:RenderLights( base, data )
 				if not base:BodygroupIsValid( lightsdata.bodygroup.name, lightsdata.bodygroup.active ) then continue end
 			end
 
-			local pos = base:LocalToWorld( lightsdata.pos )
+			local pos
+
+			if isnumber( lightsdata.pos ) then
+				local att = base:GetAttachment( lightsdata.pos )
+
+				if not att then continue end
+
+				pos = att.Pos
+			else
+				pos = base:LocalToWorld( lightsdata.pos )
+			end
 
 			local visible = util.PixelVisible( pos, 2, lightsdata.PixVis )
 
