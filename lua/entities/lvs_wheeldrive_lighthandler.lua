@@ -77,13 +77,27 @@ function ENT:Initialize()
 		return
 	end
 
-	self:InitializeLights( base )
+	if not istable( base.Lights ) then return end
+
+	self:InitializeLights( base, base.Lights )
+
+	for typeid, typedata in pairs( base.Lights ) do
+		if not typedata.Siren or not typedata.Trigger then continue end
+
+		if not istable( self._TriggerList ) then
+			self._TriggerList = {}
+		end
+
+		local data = {}
+		data.pattern =  string.Explode( "", typedata.Trigger )
+		data.cur = 1
+		data.max = #data.pattern
+
+		self._TriggerList[ typedata.Trigger ] = data
+	end
 end
 
-function ENT:InitializeLights( base )
-	local data = base.Lights
-
-	if not istable( data ) then return end
+function ENT:InitializeLights( base, data )
 
 	for typeid, typedata in pairs( data ) do
 		if not typedata.Trigger then
@@ -100,11 +114,12 @@ function ENT:InitializeLights( base )
 				data[typeid].Sprites[ lightsid ].PixVis = util.GetPixelVisibleHandle()
 
 				if isstring( lightsdata.pos ) then
-					data[typeid].Sprites[ lightsid ].pos = base:LookupAttachment( lightsdata.pos )
+					data[typeid].Sprites[ lightsid ].att = base:LookupAttachment( lightsdata.pos )
+					data[typeid].Sprites[ lightsid ].pos = vector_origin
 				else
 					data[typeid].Sprites[ lightsid ].pos = lightsdata.pos or vector_origin
 				end
-	
+
 				data[typeid].Sprites[ lightsid ].mat = isstring( lightsdata.mat ) and Material( lightsdata.mat ) or Material( "sprites/light_ignorez" )
 				data[typeid].Sprites[ lightsid ].width = lightsdata.width or 50
 				data[typeid].Sprites[ lightsid ].height = lightsdata.height or 50
@@ -427,6 +442,28 @@ function ENT:CalcTypeActivators( base )
 	self:LerpActivator( "main+fog", main * 0.75 + fog * 1.25, Rate )
 
 	self:LerpActivator( "high", high, Rate )
+
+	if not istable( self._TriggerList ) then return end
+
+	local RateSiren = math.min( Rate * 50, 1 )
+
+	for id, data in pairs( self._TriggerList ) do
+		self:LerpActivator( id, data.pattern[ data.cur ] or 0, RateSiren )
+	end
+
+	local T = CurTime()
+
+	if (self._calcNext or 0) > T then return end
+
+	self._calcNext = T + 0.1
+
+	for id, data in pairs( self._TriggerList ) do
+		data.cur = data.cur + 1
+
+		if data.cur > data.max then
+			data.cur = 1
+		end
+	end
 end
 
 ENT.LensFlare1 = Material( "effects/lvs/car_lensflare" )
@@ -541,8 +578,8 @@ function ENT:RenderLights( base, data )
 
 			local pos
 
-			if isnumber( lightsdata.pos ) then
-				local att = base:GetAttachment( lightsdata.pos )
+			if lightsdata.att then
+				local att = base:GetAttachment( lightsdata.att )
 
 				if not att then continue end
 
