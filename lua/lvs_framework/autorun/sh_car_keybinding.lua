@@ -58,6 +58,13 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			cmd = "lvs_car_menu"
 		},
 		{
+			name = "CAR_SIREN",
+			category = "LVS-Car",
+			name_menu = "Open Siren Menu",
+			default = "phys_swap",
+			cmd = "lvs_car_siren"
+		},
+		{
 			name = "CAR_SWAP_AMMO",
 			category = "LVS-Car",
 			name_menu = "Change Ammo Type",
