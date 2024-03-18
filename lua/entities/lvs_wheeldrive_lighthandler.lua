@@ -115,9 +115,8 @@ function ENT:InitializeLights( base, data )
 
 				if isstring( lightsdata.pos ) then
 					data[typeid].Sprites[ lightsid ].att = base:LookupAttachment( lightsdata.pos )
-					data[typeid].Sprites[ lightsid ].pos = vector_origin
 				else
-					data[typeid].Sprites[ lightsid ].pos = lightsdata.pos or vector_origin
+					data[typeid].Sprites[ lightsid ].pos = isvector( lightsdata.pos ) and lightsdata.pos or vector_origin
 				end
 
 				data[typeid].Sprites[ lightsid ].mat = isstring( lightsdata.mat ) and Material( lightsdata.mat ) or Material( "sprites/light_ignorez" )
@@ -153,7 +152,13 @@ function ENT:InitializeLights( base, data )
 
 		if typedata.DynamicLights then
 			for dLightid, dLightdata in pairs( typedata.DynamicLights ) do
-				data[typeid].DynamicLights[ dLightid ].pos = dLightdata.pos or vector_origin
+
+				if isstring( dLightdata.pos ) then
+					data[typeid].DynamicLights[ dLightid ].att = base:LookupAttachment( dLightdata.pos )
+				else
+					data[typeid].DynamicLights[ dLightid ].pos = isvector( dLightdata.pos ) and dLightdata.pos or vector_origin
+				end
+
 				data[typeid].DynamicLights[ dLightid ].colorR = dLightdata.colorR or 255
 				data[typeid].DynamicLights[ dLightid ].colorG = dLightdata.colorG or 255
 				data[typeid].DynamicLights[ dLightid ].colorB = dLightdata.colorB or 255
@@ -318,7 +323,20 @@ function ENT:LightsThink( base )
 
 				if not dlight then continue end
 
-				dlight.pos = base:LocalToWorld( dLightdata.pos )
+				local pos
+
+				if dLightdata.att then
+					local att = base:GetAttachment( dLightdata.att )
+
+					if not att then
+						dlight.pos = vector_origin
+					else
+						dlight.pos = att.Pos
+					end
+				else
+					dlight.pos = base:LocalToWorld( dLightdata.pos )
+				end
+
 				dlight.r = dLightdata.colorR
 				dlight.g =dLightdata.colorG
 				dlight.b = dLightdata.colorB
@@ -451,7 +469,7 @@ function ENT:CalcTypeActivators( base )
 		self:LerpActivator( id, data.pattern[ data.cur ] or 0, RateSiren )
 	end
 
-	local T = CurTime()
+	local T = CurTime() + self:EntIndex() * 1337
 
 	if (self._calcNext or 0) > T then return end
 
