@@ -97,6 +97,8 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Int", "TurnMode" )
 
+	self:AddDT( "Int", "SirenMode" )
+
 	self:AddDT( "Bool", "Reverse" )
 	self:AddDT( "Bool", "NWHandBrake" )
 
@@ -113,6 +115,7 @@ function ENT:SetupDataTables()
 
 	if SERVER then
 		self:SetMaxThrottle( 1 )
+		self:SetSirenMode( -1 )
 	end
 end
 
