@@ -99,6 +99,8 @@ end
 
 function ENT:InitializeLights( base, data )
 
+	if not istable( data ) then return end
+
 	for typeid, typedata in pairs( data ) do
 		if not typedata.Trigger then
 			data[typeid] = nil
@@ -134,8 +136,14 @@ function ENT:InitializeLights( base, data )
 				if typedata.Trigger == "high" then
 					data[typeid].ProjectedTextures[ projid ].PixVis = util.GetPixelVisibleHandle()
 				end
-				data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
-				data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
+
+				if isstring( projdata.pos ) then
+					data[typeid].ProjectedTextures[ projid ].att = base:LookupAttachment( projdata.pos )
+				else
+					data[typeid].ProjectedTextures[ projid ].pos = projdata.pos or vector_origin
+					data[typeid].ProjectedTextures[ projid ].ang = projdata.ang or angle_zero
+				end
+
 				data[typeid].ProjectedTextures[ projid ].mat = projdata.mat or (typedata.Trigger == "high" and "effects/flashlight/soft" or "effects/lvs/car_projectedtexture")
 				data[typeid].ProjectedTextures[ projid ].farz = projdata.farz or (typedata.Trigger == "high" and 4000 or 1000)
 				data[typeid].ProjectedTextures[ projid ].nearz = projdata.nearz or 65
@@ -299,8 +307,21 @@ function ENT:LightsThink( base )
 				if IsValid( proj ) then
 					if proj_active then
 						proj:SetBrightness( projdata.brightness * mul ) 
-						proj:SetPos( base:LocalToWorld( projdata.pos ) )
-						proj:SetAngles( base:LocalToWorldAngles( projdata.ang ) )
+
+						if projdata.att then
+							local att = base:GetAttachment( projdata.att )
+
+							if att then
+								proj:SetPos( att.Pos )
+								proj:SetAngles( att.Ang )
+							end
+						else
+							if not isvector( projdata.pos ) then self:InitializeLights( base ) break end
+
+							proj:SetPos( base:LocalToWorld( projdata.pos ) )
+							proj:SetAngles( base:LocalToWorldAngles( projdata.ang ) )
+						end
+
 						proj:Update()
 					else
 						self:RemoveProjectedTexture( id )
@@ -334,11 +355,13 @@ function ENT:LightsThink( base )
 						dlight.pos = att.Pos
 					end
 				else
+					if not isvector( dLightdata.pos ) then self:InitializeLights( base ) break end
+
 					dlight.pos = base:LocalToWorld( dLightdata.pos )
 				end
 
 				dlight.r = dLightdata.colorR
-				dlight.g =dLightdata.colorG
+				dlight.g = dLightdata.colorG
 				dlight.b = dLightdata.colorB
 				dlight.brightness = dLightdata.brightness
 				dlight.decay = dLightdata.decay
@@ -603,6 +626,8 @@ function ENT:RenderLights( base, data )
 
 				pos = att.Pos
 			else
+				if not isvector( lightsdata.pos ) then self:InitializeLights( base ) break end
+
 				pos = base:LocalToWorld( lightsdata.pos )
 			end
 
