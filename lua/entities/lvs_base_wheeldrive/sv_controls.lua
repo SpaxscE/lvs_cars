@@ -176,13 +176,13 @@ function ENT:CalcLights( ply )
 		self._lights = lights
 
 		if lights then
-			self._lightsPressedTime = T
+			self._LightsUnpressTime = T
 		else
-			self._lightsPressedTime = nil
+			self._LightsUnpressTime = nil
 		end
 	end
 
-	if self._lights and (T - self._lightsPressedTime) > 0.4 then
+	if self._lights and (T - self._LightsUnpressTime) > 0.4 then
 		lights = false
 	end
 
@@ -264,13 +264,53 @@ function ENT:StartCommand( ply, cmd )
 	self:CalcHandbrake( ply )
 	self:CalcTransmission( ply )
 	self:CalcLights( ply )
+	self:CalcSiren( ply )
+end
 
-	if not self.HornSound or not IsValid( self.HornSND ) then return end
+function ENT:CalcSiren( ply )
+	if istable( self.SirenSound ) and IsValid( self.SirenSND ) then
+		local siren = ply:lvsKeyDown( "CAR_SIREN" )
 
-	if ply:lvsKeyDown( "ATTACK" ) then
-		self.HornSND:Play()
-	else
-		self.HornSND:Stop()
+		local T = CurTime()
+
+		if self._siren ~= siren then
+			self._siren = siren
+
+			if siren then
+				self._sirenUnpressTime = T
+			else
+				self._sirenUnpressTime = nil
+			end
+		end
+
+		if self._siren and (T - self._sirenUnpressTime) > 0.4 then
+			siren = false
+		end
+
+		if siren ~= self._oldsiren then
+			if not isbool( self._oldsiren ) then self._oldsiren = siren return end
+
+			if siren then
+				self._SirenPressedTime = T
+				PrintChat("A")
+			else
+				if (T - (self._SirenPressedTime or 0)) >= 0.4 then
+					PrintChat("C")
+				else
+					PrintChat("B")
+				end
+			end
+
+			self._oldsiren = siren
+		end
+	end
+
+	if self.HornSound and IsValid( self.HornSND ) then
+		if ply:lvsKeyDown( "ATTACK" ) then
+			self.HornSND:Play()
+		else
+			self.HornSND:Stop()
+		end
 	end
 end
 

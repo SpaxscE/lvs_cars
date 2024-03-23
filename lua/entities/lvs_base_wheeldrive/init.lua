@@ -111,9 +111,17 @@ function ENT:PostInitialize( PObj )
 	if isstring( self.HornSound ) and isvector( self.HornPos ) then
 		if IsValid( self.HornSND ) then self.HornSND:Remove() end
 
-		self.HornSND = self:AddSoundEmitter( self.HornPos, self.HornSound, self.HornSoundInterior )
+		self.HornSND = self:AddSoundEmitter( self.HornPos or vector_origin, self.HornSound, self.HornSoundInterior )
 		self.HornSND:SetSoundLevel( 75 )
 		self.HornSND:SetDoppler( true )
+	end
+
+	if istable( self.SirenSound ) then
+		if IsValid( self.SirenSND ) then self.SirenSND:Remove() end
+
+		self.SirenSND = self:AddSoundEmitter( self.SirenPos or vector_origin, "common/null.wav" )
+		self.SirenSND:SetSoundLevel( 75 )
+		self.SirenSND:SetDoppler( true )
 	end
 
 	PObj:SetMass( self.PhysicsMass * self.PhysicsWeightScale )
