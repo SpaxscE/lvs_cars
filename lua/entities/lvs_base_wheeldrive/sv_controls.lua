@@ -268,8 +268,28 @@ function ENT:StartCommand( ply, cmd )
 end
 
 function ENT:CalcSiren( ply )
+	local horn = ply:lvsKeyDown( "ATTACK" )
+
 	if istable( self.SirenSound ) and IsValid( self.SirenSND ) then
+		local mode = self:GetSirenMode()
 		local siren = ply:lvsKeyDown( "CAR_SIREN" )
+
+		if mode ~= -1 then
+			if horn then
+				if self.SirenSound[ mode ].horn then
+					self:SetSirenSound( self.SirenSound[ mode ].horn )
+				end
+
+				horn = false
+				siren = false
+			else
+				if not siren then
+					if self.SirenSound[ mode ].siren then
+						self:SetSirenSound( self.SirenSound[ mode ].siren )
+					end
+				end
+			end
+		end
 
 		local T = CurTime()
 
@@ -292,32 +312,56 @@ function ENT:CalcSiren( ply )
 
 			if siren then
 				self._SirenPressedTime = T
-
-				self:Siren()
 			else
 				if (T - (self._SirenPressedTime or 0)) >= 0.4 then
 					self:StopSiren()
+				else
+					self:StartSiren()
 				end
 			end
 
 			self._oldsiren = siren
 		end
 	end
---[[
+
 	if self.HornSound and IsValid( self.HornSND ) then
-		if ply:lvsKeyDown( "ATTACK" ) then
+		if horn then
 			self.HornSND:Play()
 		else
 			self.HornSND:Stop()
 		end
 	end
-]]
 end
 
+function ENT:SetSirenSound( sound )
+	if sound then 
+		if sound ~= self._OldSirenSound then
+			if self._PreventSiren then return end
 
-function ENT:Siren()
-	if self._PreventSiren then return end
+			self._OldSirenSound = sound
 
+			self._PreventSiren = true
+
+			self.SirenSND:Stop()
+			self.SirenSND:SetSound( sound )
+			self.SirenSND:SetSoundInterior( sound )
+
+			timer.Simple( 0.1, function()
+				if not IsValid( self.SirenSND ) then return end
+
+				self.SirenSND:Play()
+	
+				self._PreventSiren = false
+			end )
+		end
+	else
+		self._OldSirenSound = nil
+
+		self.SirenSND:Stop()
+	end
+end
+
+function ENT:StartSiren()
 	local Mode = self:GetSirenMode()
 	local Max = #self.SirenSound
 
@@ -328,24 +372,7 @@ function ENT:Siren()
 	end
 
 	self:SetSirenMode( Next )
-
-	local sound = self.SirenSound[ Next ].siren
-
-	if sound then 
-		self.SirenSND:Stop()
-		self.SirenSND:SetSound( sound )
-		self.SirenSND:SetSoundInterior( sound )
-		
-PrintChat( sound )
-
-		timer.Simple( 0, function()
-			if not IsValid( self.SirenSND ) then return end
-
-			self.SirenSND:Play()
-		end )
-	else
-		self.SirenSND:Stop()
-	end
+	self:SetSirenSound( self.SirenSound[ Next ].siren )
 end
 
 function ENT:StopSiren()
