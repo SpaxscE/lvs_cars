@@ -421,9 +421,13 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 
 	self:SetReverse( false )
 
-	if not self.HornSound or not IsValid( self.HornSND ) then return end
+	if IsValid( self.SirenSND ) then
+		self.SirenSND:Stop()
+	end
 
-	self.HornSND:Stop()
+	if IsValid( self.HornSND ) then
+		self.HornSND:Stop()
+	end
 end
 
 function ENT:OnRefueled()
