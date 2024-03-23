@@ -292,19 +292,18 @@ function ENT:CalcSiren( ply )
 
 			if siren then
 				self._SirenPressedTime = T
-				PrintChat("A")
+
+				self:Siren()
 			else
 				if (T - (self._SirenPressedTime or 0)) >= 0.4 then
-					PrintChat("C")
-				else
-					PrintChat("B")
+					self:StopSiren()
 				end
 			end
 
 			self._oldsiren = siren
 		end
 	end
-
+--[[
 	if self.HornSound and IsValid( self.HornSND ) then
 		if ply:lvsKeyDown( "ATTACK" ) then
 			self.HornSND:Play()
@@ -312,6 +311,46 @@ function ENT:CalcSiren( ply )
 			self.HornSND:Stop()
 		end
 	end
+]]
+end
+
+
+function ENT:Siren()
+	if self._PreventSiren then return end
+
+	local Mode = self:GetSirenMode()
+	local Max = #self.SirenSound
+
+	local Next = Mode + 1
+
+	if Mode <= -1 or Next > Max then
+		Next = 1
+	end
+
+	self:SetSirenMode( Next )
+
+	local sound = self.SirenSound[ Next ].siren
+
+	if sound then 
+		self.SirenSND:Stop()
+		self.SirenSND:SetSound( sound )
+		self.SirenSND:SetSoundInterior( sound )
+		
+PrintChat( sound )
+
+		timer.Simple( 0, function()
+			if not IsValid( self.SirenSND ) then return end
+
+			self.SirenSND:Play()
+		end )
+	else
+		self.SirenSND:Stop()
+	end
+end
+
+function ENT:StopSiren()
+	self:SetSirenMode( -1 )
+	self.SirenSND:Stop()
 end
 
 function ENT:SetRoadkillAttacker( ply )

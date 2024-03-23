@@ -89,7 +89,12 @@ function ENT:Initialize()
 		end
 
 		local data = {}
-		data.pattern =  string.Explode( "", typedata.Trigger )
+		data.pattern = {}
+
+		for id, n in ipairs( string.Explode( "", typedata.Trigger ) ) do
+			data.pattern[ id ] = tonumber( n or 0 )
+		end
+
 		data.cur = 1
 		data.max = #data.pattern
 
@@ -486,6 +491,8 @@ function ENT:CalcTypeActivators( base )
 
 	if not istable( self._TriggerList ) then return end
 
+	local RateSiren = math.min( Rate * 50, 1 )
+
 	if base:GetSirenMode() <= 0 then
 		for id, data in pairs( self._TriggerList ) do
 			self:LerpActivator( id, 0, RateSiren )
@@ -494,10 +501,8 @@ function ENT:CalcTypeActivators( base )
 		return
 	end
 
-	local RateSiren = math.min( Rate * 50, 1 )
-
 	for id, data in pairs( self._TriggerList ) do
-		self:LerpActivator( id, data.pattern[ data.cur ] or 0, RateSiren )
+		self:LerpActivator( id, data.pattern[ data.cur ], RateSiren )
 	end
 
 	local T = CurTime() + self:EntIndex() * 1337
