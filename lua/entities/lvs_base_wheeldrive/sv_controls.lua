@@ -268,34 +268,19 @@ function ENT:StartCommand( ply, cmd )
 end
 
 function ENT:CalcSiren( ply )
+	local mode = self:GetSirenMode()
 	local horn = ply:lvsKeyDown( "ATTACK" )
 
-	if istable( self.SirenSound ) and IsValid( self.SirenSND ) then
-		local mode = self:GetSirenMode()
-		local siren = ply:lvsKeyDown( "CAR_SIREN" )
-
-		if mode > 0 then
-			if horn ~= self._oldKeyHorn then
-				self._oldKeyHorn = horn
-
-				if horn then
-					if self.SirenSound[ mode ].horn then
-						self:SetSirenSound( self.SirenSound[ mode ].horn )
-					end
-				else
-					if not siren then
-						if self.SirenSound[ mode ].siren then
-							self:SetSirenSound( self.SirenSound[ mode ].siren )
-						end
-					end
-				end
-			end
-
-			if horn then
-				horn = false
-				siren = false
-			end
+	if self.HornSound and IsValid( self.HornSND ) then
+		if horn and mode <= 0 then
+			self.HornSND:Play()
+		else
+			self.HornSND:Stop()
 		end
+	end
+
+	if istable( self.SirenSound ) and IsValid( self.SirenSND ) then
+		local siren = ply:lvsKeyDown( "CAR_SIREN" )
 
 		local T = CurTime()
 
@@ -327,19 +312,20 @@ function ENT:CalcSiren( ply )
 						self:SetSirenMode( 0 )
 					end
 				else
-					self:StartSiren()
+					self:StartSiren( horn, true )
 				end
 			end
 
 			self._oldsiren = siren
-		end
-	end
-
-	if self.HornSound and IsValid( self.HornSND ) then
-		if horn then
-			self.HornSND:Play()
 		else
-			self.HornSND:Stop()
+			if horn ~= self._OldKeyHorn then
+				self._OldKeyHorn = horn
+				if horn then
+					self:StartSiren( true, false )
+				else
+					self:StartSiren( false, false )
+				end
+			end
 		end
 	end
 end
@@ -366,18 +352,31 @@ function ENT:SetSirenSound( sound )
 	end
 end
 
-function ENT:StartSiren()
+function ENT:StartSiren( horn, incr )
 	local Mode = self:GetSirenMode()
 	local Max = #self.SirenSound
 
-	local Next = Mode + 1
+	local Next = Mode
 
-	if Mode <= -1 or Next > Max then
-		Next = 1
+	if incr then
+		Next = Next + 1
+
+		if Mode <= -1 or Next > Max then
+			Next = 1
+		end
+
+		self:SetSirenMode( Next )
 	end
 
-	self:SetSirenMode( Next )
-	self:SetSirenSound( self.SirenSound[ Next ].siren )
+	if not self.SirenSound[ Next ] then return end
+
+	if horn and self.SirenSound[ Next ].horn then
+		self:SetSirenSound( self.SirenSound[ Next ].horn )
+	else
+		if not self.SirenSound[ Next ].siren then return end
+
+		self:SetSirenSound( self.SirenSound[ Next ].siren )
+	end
 end
 
 function ENT:StopSiren()
