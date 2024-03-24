@@ -493,7 +493,7 @@ function ENT:CalcTypeActivators( base )
 
 	local RateSiren = math.min( Rate * 50, 1 )
 
-	if base:GetSirenMode() <= 0 then
+	if base:GetSirenMode() < 0 then
 		for id, data in pairs( self._TriggerList ) do
 			self:LerpActivator( id, 0, RateSiren )
 		end

@@ -421,8 +421,10 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 
 	self:SetReverse( false )
 
-	if IsValid( self.SirenSND ) then
-		self.SirenSND:Stop()
+	self:StopSiren()
+
+	if self:GetSirenMode() > 0 then
+		self:SetSirenMode( 0 )
 	end
 
 	if IsValid( self.HornSND ) then

@@ -274,20 +274,26 @@ function ENT:CalcSiren( ply )
 		local mode = self:GetSirenMode()
 		local siren = ply:lvsKeyDown( "CAR_SIREN" )
 
-		if mode ~= -1 then
-			if horn then
-				if self.SirenSound[ mode ].horn then
-					self:SetSirenSound( self.SirenSound[ mode ].horn )
-				end
+		if mode > 0 then
+			if horn ~= self._oldKeyHorn then
+				self._oldKeyHorn = horn
 
-				horn = false
-				siren = false
-			else
-				if not siren then
-					if self.SirenSound[ mode ].siren then
-						self:SetSirenSound( self.SirenSound[ mode ].siren )
+				if horn then
+					if self.SirenSound[ mode ].horn then
+						self:SetSirenSound( self.SirenSound[ mode ].horn )
+					end
+				else
+					if not siren then
+						if self.SirenSound[ mode ].siren then
+							self:SetSirenSound( self.SirenSound[ mode ].siren )
+						end
 					end
 				end
+			end
+
+			if horn then
+				horn = false
+				siren = false
 			end
 		end
 
@@ -314,7 +320,12 @@ function ENT:CalcSiren( ply )
 				self._SirenPressedTime = T
 			else
 				if (T - (self._SirenPressedTime or 0)) >= 0.4 then
-					self:StopSiren()
+					if mode >= 0 then
+						self:SetSirenMode( -1 )
+						self:StopSiren()
+					else
+						self:SetSirenMode( 0 )
+					end
 				else
 					self:StartSiren()
 				end
@@ -335,29 +346,23 @@ end
 
 function ENT:SetSirenSound( sound )
 	if sound then 
-		if sound ~= self._OldSirenSound then
-			if self._PreventSiren then return end
+		if self._PreventSiren then return end
 
-			self._OldSirenSound = sound
-
-			self._PreventSiren = true
-
-			self.SirenSND:Stop()
-			self.SirenSND:SetSound( sound )
-			self.SirenSND:SetSoundInterior( sound )
-
-			timer.Simple( 0.1, function()
-				if not IsValid( self.SirenSND ) then return end
-
-				self.SirenSND:Play()
-	
-				self._PreventSiren = false
-			end )
-		end
-	else
-		self._OldSirenSound = nil
+		self._PreventSiren = true
 
 		self.SirenSND:Stop()
+		self.SirenSND:SetSound( sound )
+		self.SirenSND:SetSoundInterior( sound )
+
+		timer.Simple( 0.1, function()
+			if not IsValid( self.SirenSND ) then return end
+
+			self.SirenSND:Play()
+
+			self._PreventSiren = false
+		end )
+	else
+		self:StopSiren()
 	end
 end
 
@@ -376,7 +381,8 @@ function ENT:StartSiren()
 end
 
 function ENT:StopSiren()
-	self:SetSirenMode( -1 )
+	if not IsValid( self.SirenSND ) then return end
+
 	self.SirenSND:Stop()
 end
 
