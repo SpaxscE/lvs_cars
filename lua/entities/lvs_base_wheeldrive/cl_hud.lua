@@ -172,6 +172,7 @@ local function DrawTexturedRect( X, Y, size, selected )
 	surface.DrawTexturedRectRotated( X, Y, size, size, 0 )
 end
 
+ENT.CarMenuSiren = Material( "lvs/carmenu_siren.png" )
 ENT.CarMenuHighbeam = Material( "lvs/carmenu_highbeam.png" )
 ENT.CarMenuLowbeam = Material( "lvs/carmenu_lowbeam.png" )
 ENT.CarMenuDisable = Material( "lvs/carmenu_cross.png" )
