@@ -300,7 +300,7 @@ function ENT:HandleEngineSounds( vehicle )
 	end
 
 	if not self.EnginePitchStep then
-		self.EnginePitchStep = math.Clamp(vehicle.EngineMaxRPM / 10000, 0.6, 0.98)
+		self.EnginePitchStep = math.Clamp(vehicle.EngineMaxRPM / 10000, 0.6, 0.9)
 
 		return
 	end
