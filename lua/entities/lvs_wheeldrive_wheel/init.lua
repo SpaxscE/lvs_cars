@@ -112,7 +112,7 @@ function ENT:lvsMakeSpherical( radius )
 	local base = self:GetBase()
 
 	if IsValid( base ) then
-		physprop = base.WheelPhysicsMaterial
+		physprop = base.WheelPhysicsMaterial or "jeeptire"
 	end
 
 	self:PhysicsInitSphere( radius, physprop )
