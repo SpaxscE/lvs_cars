@@ -320,6 +320,7 @@ function ENT:CalcSiren( ply )
 		else
 			if horn ~= self._OldKeyHorn then
 				self._OldKeyHorn = horn
+
 				if horn then
 					self:StartSiren( true, false )
 				else
@@ -370,10 +371,22 @@ function ENT:StartSiren( horn, incr )
 
 	if not self.SirenSound[ Next ] then return end
 
-	if horn and self.SirenSound[ Next ].horn then
+	if horn then
+		if not self.SirenSound[ Next ].horn then
+
+			self:SetSirenMode( 0 )
+
+			return
+		end
+
 		self:SetSirenSound( self.SirenSound[ Next ].horn )
 	else
-		if not self.SirenSound[ Next ].siren then return end
+		if not self.SirenSound[ Next ].siren then
+
+			self:SetSirenMode( 0 )
+
+			return
+		end
 
 		self:SetSirenSound( self.SirenSound[ Next ].siren )
 	end
