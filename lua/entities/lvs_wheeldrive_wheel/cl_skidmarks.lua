@@ -10,6 +10,8 @@ ENT.SkidmarkAlpha = 150
 
 ENT.SkidmarkSurfaces = {
 	["concrete"] = true,
+	["plastic_barrel_buoyant"] = true,
+	["phx_rubbertire2"] = true,
 	["tile"] = true,
 	["metal"] = true,
 	["boulder"] = true,
