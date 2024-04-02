@@ -56,6 +56,7 @@ ENT.PhysicsDampingSpeed = 4000
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = false
 
+ENT.WheelPhysicsMaterial = "jeeptire"
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
 

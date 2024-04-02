@@ -107,7 +107,15 @@ function ENT:lvsMakeSpherical( radius )
 		radius = math.max( radius.x, radius.y, radius.z )
 	end
 
-	self:PhysicsInitSphere( radius, "jeeptire" )
+	local physprop = "jeeptire" 
+
+	local base = self:GetBase()
+
+	if IsValid( base ) then
+		physprop = base.WheelPhysicsMaterial
+	end
+
+	self:PhysicsInitSphere( radius, physprop )
 
 	self:SetRadius( radius )
 
