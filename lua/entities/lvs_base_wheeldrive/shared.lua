@@ -97,7 +97,7 @@ function ENT:SetupDataTables()
 	self:AddDT( "Float", "WheelVelocity" )
 
 	self:AddDT( "Int", "TurnMode" )
-	self:AddDT( "Int", "NWGear" )
+
 	self:AddDT( "Int", "SirenMode" )
 
 	self:AddDT( "Bool", "Reverse" )
@@ -117,22 +117,7 @@ function ENT:SetupDataTables()
 	if SERVER then
 		self:SetMaxThrottle( 1 )
 		self:SetSirenMode( -1 )
-		self:SetNWGear( -1 )
 	end
-end
-
-function ENT:GetGear()
-	local Gear = self:GetNWGear()
-
-	if Gear <= 0 then
-		return -1
-	end
-
-	if self:GetReverse() then
-		return math.Clamp( Gear, 1, self.TransGearsReverse )
-	end
-
-	return math.Clamp( Gear, 1, self.TransGears )
 end
 
 function ENT:TurretSystemDT()
@@ -172,30 +157,6 @@ function ENT:GetMaxSteerAngle()
 end
 
 function ENT:GetTargetVelocity()
-	local Gear = self:GetNWGear()
-
-	if Gear ~= -1 then
-		local Reverse = self:GetReverse()
-		local NumGears = Reverse and self.TransGearsReverse or self.TransGears
-		local MaxVelocity = Reverse and self.MaxVelocityReverse or self.MaxVelocity
-
-		local PitchValue = MaxVelocity / NumGears
-
-		local VelocityGeared = self:GetVelocity():Length()
-		local GearIdeal = 1
-		while (VelocityGeared > PitchValue) and GearIdeal < NumGears do
-			VelocityGeared = VelocityGeared - PitchValue
-
-			GearIdeal  = GearIdeal + 1
-		end
-
-		if Gear > (GearIdeal + 1) then
-			self:SetNWGear( math.max( Gear - 1, 1 ) )
-		end
-
-		return math.min( (MaxVelocity / NumGears) * self:GetGear() * 2, MaxVelocity ) * (Reverse and -1 or 1) * math.min( GearIdeal / Gear, 1 )
-	end
-
 	if self:GetReverse() then
 		return -self.MaxVelocityReverse
 	end

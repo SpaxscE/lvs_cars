@@ -71,18 +71,6 @@ hook.Add( "LVS:Initialize", "[LVS] - Cars - Keys", function()
 			default = "+walk",
 			cmd = "lvs_car_swap_ammo"
 		},
-		{
-			name = "CAR_SHIFT_UP",
-			category = "LVS-Car",
-			name_menu = "Shift Up",
-			cmd = "lvs_car_shiftup"
-		},
-		{
-			name = "CAR_SHIFT_DN",
-			category = "LVS-Car",
-			name_menu = "Shift Down",
-			cmd = "lvs_car_shiftdown"
-		},
 	}
 
 	for _, v in pairs( KEYS ) do

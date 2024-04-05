@@ -210,7 +210,6 @@ function ENT:HandleEngineSounds( vehicle )
 		Vel = vehVel
 	end
 
-	local Gear = vehicle:GetGear()
 	local NumGears = vehicle.TransGears
 
 	local VolumeValue = self:SetEngineVolume( LVS.EngineVolume )
@@ -235,23 +234,18 @@ function ENT:HandleEngineSounds( vehicle )
 	end
 	--[[ workaround ]]--
 
-	local CurrentGear = math.Clamp(self:GetGear(),1,NumGears)
-	local Ratio = 0
 
-	if Gear == -1 then
-		while (VelocityGeared > PitchValue) and DesiredGear< NumGears do
-			VelocityGeared = VelocityGeared - PitchValue
+	while (VelocityGeared > PitchValue) and DesiredGear< NumGears do
+		VelocityGeared = VelocityGeared - PitchValue
 
-			DesiredGear = DesiredGear + 1
-		end
-
-		DesiredGear = math.Clamp( DesiredGear, 1, Reverse and vehicle.TransGearsReverse or NumGears )
-
-		Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + (Throttle ^ 2) * 0.5)
-	else
-		DesiredGear = Gear
-		Ratio = (Vel - (Gear - 1) * PitchValue) / PitchValue
+		DesiredGear = DesiredGear + 1
 	end
+
+	DesiredGear = math.Clamp( DesiredGear, 1, Reverse and vehicle.TransGearsReverse or NumGears )
+
+	local CurrentGear = math.Clamp(self:GetGear(),1,NumGears)
+
+	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + (Throttle ^ 2) * 0.5)
 
 	if CurrentGear ~= DesiredGear then
 		if (self._NextShift or 0) < T then
@@ -319,7 +313,7 @@ function ENT:HandleEngineSounds( vehicle )
 		local Vol03 = data.Volume * 0.3
 		local Vol02 = data.Volume * 0.2
 
-		local Volume = math.max(Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle,0.4) * VolumeValue
+		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue
 
 		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * self.EnginePitchStep) * MaxThrottle
 
