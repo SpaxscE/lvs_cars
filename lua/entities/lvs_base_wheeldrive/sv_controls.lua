@@ -109,8 +109,37 @@ function ENT:CalcHandbrake( ply )
 	end
 end
 
+function ENT:CalcManualTransmission( ply, ShiftUp, ShiftDn )
+	if ShiftUp ~= self._oldShiftUp then
+		self._oldShiftUp = ShiftUp
+
+		if ShiftUp then
+			self:SetNWGear( math.min( self:GetNWGear() + 1, self.TransGears ) )
+		end
+	end
+
+	if ShiftDn ~= self._oldShiftDn then
+		self._oldShiftDn = ShiftDn
+
+		if ShiftDn then
+			self:SetNWGear( math.max( self:GetNWGear() - 1, 1 ) )
+		end
+	end
+end
+
 function ENT:CalcTransmission( ply )
-	if not self.ForwardAngle then return end
+	local ShiftUp = ply:lvsKeyDown( "CAR_SHIFT_UP" )
+	local ShiftDn = ply:lvsKeyDown( "CAR_SHIFT_DN" )
+
+	if not self.ForwardAngle or self:GetNWGear() ~= -1 then
+		self:CalcManualTransmission( ply, ShiftUp, ShiftDn )
+
+		return
+	end
+
+	if ShiftUp or ShiftDn then
+		self:SetNWGear( 1 )
+	end
 
 	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() )
 
