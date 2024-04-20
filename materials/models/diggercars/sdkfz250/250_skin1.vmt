@@ -8,6 +8,7 @@
 	"$detailblendfactor" "2"
 	"$detailblendmode" "0"
 
+	"$nodecal" "1"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3

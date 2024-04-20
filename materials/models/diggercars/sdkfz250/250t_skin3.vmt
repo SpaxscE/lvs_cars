@@ -4,6 +4,7 @@
 	"$bumpmap" "models/DiggerCars/shared/skin_nm"
 	"$alphatest" "1"
 	"$allowalphatocoverage" "1"
+	"$nodecal" "1"
 	"$phong" "1" 
 	"$phongboost" "0.08" 
 	"$phongexponent" 3
