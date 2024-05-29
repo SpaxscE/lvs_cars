@@ -68,10 +68,15 @@ function ENT:CalcTracks()
 
 		local RangeMul = data.PoseParameter.rangeMultiplier or 1
 
-		if string.StartsWith( data.PoseParameter.name, "!" ) then
+		if data.IsBonePP == nil then
+			data.IsBonePP = string.StartsWith( data.PoseParameter.name, "!" )
 
+			continue
+			
+		end
+
+		if data.IsBonePP then
 			self:SetBonePoseParameter( data.PoseParameter.name, math.Clamp( self:QuickLerp( data.PoseParameter.name, Dist * RangeMul, Rate ) / (data.PoseParameter.range or 10), 0 , 1 ) )
-
 		else
 			self:SetPoseParameter( data.PoseParameter.name, self:QuickLerp( data.PoseParameter.name, Dist * RangeMul, Rate ) )
 		end
