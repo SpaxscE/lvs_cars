@@ -70,7 +70,7 @@ function ENT:CalcTracks()
 
 		if string.StartsWith( data.PoseParameter.name, "!" ) then
 
-			self:SetBonePoseParameter( data.PoseParameter.name, math.Clamp( self:QuickLerp( data.PoseParameter.name, Dist * RangeMul, Rate ) / data.PoseParameter.range, 0 , 1 ) )
+			self:SetBonePoseParameter( data.PoseParameter.name, math.Clamp( self:QuickLerp( data.PoseParameter.name, Dist * RangeMul, Rate ) / (data.PoseParameter.range or 10), 0 , 1 ) )
 
 		else
 			self:SetPoseParameter( data.PoseParameter.name, self:QuickLerp( data.PoseParameter.name, Dist * RangeMul, Rate ) )
