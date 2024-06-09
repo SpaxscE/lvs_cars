@@ -116,7 +116,6 @@ if SERVER then
 
 	util.AddNetworkString( "lvs_car_turnsignal" )
 	util.AddNetworkString( "lvs_car_break" )
-	util.AddNetworkString( "lvs_car_markers" )
 
 	net.Receive( "lvs_car_turnsignal", function( len, ply )
 		if not IsValid( ply ) then return end
@@ -136,17 +135,4 @@ else
 
 		ent:OnEngineStallBroken()
 	end)
-
-	net.Receive( "lvs_car_markers", function( len )
-		if not LVS.ShowHitMarker then return end
-
-		local ply = LocalPlayer()
-
-		local vehicle = ply:lvsGetVehicle()
-
-		if not IsValid( vehicle ) then return end
-
-		vehicle.LastCritMarker = CurTime() + 0.15
-		ply:EmitSound( "lvs/armor_takedamage_"..math.random(1,3)..".wav", 85, math.random(95,105), 0.7, CHAN_ITEM2 )
-	end )
 end
