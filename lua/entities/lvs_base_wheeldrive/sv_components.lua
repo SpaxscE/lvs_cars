@@ -187,32 +187,32 @@ function ENT:AddArmor( pos, ang, mins, maxs, health, minforce )
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( Armor ) or not dmginfo:IsDamageType( DMG_AIRBOAT + DMG_SNIPER ) then return true end
 	
+			local MaxHealth = self:GetMaxHP()
+			local MaxArmor = Armor:GetMaxHP()
 			local Damage = dmginfo:GetDamage()
-			local DamageRemaining = math.max( Damage - Armor:GetHP(), 0 )
+
+			local ArmoredHealth = MaxHealth + MaxArmor
+			local NumShotsToKill = ArmoredHealth / Damage
+
+			local ScaleDamage =  math.Clamp( MaxHealth / (NumShotsToKill * Damage),0,1)
+
 			local DidDamage = Armor:TakeTransmittedDamage( dmginfo )
 
 			if DidDamage then
+				--[[
 				if DamageRemaining <= 0 then
 					net.Start( "lvs_hurtmarker" )
 						net.WriteFloat( math.min( Damage / 50, 1 ) )
 					net.Send( self:GetEveryone() )
 				end
+				]]
 
-				dmginfo:SetDamage( DamageRemaining )
+				dmginfo:ScaleDamage( ScaleDamage )
 			else
 				dmginfo:ScaleDamage( 0 )
 			end
 
-			if Armor:GetDestroyed() then return true end
-
-			if DidDamage then
-				local Attacker = dmginfo:GetAttacker() 
-				if IsValid( Attacker ) and Attacker:IsPlayer() then
-					net.Start( "lvs_hitmarker" )
-						net.WriteBool( false )
-					net.Send( Attacker )
-				end
-			end
+			return true
 		end
 	} )
 

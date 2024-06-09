@@ -122,14 +122,14 @@ if SERVER then
 				self:SetDestroyed( true )
 				self:OnDestroyed( dmginfo )
 			end
-
-			local Attacker = dmginfo:GetAttacker() 
-			if IsValid( Attacker ) and Attacker:IsPlayer() then
-				net.Start( "lvs_car_markers" )
-				net.Send( Attacker )
-			end
 		end
 
+		local Attacker = dmginfo:GetAttacker() 
+		if IsValid( Attacker ) and Attacker:IsPlayer() then
+			net.Start( "lvs_car_markers" )
+			net.Send( Attacker )
+		end
+	
 		return true
 	end
 
