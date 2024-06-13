@@ -137,11 +137,13 @@ end
 function ENT:GetMaxSteerAngle()
 	if CLIENT then return self:GetNWMaxSteer() end
 
-	if self._WheelMaxSteerAngle then return self._WheelMaxSteerAngle end
+	local EntTable = self:GetTable()
+
+	if EntTable._WheelMaxSteerAngle then return EntTable._WheelMaxSteerAngle end
 
 	local Cur = 0
 
-	for _, Axle in pairs( self._WheelAxleData ) do
+	for _, Axle in pairs( EntTable._WheelAxleData ) do
 		if not Axle.SteerAngle then continue end
 
 		if Axle.SteerAngle > Cur then
@@ -149,7 +151,7 @@ function ENT:GetMaxSteerAngle()
 		end
 	end
 
-	self._WheelMaxSteerAngle = Cur
+	EntTable._WheelMaxSteerAngle = Cur
 
 	self:SetNWMaxSteer( Cur )
 
@@ -165,13 +167,15 @@ function ENT:GetTargetVelocity()
 end
 
 function ENT:HasHighBeams()
-	if isbool( self._HasHighBeams ) then return self._HasHighBeams end
+	local EntTable = self:GetTable()
 
-	if not istable( self.Lights ) then return false end
+	if isbool( EntTable._HasHighBeams ) then return EntTable._HasHighBeams end
+
+	if not istable( EntTable.Lights ) then return false end
 
 	local HasHigh = false
 
-	for _, data in pairs( self.Lights ) do
+	for _, data in pairs( EntTable.Lights ) do
 		if not istable( data ) then continue end
 
 		for id, typedata in pairs( data ) do
@@ -183,19 +187,21 @@ function ENT:HasHighBeams()
 		end
 	end
 
-	self._HasHighBeams = HasHigh
+	EntTable._HasHighBeams = HasHigh
 
 	return HasHigh
 end
 
 function ENT:HasFogLights()
-	if isbool( self._HasFogLights ) then return self._HasFogLights end
+	local EntTable = self:GetTable()
 
-	if not istable( self.Lights ) then return false end
+	if isbool( EntTable._HasFogLights ) then return EntTable._HasFogLights end
+
+	if not istable( EntTable.Lights ) then return false end
 
 	local HasFog = false
 
-	for _, data in pairs( self.Lights ) do
+	for _, data in pairs( EntTable.Lights ) do
 		if not istable( data ) then continue end
 
 		for id, typedata in pairs( data ) do
@@ -207,19 +213,21 @@ function ENT:HasFogLights()
 		end
 	end
 
-	self._HasFogLights = HasFog
+	EntTable._HasFogLights = HasFog
 
 	return HasFog
 end
 
 function ENT:HasTurnSignals()
-	if isbool( self._HasTurnSignals ) then return self._HasTurnSignals end
+	local EntTable = self:GetTable()
 
-	if not istable( self.Lights ) then return false end
+	if isbool( EntTable._HasTurnSignals ) then return EntTable._HasTurnSignals end
+
+	if not istable( EntTable.Lights ) then return false end
 
 	local HasTurnSignals = false
 
-	for _, data in pairs( self.Lights ) do
+	for _, data in pairs( EntTable.Lights ) do
 		if not istable( data ) then continue end
 
 		for id, typedata in pairs( data ) do
@@ -231,7 +239,7 @@ function ENT:HasTurnSignals()
 		end
 	end
 
-	self._HasTurnSignals = HasTurnSignals
+	EntTable._HasTurnSignals = HasTurnSignals
 
 	return HasTurnSignals
 end
@@ -239,14 +247,16 @@ end
 function ENT:BodygroupIsValid( name, groups )
 	if not name or not istable( groups ) then return false end
 
+	local EntTable = self:GetTable()
+
 	local id = -1
 
-	if self._StoredBodyGroups then
-		if self._StoredBodyGroups[ name ] then
-			id = self._StoredBodyGroups[ name ]
+	if EntTable._StoredBodyGroups then
+		if EntTable._StoredBodyGroups[ name ] then
+			id = EntTable._StoredBodyGroups[ name ]
 		end
 	else
-		self._StoredBodyGroups = {}
+		EntTable._StoredBodyGroups = {}
 	end
 
 	if id == -1 then
@@ -261,7 +271,7 @@ function ENT:BodygroupIsValid( name, groups )
 
 	if id == -1 then return false end
 
-	self._StoredBodyGroups[ name ] = id
+	EntTable._StoredBodyGroups[ name ] = id
 
 	local cur = self:GetBodygroup( id )
 

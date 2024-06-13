@@ -18,9 +18,11 @@ if SERVER then
 	end
 
 	function ENT:CheckWater( Base )
+		local EntTable = self:GetTable()
+
 		if bit.band( util.PointContents( self:GetPos() ), CONTENTS_WATER ) ~= CONTENTS_WATER then
-			if self.CountWater then
-				self.CountWater = nil
+			if EntTable.CountWater then
+				EntTable.CountWater = nil
 			end
 
 			return
@@ -28,9 +30,9 @@ if SERVER then
 
 		if Base.WaterLevelAutoStop > 3 then return end
 
-		self.CountWater = (self.CountWater or 0) + 1
+		EntTable.CountWater = (EntTable.CountWater or 0) + 1
 
-		if self.CountWater < 4 then return end
+		if EntTable.CountWater < 4 then return end
 
 		Base:StopEngine()
 	end
@@ -167,6 +169,8 @@ function ENT:HandleEngineSounds( vehicle )
 	local MaxThrottle = vehicle:GetMaxThrottle()
 	local Doppler = vehicle:CalcDoppler( ply )
 
+	local EntTable = self:GetTable()
+
 	local DrivingMe = ply:lvsGetVehicle() == vehicle
 
 	local VolumeSetNow = false
@@ -175,20 +179,20 @@ function ENT:HandleEngineSounds( vehicle )
 	if IsValid( pod ) then
 		local ThirdPerson = pod:GetThirdPersonMode()
 
-		if ThirdPerson ~= self._lvsoldTP then
-			self._lvsoldTP = ThirdPerson
+		if ThirdPerson ~= EntTable._lvsoldTP then
+			EntTable._lvsoldTP = ThirdPerson
 			VolumeSetNow = DrivingMe
 		end
 
 		FirstPerson = DrivingMe and not ThirdPerson
 	end
 
-	if DrivingMe ~= self._lvsoldDrivingMe then
-		self._lvsoldDrivingMe = DrivingMe
+	if DrivingMe ~= EntTable._lvsoldDrivingMe then
+		EntTable._lvsoldDrivingMe = DrivingMe
 
 		self:StopSounds()
 
-		self._oldEnActive = nil
+		EntTable._oldEnActive = nil
 
 		return
 	end
@@ -217,7 +221,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local DesiredGear = 1
 
-	local subGeared = vehVel - (self._smVelGeared or 0)
+	local subGeared = vehVel - (EntTable._smVelGeared or 0)
 	local VelocityGeared = vehVel
 
 	if wheelVel == 0 and vehicle:GetNWHandBrake() then
@@ -227,10 +231,10 @@ function ENT:HandleEngineSounds( vehicle )
 
 	--[[ workaround ]]-- TODO: Fix it properly
 	if vehicle:Sign( subGeared ) < 0 then
-		self._smVelGeared = (self._smVelGeared or 0) + subGeared * FT * 5
-		VelocityGeared = self._smVelGeared
+		self._smVelGeared = (EntTable._smVelGeared or 0) + subGeared * FT * 5
+		VelocityGeared = EntTable._smVelGeared
 	else
-		self._smVelGeared = VelocityGeared 
+		EntTable._smVelGeared = VelocityGeared 
 	end
 	--[[ workaround ]]--
 
@@ -248,12 +252,12 @@ function ENT:HandleEngineSounds( vehicle )
 	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + (Throttle ^ 2) * 0.5)
 
 	if CurrentGear ~= DesiredGear then
-		if (self._NextShift or 0) < T then
-			self._NextShift = T + vehicle.TransMinGearHoldTime
+		if (EntTable._NextShift or 0) < T then
+			EntTable._NextShift = T + vehicle.TransMinGearHoldTime
 
 			if CurrentGear < DesiredGear then
-				self._ShiftTime = T + vehicle.TransShiftSpeed
-				self._WobbleTime = T + vehicle.TransWobbleTime
+				EntTable._ShiftTime = T + vehicle.TransShiftSpeed
+				EntTable._WobbleTime = T + vehicle.TransWobbleTime
 			end
 
 			vehicle:OnChangeGear( CurrentGear, DesiredGear )
@@ -265,16 +269,16 @@ function ENT:HandleEngineSounds( vehicle )
 	if Throttle > 0.5 then
 		local FullThrottle = Throttle >= 0.99
 
-		if self._oldFullThrottle ~= FullThrottle then
-			self._oldFullThrottle = FullThrottle
+		if EntTable._oldFullThrottle ~= FullThrottle then
+			EntTable._oldFullThrottle = FullThrottle
 
 			if FullThrottle then
-				self._WobbleTime = T + vehicle.TransWobbleTime
+				EntTable._WobbleTime = T + vehicle.TransWobbleTime
 			end
 		end
 
 		if Wobble == 0 then
-			local Mul = math.Clamp( (self._WobbleTime or 0) - T, 0, 1 )
+			local Mul = math.Clamp( (EntTable._WobbleTime or 0) - T, 0, 1 )
 
 			Wobble = (math.cos( T * (20 + CurrentGear * 10) * vehicle.TransWobbleFrequencyMultiplier ) * math.max(1 - Ratio,0) * vehicle.TransWobble * math.max(1 - vehicle:AngleBetweenNormal( vehicle:GetUp(), Vector(0,0,1) ) / 5,0) ^ 2) * Mul 
 		end
@@ -285,37 +289,37 @@ function ENT:HandleEngineSounds( vehicle )
 	local rpmSet = false
 	local rpmRate = PlayIdleSound and 1 or 5
 
-	self._smIdleVolume = self._smIdleVolume and self._smIdleVolume + ((PlayIdleSound and 1 or 0) - self._smIdleVolume) * FT or 0
-	self._smRPMVolume = self._smRPMVolume and self._smRPMVolume + ((PlayIdleSound and 0 or 1) - self._smRPMVolume) * FT * rpmRate or 0
+	EntTable._smIdleVolume = EntTable._smIdleVolume and EntTable._smIdleVolume + ((PlayIdleSound and 1 or 0) - EntTable._smIdleVolume) * FT or 0
+	EntTable._smRPMVolume = EntTable._smRPMVolume and EntTable._smRPMVolume + ((PlayIdleSound and 0 or 1) - EntTable._smRPMVolume) * FT * rpmRate or 0
 
-	if (self._ShiftTime or 0) > T or PlayIdleSound then
+	if (EntTable._ShiftTime or 0) > T or PlayIdleSound then
 		PitchAdd = 0
 		Ratio = 0
 		Wobble = 0
 		Throttle = 0
 		FadeSpeed = PlayIdleSound and 0.25 or 3
-		self._ClutchActive = true
+		EntTable._ClutchActive = true
 	else
-		self._ClutchActive = false
+		EntTable._ClutchActive = false
 	end
 
-	if not self.EnginePitchStep then
-		self.EnginePitchStep = math.Clamp(vehicle.EngineMaxRPM / 10000, 0.6, 0.9)
+	if not EntTable.EnginePitchStep then
+		EntTable.EnginePitchStep = math.Clamp(vehicle.EngineMaxRPM / 10000, 0.6, 0.9)
 
 		return
 	end
 
-	for id, sound in pairs( self._ActiveSounds ) do
+	for id, sound in pairs( EntTable._ActiveSounds ) do
 		if not sound then continue end
 
-		local data = self.EngineSounds[ id ]
+		local data = EntTable.EngineSounds[ id ]
 
 		local Vol03 = data.Volume * 0.3
 		local Vol02 = data.Volume * 0.2
 
 		local Volume = (Vol02 + Vol03 * Ratio + (Vol02 * Ratio + Vol03) * Throttle) * VolumeValue
 
-		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * self.EnginePitchStep) * MaxThrottle
+		local PitchAdd = CurrentGear * (data.PitchMul / NumGears * EntTable.EnginePitchStep) * MaxThrottle
 
 		local Pitch = data.Pitch + PitchAdd + (data.PitchMul - PitchAdd) * Ratio + Wobble
 		local PitchMul = data.UseDoppler and Doppler or 1
@@ -323,10 +327,10 @@ function ENT:HandleEngineSounds( vehicle )
 		local SoundType = data.SoundType
 
 		if SoundType ~= LVS.SOUNDTYPE_ALL then
-			Volume = Volume  * self._smRPMVolume
+			Volume = Volume  * EntTable._smRPMVolume
 
 			if SoundType == LVS.SOUNDTYPE_IDLE_ONLY then
-				Volume = self._smIdleVolume * data.Volume * VolumeValue
+				Volume = EntTable._smIdleVolume * data.Volume * VolumeValue
 				Pitch = data.Pitch + data.PitchMul * Ratio
 			end
 
@@ -394,18 +398,20 @@ function ENT:Think()
 
 	if not IsValid( vehicle ) then return end
 
+	local EntTable = self:GetTable()
+
 	self:DamageFX( vehicle )
 
-	if not self.EngineSounds then
-		self.EngineSounds = vehicle.EngineSounds
+	if not EntTable.EngineSounds then
+		EntTable.EngineSounds = vehicle.EngineSounds
 
 		return
 	end
 
 	local EngineActive = vehicle:GetEngineActive()
 
-	if self._oldEnActive ~= EngineActive then
-		self._oldEnActive = EngineActive
+	if EntTable._oldEnActive ~= EngineActive then
+		EntTable._oldEnActive = EngineActive
 
 		self:OnEngineActiveChanged( EngineActive )
 	end

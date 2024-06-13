@@ -76,14 +76,16 @@ local oldReverse = false
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	self:DrawDeveloperInfo()
 
+	local EntTable = self:GetTable()
+
 	local T = CurTime()
 
-	if (self._nextRefreshVel or 0) < T then
-		self._nextRefreshVel = T + 0.1
-		self._refreshVel = self:GetVelocity():Length()
+	if (EntTable._nextRefreshVel or 0) < T then
+		EntTable._nextRefreshVel = T + 0.1
+		EntTable._refreshVel = self:GetVelocity():Length()
 	end
 
-	local kmh = math.Round( (self._refreshVel or 0) * 0.09144,0)
+	local kmh = math.Round( (EntTable._refreshVel or 0) * 0.09144,0)
 	draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
 	draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
 
@@ -97,9 +99,9 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	local fueltank = self:GetFuelTank()
 
 	if IsValid( fueltank ) and fueltank:GetFuel() <= 0 then
-		surface.SetMaterial( self.IconFuel )
+		surface.SetMaterial( EntTable.IconFuel )
 	else
-		surface.SetMaterial( self.IconEngine )
+		surface.SetMaterial( EntTable.IconEngine )
 	end
 
 	surface.SetDrawColor( 0, 0, 0, 200 )
@@ -186,35 +188,37 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 
 	local MenuOpen = ply:lvsKeyDown( "CAR_MENU" ) and self:HasTurnSignals()
 
+	local EntTable = self:GetTable()
+
 	if MenuOpen then
 		if ply:lvsKeyDown( "CAR_BRAKE" ) then
-			self._SelectedMode = 3
+			EntTable._SelectedMode = 3
 		end
 		if ply:lvsKeyDown( "CAR_THROTTLE" ) then
-			self._SelectedMode = 0
+			EntTable._SelectedMode = 0
 		end
 		if ply:lvsKeyDown( "CAR_STEER_LEFT" ) then
-			self._SelectedMode = 1
+			EntTable._SelectedMode = 1
 		end
 		if ply:lvsKeyDown( "CAR_STEER_RIGHT" ) then
-			self._SelectedMode = 2
+			EntTable._SelectedMode = 2
 		end
 
-		if self._oldSelectedMode ~= self._SelectedMode then
-			self._oldSelectedMode = self._SelectedMode
+		if EntTable._oldSelectedMode ~= EntTable._SelectedMode then
+			EntTable._oldSelectedMode = EntTable._SelectedMode
 
 			self:EmitSound("buttons/lightswitch2.wav",75,120,0.25)
 		end
 	else
-		if self._oldSelectedMode and isnumber( self._SelectedMode ) then
+		if EntTable._oldSelectedMode and isnumber( EntTable._SelectedMode ) then
 			self:EmitSound("buttons/lightswitch2.wav",75,100,0.25)
 
 			net.Start( "lvs_car_turnsignal" )
-				net.WriteInt( self._SelectedMode, 4 )
+				net.WriteInt( EntTable._SelectedMode, 4 )
 			net.SendToServer()
 
-			self._SelectedMode = 0
-			self._oldSelectedMode = nil
+			EntTable._SelectedMode = 0
+			EntTable._oldSelectedMode = nil
 		end
 
 		local size = 32
@@ -249,19 +253,19 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 		local Alpha = self:GetTurnFlasher() and 255 or 0
 
 		if TurnMode == 1 or TurnMode == 3 then
-			surface.SetMaterial( self.CarMenuLeft )
+			surface.SetMaterial( EntTable.CarMenuLeft )
 			DrawTexturedRect( cX - (size + dist), cY, size, Color(0,255,157,Alpha) )
 		end
 
 		if TurnMode == 2 or TurnMode == 3 then
-			surface.SetMaterial( self.CarMenuRight )
+			surface.SetMaterial( EntTable.CarMenuRight )
 			DrawTexturedRect( cX + (size + dist), cY, size, Color(0,255,157,Alpha) )
 		end
 
 		return
 	end
 
-	local SelectedThing = self._SelectedMode or 0
+	local SelectedThing = EntTable._SelectedMode or 0
 
 	local size = 32
 	local dist = 5
@@ -269,16 +273,16 @@ function ENT:LVSHudPaintCarMenu( X, Y, w, h, ScrX, ScrY, ply )
 	local cX = X + w * 0.5
 	local cY = Y + h - size * 0.5 - dist
 
-	surface.SetMaterial( self.CarMenuDisable )
+	surface.SetMaterial( EntTable.CarMenuDisable )
 	DrawTexturedRect( cX, cY - (size + dist), size, SelectedThing == 0 )
 
-	surface.SetMaterial( self.CarMenuLeft )
+	surface.SetMaterial( EntTable.CarMenuLeft )
 	DrawTexturedRect( cX - (size + dist), cY, size, SelectedThing == 1 )
 
-	surface.SetMaterial( self.CarMenuRight)
+	surface.SetMaterial( EntTable.CarMenuRight)
 	DrawTexturedRect( cX + (size + dist), cY, size, SelectedThing == 2 )
 
-	surface.SetMaterial( self.CarMenuHazard )
+	surface.SetMaterial( EntTable.CarMenuHazard )
 	DrawTexturedRect( cX, cY, size, SelectedThing == 3 )
 end
 

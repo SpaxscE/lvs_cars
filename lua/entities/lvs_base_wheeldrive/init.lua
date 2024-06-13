@@ -194,19 +194,22 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	local T = CurTime()
 	local tickdelta = engine.TickInterval()
 
+	local EntTable = self:GetTable()
+	local WheelTable = ent:GetTable()
+
 	if not self:GetEngineActive() then
-		if (ent._lvsNextThink or 0) > T then
+		if (WheelTable._lvsNextThink or 0) > T then
 			return vector_origin, vector_origin, SIM_NOTHING
 		else
-			ent._lvsNextThink = T + 0.05
+			WheelTable._lvsNextThink = T + 0.05
 		end
 	end
 
-	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if ent.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
+	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then if WheelTable.SetRPM then ent:SetRPM( 0 ) end return vector_origin, vector_origin, SIM_NOTHING end
 
 	if self:IsDestroyed() then self:EnableHandbrake() return vector_origin, vector_origin, SIM_NOTHING end
 
-	if (ent._lvsNextSimulate or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
+	if (WheelTable._lvsNextSimulate or 0) > T then return vector_origin, vector_origin, SIM_NOTHING end
 
 	local RotationAxis = ent:GetRotationAxis()
 
@@ -219,7 +222,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	if tickdelta < 1 / 30 and not (Throttle > 0 and math.abs( curRPM ) < 50) then
 		local deltatimeNew = 1 / 15
 
-		ent._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
+		WheelTable._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
 
 		local Tick1 = 1 / deltatime
 		local Tick2 = 1 / deltatimeNew
@@ -244,16 +247,16 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 			local targetRPM = ent:VelToRPM( ForwardVel ) * 0.5
 
-			if math.abs( curRPM ) < self.WheelBrakeLockupRPM then
+			if math.abs( curRPM ) < EntTable.WheelBrakeLockupRPM then
 				ent:LockRotation()
 			else
 				if (ForwardVel > 0 and targetRPM > 0) or (ForwardVel < 0 and targetRPM < 0) then
-					ForceAngle = RotationAxis * math.Clamp( (targetRPM - curRPM) / 100,-1,1) * math.deg( self.WheelBrakeForce ) * ent:GetBrakeFactor() * self:GetBrake()
+					ForceAngle = RotationAxis * math.Clamp( (targetRPM - curRPM) / 100,-1,1) * math.deg( EntTable.WheelBrakeForce ) * ent:GetBrakeFactor() * self:GetBrake()
 				end
 			end
 		end
 	else
-		if math.abs( curRPM ) < self.WheelBrakeLockupRPM and Throttle == 0 then
+		if math.abs( curRPM ) < EntTable.WheelBrakeLockupRPM and Throttle == 0 then
 			ent:LockRotation()
 		else
 			if ent:IsRotationLocked() then
@@ -268,21 +271,21 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 			local targetRPMabs = math.abs( targetRPM )
 
-			local powerRPM = targetRPMabs * self.EngineCurve
+			local powerRPM = targetRPMabs * EntTable.EngineCurve
 
 			local powerCurve = (powerRPM + math.max( targetRPMabs - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPMabs * self:Sign( targetRPM - curRPM )
 
-			local Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle
+			local Torque = powerCurve * math.deg( EntTable.EngineTorque ) * TorqueFactor * Throttle
 
 			local BoostRPM = 0
 
 			if self:GetReverse() then
-				BoostRPM = ent:VelToRPM( self.MaxVelocityReverse / self.TransGearsReverse ) * 0.5
+				BoostRPM = ent:VelToRPM( EntTable.MaxVelocityReverse / EntTable.TransGearsReverse ) * 0.5
 			else
-				BoostRPM = ent:VelToRPM( self.MaxVelocity / self.TransGears ) * 0.5
+				BoostRPM = ent:VelToRPM( EntTable.MaxVelocity / EntTable.TransGears ) * 0.5
 			end
 
-			local BoostMul = math.max( self.EngineCurveBoostLow, 0 )
+			local BoostMul = math.max( EntTable.EngineCurveBoostLow, 0 )
 			local BoostStart = 1 + BoostMul
 
 			local TorqueBoost = BoostStart - (math.min( math.max( math.abs( curRPM ) - BoostRPM, 0 ), BoostRPM) / BoostRPM) * BoostMul
@@ -302,15 +305,15 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			if self:PivotSteer() then
 				local RotationDirection = ent:GetWheelType() * self:GetPivotSteer()
 	
-				if self.PivotSteerByBrake and RotationDirection < 0 then
+				if EntTable.PivotSteerByBrake and RotationDirection < 0 then
 					ent:LockRotation( true )
 
 					return vector_origin, vector_origin, SIM_NOTHING
 				end
 
-				powerCurve = math.Clamp((self.PivotSteerWheelRPM * RotationDirection - curRPM) / self.PivotSteerWheelRPM,-1,1)
+				powerCurve = math.Clamp((EntTable.PivotSteerWheelRPM * RotationDirection - curRPM) / EntTable.PivotSteerWheelRPM,-1,1)
 
-				Torque = powerCurve * math.deg( self.EngineTorque ) * TorqueFactor * Throttle * 2 * self.PivotSteerTorqueMul
+				Torque = powerCurve * math.deg( EntTable.EngineTorque ) * TorqueFactor * Throttle * 2 * EntTable.PivotSteerTorqueMul
 
 				ForceAngle = RotationAxis * Torque
 			end
@@ -334,7 +337,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		local VelY = math.abs( Fy )
 
 		if VelY > VelX * 0.1 then
-			if VelX > self.FastSteerActiveVelocity then
+			if VelX > EntTable.FastSteerActiveVelocity then
 				if VelY < VelX * 0.6 then
 					return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION
 				end
@@ -348,7 +351,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		return ForceAngle * forceMul, vector_origin, SIM_GLOBAL_ACCELERATION
 	end
 
-	local ForceLinear = -self:GetUp() * self.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / 500, 1 ),-self.WheelSideForce,self.WheelSideForce) * self.ForceLinearMultiplier
+	local ForceLinear = -self:GetUp() * EntTable.WheelDownForce * TorqueFactor - Right * math.Clamp(Fy * 5 * math.min( math.abs( Fx ) / 500, 1 ),-EntTable.WheelSideForce,EntTable.WheelSideForce) * EntTable.ForceLinearMultiplier
 
 	return ForceAngle * forceMul, ForceLinear * forceMul, SIM_GLOBAL_ACCELERATION
 end

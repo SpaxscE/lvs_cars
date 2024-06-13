@@ -11,7 +11,9 @@ ENT.OpticsPodIndex = {
 }
 
 function ENT:GetOpticsEnabled()
-	if not self.OpticsEnable then return false end
+	local EntTable = self:GetTable()
+
+	if not EntTable.OpticsEnable then return false end
 
 	local ply = LocalPlayer()
 
@@ -23,11 +25,11 @@ function ENT:GetOpticsEnabled()
 		PodIndex = 1
 	end
 
-	if self.OpticsPodIndex[ PodIndex ] then
+	if EntTable.OpticsPodIndex[ PodIndex ] then
 		if pod:GetThirdPersonMode() then
-			return self.OpticsThirdPerson
+			return EntTable.OpticsThirdPerson
 		else
-			return self.OpticsFirstPerson
+			return EntTable.OpticsFirstPerson
 		end
 	end
 

@@ -13,7 +13,9 @@ function ENT:CalcSteer( ply )
 
 	local TargetValue = (KeyRight and 1 or 0) - (KeyLeft and 1 or 0)
 
-	if Vel:Length() > self.FastSteerActiveVelocity then
+	local EntTable = self:GetTable()
+
+	if Vel:Length() > EntTable.FastSteerActiveVelocity then
 		local Forward = self:GetForward()
 		local Right = self:GetRight()
 
@@ -30,19 +32,19 @@ function ENT:CalcSteer( ply )
 
 		local DriftAngle = self:AngleBetweenNormal( Forward, VelNormal )
 
-		if DriftAngle < self.FastSteerDeactivationDriftAngle then
-			MaxSteer = math.min( MaxSteer, self.FastSteerAngleClamp )
+		if DriftAngle < EntTable.FastSteerDeactivationDriftAngle then
+			MaxSteer = math.min( MaxSteer, EntTable.FastSteerAngleClamp )
 		end
 
 		if not KeyLeft and not KeyRight then
 			local Cur = self:GetSteer() / MaxSteer
 
-			local MaxHelpAng = math.min( MaxSteer, self.SteerAssistMaxAngle )
+			local MaxHelpAng = math.min( MaxSteer, EntTable.SteerAssistMaxAngle )
 
 			local Ang = self:AngleBetweenNormal( Right, VelNormal ) - 90
-			local HelpAng = ((math.abs( Ang ) / 90) ^ self.SteerAssistExponent) * 90 * self:Sign( Ang )
+			local HelpAng = ((math.abs( Ang ) / 90) ^ EntTable.SteerAssistExponent) * 90 * self:Sign( Ang )
 
-			TargetValue = math.Clamp( -HelpAng * self.SteerAssistMultiplier,-MaxHelpAng,MaxHelpAng) / MaxSteer
+			TargetValue = math.Clamp( -HelpAng * EntTable.SteerAssistMultiplier,-MaxHelpAng,MaxHelpAng) / MaxSteer
 		end
 	end
 
@@ -50,11 +52,13 @@ function ENT:CalcSteer( ply )
 end
 
 function ENT:IsLegalInput()
-	if not self.ForwardAngle then return true end
+	local EntTable = self:GetTable()
 
-	local MinSpeed = math.min(self.MaxVelocity,self.MaxVelocityReverse)
+	if not EntTable.ForwardAngle then return true end
 
-	local ForwardVel = self:Sign( math.Round( self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() ) / MinSpeed, 0 ) )
+	local MinSpeed = math.min(EntTable.MaxVelocity,EntTable.MaxVelocityReverse)
+
+	local ForwardVel = self:Sign( math.Round( self:VectorSplitNormal( self:LocalToWorldAngles( EntTable.ForwardAngle ):Forward(), self:GetVelocity() ) / MinSpeed, 0 ) )
 	local DesiredVel = self:GetReverse() and -1 or 1
 
 	return ForwardVel == DesiredVel * math.abs( ForwardVel )
@@ -110,14 +114,16 @@ function ENT:CalcHandbrake( ply )
 end
 
 function ENT:CalcTransmission( ply )
-	if not self.ForwardAngle then return end
+	local EntTable = self:GetTable()
 
-	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( self.ForwardAngle ):Forward(), self:GetVelocity() )
+	if not EntTable.ForwardAngle then return end
+
+	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( EntTable.ForwardAngle ):Forward(), self:GetVelocity() )
 
 	local KeyForward = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBackward = ply:lvsKeyDown( "CAR_BRAKE" )
 
-	local ReverseVelocity = self.AutoReverseVelocity
+	local ReverseVelocity = EntTable.AutoReverseVelocity
 
 	if KeyForward and KeyBackward then return end
 
@@ -141,25 +147,25 @@ function ENT:CalcTransmission( ply )
 
 	if KeyBackward and ForwardVelocity < ReverseVelocity then
 
-		if not self._toggleReverse then
-			self._toggleReverse = true
+		if not EntTable._toggleReverse then
+			EntTable._toggleReverse = true
 
-			self._KeyBackTime = T + 0.4
+			EntTable._KeyBackTime = T + 0.4
 		end
 
-		if (self._KeyBackTime or 0) < T then
+		if (EntTable._KeyBackTime or 0) < T then
 			self:SetReverse( true )
 		end
 	else
-		self._toggleReverse = nil
+		EntTable._toggleReverse = nil
 	end
 
 	local Reverse = self:GetReverse()
 
-	if Reverse ~= self._oldKeyReverse then
-		self._oldKeyReverse = Reverse
+	if Reverse ~= EntTable._oldKeyReverse then
+		EntTable._oldKeyReverse = Reverse
 
-		self:EmitSound( self.TransShiftSound, 75 )
+		self:EmitSound( EntTable.TransShiftSound, 75 )
 	end
 end
 
@@ -172,29 +178,31 @@ function ENT:CalcLights( ply )
 
 	local T = CurTime()
 
-	if self._lights ~= lights then
-		self._lights = lights
+	local EntTable = self:GetTable()
+
+	if EntTable._lights ~= lights then
+		EntTable._lights = lights
 
 		if lights then
-			self._LightsUnpressTime = T
+			EntTable._LightsUnpressTime = T
 		else
-			self._LightsUnpressTime = nil
+			EntTable._LightsUnpressTime = nil
 		end
 	end
 
-	if self._lights and (T - self._LightsUnpressTime) > 0.4 then
+	if EntTable._lights and (T - EntTable._LightsUnpressTime) > 0.4 then
 		lights = false
 	end
 
-	if lights ~= self._oldlights then
-		if not isbool( self._oldlights ) then self._oldlights = lights return end
+	if lights ~= EntTable._oldlights then
+		if not isbool( EntTable._oldlights ) then EntTable._oldlights = lights return end
 
 		if lights then
-			self._LightsPressedTime = T
+			EntTable._LightsPressedTime = T
 		else
 			if LightsHandler:GetActive() then
 				if self:HasHighBeams() then
-					if (T - (self._LightsPressedTime or 0)) >= 0.4 then
+					if (T - (EntTable._LightsPressedTime or 0)) >= 0.4 then
 						LightsHandler:SetActive( false )
 						LightsHandler:SetHighActive( false )
 						LightsHandler:SetFogActive( false )
@@ -215,7 +223,7 @@ function ENT:CalcLights( ply )
 			else
 				self:EmitSound( "items/flashlight1.wav", 75, 100, 0.25 )
 
-				if self:HasFogLights() and (T - (self._LightsPressedTime or T)) >= 0.4 then
+				if self:HasFogLights() and (T - (EntTable._LightsPressedTime or T)) >= 0.4 then
 					LightsHandler:SetFogActive( not LightsHandler:GetFogActive() )
 				else
 					LightsHandler:SetActive( true )
@@ -223,7 +231,7 @@ function ENT:CalcLights( ply )
 			end
 		end
 
-		self._oldlights = lights
+		EntTable._oldlights = lights
 	end
 end
 
@@ -271,40 +279,42 @@ function ENT:CalcSiren( ply )
 	local mode = self:GetSirenMode()
 	local horn = ply:lvsKeyDown( "ATTACK" )
 
-	if self.HornSound and IsValid( self.HornSND ) then
+	local EntTable = self:GetTable()
+
+	if EntTable.HornSound and IsValid( EntTable.HornSND ) then
 		if horn and mode <= 0 then
-			self.HornSND:Play()
+			EntTable.HornSND:Play()
 		else
-			self.HornSND:Stop()
+			EntTable.HornSND:Stop()
 		end
 	end
 
-	if istable( self.SirenSound ) and IsValid( self.SirenSND ) then
+	if istable( EntTable.SirenSound ) and IsValid( EntTable.SirenSND ) then
 		local siren = ply:lvsKeyDown( "CAR_SIREN" )
 
 		local T = CurTime()
 
-		if self._siren ~= siren then
-			self._siren = siren
+		if EntTable._siren ~= siren then
+			EntTable._siren = siren
 
 			if siren then
-				self._sirenUnpressTime = T
+				EntTable._sirenUnpressTime = T
 			else
-				self._sirenUnpressTime = nil
+				EntTable._sirenUnpressTime = nil
 			end
 		end
 
-		if self._siren and (T - self._sirenUnpressTime) > 0.4 then
+		if EntTable._siren and (T - EntTable._sirenUnpressTime) > 0.4 then
 			siren = false
 		end
 
-		if siren ~= self._oldsiren then
-			if not isbool( self._oldsiren ) then self._oldsiren = siren return end
+		if siren ~= EntTable._oldsiren then
+			if not isbool( EntTable._oldsiren ) then EntTable._oldsiren = siren return end
 
 			if siren then
-				self._SirenPressedTime = T
+				EntTable._SirenPressedTime = T
 			else
-				if (T - (self._SirenPressedTime or 0)) >= 0.4 then
+				if (T - (EntTable._SirenPressedTime or 0)) >= 0.4 then
 					if mode >= 0 then
 						self:SetSirenMode( -1 )
 						self:StopSiren()
@@ -316,10 +326,10 @@ function ENT:CalcSiren( ply )
 				end
 			end
 
-			self._oldsiren = siren
+			EntTable._oldsiren = siren
 		else
-			if horn ~= self._OldKeyHorn then
-				self._OldKeyHorn = horn
+			if horn ~= EntTable._OldKeyHorn then
+				EntTable._OldKeyHorn = horn
 
 				if horn then
 					self:StartSiren( true, false )
@@ -354,8 +364,10 @@ function ENT:SetSirenSound( sound )
 end
 
 function ENT:StartSiren( horn, incr )
+	local EntTable = self:GetTable()
+
 	local Mode = self:GetSirenMode()
-	local Max = #self.SirenSound
+	local Max = #EntTable.SirenSound
 
 	local Next = Mode
 
@@ -369,26 +381,26 @@ function ENT:StartSiren( horn, incr )
 		self:SetSirenMode( Next )
 	end
 
-	if not self.SirenSound[ Next ] then return end
+	if not EntTable.SirenSound[ Next ] then return end
 
 	if horn then
-		if not self.SirenSound[ Next ].horn then
+		if not EntTable.SirenSound[ Next ].horn then
 
 			self:SetSirenMode( 0 )
 
 			return
 		end
 
-		self:SetSirenSound( self.SirenSound[ Next ].horn )
+		self:SetSirenSound( EntTable.SirenSound[ Next ].horn )
 	else
-		if not self.SirenSound[ Next ].siren then
+		if not EntTable.SirenSound[ Next ].siren then
 
 			self:SetSirenMode( 0 )
 
 			return
 		end
 
-		self:SetSirenSound( self.SirenSound[ Next ].siren )
+		self:SetSirenSound( EntTable.SirenSound[ Next ].siren )
 	end
 end
 

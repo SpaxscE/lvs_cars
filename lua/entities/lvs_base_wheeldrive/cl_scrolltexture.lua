@@ -58,24 +58,26 @@ function ENT:ScrollTexture( name, material, pos )
 	local id = self:EntIndex()
 	local class = self:GetClass()
 
+	local EntTable = self:GetTable()
+
 	local texture_name = class.."_["..id.."]_"..name
 
-	if istable( self._StoredScrollTextures ) then
-		if self._StoredScrollTextures[ texture_name ] then
+	if istable( EntTable._StoredScrollTextures ) then
+		if EntTable._StoredScrollTextures[ texture_name ] then
 			self._StoredScrollTextures[ texture_name ]:SetVector("$translate", pos )
 
 			return "!"..texture_name
 		end
 	else
-		self._StoredScrollTextures = {}
+		EntTable._StoredScrollTextures = {}
 	end
 
-	local data = table.Copy( self.ScrollTextureData )
+	local data = table.Copy( EntTable.ScrollTextureData )
 	data["$basetexture"] = material
 
 	local mat = CreateMaterial(texture_name, "VertexLitGeneric", data )
 
-	self._StoredScrollTextures[ texture_name ] = mat
+	EntTable._StoredScrollTextures[ texture_name ] = mat
 
 	return "!"..texture_name
 end

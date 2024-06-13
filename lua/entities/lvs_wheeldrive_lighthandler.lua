@@ -538,21 +538,23 @@ function ENT:GetAmbientLight( base )
 		plyPos = ViewEnt:GetPos()
 	end
 
-	if (self._NextLightCheck or 0) > T then return (self._AmbientLightMul or 0), plyPos end
+	local EntTable = self:GetTable()
+
+	if (EntTable._NextLightCheck or 0) > T then return (EntTable._AmbientLightMul or 0), plyPos end
 
 	local LightVeh = render.GetLightColor( base:LocalToWorld( base:OBBCenter() ) )
 	local LightPlayer = render.GetLightColor( plyPos )
 	local AmbientLightMul =  (1 - math.min( LightVeh:Dot( LightPlayer ) * 200, 1 )) ^ 2
 
-	self._NextLightCheck = T + FT
+	EntTable._NextLightCheck = T + FT
 
-	if not self._AmbientLightMul then
-		self._AmbientLightMul = 0
+	if not EntTable._AmbientLightMul then
+		EntTable._AmbientLightMul = 0
 	end
 
-	self._AmbientLightMul = self._AmbientLightMul and self._AmbientLightMul + (AmbientLightMul - self._AmbientLightMul) * FT or 0
+	EntTable._AmbientLightMul = EntTable._AmbientLightMul and EntTable._AmbientLightMul + (AmbientLightMul - EntTable._AmbientLightMul) * FT or 0
 
-	return self._AmbientLightMul, plyPos
+	return EntTable._AmbientLightMul, plyPos
 end
 
 local DoMagic = {
