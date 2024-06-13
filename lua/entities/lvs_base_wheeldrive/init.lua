@@ -41,10 +41,6 @@ end
 
 local function IsServerOK( class )
 
-	if istable( LVS.VehicleBlackList ) then
-		if LVS.VehicleBlackList[ class ] then return false end
-	end
-
 	if GetConVar( "gmod_physiterations" ):GetInt() ~= 4 then
 		RunConsoleCommand("gmod_physiterations", "4")
 
