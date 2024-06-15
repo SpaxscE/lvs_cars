@@ -3,8 +3,6 @@ include("cl_effects.lua")
 include("cl_skidmarks.lua")
 
 function ENT:Initialize()
-	if not self:GetHideModel() then return end
-
 	local Mins, Maxs = self:GetRenderBounds()
 
 	self:SetRenderBounds( Mins, Maxs, Vector( 50, 50, 50 ) )
