@@ -19,6 +19,7 @@ include("sv_wheelsystem.lua")
 include("sv_damage.lua")
 include("sv_pivotsteer.lua")
 include("sv_duping.lua")
+include("sv_manualtransmission.lua")
 include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
@@ -265,6 +266,8 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		end
 
 		if TorqueFactor > 0 and Throttle > 0 then
+			local engineTorque = self:GetEngineTorque()
+
 			local targetVelocity = self:GetTargetVelocity()
 
 			local targetRPM = ent:VelToRPM( targetVelocity )
@@ -275,7 +278,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 			local powerCurve = (powerRPM + math.max( targetRPMabs - powerRPM,0) - math.max(math.abs(curRPM) - powerRPM,0)) / targetRPMabs * self:Sign( targetRPM - curRPM )
 
-			local Torque = powerCurve * math.deg( EntTable.EngineTorque ) * TorqueFactor * Throttle
+			local Torque = powerCurve * engineTorque * TorqueFactor * Throttle
 
 			local BoostRPM = 0
 
@@ -313,7 +316,7 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 				powerCurve = math.Clamp((EntTable.PivotSteerWheelRPM * RotationDirection - curRPM) / EntTable.PivotSteerWheelRPM,-1,1)
 
-				Torque = powerCurve * math.deg( EntTable.EngineTorque ) * TorqueFactor * Throttle * 2 * EntTable.PivotSteerTorqueMul
+				Torque = powerCurve * engineTorque * TorqueFactor * Throttle * 2 * EntTable.PivotSteerTorqueMul
 
 				ForceAngle = RotationAxis * Torque
 			end
@@ -395,7 +398,6 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	end
 
 	self:OnDriverExitVehicle( Old )
-
 	self:SetThrottle( 0 )
 
 	if self:GetBrake() > 0 then

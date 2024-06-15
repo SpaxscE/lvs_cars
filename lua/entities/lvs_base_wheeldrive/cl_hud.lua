@@ -72,6 +72,7 @@ local WaveScale = 0
 local WaveMaterial = Material( "effects/select_ring" )
 local oldThrottleActive = false
 local oldReverse = false
+local oldGear = -1
 
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	self:DrawDeveloperInfo()
@@ -122,6 +123,15 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 			WaveScale = 1
 		end
 
+		local IsManual = self:IsManualTransmission()
+		local Gear = self:GetGear()
+
+		if oldGear ~= Gear then
+			oldGear = Gear
+
+			WaveScale = 1
+		end
+
 		if WaveScale > 0 then
 			WaveScale = math.max( WaveScale - RealFrameTime() * 2, 0 )
 
@@ -132,13 +142,17 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 
 			surface.DrawTexturedRectRotated( hX, hY, WaveRadius, WaveRadius, 0 )
 
-			if not Reverse then
+			if not Reverse and not IsManual then
 				draw.SimpleText( "D" , "LVS_FONT",  hX, hY, Color(0,0,0,math.min(800 * WaveScale ^ 2,255)), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 			end
 		end
 
-		if Reverse then
-			draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		if IsManual then
+			draw.SimpleText( (Reverse and -1 or 1) * Gear , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		else
+			if Reverse then
+				draw.SimpleText( "R" , "LVS_FONT",  hX, hY, Color(0,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			end
 		end
 	end
 

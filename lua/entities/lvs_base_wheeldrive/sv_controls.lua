@@ -114,9 +114,26 @@ function ENT:CalcHandbrake( ply )
 end
 
 function ENT:CalcTransmission( ply )
+	local ShiftUp = ply:lvsKeyDown( "CAR_SHIFT_UP" )
+	local ShiftDn = ply:lvsKeyDown( "CAR_SHIFT_DN" )
+
 	local EntTable = self:GetTable()
 
-	if not EntTable.ForwardAngle then return end
+	if not EntTable.ForwardAngle or self:IsManualTransmission() then
+
+		self:CalcManualTransmission( ply, EntTable, ShiftUp, ShiftDn )
+
+		return
+	else
+		if ShiftUp or ShiftDn then
+			EntTable._oldShiftDn = true
+			EntTable._oldShiftUp = true
+
+			self:EnableManualTransmission()
+
+			return
+		end
+	end
 
 	local ForwardVelocity = self:VectorSplitNormal( self:LocalToWorldAngles( EntTable.ForwardAngle ):Forward(), self:GetVelocity() )
 

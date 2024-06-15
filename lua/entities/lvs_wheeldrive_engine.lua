@@ -173,6 +173,8 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local DrivingMe = ply:lvsGetVehicle() == vehicle
 
+	local IsManualTransmission = vehicle:IsManualTransmission()
+
 	local VolumeSetNow = false
 
 	local FirstPerson = false
@@ -204,6 +206,8 @@ function ENT:HandleEngineSounds( vehicle )
 	local vehVel = vehicle:GetVelocity():Length()
 	local wheelVel = vehicle:GetWheelVelocity()
 
+	local IsHandBraking = wheelVel == 0 and vehicle:GetNWHandBrake()
+
 	local Vel = 0
 	local Wobble = 0
 
@@ -224,7 +228,7 @@ function ENT:HandleEngineSounds( vehicle )
 	local subGeared = vehVel - (EntTable._smVelGeared or 0)
 	local VelocityGeared = vehVel
 
-	if wheelVel == 0 and vehicle:GetNWHandBrake() then
+	if IsHandBraking then
 		VelocityGeared = PitchValue * Throttle
 		Vel = VelocityGeared
 	end
@@ -245,11 +249,30 @@ function ENT:HandleEngineSounds( vehicle )
 		DesiredGear = DesiredGear + 1
 	end
 
-	DesiredGear = math.Clamp( DesiredGear, 1, Reverse and vehicle.TransGearsReverse or NumGears )
+	if IsManualTransmission then
+		EntTable._NextShift = 0
+
+		if IsHandBraking then
+			DesiredGear = 1
+		else
+			DesiredGear = vehicle:GetGear()
+		end
+	else
+		DesiredGear = math.Clamp( DesiredGear, 1, Reverse and vehicle.TransGearsReverse or NumGears )
+	end
 
 	local CurrentGear = math.Clamp(self:GetGear(),1,NumGears)
 
-	local Ratio = (math.Clamp(Vel - (CurrentGear - 1) * PitchValue,0, PitchValue) / PitchValue) * (0.5 + (Throttle ^ 2) * 0.5)
+	local RatioThrottle = 0.5 + (Throttle ^ 2) * 0.5
+
+	local RatioPitch = math.max(Vel - (CurrentGear - 1) * PitchValue,0)
+
+	if not IsManualTransmission or IsHandBraking then
+		RatioPitch = math.min( PitchValue, RatioPitch )
+	end
+
+	local preRatio = math.Clamp(Vel / (PitchValue * (CurrentGear - 1)),0,1)
+	local Ratio = (RatioPitch / PitchValue) * RatioThrottle
 
 	if CurrentGear ~= DesiredGear then
 		if (EntTable._NextShift or 0) < T then
@@ -289,6 +312,23 @@ function ENT:HandleEngineSounds( vehicle )
 	local rpmSet = false
 	local rpmRate = PlayIdleSound and 1 or 5
 
+	if IsManualTransmission and (self:GetRPM() < vehicle.EngineIdleRPM or EntTable.ForcedIdle) then
+		if EntTable.ForcedIdle then
+			self:SetRPM(  vehicle.EngineIdleRPM )
+			PlayIdleSound = true
+			rpmRate = 1
+			EntTable._ClutchActive = true
+
+			if Ratio > 0 or Throttle > 0 then
+				EntTable.ForcedIdle = nil
+			end
+		else
+			if Ratio == 0 and Throttle == 0 then
+				EntTable.ForcedIdle = true
+			end
+		end
+	end
+
 	EntTable._smIdleVolume = EntTable._smIdleVolume and EntTable._smIdleVolume + ((PlayIdleSound and 1 or 0) - EntTable._smIdleVolume) * FT or 0
 	EntTable._smRPMVolume = EntTable._smRPMVolume and EntTable._smRPMVolume + ((PlayIdleSound and 0 or 1) - EntTable._smRPMVolume) * FT * rpmRate or 0
 
@@ -301,6 +341,10 @@ function ENT:HandleEngineSounds( vehicle )
 		EntTable._ClutchActive = true
 	else
 		EntTable._ClutchActive = false
+	end
+
+	if IsManualTransmission and IsHandBraking then
+		EntTable._ClutchActive = true
 	end
 
 	if not EntTable.EnginePitchStep then
@@ -323,6 +367,10 @@ function ENT:HandleEngineSounds( vehicle )
 
 		local Pitch = data.Pitch + PitchAdd + (data.PitchMul - PitchAdd) * Ratio + Wobble
 		local PitchMul = data.UseDoppler and Doppler or 1
+
+		if IsManualTransmission and Ratio == 0 and preRatio < 1 and not PlayIdleSound then
+			Pitch = (PitchAdd / CurrentGear) * (1 - preRatio) + (data.Pitch + PitchAdd) * preRatio + Wobble
+		end
 
 		local SoundType = data.SoundType
 
@@ -379,16 +427,16 @@ function ENT:HandleEngineSounds( vehicle )
 		if istable( sound ) then
 			if sound.int then
 				rpmSet = true
-				self:SetRPM( ((sound.int:GetPitch() - data.Pitch) / data.PitchMul) * vehicle.EngineMaxRPM )
+				self:SetRPM( vehicle.EngineIdleRPM + ((sound.int:GetPitch() - data.Pitch) / data.PitchMul) * (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM) )
 			else
 				if not sound.ext then continue end
 
 				rpmSet = true
-				self:SetRPM( ((sound.ext:GetPitch() - data.Pitch) / data.PitchMul) * vehicle.EngineMaxRPM )
+				self:SetRPM( vehicle.EngineIdleRPM + ((sound.ext:GetPitch() - data.Pitch) / data.PitchMul) * (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM) )
 			end
 		else
 			rpmSet = true
-			self:SetRPM( ((sound:GetPitch() - data.Pitch) / data.PitchMul) * vehicle.EngineMaxRPM )
+			self:SetRPM( vehicle.EngineIdleRPM + ((sound:GetPitch() - data.Pitch) / data.PitchMul) * (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM) )
 		end
 	end
 end

@@ -96,8 +96,8 @@ function ENT:SetupDataTables()
 
 	self:AddDT( "Float", "WheelVelocity" )
 
+	self:AddDT( "Int", "NWGear" )
 	self:AddDT( "Int", "TurnMode" )
-
 	self:AddDT( "Int", "SirenMode" )
 
 	self:AddDT( "Bool", "Reverse" )
@@ -159,7 +159,21 @@ function ENT:GetMaxSteerAngle()
 end
 
 function ENT:GetTargetVelocity()
-	if self:GetReverse() then
+	local Reverse = self:GetReverse()
+
+	if self:IsManualTransmission() then
+		local Gear = self:GetGear()
+		local EntTable = self:GetTable()
+
+		local NumGears = Reverse and EntTable.TransGearsReverse or EntTable.TransGears
+		local MaxVelocity = Reverse and EntTable.MaxVelocityReverse or EntTable.MaxVelocity
+
+		local GearedVelocity = math.min( (MaxVelocity / NumGears) * (Gear + 1), MaxVelocity )
+
+		return GearedVelocity * (Reverse and -1 or 1)
+	end
+
+	if Reverse then
 		return -self.MaxVelocityReverse
 	end
 
@@ -242,6 +256,24 @@ function ENT:HasTurnSignals()
 	EntTable._HasTurnSignals = HasTurnSignals
 
 	return HasTurnSignals
+end
+
+function ENT:GetGear()
+	local Gear = self:GetNWGear()
+
+	if Gear <= 0 then
+		return -1
+	end
+
+	if self:GetReverse() then
+		return math.Clamp( Gear, 1, self.TransGearsReverse )
+	end
+
+	return math.Clamp( Gear, 1, self.TransGears )
+end
+
+function ENT:IsManualTransmission()
+	return self:GetNWGear() > 0
 end
 
 function ENT:BodygroupIsValid( name, groups )
