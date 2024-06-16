@@ -1,5 +1,7 @@
 
 function ENT:OnCreateAI()
+	self:DisableManualTransmission()
+
 	self:StartEngine()
 
 	self.LVSFireBullet = function( self, data )

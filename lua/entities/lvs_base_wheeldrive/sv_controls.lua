@@ -126,12 +126,16 @@ function ENT:CalcTransmission( ply )
 		return
 	else
 		if ShiftUp or ShiftDn then
-			EntTable._oldShiftDn = true
-			EntTable._oldShiftUp = true
+			local Allowed = hook.Run( "LVS.OnPlayerRequestManualTransmission", ply, self ) ~= false
 
-			self:EnableManualTransmission()
+			if Allowed then
+				EntTable._oldShiftDn = true
+				EntTable._oldShiftUp = true
 
-			return
+				self:EnableManualTransmission()
+
+				return
+			end
 		end
 	end
 
