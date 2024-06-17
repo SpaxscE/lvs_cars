@@ -1,0 +1,32 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/diggercars/kubel/mg34"
+	"$bumpmap" "models/diggercars/kubel/mg34_nm"
+	"$halflambert" "1"					
+	
+	"$phong" "1"
+	"$phongboost"	"1" 		
+	"$phongexponent" "15"
+	"$phongfresnelranges"	"[0.3 1 4]"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$colorfix" "{80 80 80}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,277 @@
+
+ENT.Base = "lvs_base_wheeldrive"
+
+ENT.PrintName = "Willys Jeep M1919 Solo"
+ENT.Author = "Luna"
+ENT.Information = "Luna's Vehicle Script"
+ENT.Category = "[LVS] - Cars"
+
+ENT.VehicleCategory = "Cars"
+ENT.VehicleSubCategory = "Military"
+
+ENT.Spawnable			= true
+ENT.AdminSpawnable		= false
+
+ENT.MDL = "models/diggercars/willys/willys_mg.mdl"
+
+ENT.AITEAM = 2
+
+ENT.MaxVelocity = 1200
+
+ENT.EngineCurve = 0.25
+ENT.EngineTorque = 150
+
+ENT.TransGears = 4
+ENT.TransGearsReverse = 1
+
+ENT.EngineSounds = {
+	{
+		sound = "lvs/vehicles/willy/eng_idle_loop.wav",
+		Volume = 0.5,
+		Pitch = 85,
+		PitchMul = 25,
+		SoundLevel = 75,
+		SoundType = LVS.SOUNDTYPE_IDLE_ONLY,
+	},
+	{
+		sound = "lvs/vehicles/willy/eng_loop.wav",
+		Volume = 1,
+		Pitch = 50,
+		PitchMul = 100,
+		SoundLevel = 75,
+		UseDoppler = true,
+	},
+}
+
+ENT.Lights = {
+	{
+		Trigger = "main",
+		SubMaterialID = 0,
+		Sprites = {
+			[1] = {
+				pos = Vector(60.34,-17.52,34.46),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(60.34,17.52,34.46),
+				colorB = 200,
+				colorA = 150,
+			},
+			[3] = {
+				pos = Vector(-63.41,-20.49,21.1),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(60.34,-17.52,34.46),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(60.34,17.52,34.46),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+		Trigger = "main",
+		SubMaterialID = 7,
+	},
+	{
+		Trigger = "high",
+		Sprites = {
+			[1] = {
+				pos = Vector(60.34,-17.52,34.46),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(60.34,17.52,34.46),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+		ProjectedTextures = {
+			[1] = {
+				pos = Vector(60.34,-17.52,34.46),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+			[2] = {
+				pos = Vector(60.34,17.52,34.46),
+				ang = Angle(0,0,0),
+				colorB = 200,
+				colorA = 150,
+				shadows = true,
+			},
+		},
+	},
+	{
+
+		Trigger = "brake",
+		SubMaterialID = 2,
+		Sprites = {
+			[1] = {
+				pos = Vector(-63.41,20.49,21.1),
+				colorG = 0,
+				colorB = 0,
+				colorA = 150,
+			},
+		}
+	},
+	{
+		Trigger = "fog",
+		SubMaterialID = 1,
+		Sprites = {
+			[1] = {
+				pos = Vector(61.03,14.6,28.6),
+				colorB = 200,
+				colorA = 150,
+			},
+			[2] = {
+				pos = Vector(61.03,-14.6,28.6),
+				colorB = 200,
+				colorA = 150,
+			},
+			[3] = {
+				pos = Vector(53.09,26.85,35.88),
+				colorB = 200,
+				colorA = 150,
+			},
+		},
+	},
+}
+
+ENT.ExhaustPositions = {
+	{
+		pos = Vector(-59.32,13.07,12.77),
+		ang = Angle(0,180,0),
+	},
+}
+
+function ENT:InitWeapons()
+	self:AddGunnerWeapons()
+end
+
+
+function ENT:GunnerInRange( Dir )
+	return self:AngleBetweenNormal( self:GetForward(), Dir ) < 50
+end
+
+function ENT:AddGunnerWeapons()
+	local COLOR_RED = Color(255,0,0,255)
+	local COLOR_WHITE = Color(255,255,255,255)
+
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/mg.png")
+	weapon.Ammo = 1000
+	weapon.Delay = 0.1
+	weapon.HeatRateUp = 0.2
+	weapon.HeatRateDown = 0.25
+	weapon.Attack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		if not base:GunnerInRange( ent:GetAimVector() ) then
+
+			if not IsValid( base.SNDTurretMGf ) then return true end
+
+			base.SNDTurretMGf:Stop()
+	
+			return true
+		end
+
+		local ID = base:LookupAttachment( "muzzle" )
+
+		local Muzzle = base:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local bullet = {}
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
+		bullet.Spread 	= Vector(0.015,0.015,0.015)
+		bullet.TracerName = "lvs_tracer_yellow_small"
+		bullet.Force	= 10
+		bullet.HullSize 	= 0
+		bullet.Damage	= 25
+		bullet.Velocity = 30000
+		bullet.Attacker 	= ent:GetDriver()
+		ent:LVSFireBullet( bullet )
+
+		local effectdata = EffectData()
+		effectdata:SetOrigin( bullet.Src )
+		effectdata:SetNormal( Muzzle.Ang:Forward() )
+		effectdata:SetEntity( ent )
+		util.Effect( "lvs_muzzle", effectdata )
+
+		ent:TakeAmmo( 1 )
+
+		base.MgShot:PlayOnce()
+
+		if not IsValid( base.SNDTurretMGf ) then return end
+
+		base.SNDTurretMGf:Play()
+	end
+	weapon.StartAttack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) or not IsValid( base.SNDTurretMGf ) then return end
+
+		base.SNDTurretMGf:Play()
+	end
+	weapon.FinishAttack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) or not IsValid( base.SNDTurretMGf ) then return end
+
+		base.SNDTurretMGf:Stop()
+	end
+	weapon.OnThink = function( ent, active )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		if not base:GetAI() and not IsValid( ent:GetDriver() ) then
+			base:SetPoseParameter("f_pitch",  15 )
+			base:SetPoseParameter("f_yaw", 0 )
+
+			return
+		end
+
+		local Angles = base:WorldToLocalAngles( ent:GetAimVector():Angle() )
+		Angles:Normalize()
+
+		base:SetPoseParameter("f_yaw", -Angles.y )
+		base:SetPoseParameter("f_pitch",  -Angles.p )
+	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		local Pos2D = ent:GetEyeTrace().HitPos:ToScreen()
+
+		local Col =  base:GunnerInRange( ent:GetAimVector() ) and COLOR_WHITE or COLOR_RED
+
+		base:PaintCrosshairCenter( Pos2D, Col )
+		base:LVSPaintHitMarker( Pos2D )
+	end
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
+	end
+	self:AddWeapon( weapon )
+end
+

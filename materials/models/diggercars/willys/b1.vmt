@@ -1,0 +1,37 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/diggercars/willys/1919_ao"
+	"$bumpmap" "models/diggercars/willys/1919_nm"
+	"$halflambert" "1"					
+	
+	"$detail" "models/diggercars/willys/1919_diff"
+	"$detailscale" "1"
+	"$detailblendfactor" "0.5"
+	"$detailblendmode" "0"	
+
+	"$phong" "1"
+	"$phongboost"	"1" 		
+	"$phongexponent" "15"
+	"$phongfresnelranges"	"[0.3 1 4]"
+	"$alphatest" "1"
+	"$allowalphatocoverage" "1"
+	"$colorfix" "{170 80 20}"
+	"Proxies"
+	{
+		"Equals"
+		{
+			srcVar1 $colorfix
+			resultVar	$color
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
