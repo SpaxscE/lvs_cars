@@ -1,6 +1,5 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "cl_tankview.lua" )
 include("shared.lua")
 
 function ENT:OnSpawn( PObj )
@@ -9,6 +8,8 @@ function ENT:OnSpawn( PObj )
 
 	local GunnerSeat = self:AddPassengerSeat( Vector(-30,0,18), Angle(0,-90,0) )
 	self:SetGunnerSeat( GunnerSeat )
+
+	local PassengerSeat2 = self:AddPassengerSeat( Vector(-22,-12,22), Angle(0,-90,15) )
 
 	local ID = self:LookupAttachment( "muzzle" )
 	local Muzzle = self:GetAttachment( ID )
@@ -34,7 +35,7 @@ function ENT:OnSpawn( PObj )
 	local DoorHandler = self:AddDoorHandler( "rear_right_door", Vector(-10,-21,35), Angle(0,180,0), Vector(-8,-3,-12), Vector(18,6,12), Vector(-8,-15,-12), Vector(18,30,12) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_door_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_door_close.wav" )
-	DoorHandler:LinkToSeat( GunnerSeat )
+	DoorHandler:LinkToSeat( PassengerSeat2 )
 
 	local DoorHandler = self:AddDoorHandler( "hatch", Vector(27.71,0,53), Angle(0,0,0), Vector(-5,-23,-5), Vector(5,23,7), Vector(-5,-23,-10), Vector(18,23,-3) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_close.wav" )

@@ -105,8 +105,17 @@ function ENT:InitWeapons()
 	self:AddGunnerWeapons()
 end
 
-
 function ENT:GunnerInRange( Dir )
+	local pod = self:GetGunnerSeat()
+
+	if IsValid( pod ) and not pod:GetThirdPersonMode() then
+		local ply = pod:GetDriver()
+
+		if IsValid( ply ) and ply:lvsKeyDown( "ZOOM" ) then
+			return true
+		end
+	end
+
 	return self:AngleBetweenNormal( self:GetForward(), Dir ) < 40
 end
 
@@ -134,27 +143,39 @@ function ENT:AddGunnerWeapons()
 			return true
 		end
 
-		local ID = base:LookupAttachment( "muzzle" )
-
-		local Muzzle = base:GetAttachment( ID )
+		local Muzzle = base:GetAttachment( base:LookupAttachment( "muzzle" ) )
 
 		if not Muzzle then return end
 
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
+
+		local ply = ent:GetDriver()
+
+		if IsValid( ply ) and ply:lvsKeyDown( "ZOOM" ) then
+			local pod = ply:GetVehicle()
+
+			if IsValid( pod ) and not pod:GetThirdPersonMode() then
+				bullet.Dir = Muzzle.Ang:Forward()
+			else
+				bullet.Dir = (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
+			end
+		else
+			bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
+		end
+
 		bullet.Spread 	= Vector(0.015,0.015,0.015)
 		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
 		bullet.Velocity = 30000
-		bullet.Attacker 	= ent:GetDriver()
+		bullet.Attacker 	= ply
 		ent:LVSFireBullet( bullet )
 
 		local effectdata = EffectData()
 		effectdata:SetOrigin( bullet.Src )
-		effectdata:SetNormal( Muzzle.Ang:Forward() )
+		effectdata:SetNormal( bullet.Dir )
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle", effectdata )
 
@@ -205,9 +226,16 @@ function ENT:AddGunnerWeapons()
 
 		local Pos2D = ent:GetEyeTrace().HitPos:ToScreen()
 
-		local Col =  base:GunnerInRange( ent:GetAimVector() ) and COLOR_WHITE or COLOR_RED
+		local Col = base:GunnerInRange( ent:GetAimVector() ) and COLOR_WHITE or COLOR_RED
 
-		base:PaintCrosshairCenter( Pos2D, Col )
+		local pod = ply:GetVehicle()
+
+		if not IsValid( pod ) then return end
+
+		if not ply:lvsKeyDown( "ZOOM" ) or pod:GetThirdPersonMode() then
+			base:PaintCrosshairCenter( Pos2D, Col )
+		end
+
 		base:LVSPaintHitMarker( Pos2D )
 	end
 	weapon.OnOverheat = function( ent )
