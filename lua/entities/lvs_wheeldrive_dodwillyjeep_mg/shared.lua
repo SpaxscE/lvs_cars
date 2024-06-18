@@ -184,7 +184,7 @@ function ENT:AddGunnerWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/mg.png")
 	weapon.Ammo = 1000
-	weapon.Delay = 0.1
+	weapon.Delay = 0.12
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.Attack = function( ent )
@@ -221,7 +221,7 @@ function ENT:AddGunnerWeapons()
 
 		local effectdata = EffectData()
 		effectdata:SetOrigin( bullet.Src )
-		effectdata:SetNormal( Muzzle.Ang:Forward() )
+		effectdata:SetNormal( Muzzle.Ang:Up() )
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle", effectdata )
 
