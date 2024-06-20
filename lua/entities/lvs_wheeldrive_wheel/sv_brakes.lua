@@ -44,6 +44,16 @@ function ENT:LockRotation( TimedLock )
 
 	self.bsLock = constraint.AdvBallsocket(self,Master,0,0,vector_origin,vector_origin,0,0,-0.1,-0.1,-0.1,0.1,0.1,0.1,0,0,0,1,1)
 	self.bsLock.DoNotDuplicate = true
+
+	local PhysObj = self:GetPhysicsObject()
+
+	if self._OriginalMass or not IsValid( PhysObj ) then return end
+
+	local Mass = PhysObj:GetMass()
+
+	self._OriginalMass = Mass
+
+	PhysObj:SetMass( Mass * 1.5 )
 end
 
 function ENT:ReleaseRotation()
@@ -56,6 +66,14 @@ function ENT:ReleaseRotation()
 	if not self:IsRotationLocked() then return end
 
 	self.bsLock:Remove()
+
+	local PhysObj = self:GetPhysicsObject()
+
+	if not IsValid( PhysObj ) or not self._OriginalMass then return end
+
+	PhysObj:SetMass( self._OriginalMass )
+
+	self._OriginalMass = nil
 end
 
 function ENT:IsRotationLocked()
