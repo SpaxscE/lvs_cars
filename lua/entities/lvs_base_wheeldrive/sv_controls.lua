@@ -86,7 +86,7 @@ function ENT:CalcThrottle( ply )
 	local KeyThrottle = ply:lvsKeyDown( "CAR_THROTTLE" )
 	local KeyBrakes = ply:lvsKeyDown( "CAR_BRAKE" )
 
-	if self:GetReverse() then
+	if self:GetReverse() and not self:IsManualTransmission() then
 		KeyThrottle = ply:lvsKeyDown( "CAR_BRAKE" )
 		KeyBrakes = ply:lvsKeyDown( "CAR_THROTTLE" )
 	end
