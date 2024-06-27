@@ -4,6 +4,14 @@ include("shared.lua")
 include("sv_ai.lua")
 include("sv_kill_functions.lua")
 
+function ENT:EnableManualTransmission()
+	return false
+end
+
+function ENT:DisableManualTransmission()
+	return false
+end
+
 function ENT:OnTick()
 	local InputTarget = self:GetInputTarget()
 

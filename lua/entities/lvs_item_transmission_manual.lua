@@ -41,13 +41,13 @@ if SERVER then
 
 		if isfunction( ent.IsManualTransmission ) and ent:IsManualTransmission() then return end
 
-		ent:EmitSound("npc/dog/dog_rollover_servos1.wav")
+		if ent:EnableManualTransmission() ~= false then
+			ent:EmitSound("npc/dog/dog_rollover_servos1.wav")
 
-		self.MarkForRemove = true
+			self.MarkForRemove = true
 
-		ent:EnableManualTransmission()
-
-		SafeRemoveEntityDelayed( self, 0 )
+			SafeRemoveEntityDelayed( self, 0 )
+		end
 	end
 
 	function ENT:OnTakeDamage( dmginfo )

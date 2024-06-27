@@ -44,6 +44,14 @@ end
 function ENT:SetNWHandBrake()
 end
 
+function ENT:GetGear()
+	return -1
+end
+
+function ENT:IsManualTransmission()
+	return false
+end
+
 function ENT:SetThrottle()
 end
 
