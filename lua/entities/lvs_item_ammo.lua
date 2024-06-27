@@ -92,7 +92,7 @@ if SERVER then
 
 		self.BeenFired = true
 
-		local hit_decal = ents.Create( "lvs_wheeldrive_armor_bounce" )
+		local hit_decal = ents.Create( "lvs_armor_bounce" )
 		hit_decal:SetPos( self:GetPos() )
 		hit_decal:SetAngles( self:GetAngles() )
 		hit_decal:Spawn()
