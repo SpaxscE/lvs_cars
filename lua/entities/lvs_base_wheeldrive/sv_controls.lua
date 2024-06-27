@@ -122,6 +122,14 @@ function ENT:CalcTransmission( ply )
 
 		self:CalcManualTransmission( ply, EntTable, ShiftUp, ShiftDn )
 
+		local Reverse = self:GetReverse()
+
+		if Reverse ~= EntTable._oldKeyReverse then
+			EntTable._oldKeyReverse = Reverse
+
+			self:EmitSound( EntTable.TransShiftSound, 75 )
+		end
+
 		return
 	end
 
