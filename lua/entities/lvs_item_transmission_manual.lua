@@ -24,29 +24,37 @@ if SERVER then
 	function ENT:Initialize()	
 		self:SetModel( "models/diggercars/manual.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
+		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:PhysWake()
-		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
 	end
 
 	function ENT:Think()
 		return false
 	end
 
-	function ENT:PhysicsCollide( data, physobj )
+	function ENT:PhysicsCollide( data )
+		if self.MarkForRemove then return end
+
+		local ent = data.HitEntity
+
+		if not IsValid( ent ) or not ent.LVS or not isfunction( ent.EnableManualTransmission ) then return end
+
+		if isfunction( ent.IsManualTransmission ) and ent:IsManualTransmission() then return end
+
+		ent:EmitSound("npc/dog/dog_rollover_servos1.wav")
+
+		self.MarkForRemove = true
+
+		ent:EnableManualTransmission()
+
+		SafeRemoveEntityDelayed( self, 0 )
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
 	end
-end
 
-if CLIENT then
+else
 	function ENT:Draw( flags )
 		self:DrawModel( flags )
-	end
-
-	function ENT:OnRemove()
-	end
-
-	function ENT:Think()
 	end
 end
