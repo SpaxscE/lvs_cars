@@ -47,6 +47,10 @@ if SERVER then
 	function ENT:OnLinked( ent )
 		ent:OnSuperCharged( true )
 		ent:SetCompressor( self )
+
+		if not self.PlaySound then return end
+
+		ent:EmitSound("lvs/equip_blower.ogg")
 	end
 
 	function ENT:OnUnLinked( ent )

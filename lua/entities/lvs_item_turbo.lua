@@ -21,6 +21,10 @@ if SERVER then
 	function ENT:OnLinked( ent )
 		ent:OnTurboCharged( true )
 		ent:SetTurbo( self )
+
+		if not self.PlaySound then return end
+
+		ent:EmitSound("lvs/equip_turbo.ogg")
 	end
 
 	function ENT:OnUnLinked( ent )
