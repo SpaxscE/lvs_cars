@@ -28,6 +28,18 @@ function ENT:GetBoost()
 end
 
 if SERVER then
+	function ENT:SpawnFunction( ply, tr, ClassName )
+		if not tr.Hit then return end
+
+		local ent = ents.Create( ClassName )
+		ent:SetPos( tr.HitPos + tr.HitNormal * 5 )
+		ent:Spawn()
+		ent:Activate()
+		ent.PlaySound = true
+
+		return ent
+	end
+
 	function ENT:Initialize()	
 	end
 
@@ -70,11 +82,7 @@ if SERVER then
 
 		self.DoNotDuplicate = true
 
-		timer.Simple(0, function()
-			if not IsValid( self ) then return end
-
-			self:PhysicsDestroy()
-		end)
+		self:PhysicsDestroy()
 
 		self:SetSolid( SOLID_NONE )
 		self:SetMoveType( MOVETYPE_NONE )
@@ -106,7 +114,17 @@ if SERVER then
 	end
 
 	function ENT:PhysicsCollide( data )
-		self:LinkTo( data.HitEntity )
+		if self.HasTouched then return end
+
+		self.HasTouched = true
+
+		timer.Simple(0, function()
+			if not IsValid( self ) then return end
+
+			self.HasTouched = nil
+
+			self:LinkTo( data.HitEntity )
+		end)
 	end
 
 	function ENT:OnRemove()
