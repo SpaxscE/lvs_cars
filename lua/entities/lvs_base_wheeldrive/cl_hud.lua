@@ -1,5 +1,6 @@
 
 include("cl_optics.lua")
+include("cl_hud_speedometer.lua")
 
 function ENT:LVSPreHudPaint( X, Y, ply )
 	return true
@@ -84,6 +85,16 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	if (EntTable._nextRefreshVel or 0) < T then
 		EntTable._nextRefreshVel = T + 0.1
 		EntTable._refreshVel = self:GetVelocity():Length()
+	end
+
+	if self:GetRacingHud() then
+		if ply ~= self:GetDriver() then
+			local kmh = math.Round( (EntTable._refreshVel or 0) * 0.09144,0)
+			draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
+			draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
+		end
+
+		return
 	end
 
 	local kmh = math.Round( (EntTable._refreshVel or 0) * 0.09144,0)

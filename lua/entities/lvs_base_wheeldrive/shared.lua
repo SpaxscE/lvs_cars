@@ -103,6 +103,8 @@ function ENT:SetupDataTables()
 	self:AddDT( "Bool", "Reverse" )
 	self:AddDT( "Bool", "NWHandBrake" )
 
+	self:AddDT( "Bool", "RacingHud" )
+
 	self:AddDT( "Entity", "Engine" )
 	self:AddDT( "Entity", "FuelTank" )
 	self:AddDT( "Entity", "LightsHandler" )
