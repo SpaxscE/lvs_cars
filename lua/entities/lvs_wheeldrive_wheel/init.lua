@@ -140,4 +140,14 @@ function ENT:PhysicsCollide( data, physobj )
 
 		self:EmitSound( "lvs/vehicles/generic/suspension_hit_".. math.random(1,17) ..".ogg", 70, 100, Volume ^ 2 )
 	end
+
+	if math.abs(data.OurNewVelocity.z - data.OurOldVelocity.z) > 100 then
+		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
+
+		timer.Simple(0, function()
+			if not IsValid( physobj ) then return end
+
+			physobj:SetVelocityInstantaneous( data.OurOldVelocity )
+		end)
+	end
 end
