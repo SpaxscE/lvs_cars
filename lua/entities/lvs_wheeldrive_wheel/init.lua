@@ -143,11 +143,5 @@ function ENT:PhysicsCollide( data, physobj )
 
 	if math.abs(data.OurNewVelocity.z - data.OurOldVelocity.z) > 100 then
 		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
-
-		timer.Simple(0, function()
-			if not IsValid( physobj ) then return end
-
-			physobj:SetVelocityInstantaneous( data.OurOldVelocity )
-		end)
 	end
 end
