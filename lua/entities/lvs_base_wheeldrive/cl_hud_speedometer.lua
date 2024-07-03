@@ -6,28 +6,158 @@ LVS:AddHudEditor( "Tach",  ScrW() - 266, ScrH() - 266,  256, 256, 256, 256, "TAC
 	end
 )
 
-ENT.TachRange = 280
-ENT.TachRing = Material( "lvs/tachometer/ring.png" )
-ENT.TachTextFont = "LVS_FONT"
-ENT.TachTextRadius = 97
-ENT.TachPartRadiusInner = 115
-ENT.TachTickRadiusInner = 109
-ENT.TachTickRadiusOuter = 124
+local circles = include("includes/circles/circles.lua")
 
-ENT.TachPartColor = Color(200,200,200,255)
+local Center = 130
 
-ENT.TachGlow = Material("sun/overlay")
-ENT.TachGlowColor = Color(5,30,30,255)
-ENT.TachGlowColorRedline = Color(50,0,0,255)
-ENT.TachGlowRadius = 110
+local startAngle = 165
+local endAngle = 360
+local offsetAngle = 1.4
 
-ENT.TachNeedleColor = Color(255,0,0,255)
-ENT.TachNeedleRadiusInner = 50
-ENT.TachNeedleRadiusOuter = 124
-ENT.TachNeedleBlurTime = 0.1
-ENT.TachNeedles = {}
+local RingOuter = circles.New( CIRCLE_OUTLINED, 129, 0, 0, 7 )
+RingOuter:SetX( Center )
+RingOuter:SetY( Center )
+RingOuter:SetMaterial( true )
 
-local CurRPM = 0
+local RingInner = circles.New( CIRCLE_OUTLINED, 128, 0, 0, 5 )
+RingInner:SetX( Center )
+RingInner:SetY( Center )
+RingInner:SetMaterial( true )
+
+local RingOuterRedline = circles.New( CIRCLE_OUTLINED, 129, 0, 0, 4 )
+RingOuterRedline:SetX( Center )
+RingOuterRedline:SetY( Center )
+RingOuterRedline:SetMaterial( true )
+
+local RingInnerRedline = circles.New( CIRCLE_OUTLINED, 128, 0, 0, 2 )
+RingInnerRedline:SetX( Center )
+RingInnerRedline:SetY( Center )
+RingInnerRedline:SetMaterial( true )
+
+local VehicleTach = {}
+
+function ENT:GetBakedTachMaterial()
+	local Class = self:GetClass()
+
+	if VehicleTach[ Class ] then return VehicleTach[ Class ] end
+
+	local MaxRPM = self.EngineMaxRPM + 3000
+
+	local TachRange = endAngle - startAngle
+
+	local Steps = math.ceil(MaxRPM / 1000)
+	local AngleStep = TachRange / Steps
+	local AngleRedline = startAngle + (TachRange / MaxRPM) * self.EngineMaxRPM
+
+	local tachRT = GetRenderTarget( "lvs_tach_"..Class, Center * 2, Center * 2 )
+
+	local old = DisableClipping( true )
+
+	render.OverrideAlphaWriteEnable( true, true )
+
+	render.PushRenderTarget( tachRT )
+
+	cam.Start2D()
+		render.ClearDepth()
+		render.Clear( 0, 0, 0, 0 )
+
+		surface.SetDrawColor( Color( 0, 0, 0, 200 ) )
+
+		RingOuter:SetStartAngle( startAngle - offsetAngle )
+		RingOuter:SetEndAngle( AngleRedline )
+		RingOuter()
+
+		RingOuterRedline:SetStartAngle( AngleRedline )
+		RingOuterRedline:SetEndAngle( endAngle + offsetAngle )
+		RingOuterRedline()
+
+		surface.SetDrawColor( color_white )
+
+		for i = 0, Steps do
+			for n = -1,1, 0.25 do
+				local Ang = AngleStep * i + startAngle + n
+
+				local AngX = math.cos( math.rad( Ang ) )
+				local AngY = math.sin( math.rad( Ang ) )
+
+				local StartX = Center + AngX * 109
+				local StartY = Center + AngY * 109
+
+				local EndX = Center + AngX * 127
+				local EndY = Center + AngY * 127
+
+				if Ang > AngleRedline then
+					surface.SetDrawColor( Color(255,0,0,255) )
+				else
+					surface.SetDrawColor( color_white )
+				end
+
+				surface.DrawLine( StartX, StartY, EndX, EndY )
+
+				if n == 0 then
+					local TextX = Center + AngX * 97
+					local TextY = Center + AngY * 97
+
+					if Ang > AngleRedline then
+						draw.SimpleText( i, "LVS_FONT", TextX, TextY, Color(255,0,0,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					else
+						draw.SimpleText( i, "LVS_FONT", TextX, TextY, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					end
+				end
+			end
+		end
+
+		for i = 1, Steps do
+			local Start = AngleStep * i + startAngle
+
+			for n = 1, 9 do
+				local Ang = Start - (AngleStep / 10) * n
+
+				if Ang > AngleRedline then
+					surface.SetDrawColor( Color(150,0,0,255) )
+				else
+					surface.SetDrawColor( Color(150,150,150,255) )
+				end
+
+				local AngX = math.cos( math.rad( Ang ) )
+				local AngY = math.sin( math.rad( Ang ) )
+
+				local StartX = Center + AngX * 115
+				local StartY = Center + AngY * 115
+
+				local EndX = Center + AngX * 127
+				local EndY = Center + AngY * 127
+
+				surface.DrawLine( StartX, StartY, EndX, EndY )
+			end
+		end
+
+		surface.SetDrawColor( color_white )
+
+		RingInner:SetStartAngle( startAngle - offsetAngle )
+		RingInner:SetEndAngle( AngleRedline )
+		RingInner()
+
+		surface.SetDrawColor( Color(255,0,0,255) )
+
+		RingInnerRedline:SetStartAngle( AngleRedline )
+		RingInnerRedline:SetEndAngle( endAngle + offsetAngle )
+		RingInnerRedline()
+
+	cam.End2D()
+
+	render.OverrideAlphaWriteEnable( false )
+
+	render.PopRenderTarget()
+
+	local Mat = CreateMaterial( "lvs_tach_"..Class.."_mat", "UnlitGeneric", { ["$basetexture"] = tachRT:GetName(), ["$translucent"] = 1, ["$vertexcolor"] = 1 } )
+
+	VehicleTach[ Class ] = Mat
+
+	DisableClipping( old )
+
+	return Mat
+end
 
 function ENT:LVSHudPaintTach( X, Y, w, h, ScrX, ScrY, ply )
 	if ply ~= self:GetDriver() then return end
@@ -38,129 +168,7 @@ function ENT:LVSHudPaintTach( X, Y, w, h, ScrX, ScrY, ply )
 
 	if not IsValid( Engine ) then return end
 
-	local MaxRPM = self.EngineMaxRPM + 3000
-
-	local Delta = (Engine:GetRPM() - CurRPM) * RealFrameTime() * 20
-
-	CurRPM = CurRPM + Delta
-
-	surface.SetMaterial( self.TachRing )
-	surface.SetDrawColor( Color(0,0,0,200) )
-	surface.DrawTexturedRect( X - 1,Y - 1,w + 2,h + 2)
-
-	surface.SetDrawColor( color_white )
-	surface.DrawTexturedRect( X,Y,w,h)
-
-	local Steps = math.ceil(MaxRPM / 1000)
-	local AngleStep = self.TachRange / Steps
-	local AngleRedline = (self.TachRange / MaxRPM) * self.EngineMaxRPM
-
-	local CenterX = X + w * 0.5
-	local CenterY = Y + h * 0.5
-
-	for i = 0, self.TachRange, 10 do
-		local Ang = i + 90
-
-		local AngX = math.cos( math.rad( Ang ) )
-		local AngY = math.sin( math.rad( Ang ) )
-
-		local TextX = CenterX + AngX * self.TachGlowRadius
-		local TextY = CenterY + AngY * self.TachGlowRadius
-
-		surface.SetMaterial( self.TachGlow )
-		if i > AngleRedline then
-			surface.SetDrawColor( self.TachGlowColorRedline )
-		else
-			surface.SetDrawColor( self.TachGlowColor )
-		end
-
-		surface.DrawTexturedRectRotated( TextX,TextY,64,64,0)
-	end
-
-	surface.SetDrawColor( color_white )
-
-	for i = 0, Steps do
-		for n = -1,1, 0.25 do
-			local Ang = AngleStep * i + 90 + n
-
-			local AngX = math.cos( math.rad( Ang ) )
-			local AngY = math.sin( math.rad( Ang ) )
-
-			local StartX = CenterX + AngX * self.TachTickRadiusInner
-			local StartY = CenterY + AngY * self.TachTickRadiusInner
-
-			local EndX = CenterX + AngX * self.TachTickRadiusOuter
-			local EndY = CenterY + AngY * self.TachTickRadiusOuter
-
-			surface.DrawLine( StartX, StartY, EndX, EndY )
-
-			if n == 0 then
-				local TextX = CenterX + AngX * self.TachTextRadius
-				local TextY = CenterY + AngY * self.TachTextRadius
-
-				draw.SimpleText( i, self.TachTextFont, TextX, TextY, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			end
-		end
-	end
-
-	surface.SetDrawColor( self.TachPartColor )
-
-	for i = 1, Steps do
-		local Start = AngleStep * i + 90
-
-		for n = 1, 9 do
-			local Ang = Start - (AngleStep / 10) * n
-
-			local AngX = math.cos( math.rad( Ang ) )
-			local AngY = math.sin( math.rad( Ang ) )
-
-			local StartX = CenterX + AngX * self.TachPartRadiusInner
-			local StartY = CenterY + AngY * self.TachPartRadiusInner
-
-			local EndX = CenterX + AngX * self.TachTickRadiusOuter
-			local EndY = CenterY + AngY * self.TachTickRadiusOuter
-
-			surface.DrawLine( StartX, StartY, EndX, EndY )
-		end
-	end
-
-	local T = CurTime()
-
-	local Ang = (CurRPM / MaxRPM) * self.TachRange + 90
-
-	local AngX = math.cos( math.rad( Ang ) )
-	local AngY = math.sin( math.rad( Ang ) )
-
-	if math.abs( Delta ) > 1 then
-		local data = {
-			StartX = (CenterX + AngX * self.TachNeedleRadiusInner),
-			StartY = (CenterY + AngY * self.TachNeedleRadiusInner),
-			EndX = (CenterX + AngX * self.TachNeedleRadiusOuter),
-			EndY = (CenterY + AngY * self.TachNeedleRadiusOuter),
-			Time = T + self.TachNeedleBlurTime
-		}
-
-		table.insert( self.TachNeedles, data )
-	else
-		local StartX = CenterX + AngX * self.TachNeedleRadiusInner
-		local StartY = CenterY + AngY * self.TachNeedleRadiusInner
-		local EndX = CenterX + AngX * self.TachNeedleRadiusOuter
-		local EndY = CenterY + AngY * self.TachNeedleRadiusOuter
-
-		surface.SetDrawColor( self.TachNeedleColor )
-		surface.DrawLine( StartX, StartY, EndX, EndY )
-	end
-
-	for index, data in pairs( self.TachNeedles ) do
-		if data.Time < T then
-			self.TachNeedles[ index ] = nil
-
-			continue
-		end
-
-		local Brightness = (data.Time - T) / self.TachNeedleBlurTime
-
-		surface.SetDrawColor( Color( self.TachNeedleColor.r * Brightness, self.TachNeedleColor.g * Brightness, self.TachNeedleColor.b * Brightness, self.TachNeedleColor.a * Brightness ^ 2 ) )
-		surface.DrawLine( data.StartX, data.StartY, data.EndX, data.EndY )
-	end
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial( self:GetBakedTachMaterial() )
+	surface.DrawTexturedRect( X, Y, w, h )
 end
