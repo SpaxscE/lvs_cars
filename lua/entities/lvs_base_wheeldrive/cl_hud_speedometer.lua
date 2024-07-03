@@ -76,7 +76,7 @@ function ENT:GetBakedSpeedoMaterial( MaxSpeed )
 
 	local SpeedoRange = endAngleSpeedo - startAngleSpeedo
 
-	local Steps = math.ceil( MaxSpeed / 15 ) + 2
+	local Steps = math.ceil( MaxSpeed / 15 )
 	local AngleStep = SpeedoRange / Steps
 
 	local speedoRT = GetRenderTarget( "lvs_speedo_"..Class, Center * 2, Center * 2 )
@@ -305,7 +305,7 @@ function ENT:LVSHudPaintSpeedo( X, Y, w, h, ScrX, ScrY, ply )
 
 	CurSpeed = CurSpeed + Delta
 
-	local MaxSpeed = math.ceil( math.max( self.MaxVelocity, self.MaxVelocityReverse ) * 0.09144,0)
+	local MaxSpeed = math.ceil( math.max( self.MaxVelocity, self.MaxVelocityReverse ) * 0.09144,0) + 20
 
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( self:GetBakedSpeedoMaterial( MaxSpeed ) )
