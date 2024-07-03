@@ -145,7 +145,11 @@ function ENT:SetRPM( rpm )
 end
 
 function ENT:GetRPM()
-	return (self._CurRPM or 0)
+	local base = self:GetBase()
+
+	if not IsValid( base ) or not base:GetEngineActive() then return 0 end
+
+	return math.abs(self._CurRPM or 0)
 end
 
 function ENT:GetClutch()

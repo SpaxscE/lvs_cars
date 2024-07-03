@@ -58,7 +58,7 @@ function ENT:CalcPoseParameters()
 	local handbrake = self:QuickLerp( "handbrake", self:GetNWHandBrake() and 1 or 0 )
 
 	if IsValid( engine ) then
-		rpm = self:QuickLerp( "rpm", engineActive and engine:GetRPM() or 0 )
+		rpm = self:QuickLerp( "rpm", engine:GetRPM() )
 		gear = engine:GetGear()
 		oil = self:QuickLerp( "oil", engineActive and math.min( 0.2 + (rpm / self.EngineMaxRPM) * 1.25, 1 ) or 0, 0.1 ) ^ 2
 
