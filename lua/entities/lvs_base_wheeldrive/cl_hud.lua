@@ -87,16 +87,6 @@ function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 		EntTable._refreshVel = self:GetVelocity():Length()
 	end
 
-	if self:GetRacingHud() then
-		if ply ~= self:GetDriver() then
-			local kmh = math.Round( (EntTable._refreshVel or 0) * 0.09144,0)
-			draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
-			draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
-		end
-
-		return
-	end
-
 	local kmh = math.Round( (EntTable._refreshVel or 0) * 0.09144,0)
 	draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
 	draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
