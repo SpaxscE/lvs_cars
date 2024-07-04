@@ -84,15 +84,22 @@ function ENT:RunAI()
 	local Throttle = math.min( math.max( TargetPosLocal:Length() - GotoDist, 0 ) / 10, 1 )
 
 	self:PhysWake()
-	self:LerpThrottle( Throttle )
 
-	if Throttle == 0 then
-		self:LerpBrake( 1 )
+	if self:IsLegalInput() then
+		self:LerpThrottle( Throttle )
+
+		if Throttle == 0 then
+			self:LerpBrake( 1 )
+		else
+			self:LerpBrake( 0 )
+		end
 	else
-		self:LerpBrake( 0 )
+		self:LerpThrottle( 0 )
+		self:LerpBrake( Throttle )
 	end
 
 	self:ReleaseHandbrake()
+
 	self:SetReverse( TargetPosLocal.y < 0 )
 
 	self:ApproachTargetAngle( Pod:LocalToWorldAngles( (GotoPos - self:GetPos()):Angle() ) )
