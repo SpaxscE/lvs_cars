@@ -1,6 +1,6 @@
 LVS:AddHudEditor( "Speedo",  ScrW() * 0.5 - 300 - 25, ScrH() - 240,  300, 220, 300, 220, "SPEEDO",
 	function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
-		if not vehicle.LVSHudPaintSpeedo then return end
+		if not vehicle.LVSHudPaintSpeedo or not vehicle.GetRacingHud then return end
 
 		vehicle:LVSHudPaintSpeedo( X, Y, W, H, ScrX, ScrY, ply )
 	end
@@ -8,7 +8,7 @@ LVS:AddHudEditor( "Speedo",  ScrW() * 0.5 - 300 - 25, ScrH() - 240,  300, 220, 3
 
 LVS:AddHudEditor( "Tach",  ScrW() * 0.5 + 25, ScrH() - 240,  300, 220, 300, 220, "TACH",
 	function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
-		if not vehicle.LVSHudPaintTach then return end
+		if not vehicle.LVSHudPaintTach or not vehicle.GetRacingHud then return end
 
 		vehicle:LVSHudPaintTach( X, Y, W, H, ScrX, ScrY, ply )
 	end
