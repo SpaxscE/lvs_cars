@@ -223,6 +223,7 @@ function ENT:HandleEngineSounds( vehicle )
 	end
 
 	local NumGears = vehicle.TransGears
+	local MaxGear = Reverse and vehicle.TransGearsReverse or NumGears
 
 	local VolumeValue = self:SetEngineVolume( LVS.EngineVolume )
 	local PitchValue = vehicle.MaxVelocity / NumGears
@@ -262,7 +263,7 @@ function ENT:HandleEngineSounds( vehicle )
 			DesiredGear = vehicle:GetGear()
 		end
 	else
-		DesiredGear = math.Clamp( DesiredGear, 1, Reverse and vehicle.TransGearsReverse or NumGears )
+		DesiredGear = math.Clamp( DesiredGear, 1, MaxGear )
 	end
 
 	local CurrentGear = math.Clamp(self:GetGear(),1,NumGears)
@@ -271,7 +272,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local RatioPitch = math.max(Vel - (CurrentGear - 1) * PitchValue,0)
 
-	if not IsManualTransmission or IsHandBraking then
+	if (not IsManualTransmission or IsHandBraking) and CurrentGear ~= MaxGear then
 		RatioPitch = math.min( PitchValue, RatioPitch )
 	end
 
