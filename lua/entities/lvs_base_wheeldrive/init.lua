@@ -192,6 +192,9 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	return self:SimulateRotatingWheel( ent, phys, deltatime )
 end
 
+local deltatimeMin = 1 / 30
+local deltatimeNew = 1 / 15
+
 function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 	local T = CurTime()
 	local tickdelta = engine.TickInterval()
@@ -221,15 +224,16 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 
 	local Throttle = self:GetThrottle()
 
-	if tickdelta < 1 / 30 and not (Throttle > 0 and math.abs( curRPM ) < 50) then
-		local deltatimeNew = 1 / 15
-
+	if tickdelta < deltatimeMin and not (Throttle > 0 and math.abs( curRPM ) < 50) then
 		WheelTable._lvsNextSimulate = T + deltatimeNew - tickdelta * 0.5
 
 		local Tick1 = 1 / deltatime
 		local Tick2 = 1 / deltatimeNew
 
 		forceMul = Tick1 / Tick2
+
+	else
+		WheelTable._lvsNextSimulate = T - 1
 	end
 
 	ent:SetRPM( curRPM )
