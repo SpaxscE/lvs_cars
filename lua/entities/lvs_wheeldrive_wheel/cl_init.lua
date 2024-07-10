@@ -10,11 +10,20 @@ function ENT:Initialize()
 	self:DrawShadow( false )
 end
 
-function ENT:Draw()
-	if self:GetHideModel() then return end
+if GravHull then
+	function ENT:Draw( flags )
+		if self:GetHideModel() then return end
 
-	self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
-	self:DrawModel()
+		self:SetAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
+		self:DrawModel( flags )
+	end
+else
+	function ENT:Draw( flags )
+		if self:GetHideModel() then return end
+
+		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
+		self:DrawModel( flags )
+	end
 end
 
 function ENT:DrawTranslucent()
