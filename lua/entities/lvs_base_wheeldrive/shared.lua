@@ -56,9 +56,21 @@ ENT.PhysicsDampingSpeed = 4000
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = false
 
-ENT.WheelPhysicsMaterial = "jeeptire"
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
+ENT.WheelPhysicsMaterials = {
+	[0] = "friction_00", -- 0
+	[1] = "friction_10", --  0.1
+	[2] = "friction_25", --  0.25
+	[3] = "popcan", --  0.3
+	[4] = "glassbottle", --  0.4
+	[5] = "glass", --  0.5
+	[6] = "snow", --  0.6
+	[7] = "roller", --  0.7
+	[8] = "rubber", --  0.8
+	[9] = "grenade", --  0.9
+	[10] = "jeeptire", --  1.337 -- i don't believe friction in havok can go above 1, however other settings such as bouncyness and elasticity are affected by it as it seems. We use jeeptire as default even tho it technically isn't the "best" choice, but rather the most common one
+}
 
 ENT.AutoReverseVelocity = 50
 

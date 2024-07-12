@@ -6,24 +6,6 @@ include("shared.lua")
 include("sv_axle.lua")
 include("sv_brakes.lua")
 
-ENT.FrictionChart = {
-	[0] = "friction_00", -- 0
-	[1] = "friction_10", --  0.1
-	[2] = "friction_25", --  0.25
-	[3] = "popcan", --  0.3
-	[4] = "glassbottle", --  0.4
-	[5] = "glass", --  0.5
-	[6] = "snow", --  0.6
-	[7] = "roller", --  0.7
-	[8] = "rubber", --  0.8
-	[9] = "grenade", --  0.9
-	[10] = "rubbertire", --  1
-	[11] = "jeeptire", --  1.337 -- i don't believe friction in havok can go above 1, however other settings such as bouncyness and elasticity are affected by it as it seems. We use jeeptire as default even tho it technically isn't the "best" choice, but rather the most common one
-	[12] = "jalopytire", --  1.337
-	[13] = "phx_tire_normal", --  3
-	[14] = "phx_rubbertire2", --  5
-}
-
 function ENT:GetWheelType()
 	return self._WheelType or LVS.WHEELTYPE_NONE
 end
@@ -125,15 +107,7 @@ function ENT:lvsMakeSpherical( radius )
 		radius = math.max( radius.x, radius.y, radius.z )
 	end
 
-	local physprop = "jeeptire" 
-
-	local base = self:GetBase()
-
-	if IsValid( base ) then
-		physprop = base.WheelPhysicsMaterial or "jeeptire"
-	end
-
-	self:PhysicsInitSphere( radius, physprop )
+	self:PhysicsInitSphere( radius, "jeeptire"  )
 
 	self:SetRadius( radius )
 
