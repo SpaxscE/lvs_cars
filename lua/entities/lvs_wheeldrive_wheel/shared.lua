@@ -49,4 +49,16 @@ end
 
 function ENT:CheckAlignment()
 	self.CamberCasterToe = (math.abs( self:GetToe() ) + math.abs( self:GetCaster() ) + math.abs( self:GetCamber() )) ~= 0
+
+	if CLIENT then return end
+
+	local Camber = math.abs( self:GetCamber() )
+	local CamberValue1 = (math.min( Camber, 15 ) / 15) * 0.3
+	local CamberValue2 = (math.Clamp( Camber - 15, 0, 65 ) / 65) * 0.7
+
+	local CasterValue = (math.min( math.abs( self:GetCaster() ), 15 ) / 15) * math.max( 1 - Camber / 2, 0 )
+
+	local TractionValue = 1 - CamberValue1 -  CamberValue2 + CasterValue
+
+	self:PhysicsMaterialUpdate( TractionValue )
 end

@@ -68,8 +68,10 @@ ENT.WheelPhysicsMaterials = {
 	[6] = "snow", --  0.6
 	[7] = "roller", --  0.7
 	[8] = "rubber", --  0.8
-	[9] = "grenade", --  0.9
+	[9] = "slime", --  0.9
 	[10] = "jeeptire", --  1.337 -- i don't believe friction in havok can go above 1, however other settings such as bouncyness and elasticity are affected by it as it seems. We use jeeptire as default even tho it technically isn't the "best" choice, but rather the most common one
+	[11] = "jalopytire", -- 1.337
+	[12] = "phx_tire_normal", --  3
 }
 
 ENT.AutoReverseVelocity = 50

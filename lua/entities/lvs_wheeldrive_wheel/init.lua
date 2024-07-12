@@ -114,6 +114,17 @@ function ENT:lvsMakeSpherical( radius )
 	self:DrawShadow( not self:GetHideModel() )
 end
 
+function ENT:PhysicsMaterialUpdate( TargetValue )
+	local base = self:GetBase()
+	local PhysObj = self:GetPhysicsObject()
+
+	if not IsValid( base ) or not IsValid( PhysObj ) then return end
+
+	local ListID = math.Clamp( math.Round( (TargetValue or 1) * 10, 0 ), 0, 12 )
+
+	PhysObj:SetMaterial( base.WheelPhysicsMaterials[ ListID ] )
+end
+
 function ENT:PhysicsOnGround( PhysObj )
 	if not PhysObj then
 		PhysObj = self:GetPhysicsObject()
