@@ -1,5 +1,5 @@
 
-LVS:AddHudEditor( "Tach",  ScrW() * 0.5 + 25, ScrH() - 240,  300, 220, 300, 220, "TACH",
+LVS:AddHudEditor( "Tachometer",  ScrW() - 530, ScrH() - 250,  300, 220, 300, 220, "TACH",
 	function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
 		if not vehicle.LVSHudPaintTach or not vehicle.GetRacingHud then return end
 

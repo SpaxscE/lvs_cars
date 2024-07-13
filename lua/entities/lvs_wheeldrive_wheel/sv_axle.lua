@@ -55,6 +55,18 @@ function ENT:GetRotationAxis()
 	return WorldAngleDirection:Right()
 end
 
+function ENT:GetSteerType()
+	if self._steerType then return self._steerType end
+
+	local base = self:GetBase()
+
+	if not IsValid( base ) then return 0 end
+
+	self._steerType = base:GetAxleData( self:GetAxle() ).SteerType
+
+	return self._steerType
+end
+
 function ENT:GetTorqueFactor()
 	if self._torqueFactor then return self._torqueFactor end
 

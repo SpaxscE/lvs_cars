@@ -52,13 +52,24 @@ function ENT:CheckAlignment()
 
 	if CLIENT then return end
 
+	local SteerType = self:GetSteerType()
+	local Caster = self:GetCaster()
+
 	local Camber = math.abs( self:GetCamber() )
 	local CamberValue1 = (math.min( Camber, 15 ) / 15) * 0.3
 	local CamberValue2 = (math.Clamp( Camber - 15, 0, 65 ) / 65) * 0.7
 
-	local CasterValue = (math.min( math.abs( self:GetCaster() ), 15 ) / 15) * math.max( 1 - Camber / 2, 0 )
+	local CasterValue = (math.min( math.abs( Caster ), 15 ) / 15) * math.max( 1 - Camber / 10, 0 )
+
+	if SteerType == LVS.WHEEL_STEER_NONE then CasterValue = 0 end
+
+	if SteerType == LVS.WHEEL_STEER_FRONT and Caster < 0 then CasterValue = 0 end
+
+	if SteerType == LVS.WHEEL_STEER_REAR and Caster > 0 then CasterValue = 0 end
 
 	local TractionValue = 1 - CamberValue1 -  CamberValue2 + CasterValue
 
 	self:PhysicsMaterialUpdate( TractionValue )
+
+	return TractionValue
 end

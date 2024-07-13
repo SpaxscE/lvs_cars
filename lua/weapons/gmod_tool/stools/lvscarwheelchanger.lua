@@ -526,7 +526,14 @@ function TOOL:Reload( trace )
 
 	ent:SetCaster( caster )
 
-	ent:CheckAlignment()
+	local NewTraction = math.min( math.Round( (ent:CheckAlignment() or 0) * 100, 0 ), 120 )
+
+	local ply = self:GetOwner()
+
+	if IsValid( ply ) and ply:IsPlayer() then
+		ply:ChatPrint( "Estimated Traction: "..NewTraction.."%" )
+	end
+
 	ent:SetSuspensionHeight( self:GetClientInfo("height") )
 	ent:SetSuspensionStiffness( self:GetClientInfo("stiffness") )
 	ent:PhysWake()
