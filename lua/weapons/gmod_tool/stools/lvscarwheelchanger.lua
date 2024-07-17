@@ -512,9 +512,9 @@ function TOOL:Reload( trace )
 
 	if CLIENT then return true end
 
-	local camber = math.Round( tonumber( self:GetClientInfo("camber") ), 2 )
-	local caster = math.Round( tonumber( self:GetClientInfo("caster") ), 2 )
-	local toe = math.Round( tonumber( self:GetClientInfo("toe") ), 2 )
+	local camber = math.Round( self:GetClientNumber("camber",0) , 2 )
+	local caster = math.Round( self:GetClientNumber("caster",0) , 2 )
+	local toe = math.Round( self:GetClientNumber("toe",0) , 2 )
 
 	if math.Round( ent:GetCamber(), 2 ) == camber and math.Round( ent:GetToe(), 2 ) == toe and math.Round( ent:GetCaster(), 2 ) == caster then
 		ent:SetCamber( -camber )
