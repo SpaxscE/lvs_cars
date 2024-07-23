@@ -317,5 +317,5 @@ ENT.ExhaustPositions = {
 
 --[[ lights ]]
 ENT.Lights = {}
--- see: https://raw.githubusercontent.com/Blu-x92/lvs_cars/main/zzz_ENT_lights_info.lua?token=GHSAT0AAAAAACFA53CXF42NMFHSXN5VQ2I4ZHD6NBQ
+-- see: https://raw.githubusercontent.com/SpaxscE/lvs_cars/main/zzz_ENT_lights_info.lua
 -- or https://discord.com/channels/1036581288653627412/1140195565368508427/1140195750207291403
