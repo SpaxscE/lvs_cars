@@ -21,6 +21,7 @@ include("sv_damage.lua")
 include("sv_pivotsteer.lua")
 include("sv_duping.lua")
 include("sv_manualtransmission.lua")
+include("sv_engine.lua")
 include("sh_camera_eyetrace.lua")
 
 ENT.DriverActiveSound = "common/null.wav"
@@ -129,16 +130,6 @@ function ENT:PostInitialize( PObj )
 	SetMinimumAngularVelocityTo( 24000 )
 
 	self:EnableHandbrake()
-end
-
-function ENT:StartEngine()
-	for _, wheel in pairs( self:GetWheels() ) do
-		if not IsValid( wheel ) then continue end
-
-		wheel:PhysWake()
-	end
-
-	BaseClass.StartEngine( self )
 end
 
 function ENT:AlignView( ply )
@@ -448,6 +439,12 @@ end
 
 function ENT:OnMaintenance()
 	local FuelTank = self:GetFuelTank()
+	local Engine = self:GetEngine()
+
+	if IsValid( Engine ) then
+		Engine:SetHP( Engine:GetMaxHP() )
+		Engine:SetDestroyed( false )
+	end
 
 	if IsValid( FuelTank ) then
 		FuelTank:ExtinguishAndRepair()
@@ -466,6 +463,7 @@ function ENT:OnMaintenance()
 		entity:SetDestroyed( false )
 		entity:OnRepaired()
 	end
+
 end
 
 function ENT:OnSuperCharged( enable )

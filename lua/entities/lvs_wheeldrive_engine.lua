@@ -7,9 +7,25 @@ ENT._LVS = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
+
+	self:NetworkVar( "Float",1, "HP" )
+	self:NetworkVar( "Float",2, "MaxHP" )
+
+	self:NetworkVar( "Bool",0, "Destroyed" )
+
+	if SERVER then
+		self:NetworkVarNotify( "Destroyed", self.OnDestroyed )
+
+		self:SetMaxHP( 100 )
+		self:SetHP( 100 )
+	end
 end
 
 if SERVER then
+	function ENT:OnDestroyed( name, old, new)
+		if new == old then return end
+	end
+
 	function ENT:Initialize()	
 		self:SetMoveType( MOVETYPE_NONE )
 		self:SetSolid( SOLID_NONE )
@@ -51,6 +67,21 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
+		if self:GetDestroyed() then return end
+
+		local Damage = dmginfo:GetDamage()
+
+		if Damage <= 0 then return end
+
+		local CurHealth = self:GetHP()
+
+		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
+
+		self:SetHP( NewHealth )
+
+		if NewHealth <= 0 then
+			self:SetDestroyed( true )
+		end
 	end
 
 	function ENT:UpdateTransmitState() 
