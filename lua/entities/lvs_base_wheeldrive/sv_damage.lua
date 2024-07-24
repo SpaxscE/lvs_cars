@@ -94,7 +94,7 @@ function ENT:Explode()
 	else
 		for id, group in pairs( self:GetBodyGroups() ) do
 			for subid, subgroup in pairs( group.submodels ) do
-				if subgroup == "" then
+				if subgroup == "" or string.lower( subgroup ) == "empty" then
 					self:SetBodygroup( id - 1, subid )
 				end
 			end
