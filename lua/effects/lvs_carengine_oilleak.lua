@@ -35,8 +35,6 @@ function EFFECT:Init( data )
 			effectdata:SetRadius( 0.1 ) 
 		util.Effect( "StriderBlood", effectdata )
 
-		sound.Play( "ambient/water/water_spray"..math.random(1,3)..".wav", hitpos, 55, math.Rand(95,105), 0.5 )
-
 		oildrip:SetDieTime( 0 )
 
 		if IsValid( Ent ) then
