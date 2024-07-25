@@ -524,8 +524,44 @@ function ENT:Think()
 	end
 end
 
+function ENT:RemoveFireSound()
+	if self.FireBurnSND then
+		self.FireBurnSND:Stop()
+		self.FireBurnSND = nil
+	end
+
+	self.ShouldStopFire = nil
+end
+
+function ENT:StopFireSound()
+	if self.ShouldStopFire or not self.FireBurnSND then return end
+
+	self.ShouldStopFire = true
+
+	self:EmitSound("ambient/fire/mtov_flame2.wav")
+
+	self.FireBurnSND:ChangeVolume( 0, 0.5 )
+
+	timer.Simple( 1, function()
+		if not IsValid( self ) then return end
+
+		self:RemoveFireSound()
+	end )
+end
+
+function ENT:StartFireSound()
+	if self.ShouldStopFire or self.FireBurnSND then return end
+
+	self.FireBurnSND = CreateSound( self, "ambient/fire/firebig.wav" )
+	self.FireBurnSND:PlayEx(0,100)
+	self.FireBurnSND:ChangeVolume( LVS.EngineVolume, 1 )
+
+	self:EmitSound("ambient/fire/ignite.wav")
+end
+
 function ENT:OnRemove()
 	self:StopSounds()
+	self:RemoveFireSound()
 end
 
 function ENT:Draw()
@@ -551,16 +587,27 @@ function ENT:DamageFX( vehicle )
 	local HP = self:GetHP()
 	local MaxHP = self:GetMaxHP()
 
-	if HP >= MaxHP then return end
+	if HP >= MaxHP then self:StopFireSound() return end
 
 	if (self.nextDFX or 0) > T then return end
 
 	self.nextDFX = T + 0.05
 
-	local effectdata = EffectData()
-		effectdata:SetOrigin( self:GetPos() )
-		effectdata:SetEntity( vehicle )
-		effectdata:SetMagnitude( math.max(HP - MaxHP,0) / MaxHP )
-	util.Effect( "lvs_carengine_smoke", effectdata )
+	if self:GetDestroyed() then
+		self:StartFireSound()
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetEntity( vehicle )
+		util.Effect( "lvs_carengine_fire", effectdata )
+	else
+		self:StopFireSound()
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetEntity( vehicle )
+			effectdata:SetMagnitude( math.max(HP - MaxHP,0) / MaxHP )
+		util.Effect( "lvs_carengine_smoke", effectdata )
+	end
 end
 
