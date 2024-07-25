@@ -9,17 +9,24 @@ function ENT:OnTakeDamage( dmginfo )
 	self.LastInflictor = dmginfo:GetInflictor()
 
 	BaseClass.OnTakeDamage( self, dmginfo )
-
-	if self:GetEngineActive() and self:GetHP() <= self:GetMaxHP() * 0.25 then
-		self:ShutDownEngine()
-
-		net.Start( "lvs_car_break" )
-			net.WriteEntity( self )
-		net.Broadcast()
-	end
 end
 
 function ENT:TakeCollisionDamage( damage, attacker )
+	if not IsValid( attacker ) then
+		attacker = game.GetWorld()
+	end
+
+	local Engine = self:GetEngine()
+
+	if not IsValid( Engine ) then return end
+
+	local dmginfo = DamageInfo()
+	dmginfo:SetDamage( damage / 100 )
+	dmginfo:SetAttacker( attacker )
+	dmginfo:SetInflictor( attacker )
+	dmginfo:SetDamageType( DMG_CRUSH + DMG_VEHICLE )
+
+	Engine:TakeTransmittedDamage( dmginfo )
 end
 
 function ENT:Explode()
@@ -91,6 +98,9 @@ function ENT:Explode()
 
 		ent:Remove()
 	end
+
+	self:SetDriver( NULL )
+	self:SetlvsReady( false )
 
 	self:RemoveWeapons()
 

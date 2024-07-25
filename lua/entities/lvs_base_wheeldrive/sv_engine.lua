@@ -4,8 +4,6 @@ DEFINE_BASECLASS( "lvs_base" )
 function ENT:IsEngineStartAllowed()
 	if hook.Run( "LVS.IsEngineStartAllowed", self ) == false then return false end
 
-	if self:GetHP() <= self:GetMaxHP() * 0.25 then return false end
-
 	if self:WaterLevel() > self.WaterLevelPreventStart then return false end
 
 	local FuelTank = self:GetFuelTank()
@@ -14,7 +12,11 @@ function ENT:IsEngineStartAllowed()
 
 	local Engine = self:GetEngine()
 
-	if IsValid( Engine ) and Engine:GetDestroyed() then return false end
+	if IsValid( Engine ) and Engine:GetDestroyed() then
+		Engine:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
+
+		return false
+	end
 
 	return true
 end

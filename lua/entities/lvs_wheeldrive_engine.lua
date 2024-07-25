@@ -7,6 +7,7 @@ ENT._LVS = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Entity",1, "DoorHandler" )
 
 	self:NetworkVar( "Float",1, "HP" )
 	self:NetworkVar( "Float",2, "MaxHP" )
@@ -14,23 +15,16 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Bool",0, "Destroyed" )
 
 	if SERVER then
-		self:NetworkVarNotify( "Destroyed", self.OnDestroyed )
-
 		self:SetMaxHP( 100 )
 		self:SetHP( 100 )
 	end
 end
 
 if SERVER then
-	function ENT:OnDestroyed( name, old, new)
-		if new == old then return end
-	end
-
 	function ENT:Initialize()	
 		self:SetMoveType( MOVETYPE_NONE )
 		self:SetSolid( SOLID_NONE )
 		self:DrawShadow( false )
-		debugoverlay.Cross( self:GetPos(), 50, 5, Color( 0, 255, 255 ) )
 	end
 
 	function ENT:CheckWater( Base )
@@ -66,7 +60,25 @@ if SERVER then
 		return true
 	end
 
-	function ENT:OnTakeDamage( dmginfo )
+	function ENT:OnDestroyed()
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+		util.Effect( "lvs_trailer_explosion", effectdata, true, true )
+
+		self:EmitSound("physics/metal/metal_box_break"..math.random(1,2)..".wav",75,100,1)
+
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return end
+
+		net.Start( "lvs_car_break" )
+			net.WriteEntity( base )
+		net.Broadcast()
+
+		base:ShutDownEngine()
+	end
+
+	function ENT:TakeTransmittedDamage( dmginfo )
 		if self:GetDestroyed() then return end
 
 		local Damage = dmginfo:GetDamage()
@@ -81,8 +93,14 @@ if SERVER then
 
 		if NewHealth <= 0 then
 			self:SetDestroyed( true )
+
+			self:OnDestroyed()
 		end
 	end
+
+	function ENT:OnTakeDamage( dmginfo )
+	end
+
 
 	function ENT:UpdateTransmitState() 
 		return TRANSMIT_ALWAYS
@@ -506,44 +524,8 @@ function ENT:Think()
 	end
 end
 
-function ENT:RemoveFireSound()
-	if self.FireBurnSND then
-		self.FireBurnSND:Stop()
-		self.FireBurnSND = nil
-	end
-
-	self.ShouldStopFire = nil
-end
-
-function ENT:StopFireSound()
-	if self.ShouldStopFire or not self.FireBurnSND then return end
-
-	self.ShouldStopFire = true
-
-	self:EmitSound("ambient/fire/mtov_flame2.wav")
-
-	self.FireBurnSND:ChangeVolume( 0, 0.5 )
-
-	timer.Simple( 1, function()
-		if not IsValid( self ) then return end
-
-		self:RemoveFireSound()
-	end )
-end
-
-function ENT:StartFireSound()
-	if self.ShouldStopFire or self.FireBurnSND then return end
-
-	self.FireBurnSND = CreateSound( self, "ambient/fire/firebig.wav" )
-	self.FireBurnSND:PlayEx(0,100)
-	self.FireBurnSND:ChangeVolume( LVS.EngineVolume, 1 )
-
-	self:EmitSound("ambient/fire/ignite.wav")
-end
-
 function ENT:OnRemove()
 	self:StopSounds()
-	self:RemoveFireSound()
 end
 
 function ENT:Draw()
@@ -566,32 +548,19 @@ end
 
 function ENT:DamageFX( vehicle )
 	local T = CurTime()
-	local HP = vehicle:GetHP()
-	local MaxHP = vehicle:GetMaxHP() 
+	local HP = self:GetHP()
+	local MaxHP = self:GetMaxHP()
 
-	if HP <= 0 or HP > MaxHP * 0.5 then self:StopFireSound() return end
-
-	if HP > MaxHP * 0.25 then
-		self:StopFireSound()
-	else
-		self:StartFireSound()
-	end
+	if HP >= MaxHP then return end
 
 	if (self.nextDFX or 0) > T then return end
 
 	self.nextDFX = T + 0.05
 
-	if HP > MaxHP * 0.25 then
-		local effectdata = EffectData()
-			effectdata:SetOrigin( self:GetPos() )
-			effectdata:SetEntity( vehicle )
-			effectdata:SetMagnitude( math.max(HP - MaxHP * 0.25,0) / (MaxHP * 0.25) )
-		util.Effect( "lvs_carengine_smoke", effectdata )
-	else
-		local effectdata = EffectData()
-			effectdata:SetOrigin( self:GetPos() )
-			effectdata:SetEntity( vehicle )
-		util.Effect( "lvs_carengine_fire", effectdata )
-	end
+	local effectdata = EffectData()
+		effectdata:SetOrigin( self:GetPos() )
+		effectdata:SetEntity( vehicle )
+		effectdata:SetMagnitude( math.max(HP - MaxHP,0) / MaxHP )
+	util.Effect( "lvs_carengine_smoke", effectdata )
 end
 

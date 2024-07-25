@@ -31,6 +31,7 @@ local function SwapEngine( ent, data )
 	Engine:SetParent( ent )
 	Engine:SetBase( ent )
 	Engine.EngineSounds = data
+	Engine:SetDoorHandler( originalEngine:GetDoorHandler() )
 
 	ent:SetEngine( Engine )
 

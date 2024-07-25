@@ -1,6 +1,10 @@
 
-function ENT:AddEngine( pos, ang )
+function ENT:AddEngine( pos, ang, mins, maxs )
 	if IsValid( self:GetEngine() ) then return end
+
+	ang = ang or angle_zero
+	mins = mins or Vector(-10,-10,-10)
+	maxs = maxs or Vector(10,10,10)
 
 	local Engine = ents.Create( "lvs_wheeldrive_engine" )
 
@@ -13,7 +17,7 @@ function ENT:AddEngine( pos, ang )
 	end
 
 	Engine:SetPos( self:LocalToWorld( pos ) )
-	Engine:SetAngles( self:LocalToWorldAngles( ang or angle_zero ) )
+	Engine:SetAngles( self:LocalToWorldAngles( ang ) )
 	Engine:Spawn()
 	Engine:Activate()
 	Engine:SetParent( self )
@@ -24,6 +28,24 @@ function ENT:AddEngine( pos, ang )
 	self:DeleteOnRemove( Engine )
 
 	self:TransferCPPI( Engine )
+
+	debugoverlay.BoxAngles( self:LocalToWorld( pos ), mins, maxs, self:LocalToWorldAngles( ang ), 15, Color( 0, 255, 255, 255 ) )
+
+	self:AddDS( {
+		pos = pos,
+		ang = ang,
+		mins = mins,
+		maxs =  maxs,
+		Callback = function( tbl, ent, dmginfo )
+			if not IsValid( Engine ) then return end
+
+			Engine:TakeTransmittedDamage( dmginfo )
+
+			if not Engine:GetDestroyed() then
+				dmginfo:ScaleDamage( 0.25 )
+			end
+		end
+	} )
 
 	return Engine
 end
@@ -72,7 +94,7 @@ function ENT:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs )
 			FuelTank:TakeTransmittedDamage( dmginfo )
 
 			if not FuelTank:GetDestroyed() then
-				dmginfo:ScaleDamage( 0.5 )
+				dmginfo:ScaleDamage( 0.25 )
 			end
 		end
 	} )
