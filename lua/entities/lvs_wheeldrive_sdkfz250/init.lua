@@ -45,6 +45,9 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
+	local Engine = self:AddEngine( Vector(50,0,45) )
+	Engine:SetDoorHandler( DoorHandler )
+
 	local DoorHandler = self:AddDoorHandler( "!hatch1", Vector(9.55,13.84,55.75), Angle(0,0,0), Vector(-3,-10,-3), Vector(3,10,3), Vector(-3,-10,-3), Vector(3,10,3) )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
@@ -53,7 +56,6 @@ function ENT:OnSpawn( PObj )
 	DoorHandler:SetSoundOpen( "lvs/vehicles/generic/car_hood_open.wav" )
 	DoorHandler:SetSoundClose( "lvs/vehicles/generic/car_hood_close.wav" )
 
-	self:AddEngine( Vector(50,0,45) )
 	self:AddFuelTank( Vector(55,0,18), Angle(0,0,0), 600, LVS.FUELTYPE_DIESEL )
 
 	self.SNDTurretMG = self:AddSoundEmitter( Vector(-63,0,85), "lvs/vehicles/halftrack/mc_loop.wav" )

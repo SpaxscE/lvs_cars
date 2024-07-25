@@ -37,6 +37,8 @@ function ENT:AddEngine( pos, ang, mins, maxs )
 		mins = mins,
 		maxs =  maxs,
 		Callback = function( tbl, ent, dmginfo )
+			local Engine = self:GetEngine()
+
 			if not IsValid( Engine ) then return end
 
 			Engine:TakeTransmittedDamage( dmginfo )
