@@ -10,6 +10,8 @@ ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
 ENT.MaxHealth = 400
+ENT.MaxHealthEngine = 25
+ENT.MaxHealthFuelTank = 10
 
 ENT.MaxVelocity = 1400
 ENT.MaxVelocityReverse = 700

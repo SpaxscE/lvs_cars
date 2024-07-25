@@ -40,6 +40,8 @@ TEAMS:
 ]]
 
 ENT.MaxHealth = 400 -- max health
+--ENT.MaxHealthEngine = 100 -- max health engine
+--ENT.MaxHealthFuelTank = 100 -- max health fuel tank
 
 --ENT.DSArmorDamageReduction = 0.1 -- damage reduction multiplier. Damage is clamped to a minimum of 1 tho
 --ENT.DSArmorDamageReductionType = DMG_BULLET + DMG_CLUB -- which damage type to damage reduce

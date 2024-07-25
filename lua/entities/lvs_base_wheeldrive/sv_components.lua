@@ -22,6 +22,8 @@ function ENT:AddEngine( pos, ang, mins, maxs )
 	Engine:Activate()
 	Engine:SetParent( self )
 	Engine:SetBase( self )
+	Engine:SetMaxHP( self.MaxHealthEngine )
+	Engine:SetHP( self.MaxHealthEngine )
 
 	self:SetEngine( Engine )
 
@@ -73,6 +75,8 @@ function ENT:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs )
 	FuelTank:SetBase( self )
 	FuelTank:SetSize( tanksize or 600 )
 	FuelTank:SetFuelType( fueltype or 0 )
+	FuelTank:SetMaxHP( self.MaxHealthFuelTank )
+	FuelTank:SetHP( self.MaxHealthFuelTank )
 
 	self:SetFuelTank( FuelTank )
 
