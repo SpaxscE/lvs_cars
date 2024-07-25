@@ -18,7 +18,6 @@ EFFECT.SmokeMat = {
 	[16] = Material( "particle/smokesprites_0016" ),
 }
 
-
 function EFFECT:Init( data )
 	local Pos = data:GetOrigin()
 	local Ent = data:GetEntity()
