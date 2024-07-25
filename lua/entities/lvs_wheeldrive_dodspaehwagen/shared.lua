@@ -17,6 +17,8 @@ ENT.MDL = "models/diggercars/222/222.mdl"
 ENT.AITEAM = 1
 
 ENT.MaxHealth = 750
+ENT.MaxHealthEngine = 400
+ENT.MaxHealthFuelTank = 100
 
 --damage system
 ENT.DSArmorIgnoreForce = 1200

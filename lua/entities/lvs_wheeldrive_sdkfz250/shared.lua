@@ -18,7 +18,10 @@ ENT.MDL_DESTROYED = "models/diggercars/sdkfz250/250_dead.mdl"
 ENT.AITEAM = 1
 
 ENT.DSArmorIgnoreForce = 1000
+
 ENT.MaxHealth = 500
+ENT.MaxHealthEngine = 400
+ENT.MaxHealthFuelTank = 100
 
 --damage system
 ENT.CannonArmorPenetration = 2700
