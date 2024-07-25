@@ -75,6 +75,15 @@ if SERVER then
 			net.WriteEntity( base )
 		net.Broadcast()
 
+		if base:GetEngineActive() then
+			self:EmitSound("npc/manhack/bat_away.wav",75,100,0.5)
+
+			timer.Simple(1, function()
+				if not IsValid( self ) then return end
+				self:EmitSound("npc/manhack/gib.wav",75,90,1)
+			end)
+		end
+	
 		base:ShutDownEngine()
 	end
 
@@ -587,13 +596,41 @@ function ENT:DamageFX( vehicle )
 	local HP = self:GetHP()
 	local MaxHP = self:GetMaxHP()
 
-	if HP >= MaxHP then self:StopFireSound() return end
+	local EntTable = self:GetTable()
 
-	if (self.nextDFX or 0) > T then return end
+	if HP ~= MaxHP and (EntTable .nextLeak or 0) < T then
+		EntTable.nextLeak = T + 0.5 + math.Rand(10,16) * (HP / MaxHP)
 
-	self.nextDFX = T + 0.05
+		if vehicle:GetVelocity():Length() > 50 then return end
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetEntity( vehicle )
+		util.Effect( "lvs_carengine_oilleak", effectdata )
+	end
+
+	if HP >= MaxHP * 0.5 then self:StopFireSound() return end
+
+	if (EntTable.nextDFX or 0) > T then return end
+
+	EntTable.nextDFX = T + 0.05
 
 	if self:GetDestroyed() then
+		if not EntTable._FireStopTime then
+			EntTable._FireStopTime = T + math.random(20,40)
+		end
+
+		if EntTable ._FireStopTime < T then
+			self:StopFireSound()
+
+			local effectdata = EffectData()
+				effectdata:SetOrigin( self:GetPos() )
+				effectdata:SetEntity( vehicle )
+			util.Effect( "lvs_carengine_blacksmoke", effectdata )
+
+			return
+		end
+
 		self:StartFireSound()
 
 		local effectdata = EffectData()
@@ -601,12 +638,14 @@ function ENT:DamageFX( vehicle )
 			effectdata:SetEntity( vehicle )
 		util.Effect( "lvs_carengine_fire", effectdata )
 	else
+		EntTable ._FireStopTime = nil
+
 		self:StopFireSound()
 
 		local effectdata = EffectData()
 			effectdata:SetOrigin( self:GetPos() )
 			effectdata:SetEntity( vehicle )
-			effectdata:SetMagnitude( math.max(HP - MaxHP,0) / MaxHP )
+			effectdata:SetMagnitude( math.max(HP,0) / (MaxHP * 0.5) )
 		util.Effect( "lvs_carengine_smoke", effectdata )
 	end
 end
