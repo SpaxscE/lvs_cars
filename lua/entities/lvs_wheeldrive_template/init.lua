@@ -25,7 +25,8 @@ function ENT:OnSpawn( PObj )
 
 	--[[ engine sound / effects ]]
 	self:AddEngine( Vector(0,0,0) ) -- add a engine. This is used for sounds and effects and is required to get accurate RPM for the gauges.
-
+	--local Engine = self:AddEngine( vector_pos, angle_ang, mins, maxs )
+	--Engine:SetDoorHandler( DoorHandler ) -- link it to a doorhandler as requirement for the repair tool
 	
 	--[[ fuel system ]]
 	-- self:AddFuelTank( pos, ang, tanksize, fueltype, mins, maxs ) -- adds a fuel tank.
