@@ -100,7 +100,6 @@ function ENT:Explode()
 	end
 
 	self:SetDriver( NULL )
-	self:SetlvsReady( false )
 
 	self:RemoveWeapons()
 
