@@ -330,7 +330,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 	local RatioPitch = math.max(Vel - (CurrentGear - 1) * PitchValue,0)
 
-	if (not IsManualTransmission or IsHandBraking) and CurrentGear ~= MaxGear then
+	if (not IsManualTransmission or IsHandBraking) then --and CurrentGear ~= MaxGear then
 		RatioPitch = math.min( PitchValue, RatioPitch )
 	end
 
