@@ -96,14 +96,6 @@ function ENT:CalcPoseParameters()
 	self:InvalidateBoneCache()
 end
 
-function ENT:PreDraw()
-	return true
-end
-
-function ENT:PreDrawTranslucent()
-	return true
-end
-
 function ENT:Think()
 	if not self:IsInitialized() then return end
 

@@ -4,10 +4,6 @@ ENT.TrackSystemEnable = false
 ENT.TrackHull = Vector(1,1,1)
 ENT.TrackData = {}
 
-function ENT:PreDrawTranslucent()
-	return false
-end
-
 function ENT:CalcTrackScrollTexture()
 	if not self.TrackSystemEnable then return end
 
