@@ -130,8 +130,6 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
-		if dmginfo:IsDamageType( DMG_DIRECT ) then return end
-
 		self:Detonate()
 	end
 else
