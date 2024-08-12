@@ -15,6 +15,8 @@ function ENT:PreEntityCopy()
 	self._WheelEnts = nil
 	self._WheelAxleID = nil
 	self._WheelAxleData = nil
+
+	return true
 end
 
 function ENT:PostEntityCopy()
