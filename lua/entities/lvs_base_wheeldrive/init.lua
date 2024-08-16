@@ -455,15 +455,6 @@ function ENT:OnMaintenance()
 			self:OnRefueled()
 		end
 	end
-
-	for _, entity in pairs( self:GetChildren() ) do
-		if entity:GetClass() ~= "lvs_wheeldrive_armor" then continue end
-
-		entity:SetHP( entity:GetMaxHP() )
-		entity:SetDestroyed( false )
-		entity:OnRepaired()
-	end
-
 end
 
 function ENT:OnSuperCharged( enable )
