@@ -154,7 +154,7 @@ function ENT:CalcTransmission( ply )
 		return
 	end
 
-	local T = CurTime()
+	local T = UnPredictedCurTime()
 
 	if KeyForward and ForwardVelocity > -ReverseVelocity then
 		self:SetReverse( false )
@@ -191,7 +191,7 @@ function ENT:CalcLights( ply )
 
 	local lights = ply:lvsKeyDown( "CAR_LIGHTS_TOGGLE" )
 
-	local T = CurTime()
+	local T = UnPredictedCurTime()
 
 	local EntTable = self:GetTable()
 
@@ -307,7 +307,7 @@ function ENT:CalcSiren( ply )
 	if istable( EntTable.SirenSound ) and IsValid( EntTable.SirenSND ) then
 		local siren = ply:lvsKeyDown( "CAR_SIREN" )
 
-		local T = CurTime()
+		local T = UnPredictedCurTime()
 
 		if EntTable._siren ~= siren then
 			EntTable._siren = siren
@@ -426,7 +426,7 @@ function ENT:StopSiren()
 end
 
 function ENT:SetRoadkillAttacker( ply )
-	local T = CurTime()
+	local T = UnPredictedCurTime()
 
 	if (self._nextSetAttacker or 0) > T then return end
 
