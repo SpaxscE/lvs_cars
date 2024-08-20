@@ -113,7 +113,7 @@ function ENT:CalcHandbrake( ply )
 	end
 end
 
-function ENT:CalcTransmission( ply )
+function ENT:CalcTransmission( ply, T )
 	local EntTable = self:GetTable()
 
 	if not EntTable.ForwardAngle or self:IsManualTransmission() then
@@ -154,8 +154,6 @@ function ENT:CalcTransmission( ply )
 		return
 	end
 
-	local T = UnPredictedCurTime()
-
 	if KeyForward and ForwardVelocity > -ReverseVelocity then
 		self:SetReverse( false )
 	end
@@ -184,14 +182,12 @@ function ENT:CalcTransmission( ply )
 	end
 end
 
-function ENT:CalcLights( ply )
+function ENT:CalcLights( ply, T )
 	local LightsHandler = self:GetLightsHandler()
 
 	if not IsValid( LightsHandler ) then return end
 
 	local lights = ply:lvsKeyDown( "CAR_LIGHTS_TOGGLE" )
-
-	local T = UnPredictedCurTime()
 
 	local EntTable = self:GetTable()
 
@@ -283,14 +279,20 @@ function ENT:StartCommand( ply, cmd )
 	else
 		self:CalcThrottle( ply )
 	end
+	
+	local T = CurTime()
+
+	if (self._nextCalcCMD or 0) > T then return end
+
+	self._nextCalcCMD = T + FrameTime() - 1e-4
 
 	self:CalcHandbrake( ply )
-	self:CalcTransmission( ply )
-	self:CalcLights( ply )
-	self:CalcSiren( ply )
+	self:CalcTransmission( ply, T )
+	self:CalcLights( ply, T )
+	self:CalcSiren( ply, T )
 end
 
-function ENT:CalcSiren( ply )
+function ENT:CalcSiren( ply, T )
 	local mode = self:GetSirenMode()
 	local horn = ply:lvsKeyDown( "ATTACK" )
 
@@ -306,8 +308,6 @@ function ENT:CalcSiren( ply )
 
 	if istable( EntTable.SirenSound ) and IsValid( EntTable.SirenSND ) then
 		local siren = ply:lvsKeyDown( "CAR_SIREN" )
-
-		local T = UnPredictedCurTime()
 
 		if EntTable._siren ~= siren then
 			EntTable._siren = siren
@@ -426,7 +426,7 @@ function ENT:StopSiren()
 end
 
 function ENT:SetRoadkillAttacker( ply )
-	local T = UnPredictedCurTime()
+	local T = CurTime()
 
 	if (self._nextSetAttacker or 0) > T then return end
 
