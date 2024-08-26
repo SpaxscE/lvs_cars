@@ -279,7 +279,7 @@ function ENT:StartCommand( ply, cmd )
 	else
 		self:CalcThrottle( ply )
 	end
-	
+
 	local T = CurTime()
 
 	if (self._nextCalcCMD or 0) > T then return end
