@@ -45,7 +45,7 @@ if SERVER then
 		if not duplicator or not duplicator.StoreEntityModifier then return end
 
 		timer.Simple( 0.2, function()
-			if not IsValid( ent ) then return end
+			if not IsValid( ent ) or not isfunction( ent.AddTurboCharger ) then return end
 
 			local turbo = ent:AddTurboCharger()
 			if IsValid( turbo ) then
