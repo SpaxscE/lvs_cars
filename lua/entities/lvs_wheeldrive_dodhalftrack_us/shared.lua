@@ -22,6 +22,7 @@ ENT.MaxHealthFuelTank = 100
 
 --damage system
 ENT.CannonArmorPenetration = 2700
+ENT.CannonArmorPenetration1km = 1200
 
 ENT.MaxVelocity = 700
 ENT.MaxVelocityReverse = 250
@@ -174,6 +175,7 @@ function ENT:InitWeapons()
 		bullet.Spread 	= Vector(0.03,0.03,0.03)
 		bullet.TracerName = "lvs_tracer_white"
 		bullet.Force	= ent.CannonArmorPenetration
+		bullet.Force1km = ent.CannonArmorPenetration1km
 		bullet.HullSize 	= 1
 		bullet.Damage	= 50
 		bullet.Velocity = 20000
