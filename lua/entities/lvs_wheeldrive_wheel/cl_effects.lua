@@ -122,16 +122,6 @@ end
 function ENT:CalcWheelSounds( Base, trace, traceWater )
 	if not trace.Hit then return end
 
-
-	-- TODO: fix reason for this workaround
-	if trace.Entity == self then
-		if istable( Base.CrosshairFilterEnts ) and #Base.CrosshairFilterEnts > 1 then
-			Base.CrosshairFilterEnts = nil
-		end
-
-		return
-	end
-
 	local RPM = math.abs( self:GetRPM() )
 
 	if self:GetDestroyed() and RPM > 30 then
