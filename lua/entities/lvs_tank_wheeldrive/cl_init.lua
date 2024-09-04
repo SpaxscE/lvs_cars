@@ -26,6 +26,8 @@ function ENT:CalcTrackScrollTexture()
 	end
 end
 
+local WorldUp = Vector(0,0,1)
+
 function ENT:CalcTracks()
 	if self:GetHP() <= 0 then
 		if self._ResetSubMaterials then
@@ -39,6 +41,8 @@ function ENT:CalcTracks()
 	end
 
 	self._ResetSubMaterials = true
+
+	local TrackHull = self.TrackHull * (math.max( WorldUp:Dot( self:GetUp() ), 0 ) ^ 2)
 
 	for _, data in pairs( self.TrackData ) do
 		if not istable( data.Attachment ) or not istable( data.PoseParameter ) then continue end
@@ -55,8 +59,8 @@ function ENT:CalcTracks()
 			start = att.Pos,
 			endpos = att.Pos - self:GetUp() * traceLength,
 			filter = self:GetCrosshairFilterEnts(),
-			mins = -self.TrackHull,
-			maxs = self.TrackHull,
+			mins = -TrackHull,
+			maxs = TrackHull,
 		} )
 
 		local Rate = data.PoseParameter.lerpSpeed or 25
