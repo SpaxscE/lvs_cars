@@ -6,6 +6,7 @@ function ENT:OnCreateAI()
 
 	self._OldLVSFireBullet = self.LVSFireBullet
 
+	-- this compensates for turret poseparameter inaccuracies
 	self.LVSFireBullet = function( self, data )
 		local Dir1 = (self:GetEyeTrace().HitPos - data.Src):GetNormalized()
 		local Dir2 = data.Dir
