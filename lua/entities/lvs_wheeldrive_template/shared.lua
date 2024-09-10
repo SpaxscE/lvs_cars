@@ -96,7 +96,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.FastSteerAngleClamp = 10 -- to which the steering angle is clamped to when speed is above ENT.FastSteerActiveVelocity
 --ENT.FastSteerDeactivationDriftAngle = 7 -- allowed drift angle until ENT.FastSteerActiveVelocity is ignored and the steering becomes unclamped
 
---ENT.SteerAssistDeadZoneAngle = 1 -- changes how much drift the counter steer system allows before interfering. 1 = 1Â° of drift without interfering
+--ENT.SteerAssistDeadZoneAngle = 1 -- changes how much drift the counter steer system allows before interfering. 1 = 1° of drift without interfering
 --ENT.SteerAssistMaxAngle = 15 -- max steering angle the counter steer system is allowed to help the player
 --ENT.SteerAssistExponent = 1.5 -- an exponent to the counter steering curve. Just leave it at 1.5
 --ENT.SteerAssistMultiplier = 3 -- how "quick" the counter steer system is steering
@@ -110,14 +110,32 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.PhysicsDampingSpeed = 4000 -- do not mess with this unless you can balance everything yourself again.
 
 --ENT.PhysicsDampingForward = true -- internal physics damping to reduce wobble. Just keep it enabled in forward direction.
---ENT.PhysicsDampingReverse = false -- disabling this in reverse allows for a reverse 180Â° turn. If you want to go fast in reverse you should set this to true in order to get good stability
+--ENT.PhysicsDampingReverse = false -- disabling this in reverse allows for a reverse 180° turn. If you want to go fast in reverse you should set this to true in order to get good stability
 
 --ENT.WheelPhysicsMass = 100 -- do not mess with this unless you can balance everything yourself again.
 --ENT.WheelPhysicsInertia = Vector(10,8,10) -- do not mess with this unless you can balance everything yourself again.
+--[[
+-- physics friction lookup table. The default used one is 10, jeeptire
+ENT.WheelPhysicsMaterials = {
+	[0] = "friction_00", -- 0
+	[1] = "friction_10", --  0.1
+	[2] = "friction_25", --  0.25
+	[3] = "popcan", --  0.3
+	[4] = "glassbottle", --  0.4
+	[5] = "glass", --  0.5
+	[6] = "snow", --  0.6
+	[7] = "roller", --  0.7
+	[8] = "rubber", --  0.8
+	[9] = "slime", --  0.9
+	[10] = "jeeptire", --  1.337 -- i don't believe friction in havok can go above 1, however other settings such as bouncyness and elasticity are affected by it as it seems. We use jeeptire as default even tho it technically isn't the "best" choice, but rather the most common one
+	[11] = "jalopytire", -- 1.337
+	[12] = "phx_tire_normal", --  3
+}
+]]
 
---ENT.WheelBrakeAutoLockup = false -- set this to true for offroad vehicles. This will engage the brake automatically so you dont have to keep holding the brake/handbrake button
---ENT.WheelBrakeAutoLockupReverseVelocity = 50 -- below/above this velocity, the transmission will auto shift into forward/reverse when ENT.WheelBrakeAutoLockup = true
---ENT.WheelBrakeLockupRPM = 50 -- wheel rpm in which the auto-brake is enabled
+--ENT.AutoReverseVelocity = 50 -- below this velocity the transmission is allowed to automatically shift into reverse when holding the brake button
+
+--ENT.WheelBrakeLockupRPM = 20 -- below this wheel rpm it will engage the auto brake when the throttle is 0
 
 --ENT.WheelBrakeForce = 400 -- how strong the brakes are. Just leave at 400. Allows for good braking while still allowing some turning. It has some build in ABS but it isnt perfect because even tho velocities say it isnt sliding the wheel will still visually slide in source...
 
@@ -134,6 +152,9 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 --ENT.TurboBlowOff = {"lvs/vehicles/generic/turbo_blowoff1.wav","lvs/vehicles/generic/turbo_blowoff1.wav"} -- change blowoff sound. If you only have one file you can just pass it as a string instead of a table.
 
 --ENT.DeleteOnExplode = false -- remove the vehicle when it explodes?
+
+--ENT.lvsAllowEngineTool = true -- alow the engine tool to be used on this vehicle?
+--ENT.lvsShowInSpawner = false -- show this vehicle in vehicle spawner entity?
 
  --[[
 --ENT.RandomColor = {} -- table with colors to set on spawn
