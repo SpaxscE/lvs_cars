@@ -271,7 +271,7 @@ function ENT:AddGunnerWeapons()
 
 		if not IsValid( base ) then return end
 
-		if not base:GetAI() and not IsValid( ent:GetDriver() ) then
+		if not ent:GetAI() and not IsValid( ent:GetDriver() ) then
 			base:SetPoseParameter("f_pitch",  15 )
 			base:SetPoseParameter("f_yaw", 0 )
 
