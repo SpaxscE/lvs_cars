@@ -4,6 +4,8 @@ function ENT:OnCreateAI()
 
 	self:StartEngine()
 
+	self._OldLVSFireBullet = self.LVSFireBullet
+
 	self.LVSFireBullet = function( self, data )
 		local Dir1 = (self:GetEyeTrace().HitPos - data.Src):GetNormalized()
 		local Dir2 = data.Dir
@@ -22,6 +24,10 @@ end
 
 function ENT:OnRemoveAI()
 	self:StopEngine()
+
+	if not isfunction( self._OldLVSFireBullet ) then return end
+
+	self.LVSFireBullet = self._OldLVSFireBullet
 end
 
 function ENT:AIGetMovementTarget()
