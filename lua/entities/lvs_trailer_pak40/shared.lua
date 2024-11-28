@@ -102,6 +102,7 @@ function ENT:InitWeapons()
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread = Vector(0,0,0)
+		bullet.EnableBallistics = true
 
 		if ent:GetUseHighExplosive() then
 			bullet.Force	= 500

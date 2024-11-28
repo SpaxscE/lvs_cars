@@ -176,7 +176,6 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_white"
 		bullet.Force	= ent.CannonArmorPenetration
 		bullet.Force1km = ent.CannonArmorPenetration1km
-		bullet.EnableBallistics = true
 		bullet.HullSize 	= 1
 		bullet.Damage	= 50
 		bullet.Velocity = 20000
