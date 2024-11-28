@@ -28,7 +28,7 @@ function ENT:QuickLerp( name, target, rate )
 
 	if not self[ name ] then self[ name ] = 0 end
 
-	self[ name ] = self[ name ] + (target - self[ name ]) * math.min( RealFrameTime(), 0.06 ) * (rate or 10)
+	self[ name ] = self[ name ] + (target - self[ name ]) * math.min( RealFrameTime() * (rate or 10), 1 )
 
 	return self[ name ]
 end
