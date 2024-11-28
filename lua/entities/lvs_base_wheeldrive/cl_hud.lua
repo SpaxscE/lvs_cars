@@ -2,6 +2,8 @@
 include("cl_optics.lua")
 include("cl_hud_speedometer.lua")
 
+ENT.VehicleIdentifierRange = 1000
+
 function ENT:LVSPreHudPaint( X, Y, ply )
 	return true
 end
