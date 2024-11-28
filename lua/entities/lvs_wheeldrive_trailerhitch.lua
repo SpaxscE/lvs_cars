@@ -28,6 +28,8 @@ if SERVER then
 
 		if not IsValid( ent ) or not isfunction( ent.StartDrag ) then return end
 
+		if ent.IsLinkInProgress then return end
+
 		if IsValid( ent:GetTargetBase() ) then
 			ent:Decouple()
 		else
