@@ -236,6 +236,7 @@ function ENT:InitWeapons()
 		bullet.TracerName = "lvs_tracer_orange"
 		bullet.Force	= 10 -- this divided by 100 = penetration in mm
 		--bullet.Force1km = 5 -- bullet force at 1km
+		--bullet.EnableBallistics = true  -- enable ballistics?
 		bullet.HullSize 	= 15
 		bullet.Damage	= 10
 		bullet.Velocity = 30000
