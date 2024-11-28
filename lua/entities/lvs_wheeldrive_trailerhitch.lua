@@ -32,6 +32,7 @@ if SERVER then
 			ent:Decouple()
 		else
 			ent:StartDrag( ply )
+			ent._HandBrakeForceDisabled = true
 		end
 	end )
 
@@ -76,6 +77,7 @@ if SERVER then
 		self.GrabEnt:SetSolid( SOLID_NONE )
 
 		base:OnStartDrag( self, ply )
+		base._HandBrakeForceDisabled = true
 
 		base._DragOriginalCollisionGroup = base:GetCollisionGroup()
 		base:SetCollisionGroup( COLLISION_GROUP_WORLD )
@@ -108,6 +110,7 @@ if SERVER then
 		if IsValid( base ) then
 
 			base:OnStopDrag( self, ply )
+			base._HandBrakeForceDisabled = nil
 
 			if IsValid( ply ) then base:SetPhysicsAttacker( ply ) end
 	

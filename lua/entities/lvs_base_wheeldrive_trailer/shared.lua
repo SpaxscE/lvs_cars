@@ -115,19 +115,13 @@ function ENT:GetReverse()
 end
 
 function ENT:GetNWHandBrake()
-	local InputTarget = self:GetInputTarget()
+	local ApplyBrakes = not IsValid( self:GetInputTarget() )
 
-	if not IsValid( InputTarget ) then return false end
+	if ApplyBrakes and self._HandBrakeForceDisabled then
+		return false
+	end
 
-	return InputTarget:GetNWHandBrake()
-end
-
-function ENT:GetParkingBrake()
-	local InputTarget = self:GetInputTarget()
-
-	if not IsValid( InputTarget ) then return false end
-
-	return InputTarget:GetParkingBrake()
+	return ApplyBrakes
 end
 
 function ENT:GetBrake()

@@ -24,6 +24,7 @@ function ENT:OnSpawn( PObj )
 			SteerType = LVS.WHEEL_STEER_NONE,
 			SteerAngle = 0,
 			BrakeFactor = 1,
+			UseHandbrake = true,
 		},
 		Wheels = {
 			self:AddWheel( {

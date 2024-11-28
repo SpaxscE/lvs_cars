@@ -42,7 +42,22 @@ function ENT:PhysicsSimulate( phys, deltatime )
 end
 
 function ENT:SimulateRotatingWheel( ent, phys, deltatime )
-	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then return vector_origin, vector_origin, SIM_NOTHING end
+	if not self:AlignWheel( ent ) or ent:IsHandbrakeActive() then
+
+		local HandBrake = self:GetNWHandBrake()
+
+		if HandBrake then
+			if not ent:IsRotationLocked() then
+				ent:LockRotation()
+			end
+		else
+			if ent:IsRotationLocked() then
+				ent:ReleaseRotation()
+			end
+		end
+
+		return vector_origin, vector_origin, SIM_NOTHING
+	end
 
 	if self:GetBrake() > 0 and not ent:IsRotationLocked() then
 		local RotationAxis = ent:GetRotationAxis()
