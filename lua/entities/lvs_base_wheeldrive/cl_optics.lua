@@ -43,12 +43,20 @@ function ENT:UseOptics()
 end
 
 function ENT:PaintCrosshairCenter( Pos2D, Col )
-
 	if self:UseOptics() then
+		if self.OpticsScreenCentered then
+			local ScreenCenter2D = {
+				x = ScrW() * 0.5,
+				y = ScrH() * 0.5,
+				visible = true,
+			}
 
-		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 1 )
+			self:PaintOptics( ScreenCenter2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 1 )
+		else
+			self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 1 )
 
-		return
+			return
+		end
 	end
 
 	BaseClass.PaintCrosshairCenter( self, Pos2D, Col )
@@ -56,10 +64,19 @@ end
 
 function ENT:PaintCrosshairOuter( Pos2D, Col )
 	if self:UseOptics() then
+		if self.OpticsScreenCentered then
+			local ScreenCenter2D = {
+				x = ScrW() * 0.5,
+				y = ScrH() * 0.5,
+				visible = true,
+			}
 
-		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 2 )
+			self:PaintOptics( ScreenCenter2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 2 )
+		else
+			self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 2 )
 
-		return
+			return
+		end
 	end
 
 	BaseClass.PaintCrosshairOuter( self, Pos2D, Col )
@@ -67,10 +84,19 @@ end
 
 function ENT:PaintCrosshairSquare( Pos2D, Col )
 	if self:UseOptics() then
+		if self.OpticsScreenCentered then
+			local ScreenCenter2D = {
+				x = ScrW() * 0.5,
+				y = ScrH() * 0.5,
+				visible = true,
+			}
 
-		self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 3 )
+			self:PaintOptics( ScreenCenter2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 3 )
+		else
+			self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 3 )
 
-		return
+			return
+		end
 	end
 
 	BaseClass.PaintCrosshairSquare( self, Pos2D, Col )
