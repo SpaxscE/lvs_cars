@@ -113,7 +113,7 @@ function ENT:InitWeapons()
 
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread = Vector(0.01,0.01,0.01)
 		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
@@ -149,7 +149,7 @@ function ENT:InitWeapons()
 		if Muzzle then
 			local traceTurret = util.TraceLine( {
 				start = Muzzle.Pos,
-				endpos = Muzzle.Pos + Muzzle.Ang:Up() * 50000,
+				endpos = Muzzle.Pos + Muzzle.Ang:Forward() * 50000,
 				filter = ent:GetCrosshairFilterEnts()
 			} )
 
@@ -198,7 +198,7 @@ function ENT:InitWeapons()
 
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread = Vector(0,0,0)
 		bullet.EnableBallistics = true
 
@@ -249,7 +249,7 @@ function ENT:InitWeapons()
 		if Muzzle then
 			local traceTurret = util.TraceLine( {
 				start = Muzzle.Pos,
-				endpos = Muzzle.Pos + Muzzle.Ang:Up() * 50000,
+				endpos = Muzzle.Pos + Muzzle.Ang:Forward() * 50000,
 				filter = ent:GetCrosshairFilterEnts()
 			} )
 

@@ -10,12 +10,30 @@ function ENT:TurretSystemDT()
 	self:AddDT( "Bool", "TurretDestroyed" )
 	self:AddDT( "Entity", "TurretArmor" )
 	self:AddDT( "Float", "TurretCompensation" )
+	self:AddDT( "Float", "NWTurretPitch" )
+	self:AddDT( "Float", "NWTurretYaw" )
 
 	if SERVER then
 		self:SetTurretEnabled( true )
 		self:SetTurretPitch( self.TurretPitchOffset )
 		self:SetTurretYaw( self.TurretYawOffset )
 	end
+end
+
+function ENT:SetTurretPitch( num )
+	self:SetNWTurretPitch( num )
+end
+
+function ENT:SetTurretYaw( num )
+	self:SetNWTurretYaw( num )
+end
+
+function ENT:GetTurretPitch()
+	return self:GetNWTurretPitch()
+end
+
+function ENT:GetTurretYaw()
+	return self:GetNWTurretYaw()
 end
 
 function ENT:TurretUpdateBallistics( newvelocity, newmuzzle, newsight )
@@ -108,30 +126,43 @@ function ENT:CalcTurretAngles()
 end
 
 function ENT:AimTurret()
-	if CLIENT then return end
+	if not self:IsTurretEnabled() then if SERVER then self:StopTurretSound() self:StopTurretSoundDMG() end return end
 
-	if not self:IsTurretEnabled() then self:StopTurretSound() self:StopTurretSoundDMG() return end
+	if SERVER then
+		local AimAngles = self:CalcTurretAngles()
 
-	local AimAngles = self:CalcTurretAngles()
+		local AimRate = self.TurretAimRate * FrameTime() 
 
-	local AimRate = self.TurretAimRate * FrameTime() 
+		if self:GetTurretDestroyed() then
+			AimRate = AimRate * self.TurretRateDestroyedMul
+		end
 
-	if self:GetTurretDestroyed() then
-		AimRate = AimRate * self.TurretRateDestroyedMul
+		local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), self.TurretPitchMin, self.TurretPitchMax )
+		local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
+
+		if self.TurretYawMin and self.TurretYawMax then
+			Yaw = math.Clamp( Yaw, self.TurretYawMin, self.TurretYawMax )
+		end
+
+		self:CalcTurretSound( Pitch, Yaw, AimRate )
+
+		self:SetTurretPitch( Pitch )
+		self:SetTurretYaw( Yaw )
+
+		self:SetPoseParameter(self.TurretPitchPoseParameterName, self.TurretPitchOffset + self:GetTurretPitch() * self.TurretPitchMul )
+		self:SetPoseParameter(self.TurretYawPoseParameterName, self.TurretYawOffset + self:GetTurretYaw() * self.TurretYawMul )
+
+		return
 	end
 
-	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), self.TurretPitchMin, self.TurretPitchMax )
-	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
+	local Rate = math.min( FrameTime() * self.TurretAimRate, 1 )
 
-	if self.TurretYawMin and self.TurretYawMax then
-		Yaw = math.Clamp( Yaw, self.TurretYawMin, self.TurretYawMax )
-	end
+	local TargetPitch = self.TurretPitchOffset + self:GetTurretPitch() * self.TurretPitchMul
+	local TargetYaw = self.TurretYawOffset + self:GetTurretYaw() * self.TurretYawMul
 
-	self:CalcTurretSound( Pitch, Yaw, AimRate )
+	self._turretPitch = self._turretPitch and self._turretPitch + (TargetPitch - self._turretPitch) * Rate or self.TurretPitchOffset
+	self._turretYaw = self._turretYaw and self._turretYaw + (TargetYaw - self._turretYaw) * Rate or self.TurretYawOffset
 
-	self:SetTurretPitch( Pitch )
-	self:SetTurretYaw( Yaw )
-
-	self:SetPoseParameter(self.TurretPitchPoseParameterName, self.TurretPitchOffset + self:GetTurretPitch() * self.TurretPitchMul )
-	self:SetPoseParameter(self.TurretYawPoseParameterName, self.TurretYawOffset + self:GetTurretYaw() * self.TurretYawMul )
+	self:SetPoseParameter(self.TurretPitchPoseParameterName, self._turretPitch )
+	self:SetPoseParameter(self.TurretYawPoseParameterName, self._turretYaw )
 end
