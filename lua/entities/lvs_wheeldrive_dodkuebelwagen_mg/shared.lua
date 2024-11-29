@@ -164,12 +164,13 @@ function ENT:AddGunnerWeapons()
 			bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
 		end
 
-		bullet.Spread 	= Vector(0.015,0.015,0.015)
+		bullet.Spread = Vector(0.01,0.01,0.01)
 		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
+		bullet.EnableBallistics = true
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
-		bullet.Velocity = 30000
+		bullet.Velocity = 15000
 		bullet.Attacker 	= ply
 		ent:LVSFireBullet( bullet )
 
