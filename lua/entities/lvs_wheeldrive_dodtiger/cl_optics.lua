@@ -51,7 +51,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 		surface.PlaySound( "lvs/optics.wav" )
 	end
 
-	RotationOffset = RotationOffset + (TargetOffset - RotationOffset) * RealFrameTime() * 8
+	RotationOffset = RotationOffset + (TargetOffset + math.max( self:GetTurretCompensation() / 25, -180 ) - RotationOffset) * RealFrameTime() * 8
 
 	local R = ScrH * 0.5 - 64
 	local R0 = R + 30

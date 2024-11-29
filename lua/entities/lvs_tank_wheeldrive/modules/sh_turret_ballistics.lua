@@ -5,6 +5,19 @@ ENT.TurretBallisticsViewAttachment = "sight"
 
 ENT.OpticsScreenCentered = true
 
+function ENT:TurretSystemDT()
+	self:AddDT( "Bool", "TurretEnabled" )
+	self:AddDT( "Bool", "TurretDestroyed" )
+	self:AddDT( "Entity", "TurretArmor" )
+	self:AddDT( "Float", "TurretCompensation" )
+
+	if SERVER then
+		self:SetTurretEnabled( true )
+		self:SetTurretPitch( self.TurretPitchOffset )
+		self:SetTurretYaw( self.TurretYawOffset )
+	end
+end
+
 function ENT:TurretUpdateBallistics( newvelocity, newmuzzle, newsight )
 	if newvelocity then
 		self.TurretBallisticsProjectileVelocity = newvelocity
@@ -49,20 +62,22 @@ local function GetTurretEyeTrace( base, weapon )
 	return trace
 end
 
-function ENT:AimTurret()
-	if CLIENT then return end
-
-	if not self:IsTurretEnabled() then self:StopTurretSound() self:StopTurretSoundDMG() return end
-
+function ENT:CalcTurretAngles()
 	local weapon = self:GetWeaponHandler( self.TurretPodIndex )
 
-	if not IsValid( weapon ) then return end
+	if not IsValid( weapon ) or self:GetUp().z < 0.6 then return self:WorldToLocalAngles( weapon:GetAimVector():Angle() ) end
+
+	local pod = weapon:GetDriverSeat()
+
+	if IsValid( pod ) and pod:GetThirdPersonMode() then
+		return self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
+	end
 
 	local ID = self:LookupAttachment( self.TurretBallisticsMuzzleAttachment )
 
 	local Muzzle = self:GetAttachment( ID )
 
-	if not Muzzle then return end
+	if not Muzzle then return self:WorldToLocalAngles( weapon:GetAimVector():Angle() ) end
 
 	local MuzzlePos = Muzzle.Pos
 	local MuzzleDir = Muzzle.Ang:Forward()
@@ -79,6 +94,8 @@ function ENT:AimTurret()
 
 	local OffsetPredicted = physenv.GetGravity() * (TimeAlive ^ 2)
 
+	self:SetTurretCompensation( OffsetPredicted.z )
+
 	local EndPos1 = AimPos - OffsetPredicted
 	local EndPos2 = MuzzlePos + MuzzleDir
 
@@ -87,7 +104,15 @@ function ENT:AimTurret()
 
 	local Pos, Ang = WorldToLocal( Muzzle.Pos, Dir1:Angle(), Muzzle.Pos, MuzzleAng )
 
-	local AimAngles = Angle( self:GetTurretPitch() + Ang.p, self:GetTurretYaw() + Ang.y, 0 )
+	return Angle( self:GetTurretPitch() + Ang.p, self:GetTurretYaw() + Ang.y, 0 )
+end
+
+function ENT:AimTurret()
+	if CLIENT then return end
+
+	if not self:IsTurretEnabled() then self:StopTurretSound() self:StopTurretSoundDMG() return end
+
+	local AimAngles = self:CalcTurretAngles()
 
 	local AimRate = self.TurretAimRate * FrameTime() 
 
