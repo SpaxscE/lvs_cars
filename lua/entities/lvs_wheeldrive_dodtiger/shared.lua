@@ -33,6 +33,11 @@ ENT.SideArmor = 4000
 ENT.TurretArmor = 6000
 ENT.RearArmor = 4000
 
+-- ballistics
+ENT.ProjectileVelocityCoaxial = 15000
+ENT.ProjectileVelocityHighExplosive = 13000
+ENT.ProjectileVelocityArmorPiercing = 16000
+
 ENT.SteerSpeed = 1
 ENT.SteerReturnSpeed = 2
 
@@ -117,7 +122,7 @@ function ENT:InitWeapons()
 		bullet.EnableBallistics = true
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
-		bullet.Velocity = 15000
+		bullet.Velocity = ent.ProjectileVelocityCoaxial
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
 
@@ -158,6 +163,9 @@ function ENT:InitWeapons()
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
+	weapon.OnSelect = function( ent )
+		ent:TurretUpdateBallistics( ent.ProjectileVelocityCoaxial, "muzzle_coax" )
+	end
 	self:AddWeapon( weapon )
 
 
@@ -184,6 +192,12 @@ function ENT:InitWeapons()
 				ent:EmitSound("lvs/vehicles/tiger/cannon_unload.wav", 75, 100, 1, CHAN_WEAPON )
 				ent:SetHeat( 1 )
 				ent:SetOverheated( true )
+
+				if ent:GetUseHighExplosive() then
+					ent:TurretUpdateBallistics( ent.ProjectileVelocityHighExplosive )
+				else
+					ent:TurretUpdateBallistics( ent.ProjectileVelocityArmorPiercing )
+				end
 			end
 		end
 	end
@@ -208,12 +222,12 @@ function ENT:InitWeapons()
 			bullet.SplashDamageRadius = 250
 			bullet.SplashDamageEffect = "lvs_bullet_impact_explosive"
 			bullet.SplashDamageType = DMG_BLAST
-			bullet.Velocity = 13000
+			bullet.Velocity = ent.ProjectileVelocityHighExplosive
 		else
 			bullet.Force	= ent.CannonArmorPenetration
 			bullet.HullSize 	= 0
 			bullet.Damage	= 1250
-			bullet.Velocity = 16000
+			bullet.Velocity = ent.ProjectileVelocityArmorPiercing
 		end
 
 		bullet.TracerName = "lvs_tracer_cannon"
@@ -262,6 +276,13 @@ function ENT:InitWeapons()
 			end
 
 			ent:LVSPaintHitMarker( MuzzlePos2D )
+		end
+	end
+	weapon.OnSelect = function( ent )
+		if ent:GetUseHighExplosive() then
+			ent:TurretUpdateBallistics( ent.ProjectileVelocityHighExplosive, "muzzle" )
+		else
+			ent:TurretUpdateBallistics( ent.ProjectileVelocityArmorPiercing, "muzzle" )
 		end
 	end
 	self:AddWeapon( weapon )
