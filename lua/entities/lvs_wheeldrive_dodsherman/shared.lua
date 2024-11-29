@@ -35,6 +35,11 @@ ENT.SideArmor = 800
 ENT.TurretArmor = 3000
 ENT.RearArmor = 800
 
+-- ballistics
+ENT.ProjectileVelocityCoaxial = 15000
+ENT.ProjectileVelocityHighExplosive = 13000
+ENT.ProjectileVelocityArmorPiercing = 16000
+
 ENT.SteerSpeed = 1
 ENT.SteerReturnSpeed = 2
 
@@ -120,7 +125,7 @@ function ENT:InitWeapons()
 		bullet.EnableBallistics = true
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
-		bullet.Velocity = 15000
+		bullet.Velocity = ent.ProjectileVelocityCoaxial
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
 
@@ -159,6 +164,9 @@ function ENT:InitWeapons()
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
+	weapon.OnSelect = function( ent )
+		ent:TurretUpdateBallistics( ent.ProjectileVelocityCoaxial, "turret_machinegun" )
+	end
 	self:AddWeapon( weapon )
 
 
@@ -186,6 +194,12 @@ function ENT:InitWeapons()
 				ent:EmitSound("lvs/vehicles/sherman/cannon_unload.wav", 75, 100, 1, CHAN_WEAPON )
 				ent:SetHeat( 1 )
 				ent:SetOverheated( true )
+
+				if ent:GetUseHighExplosive() then
+					ent:TurretUpdateBallistics( ent.ProjectileVelocityHighExplosive )
+				else
+					ent:TurretUpdateBallistics( ent.ProjectileVelocityArmorPiercing )
+				end
 			end
 		end
 	end
@@ -210,12 +224,12 @@ function ENT:InitWeapons()
 			bullet.SplashDamageRadius = 200
 			bullet.SplashDamageEffect = "lvs_bullet_impact_explosive"
 			bullet.SplashDamageType = DMG_BLAST
-			bullet.Velocity = 13000
+			bullet.Velocity = ent.ProjectileVelocityHighExplosive
 		else
 			bullet.Force	= ent.CannonArmorPenetration
 			bullet.HullSize 	= 0
 			bullet.Damage	= 1000
-			bullet.Velocity = 16000
+			bullet.Velocity = ent.ProjectileVelocityArmorPiercing
 		end
 
 		bullet.TracerName = "lvs_tracer_cannon"
@@ -262,6 +276,13 @@ function ENT:InitWeapons()
 			end
 
 			ent:LVSPaintHitMarker( MuzzlePos2D )
+		end
+	end
+	weapon.OnSelect = function( ent )
+		if ent:GetUseHighExplosive() then
+			ent:TurretUpdateBallistics( ent.ProjectileVelocityHighExplosive,  "turret_cannon" )
+		else
+			ent:TurretUpdateBallistics( ent.ProjectileVelocityArmorPiercing, "turret_cannon" )
 		end
 	end
 	self:AddWeapon( weapon )
