@@ -3,7 +3,7 @@ include("entities/lvs_tank_wheeldrive/modules/sh_turret.lua")
 include("entities/lvs_tank_wheeldrive/modules/sh_turret_ballistics.lua")
 
 ENT.TurretBallisticsProjectileVelocity = ENT.ProjectileVelocityCoaxial
-ENT.TurretBallisticsMuzzleAttachment = "muzzle"
+ENT.TurretBallisticsMuzzleAttachment = "muzzle_coax"
 ENT.TurretBallisticsViewAttachment = "sight"
 
 ENT.TurretAimRate = 15
