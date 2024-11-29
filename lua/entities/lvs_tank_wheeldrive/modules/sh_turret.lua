@@ -18,6 +18,8 @@ ENT.TurretYawPoseParameterName = "turret_yaw"
 ENT.TurretYawMul = 1
 ENT.TurretYawOffset = 0
 
+ENT.TurretRateDestroyedMul = 0.25
+
 function ENT:TurretSystemDT()
 	self:AddDT( "Bool", "TurretEnabled" )
 	self:AddDT( "Bool", "TurretDestroyed" )
@@ -214,7 +216,7 @@ function ENT:AimTurret()
 	local AimRate = self.TurretAimRate * FrameTime() 
 
 	if self:GetTurretDestroyed() then
-		AimRate = AimRate * 0.25
+		AimRate = AimRate * self.TurretRateDestroyedMul
 	end
 
 	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), self.TurretPitchMin, self.TurretPitchMax )
