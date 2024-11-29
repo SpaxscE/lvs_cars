@@ -150,13 +150,13 @@ function ENT:InitWeapons()
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= Muzzle.Ang:Forward()
-		bullet.Spread 	= Vector(0.015,0.015,0.015)
-		bullet.TracerName = "lvs_tracer_yellow"
+		bullet.Spread = Vector(0.01,0.01,0.01)
+		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
 		bullet.EnableBallistics = true
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
-		bullet.Velocity = 30000
+		bullet.Velocity = 15000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
 

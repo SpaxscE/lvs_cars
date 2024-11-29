@@ -22,9 +22,9 @@ function EFFECT:Render()
 	local endpos = bullet:GetPos()
 	local dir = bullet:GetDir()
 
-	local len = 1500 * bullet:GetLength()
+	local len = 500 * bullet:GetLength()
 
 	render.SetMaterial( self.MatBeam )
-
-	render.DrawBeam( endpos, endpos + dir * len, 5, 1, 0, Color( 255, 255, 200, 255 ) )
+	render.DrawBeam( endpos - dir * len, endpos + dir * len, 4, 1, 0, Color( 255, 255, 125, 255 ) )
+	render.DrawBeam( endpos - dir * len, endpos + dir * len, 8, 1, 0, Color( 125, 80, 0, 255 ) )
 end

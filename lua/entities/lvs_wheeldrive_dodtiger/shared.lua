@@ -111,13 +111,13 @@ function ENT:InitWeapons()
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos - Muzzle.Ang:Up() * 140 - Muzzle.Ang:Forward() * 15
 		bullet.Dir 	= Muzzle.Ang:Up()
-		bullet.Spread 	= Vector(0.015,0.015,0.015)
-		bullet.TracerName = "lvs_tracer_yellow"
+		bullet.Spread = Vector(0.01,0.01,0.01)
+		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
 		bullet.EnableBallistics = true
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
-		bullet.Velocity = 30000
+		bullet.Velocity = 15000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
 
@@ -434,13 +434,13 @@ function ENT:AddGunnerWeapons()
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
 		bullet.Dir 	= (ent:GetEyeTrace().HitPos - bullet.Src):GetNormalized()
-		bullet.Spread 	= Vector(0.015,0.015,0.015)
-		bullet.TracerName = "lvs_tracer_yellow"
+		bullet.Spread = Vector(0.01,0.01,0.01)
+		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
 		bullet.EnableBallistics = true
 		bullet.HullSize 	= 0
 		bullet.Damage	= 25
-		bullet.Velocity = 30000
+		bullet.Velocity = 15000
 		bullet.Attacker 	= ent:GetDriver()
 		ent:LVSFireBullet( bullet )
 
