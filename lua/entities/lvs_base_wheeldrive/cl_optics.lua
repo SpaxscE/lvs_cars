@@ -54,9 +54,9 @@ function ENT:PaintCrosshairCenter( Pos2D, Col )
 			self:PaintOptics( ScreenCenter2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 1 )
 		else
 			self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 1 )
-
-			return
 		end
+
+		return
 	end
 
 	BaseClass.PaintCrosshairCenter( self, Pos2D, Col )
@@ -74,9 +74,9 @@ function ENT:PaintCrosshairOuter( Pos2D, Col )
 			self:PaintOptics( ScreenCenter2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 2 )
 		else
 			self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 2 )
-
-			return
 		end
+
+		return
 	end
 
 	BaseClass.PaintCrosshairOuter( self, Pos2D, Col )
@@ -94,9 +94,9 @@ function ENT:PaintCrosshairSquare( Pos2D, Col )
 			self:PaintOptics( ScreenCenter2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 3 )
 		else
 			self:PaintOptics( Pos2D, Col, LocalPlayer():GetVehicle():GetNWInt( "pPodIndex", -1 ), 3 )
-
-			return
 		end
+
+		return
 	end
 
 	BaseClass.PaintCrosshairSquare( self, Pos2D, Col )
