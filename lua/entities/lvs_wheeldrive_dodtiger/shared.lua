@@ -102,15 +102,15 @@ function ENT:InitWeapons()
 	weapon.HeatRateUp = 0.2
 	weapon.HeatRateDown = 0.25
 	weapon.Attack = function( ent )
-		local ID = ent:LookupAttachment( "muzzle" )
+		local ID = ent:LookupAttachment( "muzzle_coax" )
 
 		local Muzzle = ent:GetAttachment( ID )
 
 		if not Muzzle then return end
 
 		local bullet = {}
-		bullet.Src 	= Muzzle.Pos - Muzzle.Ang:Up() * 140 - Muzzle.Ang:Forward() * 15
-		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread = Vector(0.01,0.01,0.01)
 		bullet.TracerName = "lvs_tracer_yellow_small"
 		bullet.Force	= 10
@@ -139,16 +139,16 @@ function ENT:InitWeapons()
 	end
 	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
 	weapon.HudPaint = function( ent, X, Y, ply )
-		local ID = ent:LookupAttachment( "muzzle" )
+		local ID = ent:LookupAttachment( "muzzle_coax" )
 
 		local Muzzle = ent:GetAttachment( ID )
 
 		if Muzzle then
-			local Start = Muzzle.Pos - Muzzle.Ang:Up() * 140 - Muzzle.Ang:Forward() * 15
+			local Start = Muzzle.Pos
 
 			local traceTurret = util.TraceLine( {
 				start = Start,
-				endpos = Start + Muzzle.Ang:Up() * 50000,
+				endpos = Start + Muzzle.Ang:Forward() * 50000,
 				filter = ent:GetCrosshairFilterEnts()
 			} )
 
@@ -196,7 +196,7 @@ function ENT:InitWeapons()
 
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread = Vector(0,0,0)
 		bullet.EnableBallistics = true
 
@@ -233,6 +233,8 @@ function ENT:InitWeapons()
 
 		ent:TakeAmmo( 1 )
 
+		ent:PlayAnimation("shot")
+
 		if not IsValid( ent.SNDTurret ) then return end
 
 		ent.SNDTurret:PlayOnce( 100 + math.cos( CurTime() + ent:EntIndex() * 1337 ) * 5 + math.Rand(-1,1), 1 )
@@ -240,14 +242,14 @@ function ENT:InitWeapons()
 		ent:EmitSound("lvs/vehicles/tiger/cannon_reload.wav", 75, 100, 1, CHAN_WEAPON )
 	end
 	weapon.HudPaint = function( ent, X, Y, ply )
-		local ID = ent:LookupAttachment(  "muzzle" )
+		local ID = ent:LookupAttachment( "muzzle" )
 
 		local Muzzle = ent:GetAttachment( ID )
 
 		if Muzzle then
 			local traceTurret = util.TraceLine( {
 				start = Muzzle.Pos,
-				endpos = Muzzle.Pos + Muzzle.Ang:Up() * 50000,
+				endpos = Muzzle.Pos + Muzzle.Ang:Forward() * 50000,
 				filter = ent:GetCrosshairFilterEnts()
 			} )
 
@@ -293,7 +295,7 @@ function ENT:InitWeapons()
 		grenade:SetAngles( Ang1 )
 		grenade:Spawn()
 		grenade:Activate()
-		grenade:GetPhysicsObject():SetVelocity( Ang1:Up() * 1000 ) 
+		grenade:GetPhysicsObject():SetVelocity( Ang1:Forward() * 1000 ) 
 
 		local Ang2 = Muzzle2.Ang
 		Ang2:RotateAroundAxis( Up, 5 )
@@ -302,7 +304,7 @@ function ENT:InitWeapons()
 		grenade:SetAngles( Ang2 )
 		grenade:Spawn()
 		grenade:Activate()
-		grenade:GetPhysicsObject():SetVelocity( Ang2:Up() * 1000 ) 
+		grenade:GetPhysicsObject():SetVelocity( Ang2:Forward() * 1000 ) 
 
 		local Ang3 = Muzzle1.Ang
 		Ang3:RotateAroundAxis( Up, -15 )
@@ -311,7 +313,7 @@ function ENT:InitWeapons()
 		grenade:SetAngles( Ang3 )
 		grenade:Spawn()
 		grenade:Activate()
-		grenade:GetPhysicsObject():SetVelocity( Ang3:Up() * 1000 ) 
+		grenade:GetPhysicsObject():SetVelocity( Ang3:Forward() * 1000 ) 
 
 
 		local Ang4 = Muzzle2.Ang
@@ -321,7 +323,7 @@ function ENT:InitWeapons()
 		grenade:SetAngles( Ang4 )
 		grenade:Spawn()
 		grenade:Activate()
-		grenade:GetPhysicsObject():SetVelocity( Ang4:Up() * 1000 ) 
+		grenade:GetPhysicsObject():SetVelocity( Ang4:Forward() * 1000 ) 
 	end
 	self:AddWeapon( weapon )
 
