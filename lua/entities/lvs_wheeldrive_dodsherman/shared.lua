@@ -164,9 +164,6 @@ function ENT:InitWeapons()
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
-	weapon.OnSelect = function( ent )
-		ent:TurretUpdateBallistics( ent.ProjectileVelocityCoaxial, "turret_machinegun" )
-	end
 	self:AddWeapon( weapon )
 
 
@@ -194,12 +191,6 @@ function ENT:InitWeapons()
 				ent:EmitSound("lvs/vehicles/sherman/cannon_unload.wav", 75, 100, 1, CHAN_WEAPON )
 				ent:SetHeat( 1 )
 				ent:SetOverheated( true )
-
-				if ent:GetUseHighExplosive() then
-					ent:TurretUpdateBallistics( ent.ProjectileVelocityHighExplosive )
-				else
-					ent:TurretUpdateBallistics( ent.ProjectileVelocityArmorPiercing )
-				end
 			end
 		end
 	end
@@ -276,13 +267,6 @@ function ENT:InitWeapons()
 			end
 
 			ent:LVSPaintHitMarker( MuzzlePos2D )
-		end
-	end
-	weapon.OnSelect = function( ent )
-		if ent:GetUseHighExplosive() then
-			ent:TurretUpdateBallistics( ent.ProjectileVelocityHighExplosive,  "turret_cannon" )
-		else
-			ent:TurretUpdateBallistics( ent.ProjectileVelocityArmorPiercing, "turret_cannon" )
 		end
 	end
 	self:AddWeapon( weapon )
