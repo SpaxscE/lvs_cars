@@ -12,6 +12,8 @@ ENT.OpticsCrosshairMaterial = Material( "lvs/circle_filled.png" )
 ENT.OpticsCrosshairColor = Color(0,0,0,150)
 ENT.OpticsCrosshairSize = 4
 
+ENT.OpticsProjectileSize = 7.5
+
 local OldTargetOffset = 0
 local RotationOffset = 0
 local circle = Material( "lvs/circle_hollow.png" )
@@ -88,7 +90,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 		local y = math.sin( math.rad( ang ) )
 
 		if i == 2 then
-			self:DrawRotatedText( "7.5", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
+			self:DrawRotatedText( self.OpticsProjectileSize, Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 		if i == 3 then
 			self:DrawRotatedText( "cm", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
