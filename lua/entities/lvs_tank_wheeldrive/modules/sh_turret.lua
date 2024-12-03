@@ -203,27 +203,29 @@ end
 function ENT:AimTurret()
 	if not self:IsTurretEnabled() then if SERVER then self:StopTurretSound() self:StopTurretSoundDMG() end return end
 
-	local weapon = self:GetWeaponHandler( self.TurretPodIndex )
+	local EntTable = self:GetTable()
+
+	local weapon = self:GetWeaponHandler( EntTable.TurretPodIndex )
 
 	if not IsValid( weapon ) then return end
 
 	local AimAngles = self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
 
-	if self.TurretFakeBarrel then
-		AimAngles = self:WorldToLocalAngles( (self:LocalToWorld( self.TurretFakeBarrelRotationCenter ) - weapon:GetEyeTrace().HitPos):Angle() )
+	if EntTable.TurretFakeBarrel then
+		AimAngles = self:WorldToLocalAngles( (self:LocalToWorld( EntTable.TurretFakeBarrelRotationCenter ) - weapon:GetEyeTrace().HitPos):Angle() )
 	end
 
-	local AimRate = self.TurretAimRate * FrameTime() 
+	local AimRate = EntTable.TurretAimRate * FrameTime() 
 
 	if self:GetTurretDestroyed() then
-		AimRate = AimRate * self.TurretRateDestroyedMul
+		AimRate = AimRate * EntTable.TurretRateDestroyedMul
 	end
 
-	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), self.TurretPitchMin, self.TurretPitchMax )
+	local Pitch = math.Clamp( math.ApproachAngle( self:GetTurretPitch(), AimAngles.p, AimRate ), EntTable.TurretPitchMin, EntTable.TurretPitchMax )
 	local Yaw = math.ApproachAngle( self:GetTurretYaw(), AimAngles.y, AimRate )
 
-	if self.TurretYawMin and self.TurretYawMax then
-		Yaw = math.Clamp( Yaw, self.TurretYawMin, self.TurretYawMax )
+	if EntTable.TurretYawMin and EntTable.TurretYawMax then
+		Yaw = math.Clamp( Yaw, EntTable.TurretYawMin, EntTable.TurretYawMax )
 	end
 
 	if SERVER then
@@ -233,6 +235,6 @@ function ENT:AimTurret()
 	self:SetTurretPitch( Pitch )
 	self:SetTurretYaw( Yaw )
 
-	self:SetPoseParameter(self.TurretPitchPoseParameterName, self.TurretPitchOffset + self:GetTurretPitch() * self.TurretPitchMul )
-	self:SetPoseParameter(self.TurretYawPoseParameterName, self.TurretYawOffset + self:GetTurretYaw() * self.TurretYawMul )
+	self:SetPoseParameter(EntTable.TurretPitchPoseParameterName, EntTable.TurretPitchOffset + self:GetTurretPitch() * EntTable.TurretPitchMul )
+	self:SetPoseParameter(EntTable.TurretYawPoseParameterName, EntTable.TurretYawOffset + self:GetTurretYaw() * EntTable.TurretYawMul )
 end

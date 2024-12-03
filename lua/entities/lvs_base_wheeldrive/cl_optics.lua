@@ -10,6 +10,24 @@ ENT.OpticsPodIndex = {
 	[1] = true,
 }
 
+ENT.OpticsCrosshairMaterial = Material( "vgui/circle" )
+ENT.OpticsCrosshairColor = Color(0,0,0,255)
+ENT.OpticsCrosshairSize = 5
+
+function ENT:PaintOpticsCrosshair( Pos2D )
+	if not Pos2D.visible then return end
+
+	local size = self.OpticsCrosshairSize
+
+	surface.SetMaterial( self.OpticsCrosshairMaterial )
+	surface.SetDrawColor( self.OpticsCrosshairColor )
+	surface.DrawTexturedRect( Pos2D.x - size * 0.5, Pos2D.y - size * 0.5, size, size )
+end
+
+function ENT:CalcOpticsCrosshairDot( Pos2D )
+	self:PaintOpticsCrosshair( Pos2D )
+end
+
 function ENT:GetOpticsEnabled()
 	local EntTable = self:GetTable()
 
@@ -45,6 +63,8 @@ end
 function ENT:PaintCrosshairCenter( Pos2D, Col )
 	if self:UseOptics() then
 		if self.OpticsScreenCentered then
+			self:CalcOpticsCrosshairDot( Pos2D )
+
 			local ScreenCenter2D = {
 				x = ScrW() * 0.5,
 				y = ScrH() * 0.5,
@@ -65,6 +85,8 @@ end
 function ENT:PaintCrosshairOuter( Pos2D, Col )
 	if self:UseOptics() then
 		if self.OpticsScreenCentered then
+			self:CalcOpticsCrosshairDot( Pos2D )
+
 			local ScreenCenter2D = {
 				x = ScrW() * 0.5,
 				y = ScrH() * 0.5,
@@ -85,6 +107,8 @@ end
 function ENT:PaintCrosshairSquare( Pos2D, Col )
 	if self:UseOptics() then
 		if self.OpticsScreenCentered then
+			self:CalcOpticsCrosshairDot( Pos2D )
+
 			local ScreenCenter2D = {
 				x = ScrW() * 0.5,
 				y = ScrH() * 0.5,

@@ -1,5 +1,10 @@
 
 include("entities/lvs_tank_wheeldrive/modules/sh_turret.lua")
+include("entities/lvs_tank_wheeldrive/modules/sh_turret_ballistics.lua")
+
+ENT.TurretBallisticsProjectileVelocity = ENT.ProjectileVelocityArmorPiercing
+ENT.TurretBallisticsMuzzleAttachment = "muzzle"
+ENT.TurretBallisticsViewAttachment = "sight"
 
 ENT.TurretAimRate = 15
 

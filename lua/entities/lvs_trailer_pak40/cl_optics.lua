@@ -8,6 +8,7 @@ ENT.OpticsPodIndex = {
 	[1] = true,
 }
 
+local RotationOffset = 0
 local circle = Material( "lvs/circle_hollow.png" )
 local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
@@ -21,7 +22,11 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	surface.SetDrawColor( 0, 0, 0, 255 )
 	surface.DrawTexturedRect( Pos2D.x - 16, Pos2D.y, 32, 32 )
 
-	self:DrawRotatedText( Type == 3 and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	if Type == 1 then
+		self:DrawRotatedText( "MG", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	else
+		self:DrawRotatedText( Type == 3 and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	end
 
 	local ScrW = ScrW()
 	local ScrH = ScrH()
@@ -38,6 +43,15 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 
 	surface.SetDrawColor( 0, 0, 0, 200 )
 
+	local TargetOffset = 0
+
+	if OldTargetOffset ~= TargetOffset then
+		OldTargetOffset = TargetOffset
+		surface.PlaySound( "lvs/optics.wav" )
+	end
+
+	RotationOffset = RotationOffset + (TargetOffset + math.max( self:GetTurretCompensation() / 15, -130 ) - RotationOffset) * RealFrameTime() * 8
+
 	local R = ScrH * 0.5 - 64
 	local R0 = R + 30
 	local R1 = R - 8
@@ -46,7 +60,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	local R4 = R - 18
 
 	for i = 0, 40 do
-		local ang = -90 + (180 / 40) * i
+		local ang = -90 + (180 / 40) * i + RotationOffset
 
 		local x = math.cos( math.rad( ang ) )
 		local y = math.sin( math.rad( ang ) )
@@ -70,7 +84,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 
 		if i == 40 then continue end
 
-		local ang = - 90 + (180 / 40) * (i + 0.5)
+		local ang = - 90 + (180 / 40) * (i + 0.5) + RotationOffset
 
 		local x = math.cos( math.rad( ang ) )
 		local y = math.sin( math.rad( ang ) )
