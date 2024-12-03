@@ -98,14 +98,14 @@ function ENT:SpawnShell()
 
 	if not IsValid( Shell ) then return end
 
-	Shell.MDL = "models/props_debris/shellcasing_10.mdl"
+	Shell.MDL = "models/props_debris/shellcasing_08.mdl"
 	Shell.CollisionSounds = {
 		"lvs/vehicles/pak40/shell_impact1.wav",
 		"lvs/vehicles/pak40/shell_impact2.wav"
 	}
 
-	Shell:SetPos( Muzzle.Pos - Muzzle.Ang:Up() * 140 )
-	Shell:SetAngles( Muzzle.Ang + Angle(0,0,90) )
+	Shell:SetPos( Muzzle.Pos - Muzzle.Ang:Forward() * 140 )
+	Shell:SetAngles( Muzzle.Ang + Angle(90,0,0) )
 	Shell:Spawn()
 	Shell:Activate()
 	Shell:SetOwner( self )
@@ -115,7 +115,7 @@ function ENT:SpawnShell()
 	if not IsValid( PhysObj ) then return end
 
 	PhysObj:SetVelocityInstantaneous( Shell:GetRight() * 250 - Shell:GetUp() * 20 )
-	PhysObj:SetAngleVelocityInstantaneous( Vector(-80,0,0) )
+	PhysObj:SetAngleVelocityInstantaneous( Vector(0,0,180) )
 end
 
 function ENT:DoReloadSequence( delay )
