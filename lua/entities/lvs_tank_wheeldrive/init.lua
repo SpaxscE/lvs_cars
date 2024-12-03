@@ -19,6 +19,7 @@ function ENT:CreateWheelChain( wheels )
 	for _, wheel in pairs( wheels ) do
 		if not IsValid( wheel ) then continue end
 
+		wheel:SetWheelChainMode( true )
 		wheel:SetDamageAllowed( true )
 		wheel:SetWidth( 0 )
 	end

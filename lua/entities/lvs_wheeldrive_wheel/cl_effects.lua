@@ -71,6 +71,28 @@ function ENT:DoWheelEffects( Base, trace, traceWater )
 	end
 end
 
+function ENT:DoWaterEffects( Base, traceWater, Pos )
+	local effectdata = EffectData()
+		effectdata:SetOrigin( traceWater.Fraction > 0.5 and traceWater.HitPos or Pos )
+		effectdata:SetEntity( Base )
+		effectdata:SetMagnitude( self:BoundingRadius() )
+		effectdata:SetFlags( 0 )
+	util.Effect( "lvs_physics_wheelwatersplash", effectdata )
+end
+
+function ENT:DoWheelChainEffects( Base, trace )
+	if not LVS.ShowEffects then return end
+
+	if not self.DustEffectSurfaces[ util.GetSurfacePropName( trace.SurfaceProps ) ] then return end
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin( trace.HitPos )
+	effectdata:SetEntity( Base )
+	effectdata:SetMagnitude( self:BoundingRadius() )
+	effectdata:SetNormal( trace.HitNormal )
+	util.Effect( "lvs_physics_trackdust", effectdata, true, true )
+end
+
 function ENT:CalcWheelEffects()
 	local T = CurTime()
 
@@ -84,7 +106,9 @@ function ENT:CalcWheelEffects()
 
 	local Radius = Base:GetUp() * (self:GetRadius() + 1)
 
-	local Pos =  self:GetPos() + self:GetVelocity() * 0.025
+	local Vel = self:GetVelocity()
+	local Pos =  self:GetPos() + Vel * 0.025
+
 	local StartPos = Pos + Radius
 	local EndPos = Pos - Radius
 
@@ -105,12 +129,11 @@ function ENT:CalcWheelEffects()
 
 	if traceWater.Hit and trace.HitPos.z < traceWater.HitPos.z then 
 		if math.abs( self:GetRPM() ) > 25 then
-			local effectdata = EffectData()
-				effectdata:SetOrigin(  traceWater.Fraction > 0.5 and traceWater.HitPos or Pos )
-				effectdata:SetEntity( Base )
-				effectdata:SetMagnitude( self:BoundingRadius() )
-				effectdata:SetFlags( 0 )
-			util.Effect( "lvs_physics_wheelwatersplash", effectdata )
+			self:DoWaterEffects( Base, traceWater, Pos )
+		end
+	else
+		if self:GetWheelChainMode() and trace.Hit and math.abs( self:GetRPM() ) > 25 and Vel:LengthSqr() > 1500 then
+			self:DoWheelChainEffects( Base, trace )
 		end
 	end
 
@@ -121,6 +144,15 @@ end
 
 function ENT:CalcWheelSounds( Base, trace, traceWater )
 	if not trace.Hit then return end
+
+	-- rejoin requires this
+	if trace.Entity == self then
+		if istable( Base.CrosshairFilterEnts ) and #Base.CrosshairFilterEnts > 1 then
+			Base.CrosshairFilterEnts = nil
+		end
+
+		return
+	end
 
 	local RPM = math.abs( self:GetRPM() )
 

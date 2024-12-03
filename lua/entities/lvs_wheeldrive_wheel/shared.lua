@@ -24,8 +24,8 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity", 0, "Base" )
 
 	self:NetworkVar( "Bool", 0, "HideModel" )
-
 	self:NetworkVar( "Bool", 1, "Destroyed" )
+	self:NetworkVar( "Bool", 2, "WheelChainMode" )
 
 	if SERVER then
 		self:SetMaxHP( 100 )
