@@ -8,29 +8,24 @@ ENT.OpticsPodIndex = {
 	[1] = true,
 }
 
+ENT.OpticsCrosshairMaterial = Material( "lvs/circle_filled.png" )
+ENT.OpticsCrosshairColor = Color(0,0,0,150)
+ENT.OpticsCrosshairSize = 4
+
 local OldTargetOffset = 0
 local RotationOffset = 0
 local circle = Material( "lvs/circle_hollow.png" )
 local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
 local pointer = Material( "gui/point.png" )
-local scope = Material( "lvs/scope.png" )
+local scope = Material( "lvs/scope_viewblocked.png" )
 
-function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
+function ENT:PaintOpticsCrosshair( Pos2D )
 	surface.SetDrawColor( 255, 255, 255, 5 )
 	surface.SetMaterial( tri1 )
 	surface.DrawTexturedRect( Pos2D.x - 17, Pos2D.y - 1, 32, 32 )
 	surface.SetDrawColor( 0, 0, 0, 255 )
 	surface.DrawTexturedRect( Pos2D.x - 16, Pos2D.y, 32, 32 )
-
-	if Type == 1 then
-		self:DrawRotatedText( "MG", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
-	else
-		self:DrawRotatedText( Type == 3 and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
-	end
-
-	local ScrW = ScrW()
-	local ScrH = ScrH()
 
 	for i = -3, 3, 1 do
 		if i == 0 then continue end
@@ -41,6 +36,32 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 		surface.SetDrawColor( 0, 0, 0, 255 )
 		surface.DrawTexturedRect( Pos2D.x - 10 + i * 32, Pos2D.y, 20, 20 )
 	end
+
+	local ScrH = ScrH()
+
+	local Y = Pos2D.y + 64
+	local height = ScrH - Y
+
+	surface.SetDrawColor( 0, 0, 0, 100 )
+	surface.DrawRect( Pos2D.x - 2,  Y, 4, height )
+end
+
+function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
+
+	if Type == 1 then
+		self:DrawRotatedText( "MG", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	else
+		self:DrawRotatedText( Type == 3 and "HE" or "AP", Pos2D.x + 30, Pos2D.y + 30, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
+	end
+
+	local size = self.OpticsCrosshairSize
+
+	surface.SetMaterial( self.OpticsCrosshairMaterial )
+	surface.SetDrawColor( self.OpticsCrosshairColor )
+	surface.DrawTexturedRect( Pos2D.x - size * 0.5, Pos2D.y - size * 0.5, size, size )
+
+	local ScrW = ScrW()
+	local ScrH = ScrH()
 
 	surface.SetDrawColor( 0, 0, 0, 200 )
 
@@ -67,7 +88,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 		local y = math.sin( math.rad( ang ) )
 
 		if i == 2 then
-			self:DrawRotatedText( "8.8", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
+			self:DrawRotatedText( "7.5", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
 		end
 		if i == 3 then
 			self:DrawRotatedText( "cm", Pos2D.x + x * R0, Pos2D.y + y * R0, "LVS_FONT", Color(0,0,0,200), 90 + ang)
@@ -115,14 +136,15 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	surface.SetMaterial( pointer )
 	surface.DrawTexturedRect( Pos2D.x - 16, 0, 32, 64 )
 
-	local Y = Pos2D.y + 64
-	local height = ScrH - Y
-	surface.DrawRect( Pos2D.x - 2,  Y, 4, height )
-
 	local diameter = ScrH
 	local radius = diameter * 0.5
 
 	surface.SetMaterial( scope )
-	surface.SetDrawColor( 0, 0, 0, 50 )
+	surface.SetDrawColor( 0, 0, 0, 255 )
 	surface.DrawTexturedRect( Pos2D.x - radius, Pos2D.y - radius, diameter, diameter )
+
+	-- black bar left + right
+	surface.DrawRect( 0, 0, Pos2D.x - radius, ScrH )
+	surface.DrawRect( Pos2D.x + radius, 0, Pos2D.x - radius, ScrH )
 end
+

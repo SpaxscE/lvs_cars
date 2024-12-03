@@ -1,4 +1,5 @@
 
+ENT.TurretBallisticsPredicted = true
 ENT.TurretBallisticsUpright = 0.6
 ENT.TurretBallisticsProjectileVelocity = 10000
 ENT.TurretBallisticsMuzzleAttachment = "muzzle"
@@ -114,7 +115,11 @@ if SERVER then
 		local ProjectileVelocity = EntTable.TurretBallisticsProjectileVelocity
 		local Dist = (AimPos - MuzzlePos):Length()
 
-		local OffsetPredicted = physenv.GetGravity() * ((Dist / ProjectileVelocity) ^ 2)
+		local OffsetPredicted = vector_origin
+
+		if EntTable.TurretBallisticsPredicted then
+			OffsetPredicted = physenv.GetGravity() * ((Dist / ProjectileVelocity) ^ 2)
+		end
 
 		local EndPos = AimPos - OffsetPredicted
 
@@ -162,7 +167,11 @@ else
 		local StartDirection = Muzzle.Ang:Forward()
 		local Velocity  = self.TurretBallisticsProjectileVelocity
 
-		local Gravity = physenv.GetGravity()
+		local Gravity = vector_origin
+
+		if self.TurretBallisticsPredicted then
+			Gravity = physenv.GetGravity()
+		end
 
 		cam.Start3D()
 		local Iteration = 0
