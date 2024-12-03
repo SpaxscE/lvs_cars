@@ -117,7 +117,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	surface.SetMaterial( pointer )
 	surface.DrawTexturedRect( Pos2D.x - 16, 0, 32, 64 )
 
-	local diameter = ScrH
+	local diameter = ScrH + 64
 	local radius = diameter * 0.5
 
 	surface.SetMaterial( scope )

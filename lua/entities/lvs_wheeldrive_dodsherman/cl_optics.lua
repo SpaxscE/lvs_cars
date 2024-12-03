@@ -44,7 +44,7 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	local ScrW = ScrW()
 	local ScrH = ScrH()
 
-	local diameter = ScrH
+	local diameter = ScrH + 64
 	local radius = diameter * 0.5
 
 	surface.SetMaterial( scope )
