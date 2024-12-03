@@ -8,13 +8,9 @@ function ENT:TankViewOverride( ply, pos, angles, fov, pod )
 		if pod:GetThirdPersonMode() then
 			pos = self:LocalToWorld( Vector(35,0,40) )
 		else
-			local ID = self:LookupAttachment( "sight" )
+			local vieworigin, found = self:GetTurretViewOrigin()
 
-			local Muzzle = self:GetAttachment( ID )
-
-			if Muzzle then
-				pos =  Muzzle.Pos
-			end
+			if found then pos = vieworigin end
 		end
 	end
 

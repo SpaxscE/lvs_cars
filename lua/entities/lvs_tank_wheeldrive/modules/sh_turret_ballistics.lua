@@ -38,18 +38,24 @@ function ENT:GetTurretYaw()
 	return self:GetNWTurretYaw()
 end
 
+function ENT:GetTurretViewOrigin()
+	local ID = self:LookupAttachment( self.TurretBallisticsViewAttachment )
+
+	local Att = self:GetAttachment( ID )
+
+	if not Att then return self:GetPos(), false end
+
+	return Att.Pos, true
+end
+
 if SERVER then
 	util.AddNetworkString( "lvs_turret_ballistics_synchronous" )
 
 	local function GetTurretEyeTrace( base, weapon )
-		local ID = base:LookupAttachment( base.TurretBallisticsViewAttachment )
+		local startpos, found = base:GetTurretViewOrigin()
 
-		local Muzzle = base:GetAttachment( ID )
-
-		if not Muzzle then return weapon:GetEyeTrace() end
-
-		local startpos = Muzzle.Pos
-
+		if not found then return weapon:GetEyeTrace() end
+	
 		local pod = weapon:GetDriverSeat()
 
 		if IsValid( pod ) and pod:GetThirdPersonMode() then
