@@ -60,7 +60,7 @@ function EFFECT:Init( data )
 		mask = MASK_SOLID_BRUSHONLY,
 	} )
 
-	if not trace.Hit then return end
+	if not trace or not trace.Hit then return end
 
 	local VecCol = (render.GetLightColor( trace.HitPos + trace.HitNormal ) * 0.8 + Vector(0.17,0.15,0.1)) * 255
 	for i = 1,24 do
