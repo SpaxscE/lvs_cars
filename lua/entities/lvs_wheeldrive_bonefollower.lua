@@ -15,6 +15,7 @@ if SERVER then
 
 	function ENT:Initialize()
 		self:PhysicsInit( SOLID_VPHYSICS )
+		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 
 		local PhysObj = self:GetPhysicsObject()
 
