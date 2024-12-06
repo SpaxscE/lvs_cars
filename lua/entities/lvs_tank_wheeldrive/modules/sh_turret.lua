@@ -233,13 +233,6 @@ else
 		local B2 = constraint.AdvBallsocket( Follower,Master,0,0,vector_origin,vector_origin,0,0,-Lock,-Lock,-Lock,Lock,Lock,Lock,0,0,0,1,1)
 		B2.DoNotDuplicate = true
 
-		for _, wheel in pairs( self:GetWheels() ) do
-			if not IsValid( wheel ) then continue end
-
-			local nocollide_constraint = constraint.NoCollide(Follower,wheel,0,0)
-			nocollide_constraint.DoNotDuplicate = true
-		end
-
 		return Follower
 	end
 end

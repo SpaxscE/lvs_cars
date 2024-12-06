@@ -14,8 +14,11 @@ if SERVER then
 	end
 
 	function ENT:Initialize()
+		self:SetUseType( SIMPLE_USE )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
+		self:SetCollisionGroup( COLLISION_GROUP_WORLD )
+		self:DrawShadow( false )
 
 		local PhysObj = self:GetPhysicsObject()
 
@@ -45,6 +48,8 @@ if SERVER then
 
 		local att = Base:GetAttachment( self._attidFollow )
 
+		if not att then self:NextThink( T + 1 ) return true end
+
 		local OldAng = Master:GetAngles()
 		local NewAng = att.Ang
 
@@ -52,8 +57,6 @@ if SERVER then
 			Master:SetAngles( att.Ang )
 			self:PhysWake()
 		end
-
-		self:NextThink( T )
 
 		return true
 	end
@@ -64,6 +67,24 @@ if SERVER then
 		if not IsValid( base ) then return end
 
 		base:OnTakeDamage( dmginfo )
+	end
+
+	function ENT:PhysicsCollide( data, phys )
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return end
+
+		base:PhysicsCollide( data, phys )
+	end
+
+	function ENT:Use( ply )
+		if (ply._lvsNextUse or 0) > CurTime() then return end
+
+		local base = self:GetBase()
+
+		if not IsValid( base ) then return end
+
+		base:Use( ply )
 	end
 
 	function ENT:OnRemove()
