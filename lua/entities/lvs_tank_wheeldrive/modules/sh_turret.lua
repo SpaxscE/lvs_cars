@@ -190,6 +190,58 @@ else
 	function ENT:OnTick()
 		self:AimTurret()
 	end
+
+	function ENT:CreateTurretPhysics( data )
+		if not isstring( data.follow ) or not isstring( data.mdl ) then return NULL end
+
+		local idFollow = self:LookupAttachment( data.follow )
+
+		local attFollow = self:GetAttachment( idFollow )
+
+		if not attFollow then return NULL end
+
+		local Follower = ents.Create( "lvs_wheeldrive_bonefollower" )
+
+		if not IsValid( Follower ) then return NULL end
+
+		local Master = ents.Create( "lvs_wheeldrive_steerhandler" )
+
+		if not IsValid( Master ) then Follower:Remove() return NULL end
+
+		Master:SetPos( attFollow.Pos )
+		Master:SetAngles( attFollow.Ang )
+		Master:Spawn()
+		Master:Activate()
+		self:DeleteOnRemove( Master )
+		self:TransferCPPI( Master )
+	
+		Follower:SetModel( data.mdl )
+		Follower:SetPos( attFollow.Pos )
+		Follower:SetAngles( self:GetAngles() )
+		Follower:Spawn()
+		Follower:Activate()
+		Follower:SetBase( self )
+		Follower:SetFollowAttachment( idFollow )
+		Follower:SetMaster( Master )
+		self:TransferCPPI( Follower )
+		self:DeleteOnRemove( Follower )
+
+		local B1 = constraint.Ballsocket( Follower, self, 0, 0, self:WorldToLocal( attFollow.Pos ), 0, 0, 1 )
+		B1.DoNotDuplicate = true
+
+		local Lock = 0.0001
+		local B2 = constraint.AdvBallsocket( Follower,Master,0,0,vector_origin,vector_origin,0,0,-Lock,-Lock,-Lock,Lock,Lock,Lock,0,0,0,1,1)
+		B2.DoNotDuplicate = true
+
+		for _, wheel in pairs( self:GetWheels() ) do
+			if not IsValid( wheel ) then continue end
+
+			local nocollide_constraint = constraint.NoCollide(Follower,wheel,0,0)
+			nocollide_constraint.DoNotDuplicate = true
+		end
+
+		return Follower
+	end
 end
 
 function ENT:IsTurretEnabled()
