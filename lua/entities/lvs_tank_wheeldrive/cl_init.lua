@@ -5,15 +5,17 @@ ENT.TrackHull = Vector(1,1,1)
 ENT.TrackData = {}
 
 function ENT:CalcTrackScrollTexture()
-	if not self.TrackSystemEnable then return end
+	local EntTable = self:GetTable()
+
+	if not EntTable.TrackSystemEnable then return end
 
 	local DriveWheelFL = self:GetTrackDriveWheelLeft()
 	if IsValid( DriveWheelFL ) then
 		local rotation = self:WorldToLocalAngles( DriveWheelFL:GetAngles() ).r
 		local scroll = self:CalcScroll( "scroll_left", rotation )
 
-		self:SetPoseParameter(self.TrackPoseParameterLeft, scroll * self.TrackPoseParameterLeftMul )
-		self:SetSubMaterial( self.TrackLeftSubMaterialID, self:ScrollTexture( "left", self.TrackScrollTexture, self.TrackLeftSubMaterialMul * scroll ) )
+		self:SetPoseParameter(EntTable.TrackPoseParameterLeft, scroll * EntTable.TrackPoseParameterLeftMul )
+		self:SetSubMaterial( EntTable.TrackLeftSubMaterialID, self:ScrollTexture( "left", EntTable.TrackScrollTexture, EntTable.TrackLeftSubMaterialMul * scroll ) )
 	end
 
 	local DriveWheelFR = self:GetTrackDriveWheelRight()
@@ -21,17 +23,19 @@ function ENT:CalcTrackScrollTexture()
 		local rotation = self:WorldToLocalAngles( DriveWheelFR:GetAngles() ).r
 		local scroll = self:CalcScroll( "scroll_right", rotation )
 
-		self:SetPoseParameter(self.TrackPoseParameterRight, scroll * self.TrackPoseParameterRightMul )
-		self:SetSubMaterial( self.TrackRightSubMaterialID, self:ScrollTexture( "right", self.TrackScrollTexture, self.TrackRightSubMaterialMul * scroll ) )
+		self:SetPoseParameter(EntTable.TrackPoseParameterRight, scroll * EntTable.TrackPoseParameterRightMul )
+		self:SetSubMaterial( EntTable.TrackRightSubMaterialID, self:ScrollTexture( "right", EntTable.TrackScrollTexture, EntTable.TrackRightSubMaterialMul * scroll ) )
 	end
 end
 
 local WorldUp = Vector(0,0,1)
 
 function ENT:CalcTracks()
+	local EntTable = self:GetTable()
+
 	if self:GetHP() <= 0 then
-		if self._ResetSubMaterials then
-			self._ResetSubMaterials = nil
+		if EntTable._ResetSubMaterials then
+			EntTable._ResetSubMaterials = nil
 			for i = 0, 128 do
 				self:SetSubMaterial( i )
 			end
@@ -40,11 +44,11 @@ function ENT:CalcTracks()
 		return
 	end
 
-	self._ResetSubMaterials = true
+	EntTable._ResetSubMaterials = true
 
-	local TrackHull = self.TrackHull * (math.max( WorldUp:Dot( self:GetUp() ), 0 ) ^ 2)
+	local TrackHull = EntTable.TrackHull * (math.max( WorldUp:Dot( self:GetUp() ), 0 ) ^ 2)
 
-	for _, data in pairs( self.TrackData ) do
+	for _, data in pairs( EntTable.TrackData ) do
 		if not istable( data.Attachment ) or not istable( data.PoseParameter ) then continue end
 		if not isstring( data.PoseParameter.name ) then continue end
 
@@ -64,7 +68,7 @@ function ENT:CalcTracks()
 		} )
 
 		local Rate = data.PoseParameter.lerpSpeed or 25
-		local Dist = (att.Pos - trace.HitPos):Length() + self.TrackHull.z - toGroundDistance
+		local Dist = (att.Pos - trace.HitPos):Length() + EntTable.TrackHull.z - toGroundDistance
 
 		local RangeMul = data.PoseParameter.rangeMultiplier or 1
 

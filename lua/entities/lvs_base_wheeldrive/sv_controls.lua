@@ -249,6 +249,8 @@ end
 function ENT:StartCommand( ply, cmd )
 	if self:GetDriver() ~= ply then return end
 
+	local EntTable = self:GetTable()
+
 	self:SetRoadkillAttacker( ply )
 
 	if ply:lvsKeyDown( "CAR_MENU" ) then
@@ -268,7 +270,7 @@ function ENT:StartCommand( ply, cmd )
 		self:CalcSteer( ply )
 	end
 
-	if self.PivotSteerEnable then
+	if EntTable.PivotSteerEnable then
 		self:CalcPivotSteer( ply )
 
 		if self:PivotSteer() then
@@ -282,9 +284,9 @@ function ENT:StartCommand( ply, cmd )
 
 	local T = CurTime()
 
-	if (self._nextCalcCMD or 0) > T then return end
+	if (EntTable._nextCalcCMD or 0) > T then return end
 
-	self._nextCalcCMD = T + FrameTime() - 1e-4
+	EntTable._nextCalcCMD = T + FrameTime() - 1e-4
 
 	self:CalcHandbrake( ply )
 	self:CalcTransmission( ply, T )

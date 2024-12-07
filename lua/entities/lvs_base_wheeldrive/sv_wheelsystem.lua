@@ -14,19 +14,23 @@ function ENT:ClearWheels()
 end
 
 function ENT:GetWheels()
-	for id, ent in pairs( self._WheelEnts ) do
+	local EntTable = self:GetTable()
+
+	for id, ent in pairs( EntTable._WheelEnts ) do
 		if IsValid( ent ) then continue end
 
-		self._WheelEnts[ id ] = nil
+		EntTable._WheelEnts[ id ] = nil
 	end
 
-	return self._WheelEnts
+	return EntTable._WheelEnts
 end
 
 function ENT:GetAxleData( ID )
-	if not self._WheelAxleData[ ID ] then return {} end
+	local EntTable = self:GetTable()
 
-	return self._WheelAxleData[ ID ]
+	if not EntTable._WheelAxleData[ ID ] then return {} end
+
+	return EntTable._WheelAxleData[ ID ]
 end
 
 function ENT:CreateSteerMaster( TargetEntity )
