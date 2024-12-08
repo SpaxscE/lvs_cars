@@ -580,8 +580,20 @@ function ENT:RenderLights( base, data )
 					if not base:BodygroupIsValid( projdata.bodygroup.name, projdata.bodygroup.active ) then continue end
 				end
 
-				local pos = base:LocalToWorld( projdata.pos )
-				local dir = base:LocalToWorldAngles( projdata.ang ):Forward()
+				local pos
+				local dir
+
+				if projdata.att then
+					local att = base:GetAttachment( projdata.att )
+
+					if att then
+						pos = att.Pos
+						dir =  att.Ang:Forward()
+					end
+				else
+					pos = base:LocalToWorld( projdata.pos )
+					dir = base:LocalToWorldAngles( projdata.ang ):Forward()
+				end
 
 				if not projdata.colorR or not projdata.colorG or not projdata.colorB or not projdata.brightness then self:InitializeLights( base ) break end
 
