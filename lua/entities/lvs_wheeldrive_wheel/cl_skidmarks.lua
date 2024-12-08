@@ -24,6 +24,7 @@ ENT.DustEffectSurfaces = {
 	["dirt"] = true,
 	["grass"] = true,
 	["antlionsand"] = true,
+	["gravel"] = true,
 }
 
 function ENT:GetSkidMarks()
