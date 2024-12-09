@@ -49,6 +49,57 @@ function ENT:GetTurretYaw()
 end
 
 if CLIENT then
+	ENT.IconTurret = Material( "lvs/turret.png" )
+	ENT.IconTurretBody = Material( "lvs/turret_body.png" )
+	ENT.IconTurretBarrel = Material( "lvs/turret_barrel.png" )
+	ENT.IconTurretRing = Material( "lvs/turret_ring.png" )
+	ENT.TurretColorMain = color_white
+	ENT.TurretColorShadow = Color(0,0,0,200)
+	ENT.TurretColorDamaged = Color(255,0,0,255)
+
+	LVS:AddHudEditor( "Turret Info",  ScrW() * 0.5 - 50, ScrH() - 110,  100, 100, 100, 100, "TURRETINFO",
+		function( self, vehicle, X, Y, W, H, ScrX, ScrY, ply )
+			if not vehicle.LVSHudPaintTurretInfo then return end
+
+			vehicle:LVSHudPaintTurretInfo( X, Y, W, H, ScrX, ScrY, ply )
+		end
+	)
+
+	function ENT:LVSHudPaintTurretInfo( X, Y, W, H, ScrX, ScrY, ply )
+		local pod = ply:GetVehicle()
+
+		if not IsValid( pod ) or pod:lvsGetPodIndex() ~= self.TurretPodIndex then return end
+
+		local EntTable = self:GetTable()
+
+		local _, viewangles = ply:lvsGetView()
+
+		local turret_yaw = self:GetTurretYaw()
+
+		local yaw_body = - ply:GetVehicle():WorldToLocalAngles( viewangles ).y + 90
+		local yaw_turret = turret_yaw + yaw_body
+
+		surface.SetDrawColor( EntTable.TurretColorShadow )
+		surface.SetMaterial( EntTable.IconTurretBody )
+		surface.DrawTexturedRectRotated( X + W * 0.5 + 2, Y + H * 0.5 + 2, W, H, yaw_body )
+
+		surface.SetDrawColor( EntTable.TurretColorMain )
+		surface.SetMaterial( EntTable.IconTurretBody )
+		surface.DrawTexturedRectRotated( X + W * 0.5, Y + H * 0.5, W, H, yaw_body )
+
+		surface.SetDrawColor( EntTable.TurretColorShadow )
+		surface.SetMaterial( EntTable.IconTurret )
+		surface.DrawTexturedRectRotated( X + W * 0.5 + 2, Y + H * 0.5 + 2, W, H, yaw_turret )
+
+		surface.SetDrawColor( EntTable.TurretColorMain )
+		surface.SetMaterial( EntTable.IconTurretBarrel )
+		surface.DrawTexturedRectRotated( X + W * 0.5, Y + H * 0.5, W, H, yaw_turret )
+
+		if self:GetTurretDestroyed() then surface.SetDrawColor( EntTable.TurretColorDamaged ) end
+		surface.SetMaterial( EntTable.IconTurretRing )
+		surface.DrawTexturedRectRotated( X + W * 0.5, Y + H * 0.5, W, H, yaw_turret )
+	end
+
 	function ENT:UpdatePoseParameters( steer, speed_kmh, engine_rpm, throttle, brake, handbrake, clutch, gear, temperature, fuel, oil, ammeter )
 		self:CalcTurret()
 	end
