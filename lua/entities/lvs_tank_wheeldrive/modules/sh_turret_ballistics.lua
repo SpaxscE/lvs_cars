@@ -5,6 +5,7 @@ ENT.TurretBallisticsProjectileVelocity = 10000
 ENT.TurretBallisticsMuzzleAttachment = "muzzle"
 ENT.TurretBallisticsViewAttachment = "sight"
 
+ENT.OpticsZoomOnly = true
 ENT.OpticsScreenCentered = true
 
 function ENT:TurretSystemDT()
@@ -89,17 +90,25 @@ if SERVER then
 		if IsValid( pod ) then
 			local ply = weapon:GetDriver()
 
-			if IsValid( ply ) and ply ~= weapon._LastBallisticsSendTo then
-				weapon._LastBallisticsSendTo = ply
+			local ForceNoCompensation = false
 
-				local velocity = EntTable.TurretBallisticsProjectileVelocity
-				local muzzle = EntTable.TurretBallisticsMuzzleAttachment
-				local sight = EntTable.TurretBallisticsViewAttachment
+			if IsValid( ply ) then
+				if self.OpticsZoomOnly and not ply:lvsKeyDown( "ZOOM" ) then
+					ForceNoCompensation = true
+				end
 
-				self:TurretUpdateBallistics( velocity, muzzle, sight )
+				if ply ~= weapon._LastBallisticsSendTo then
+					weapon._LastBallisticsSendTo = ply
+
+					local velocity = EntTable.TurretBallisticsProjectileVelocity
+					local muzzle = EntTable.TurretBallisticsMuzzleAttachment
+					local sight = EntTable.TurretBallisticsViewAttachment
+
+					self:TurretUpdateBallistics( velocity, muzzle, sight )
+				end
 			end
 
-			if pod:GetThirdPersonMode() then
+			if pod:GetThirdPersonMode() or ForceNoCompensation then
 				return self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
 			end
 		end
