@@ -598,17 +598,6 @@ function ENT:DamageFX( vehicle )
 
 	local EntTable = self:GetTable()
 
-	if HP ~= MaxHP and (EntTable .nextLeak or 0) < T then
-		EntTable.nextLeak = T + 0.5 + math.Rand(10,16) * (HP / MaxHP)
-
-		if vehicle:GetVelocity():Length() > 50 then return end
-
-		local effectdata = EffectData()
-			effectdata:SetOrigin( self:GetPos() )
-			effectdata:SetEntity( vehicle )
-		util.Effect( "lvs_carengine_oilleak", effectdata )
-	end
-
 	if HP >= MaxHP * 0.5 then self:StopFireSound() return end
 
 	if (EntTable.nextDFX or 0) > T then return end
