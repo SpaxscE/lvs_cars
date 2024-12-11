@@ -3,32 +3,10 @@ function ENT:OnCreateAI()
 	self:DisableManualTransmission()
 
 	self:StartEngine()
-
-	self._OldLVSFireBullet = self.LVSFireBullet
-
-	-- this compensates for turret poseparameter inaccuracies
-	self.LVSFireBullet = function( self, data )
-		local Dir1 = (self:GetEyeTrace().HitPos - data.Src):GetNormalized()
-		local Dir2 = data.Dir
-
-		if self:AngleBetweenNormal( Dir1, Dir2 ) < 15 then
-			data.Dir = Dir1
-		end
-
-		data.Entity = self
-		data.Velocity = data.Velocity + self:GetVelocity():Length()
-		data.SrcEntity = self:WorldToLocal( data.Src )
-
-		LVS:FireBullet( data )
-	end
 end
 
 function ENT:OnRemoveAI()
 	self:StopEngine()
-
-	if not isfunction( self._OldLVSFireBullet ) then return end
-
-	self.LVSFireBullet = self._OldLVSFireBullet
 end
 
 function ENT:AIGetMovementTarget()
