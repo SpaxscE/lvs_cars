@@ -106,14 +106,14 @@ if SERVER then
 
 					self:TurretUpdateBallistics( velocity, muzzle, sight )
 				end
+
+				if pod:GetThirdPersonMode() or ForceNoCompensation then
+					return self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
+				end
 			else
 				if not weapon:GetAI() then
 					return self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
 				end
-			end
-
-			if pod:GetThirdPersonMode() or ForceNoCompensation then
-				return self:WorldToLocalAngles( weapon:GetAimVector():Angle() )
 			end
 		end
 
