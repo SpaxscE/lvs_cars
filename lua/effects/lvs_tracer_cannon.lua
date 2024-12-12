@@ -101,7 +101,9 @@ function EFFECT:Init( data )
 end
 
 function EFFECT:Think()
-	if not LVS:GetBullet( self.ID ) then
+	local bullet = LVS:GetBullet( self.ID )
+
+	if not bullet then
 		if self.emitter then
 			self.emitter:Finish()
 		end
@@ -128,9 +130,9 @@ function EFFECT:Think()
 
 	if not self.emitter then return true end
 
-	local bullet = LVS:GetBullet( self.ID )
-
 	local Pos = bullet:GetPos()
+
+	self.Dir = bullet:GetDir()
 
 	local Sub = self.OldPos - Pos
 	local Dist = Sub:Length()
