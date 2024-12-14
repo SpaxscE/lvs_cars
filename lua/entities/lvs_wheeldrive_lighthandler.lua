@@ -586,10 +586,11 @@ function ENT:RenderLights( base, data )
 				if projdata.att then
 					local att = base:GetAttachment( projdata.att )
 
-					if att then
-						pos = att.Pos
-						dir =  att.Ang:Forward()
-					end
+					if not att then continue end
+
+					pos = att.Pos
+					dir =  att.Ang:Forward()
+
 				else
 					pos = base:LocalToWorld( projdata.pos )
 					dir = base:LocalToWorldAngles( projdata.ang ):Forward()
