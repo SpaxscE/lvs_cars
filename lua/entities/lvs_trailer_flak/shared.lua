@@ -62,7 +62,7 @@ function ENT:InitWeapons()
 		bullet.Src 	= Pos
 		bullet.Dir 	= Dir
 		bullet.Spread 	= Vector(0,0,0)
-		bullet.TracerName = "lvs_tracer_autocannon"
+		bullet.TracerName = "lvs_tracer_autocannon_highvelocity"
 		bullet.Force	= 3900
 		bullet.HullSize 	= 50 * math.max( Dir.z, 0 )
 		bullet.Damage	= 40
