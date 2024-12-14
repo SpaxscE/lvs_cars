@@ -154,6 +154,8 @@ function EFFECT:Think()
 	local Dist = Sub:Length()
 	local Dir = Sub:GetNormalized()
 
+	local Vel = bullet.Velocity / 10
+
 	for i = 0, Dist, 25 do
 		local cur_pos = self.OldPos + Dir * i
 
@@ -163,7 +165,7 @@ function EFFECT:Think()
 		
 		if not particle then continue end
 
-		particle:SetVelocity( -Dir * 1500 + VectorRand() * 10 )
+		particle:SetVelocity( -Dir * Vel + VectorRand() * 10 )
 		particle:SetDieTime( math.Rand(0.05,1) )
 		particle:SetAirResistance( 250 )
 		particle:SetStartAlpha( 100 )
