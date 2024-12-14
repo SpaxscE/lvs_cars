@@ -178,7 +178,7 @@ function ENT:InitWeapons()
 		bullet.Force1km = ent.CannonArmorPenetration1km
 		bullet.EnableBallistics = true
 		bullet.HullSize 	= 1
-		bullet.Damage	= 50
+		bullet.Damage	= 35
 		bullet.Velocity = 20000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo) end
