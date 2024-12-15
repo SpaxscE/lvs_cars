@@ -32,8 +32,6 @@ function EFFECT:Init( data )
 	self.LifeTime = 0.35
 	self.DieTime = CurTime() + self.LifeTime
 
-	local scale = data:GetMagnitude() * 0.5
-
 	self.Pos = pos
 	self.Scale = scale
 
@@ -115,11 +113,11 @@ function EFFECT:Init( data )
 		particle:SetEndSize( size )
 		particle:SetStartSize( size )
 
-		particle:SetStartLength( 200 * scale )
+		particle:SetStartLength( 100 * scale )
 		particle:SetEndLength( size )
 
 		particle:SetDieTime( math.Rand(0.1,0.2) )
-		particle:SetVelocity( (dir * 4000 + VectorRand() * 2000) * scale )
+		particle:SetVelocity( (dir * 2000 + VectorRand() * 1000) * scale )
 
 		particle:SetAirResistance( 0 )
 	end
