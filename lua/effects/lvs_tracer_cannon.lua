@@ -116,6 +116,8 @@ function EFFECT:Think()
 			endpos = EndPos,
 		} )
 
+		if not trace.Hit then return false end
+
 		local effectdata = EffectData()
 		effectdata:SetOrigin( trace.HitPos )
 		effectdata:SetStart( self.Dir )
