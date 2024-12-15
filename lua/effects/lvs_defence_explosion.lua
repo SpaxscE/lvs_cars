@@ -115,11 +115,11 @@ function EFFECT:Init( data )
 		particle:SetEndSize( size )
 		particle:SetStartSize( size )
 
-		particle:SetStartLength( 100 )
+		particle:SetStartLength( 200 * scale )
 		particle:SetEndLength( size )
 
 		particle:SetDieTime( math.Rand(0.1,0.2) )
-		particle:SetVelocity( (dir * 1500 + VectorRand() * 500) * scale )
+		particle:SetVelocity( (dir * 4000 + VectorRand() * 2000) * scale )
 
 		particle:SetAirResistance( 0 )
 	end
