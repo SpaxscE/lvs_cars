@@ -98,7 +98,7 @@ function ENT:InitWeapons()
 		local Col =  ent:TurretInRange() and Color(255,255,255,255) or Color(255,0,0,255)
 
 		ent:PaintCrosshairCenter( Pos2D, Col )
-		ent:PaintCrosshairOuter( Pos2D, Col )
+		ent:PaintCrosshairSquare( Pos2D, Col )
 		ent:LVSPaintHitMarker( Pos2D )
 	end
 	self:AddWeapon( weapon )
