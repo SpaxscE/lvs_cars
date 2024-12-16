@@ -172,9 +172,9 @@ function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = true
 	weapon.Ammo = 30
-	weapon.Delay = 3
+	weapon.Delay = 3.2
 	weapon.HeatRateUp = 1
-	weapon.HeatRateDown = 0.4
+	weapon.HeatRateDown = 0.33
 	weapon.OnThink = function( ent )
 		if ent:GetSelectedWeapon() ~= 2 then return end
 
