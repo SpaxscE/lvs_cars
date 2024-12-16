@@ -38,7 +38,7 @@ ENT.MaxHealth = 400
 
 function ENT:InitWeapons()
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/flak.png")
+	weapon.Icon = Material("lvs/weapons/flak_he.png")
 	weapon.Ammo = 1500
 	weapon.Delay = 0.25
 	weapon.HeatRateUp = 0.25
