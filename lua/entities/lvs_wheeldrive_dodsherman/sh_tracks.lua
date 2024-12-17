@@ -27,12 +27,12 @@ if SERVER then
 		local RightWheelChain = self:CreateWheelChain( {R1, R2, R3, R4, R5, R6} )
 		self:SetTrackDriveWheelRight( R4 )
 
-		local LeftTracksArmor = self:AddArmor( Vector(40,45,40), Angle(0,0,0), Vector(-150,-15,-40), Vector(40,15,0), 500, self.FrontArmor )
+		local LeftTracksArmor = self:AddArmor( Vector(12,41,22), Angle(0,0,0), Vector(-121,-10,-28), Vector(121,10,28), 500, self.FrontArmor )
 		LeftTracksArmor.OnDestroyed = LeftWheelChain.OnDestroyed
 		LeftTracksArmor.OnRepaired = LeftWheelChain.OnRepaired
 		LeftTracksArmor:SetLabel( "Tracks" )
 
-		local RightTracksArmor = self:AddArmor( Vector(40,-45,40), Angle(0,0,0), Vector(-150,-15,-40), Vector(40,15,0), 500, self.FrontArmor )
+		local RightTracksArmor = self:AddArmor( Vector(12,-41,22), Angle(0,0,0), Vector(-121,-10,-28), Vector(121,10,28), 500, self.FrontArmor )
 		RightTracksArmor.OnDestroyed = RightWheelChain.OnDestroyed
 		RightTracksArmor.OnRepaired = RightWheelChain.OnRepaired
 		RightTracksArmor:SetLabel( "Tracks" )

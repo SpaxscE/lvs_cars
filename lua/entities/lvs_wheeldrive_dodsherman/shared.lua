@@ -31,9 +31,10 @@ ENT.MaxHealth = 1200
 ENT.DSArmorIgnoreForce = 3000
 ENT.CannonArmorPenetration = 9200
 ENT.FrontArmor = 2000
+ENT.FrontArmorExtra = 4500
 ENT.SideArmor = 800
 ENT.TurretArmor = 3000
-ENT.RearArmor = 800
+ENT.RoofArmor = 100
 
 -- ballistics
 ENT.ProjectileVelocityCoaxial = 15000
