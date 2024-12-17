@@ -80,9 +80,7 @@ function ENT:AddWheel( data )
 
 	Wheel:SetAlignmentAngle( data.mdl_ang or Angle(0,0,0) )
 
-	if GetConVar( "developer" ):GetInt() ~= 1 then
-		Wheel:SetHideModel( data.hide == true )
-	end
+	Wheel:SetHideModel( data.hide == true )
 
 	Wheel:lvsMakeSpherical( data.radius or -1 )
 
