@@ -9,9 +9,11 @@ ENT.OpticsZoomOnly = true
 ENT.OpticsScreenCentered = true
 
 function ENT:TurretSystemDT()
-	self:AddDT( "Bool", "TurretEnabled" )
-	self:AddDT( "Bool", "TurretDestroyed" )
-	self:AddDT( "Entity", "TurretArmor" )
+	self:AddDT( "Bool", "NWTurretEnabled" )
+	self:AddDT( "Bool", "NWTurretDestroyed" )
+	self:AddDT( "Bool", "TurretDamaged" )
+	self:AddDT( "Entity", "NWTurretArmor" )
+
 	self:AddDT( "Float", "TurretCompensation" )
 	self:AddDT( "Float", "NWTurretPitch" )
 	self:AddDT( "Float", "NWTurretYaw" )
@@ -214,7 +216,7 @@ else
 		surface.SetMaterial( EntTable.IconTurretBarrel )
 		surface.DrawTexturedRectRotated( X + W * 0.5, Y + H * 0.5, IconSize, IconSize, yaw_turret )
 
-		if self:GetTurretDestroyed() then surface.SetDrawColor( EntTable.TurretColorDamaged ) end
+		if self:GetTurretDamaged() then surface.SetDrawColor( EntTable.TurretColorDamaged ) end
 		surface.SetMaterial( EntTable.IconTurretRing )
 		surface.DrawTexturedRectRotated( X + W * 0.5, Y + H * 0.5, IconSize, IconSize, yaw_turret )
 	end
@@ -324,7 +326,7 @@ function ENT:AimTurret()
 
 		local AimRate = EntTable.TurretAimRate * FrameTime() 
 
-		if self:GetTurretDestroyed() then
+		if self:GetTurretDamaged() then
 			AimRate = AimRate * EntTable.TurretRateDestroyedMul
 		end
 

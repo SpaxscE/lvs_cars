@@ -21,15 +21,62 @@ ENT.TurretYawOffset = 0
 ENT.TurretRateDestroyedMul = 0.25
 
 function ENT:TurretSystemDT()
-	self:AddDT( "Bool", "TurretEnabled" )
-	self:AddDT( "Bool", "TurretDestroyed" )
-	self:AddDT( "Entity", "TurretArmor" )
+	self:AddDT( "Bool", "NWTurretEnabled" )
+	self:AddDT( "Bool", "NWTurretDestroyed" )
+	self:AddDT( "Bool", "TurretDamaged" )
+	self:AddDT( "Entity", "NWTurretArmor" )
 
 	if SERVER then
 		self:SetTurretEnabled( true )
 		self:SetTurretPitch( self.TurretPitchOffset )
 		self:SetTurretYaw( self.TurretYawOffset )
 	end
+end
+
+function ENT:SetTurretDestroyed( new )
+	self:SetNWTurretDestroyed( new )
+	self:SetTurretDamaged( new )
+end
+
+function ENT:GetTurretDestroyed( new )
+	return self:GetNWTurretDestroyed()
+end
+
+function ENT:SetTurretEnabled( new )
+	self:SetNWTurretEnabled( new )
+end
+
+function ENT:SetTurretArmor( TurretArmor )
+	self:SetNWTurretArmor( TurretArmor )
+
+	if CLIENT then return end
+
+	TurretArmor.OnDestroyed = function( ent, dmginfo )
+		if not IsValid( self ) then return end
+
+		self:SetTurretDestroyed( true )
+	end
+
+	TurretArmor.OnRepaired = function( ent )
+		if not IsValid( self ) then return end
+
+		self:SetTurretDestroyed( false )
+	end
+
+	TurretArmor.OnHealthChanged = function( ent, dmginfo, old, new )
+		if new >= old then return end
+
+		self:SetTurretDamaged( true )
+	end
+end
+
+function ENT:GetTurretArmor()
+	return self:GetNWTurretArmor()
+end
+function ENT:GetTurretEnabled()
+	if self:GetTurretDestroyed() then return false end
+
+	return self:GetNWTurretEnabled()
 end
 
 function ENT:SetTurretPitch( num )
@@ -100,7 +147,7 @@ else
 		local PlayYaw = YawVolume > 0.95
 
 		local TurretArmor = self:GetTurretArmor()
-		local Destroyed = self:GetTurretDestroyed()
+		local Destroyed = self:GetTurretDamaged()
 
 		if Destroyed and (PlayPitch or PlayYaw) and IsValid( TurretArmor ) then
 			local T = CurTime()
@@ -262,7 +309,7 @@ function ENT:AimTurret()
 
 	local AimRate = EntTable.TurretAimRate * FrameTime() 
 
-	if self:GetTurretDestroyed() then
+	if self:GetTurretDamaged() then
 		AimRate = AimRate * EntTable.TurretRateDestroyedMul
 	end
 
