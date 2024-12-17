@@ -65,6 +65,8 @@ if SERVER then
 
 			if not IsValid( Base ) then return end
 
+			Base:Lock()
+
 			for _, ply in pairs( Base:GetEveryone() ) do
 				Base:HurtPlayer( ply, ply:Health() + ply:Armor(), dmginfo:GetAttacker(), dmginfo:GetInflictor() )
 			end
