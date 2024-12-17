@@ -1,8 +1,6 @@
 AddCSLuaFile()
 
 ENT.Type            = "anim"
-
-ENT.AutomaticFrameAdvance = true
 ENT.DoNotDuplicate = true
 
 function ENT:SetupDataTables()
