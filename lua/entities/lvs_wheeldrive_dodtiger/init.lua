@@ -42,9 +42,6 @@ function ENT:OnSpawn( PObj )
 	TurretArmor:SetLabel( "Turret" )
 	self:SetTurretArmor( TurretArmor )
 
-	-- driver viewport weakspot
-	self:AddDriverViewPort( Vector(105,21,54.8), Angle(0,0,0), Vector(-1,-6,-1), Vector(1,6,1) )
-
 	-- front upper plate
 	self:AddArmor( Vector(105,0,62), Angle(0,0,0), Vector(-8,-65,-12), Vector(8,65,12), 4000, self.FrontArmor )
 
