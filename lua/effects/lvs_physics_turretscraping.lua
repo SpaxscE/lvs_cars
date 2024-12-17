@@ -33,8 +33,8 @@ function EFFECT:Init( data )
 		spark:SetStartSize( size )
 
 		spark:SetStartLength( math.Rand(10,20) )
-		spark:SetDieTime( math.Rand(0.05, 0.1) )
-		spark:SetVelocity( forward * 250 + dir * 150 + VectorRand() * 50 )
+		spark:SetDieTime( math.Rand(0.01, 0.2) )
+		spark:SetVelocity( forward * math.random(250,400) + dir * 150 + VectorRand() * 50 )
 	end
 
 	emitter:Finish()

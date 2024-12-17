@@ -1,4 +1,12 @@
 
+function ENT:SetTrackArmorLeft( Armor, WheelChain )
+	self:SetTrackArmor( Armor, WheelChain )
+end
+
+function ENT:SetTrackArmorRight( Armor, WheelChain )
+	self:SetTrackArmor( Armor, WheelChain )
+end
+
 function ENT:CreateTrackPhysics( mdl )
 	if not isstring( mdl ) then return NULL end
 
@@ -52,7 +60,7 @@ function ENT:CreateWheelChain( wheels )
 
 	local WheelChain = {}
 
-	WheelChain.OnDestroyed = function()
+	WheelChain.OnDestroyed = function( ent )
 		for _, wheel in pairs( wheels ) do
 			if not IsValid( wheel ) then continue end
 
@@ -60,7 +68,7 @@ function ENT:CreateWheelChain( wheels )
 		end
 	end
 
-	WheelChain.OnRepaired = function()
+	WheelChain.OnRepaired = function( ent )
 		for _, wheel in pairs( wheels ) do
 			if not IsValid( wheel ) then continue end
 
@@ -69,4 +77,12 @@ function ENT:CreateWheelChain( wheels )
 	end
 
 	return WheelChain
+end
+
+function ENT:SetTrackArmor( Armor, WheelChain )
+	if not IsValid( Armor ) then return end
+
+	Armor.OnDestroyed = WheelChain.OnDestroyed
+	Armor.OnRepaired = WheelChain.OnRepaired
+	Armor:SetLabel( "Tracks" )
 end
