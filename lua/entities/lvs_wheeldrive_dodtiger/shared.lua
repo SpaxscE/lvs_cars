@@ -31,7 +31,9 @@ ENT.CannonArmorPenetration = 14500
 ENT.FrontArmor = 6000
 ENT.SideArmor = 4000
 ENT.TurretArmor = 6000
-ENT.RearArmor = 4000
+ENT.RearArmor = 2000
+ENT.RoofArmor = 100
+
 
 -- ballistics
 ENT.ProjectileVelocityCoaxial = 15000

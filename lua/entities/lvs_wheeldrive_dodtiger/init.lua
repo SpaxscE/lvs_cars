@@ -37,26 +37,46 @@ function ENT:OnSpawn( PObj )
 	self:AddEngine( Vector(-79.66,0,72.21), Angle(0,180,0) )
 	self:AddFuelTank( Vector(-80,0,60), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL, Vector(-12,-50,-12),Vector(12,50,0) )
 
-	-- front plate
-	self:AddArmor( Vector(115,0,32), Angle(10,0,0), Vector(-20,-70,-20), Vector(20,70,20), 4000, self.FrontArmor )
-
-	-- "windscreen"
-	self:AddArmor( Vector(95,0,35), Angle(0,0,0), Vector(-15,-70,-30), Vector(10,70,40), 3000, self.FrontArmor )
-
-	-- side armor
-	self:AddArmor( Vector(0,50,30), Angle(0,0,0), Vector(-120,-15,0), Vector(80,15,45), 1500, self.SideArmor )
-	self:AddArmor( Vector(0,-50,30), Angle(0,0,0), Vector(-120,-15,0), Vector(80,15,45), 1500, self.SideArmor )
-
 	-- turret
-	local TurretArmor = self:AddArmor( Vector(4,0,70), Angle(0,0,0), Vector(-60,-60,0), Vector(60,60,40), 4000, self.TurretArmor )
+	local TurretArmor = self:AddArmor( Vector(0,0,88), Angle(0,0,0), Vector(-52,-52,-18), Vector(52,52,18), 4000, self.TurretArmor )
 	TurretArmor:SetLabel( "Turret" )
 	self:SetTurretArmor( TurretArmor )
 
-	-- rear
-	self:AddArmor( Vector(-100,0,10), Angle(-15,0,0), Vector(-10,-45,0),Vector(10,45,65), 500, self.RearArmor )
-
 	-- driver viewport weakspot
-	self:AddDriverViewPort( Vector(105,21,55), Angle(0,0,0), Vector(-1,-7,-1), Vector(1,7,1) )
+	self:AddDriverViewPort( Vector(105,21,54.8), Angle(0,0,0), Vector(-1,-6,-1), Vector(1,6,1) )
+
+	-- front upper plate
+	self:AddArmor( Vector(105,0,62), Angle(0,0,0), Vector(-8,-65,-12), Vector(8,65,12), 4000, self.FrontArmor )
+
+	-- front mid plate
+	self:AddArmor( Vector(122,0,49), Angle(8,0,0), Vector(-10,-37,-1), Vector(10,37,1), 1200, self.RearArmor )
+
+	-- front lower plate
+	self:AddArmor( Vector(127,0,35), Angle(-67,0,0), Vector(-15,-37,-1), Vector(15,37,1), 4000, self.FrontArmor )
+
+	-- front bottom plate
+	self:AddArmor( Vector(111,0,18), Angle(-22,0,0), Vector(-11,-37,-1), Vector(11,37,1), 500, self.RoofArmor )
+
+	--left up
+	self:AddArmor( Vector(-8,64,56), Angle(0,0,0), Vector(-105,-1,-18), Vector(105,1,18), 1600, self.SideArmor )
+	--right up
+	self:AddArmor( Vector(-8,-64,56), Angle(0,0,0), Vector(-105,-1,-18), Vector(105,1,18), 1600, self.SideArmor )
+
+	--left down
+	self:AddArmor( Vector(12,37,35), Angle(0,0,0), Vector(-120,-1,-22), Vector(120,1,22), 1200, self.RearArmor )
+	--right down
+	self:AddArmor( Vector(12,-37,35), Angle(0,0,0), Vector(-120,-1,-22), Vector(120,1,22), 1200, self.RearArmor )
+
+	-- rear
+	self:AddArmor( Vector(-105,0,42), Angle(0,0,0), Vector(-8,-65,-29), Vector(8,65,29), 1600, self.SideArmor )
+
+	--top
+	self:AddArmor( Vector(0,0,69), Angle(0,0,0), Vector(-97,-63,-1), Vector(97,63,1), 500, self.RoofArmor )
+	--bottom
+	self:AddArmor( Vector(2,0,14), Angle(0,0,0), Vector(-99,-36,-1), Vector(99,36,1), 500, self.RoofArmor )
+
+	-- hole
+	self:AddArmor( Vector(82,0,52), Angle(0,0,0), Vector(-15,-63,-2), Vector(15,63,2), 500, self.RoofArmor )
 
 	-- ammo rack weakspot
 	self:AddAmmoRack( Vector(0,50,55), Vector(0,0,65), Angle(0,0,0), Vector(-54,-12,-6), Vector(54,12,6) )
