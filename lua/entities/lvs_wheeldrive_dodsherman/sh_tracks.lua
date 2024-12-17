@@ -27,7 +27,7 @@ if SERVER then
 		local RightWheelChain = self:CreateWheelChain( {R1, R2, R3, R4, R5, R6} )
 		self:SetTrackDriveWheelRight( R4 )
 
-		local LeftTracksArmor = self:AddArmor( Vector(12,41,22), Angle(0,0,0), Vector(-121,-10,-28), Vector(121,10,28), 500, self.FrontArmor )
+		local LeftTracksArmor = self:AddArmor( Vector(12,43,22), Angle(0,0,0), Vector(-121,-10,-28), Vector(121,10,28), 500, self.FrontArmor )
 		self:SetTrackArmorLeft( LeftTracksArmor, LeftWheelChain )
 
 		local RightTracksArmor = self:AddArmor( Vector(12,-41,22), Angle(0,0,0), Vector(-121,-10,-28), Vector(121,10,28), 500, self.FrontArmor )
