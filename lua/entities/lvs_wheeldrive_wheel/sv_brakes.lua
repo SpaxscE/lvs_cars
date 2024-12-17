@@ -30,10 +30,10 @@ function ENT:ReleaseHandbrake()
 	self:ReleaseRotation()
 end
 
-function ENT:LockRotation( TimedLock )
+function ENT:LockRotation( TimedLock, duration )
 
 	if TimedLock then
-		self._RotationLockTime = CurTime() + 0.15
+		self._RotationLockTime = CurTime() + (duration or 0.15)
 	end
 
 	if self:IsRotationLocked() then return end
