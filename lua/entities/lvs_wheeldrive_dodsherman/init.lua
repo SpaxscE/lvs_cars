@@ -38,9 +38,9 @@ function ENT:OnSpawn( PObj )
 	self:AddFuelTank( Vector(-75,0,40), Angle(0,0,0), 600, LVS.FUELTYPE_PETROL, Vector(0,-20,-18),Vector(18,20,18) )
 
 	-- extra front plate left
-	self:AddArmor( Vector(82,20.5,65), Angle(0,0,0), Vector(-1.2,-11,-12), Vector(1.2,11,12), 1200, self.FrontArmorExtra )
+	self:AddArmor( Vector(82,20.5,65), Angle(-36,0,0), Vector(-1.2,-11,-12), Vector(1.2,11,12), 1200, self.FrontArmorExtra )
 	-- extra front plate right
-	self:AddArmor( Vector(82,-20.5,65), Angle(0,0,0), Vector(-1.2,-11,-12), Vector(1.2,11,12), 1200, self.FrontArmorExtra )
+	self:AddArmor( Vector(82,-20.5,65), Angle(-36,0,0), Vector(-1.2,-11,-12), Vector(1.2,11,12), 1200, self.FrontArmorExtra )
 
 	-- front upper wedge
 	self:AddArmor( Vector(70,0,66), Angle(0,0,0), Vector(-26,-48,-16), Vector(26,48,16), 1000, self.FrontArmor )
