@@ -15,10 +15,10 @@ function ENT:CreateTrackPhysics( mdl )
 	self:TransferCPPI( TrackPhysics )
 	self:DeleteOnRemove( TrackPhysics )
 
-	constraint.Weld( TrackPhysics, self, 0, 0 )
-
-	local weld_constraint = TrackPhysics:SetCollisionGroup( COLLISION_GROUP_WORLD )
+	local weld_constraint = constraint.Weld( TrackPhysics, self, 0, 0 )
 	weld_constraint.DoNotDuplicate = true
+
+	TrackPhysics:SetCollisionGroup( COLLISION_GROUP_WORLD )
 
 	return TrackPhysics
 end
