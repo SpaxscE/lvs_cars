@@ -1,10 +1,8 @@
 
 AccessorFunc(ENT, "axle", "Axle", FORCE_NUMBER)
 
-function ENT:Destroy()
-	if self:GetDestroyed() then return end
-
-	self:SetDestroyed( true )
+function ENT:Damage()
+	self:SetNWDamaged( true )
 
 	if not self._torqueFactor then return end
 
@@ -12,10 +10,18 @@ function ENT:Destroy()
 	self._torqueFactor = 0
 end
 
+function ENT:Destroy()
+	if self:GetDestroyed() then return end
+
+	self:SetDestroyed( true )
+	self:SetDamaged( true )
+end
+
 function ENT:Repair()
 	self:SetHP( self:GetMaxHP() )
 
 	self:SetDestroyed( false )
+	self:SetDamaged( false )
 
 	if not self.old_torqueFactor then return end
 

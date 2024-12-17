@@ -25,7 +25,8 @@ function ENT:SetupDataTables()
 
 	self:NetworkVar( "Bool", 0, "HideModel" )
 	self:NetworkVar( "Bool", 1, "Destroyed" )
-	self:NetworkVar( "Bool", 2, "WheelChainMode" )
+	self:NetworkVar( "Bool", 2, "NWDamaged" )
+	self:NetworkVar( "Bool", 3, "WheelChainMode" )
 
 	if SERVER then
 		self:SetMaxHP( 100 )
@@ -33,6 +34,10 @@ function ENT:SetupDataTables()
 
 		self:SetWidth( 3 )
 	end
+end
+
+function ENT:GetDamaged()
+	return self:GetNWDamaged()
 end
 
 function ENT:VelToRPM( speed )
