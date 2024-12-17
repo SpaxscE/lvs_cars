@@ -156,7 +156,7 @@ else
 				self._NextTurDMGfx = T + 0.1
 
 				local effectdata = EffectData()
-				effectdata:SetOrigin( TurretArmor:WorldToLocal( Vector(0,0,TurretArmor:GetMins().z) ) )
+				effectdata:SetOrigin( TurretArmor:LocalToWorld( Vector(0,0,TurretArmor:GetMins().z) ) )
 				effectdata:SetNormal( self:GetUp() )
 				util.Effect( "lvs_physics_turretscraping", effectdata, true, true )
 			end
