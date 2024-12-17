@@ -3,7 +3,7 @@ ENT.TurretPodIndex = 1 -- 1 = driver
 ENT.TurretAimRate = 25
 
 ENT.TurretRotationSound = "vehicles/tank_turret_loop1.wav"
-ENT.TurretRotationSoundDamaged = "physics/metal/metal_box_scrape_rough_loop1.wav"
+ENT.TurretRotationSoundDamaged = "lvs/turret_damaged_loop.wav"
 
 ENT.TurretFakeBarrel = false
 ENT.TurretFakeBarrelRotationCenter = vector_origin
@@ -156,32 +156,37 @@ else
 				self._NextTurDMGfx = T + 0.1
 
 				local effectdata = EffectData()
-				effectdata:SetOrigin( TurretArmor:GetPos() )
+				effectdata:SetOrigin( TurretArmor:WorldToLocal( Vector(0,0,TurretArmor:GetMins().z) ) )
 				effectdata:SetNormal( self:GetUp() )
-				effectdata:SetRadius( 0 )
-				util.Effect( "cball_bounce", effectdata, true, true )
+				util.Effect( "lvs_physics_turretscraping", effectdata, true, true )
 			end
 		end
 
 		if PlayPitch or PlayYaw then
 			self:DoTurretSound()
-
-			if Destroyed then self:StartTurretSoundDMG() end
-		else
-			self:StopTurretSoundDMG()
 		end
 
 		local T = self:GetTurretSoundTime()
 
 		if T > 0 then
-			local sound = self:StartTurretSound()
 			local volume = math.max( PitchVolume, YawVolume )
 			local pitch = 90 + 10 * (1 - volume)
+
+			if Destroyed then
+				local sound = self:StartTurretSoundDMG()
+
+				pitch = pitch * self.TurretRateDestroyedMul
+
+				sound:ChangeVolume( volume * 0.25, 0.25 )
+			end
+	
+			local sound = self:StartTurretSound()
 
 			sound:ChangeVolume( volume * 0.25, 0.25 )
 			sound:ChangePitch( pitch, 0.25 )
 		else
 			self:StopTurretSound()
+			self:StopTurretSoundDMG()
 		end
 	end
 
