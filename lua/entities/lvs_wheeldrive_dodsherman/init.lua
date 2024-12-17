@@ -45,6 +45,11 @@ function ENT:OnSpawn( PObj )
 	-- front upper wedge
 	self:AddArmor( Vector(70,0,66), Angle(0,0,0), Vector(-26,-48,-16), Vector(26,48,16), 1000, self.FrontArmor )
 
+	-- transmission rib left
+	self:AddArmor( Vector(102,12.6,35), Angle(0,0,0), Vector(-16,-1.5,-19), Vector(16,1.5,19), 1200, self.FrontArmorExtra )
+	-- transmission rib right
+	self:AddArmor( Vector(102,-11.8,35), Angle(0,0,0), Vector(-16,-1.5,-19), Vector(16,1.5,19), 1200, self.FrontArmorExtra )
+
 	-- transmission
 	self:AddArmor( Vector(110,1,34), Angle(0,0,0), Vector(-15,-32,-18), Vector(15,32,18), 1000, self.FrontArmor )
 
