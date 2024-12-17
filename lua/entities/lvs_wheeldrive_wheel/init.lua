@@ -76,20 +76,6 @@ function ENT:OnRemove()
 end
 
 function ENT:OnTakeDamage( dmginfo )
-	if dmginfo:IsDamageType( DMG_BLAST ) and self:GetDamageAllowed() then
-		local Damage = dmginfo:GetDamage()
-
-		local CurHealth = self:GetHP()
-
-		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
-
-		self:SetHP( NewHealth )
-
-		if NewHealth <= 0 then
-			self:Destroy()
-		end
-	end
-
 	local base = self:GetBase()
 
 	if not IsValid( base ) then return end

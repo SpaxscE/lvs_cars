@@ -185,3 +185,15 @@ function ENT:DoExhaustFX( Magnitude )
 		util.Effect( "lvs_exhaust", effectdata )
 	end
 end
+
+function ENT:GetWheels()
+	local wheels = {}
+
+	for _, ent in pairs( self:GetCrosshairFilterEnts() ) do
+		if not IsValid( ent ) or ent:GetClass() ~= "lvs_wheeldrive_wheel" then continue end
+
+		table.insert( wheels, ent )
+	end
+
+	return wheels
+end

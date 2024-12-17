@@ -191,7 +191,18 @@ else
 		surface.SetMaterial( EntTable.IconTurretBody )
 		surface.DrawTexturedRectRotated( X + W * 0.5 + 2, Y + H * 0.5 + 2, IconSize, IconSize, yaw_body )
 
-		surface.SetDrawColor( EntTable.TurretColorMain )
+		
+		local BodyColor = EntTable.TurretColorMain
+
+		for _, wheel in pairs( self:GetWheels() ) do
+			if not wheel:GetDestroyed() then continue end
+
+			BodyColor = EntTable.TurretColorDamaged
+
+			break
+		end
+
+		surface.SetDrawColor( BodyColor )
 		surface.SetMaterial( EntTable.IconTurretBody )
 		surface.DrawTexturedRectRotated( X + W * 0.5, Y + H * 0.5, IconSize, IconSize, yaw_body )
 

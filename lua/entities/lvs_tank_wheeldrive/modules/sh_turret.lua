@@ -200,7 +200,7 @@ else
 
 		if not attFollow then return NULL end
 
-		local Follower = ents.Create( "lvs_wheeldrive_bonefollower" )
+		local Follower = ents.Create( "lvs_wheeldrive_attachment_follower" )
 
 		if not IsValid( Follower ) then return NULL end
 

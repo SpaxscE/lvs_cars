@@ -1,24 +1,23 @@
 AddCSLuaFile()
 
 ENT.Type            = "anim"
+
+ENT.AutomaticFrameAdvance = true
 ENT.DoNotDuplicate = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
-	self:NetworkVar( "Entity",1, "Master" )
 end
 
 if SERVER then
-	function ENT:SetFollowAttachment( id )
-		self._attidFollow = id
-	end
-
-	function ENT:Initialize()
+	function ENT:Initialize()	
 		self:SetUseType( SIMPLE_USE )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 		self:SetCollisionGroup( COLLISION_GROUP_WORLD )
 		self:DrawShadow( false )
+
+		self:SetMaterial( "models/wireframe" )
 
 		local PhysObj = self:GetPhysicsObject()
 
@@ -28,37 +27,11 @@ if SERVER then
 		PhysObj:EnableDrag( false )
 		PhysObj:EnableGravity( false ) 
 		PhysObj:EnableMotion( true )
+		PhysObj:SetMaterial( "friction_00" )
 	end
 
 	function ENT:Think()
-		local T = CurTime()
-
-		self:NextThink( T )
-
-		local Base = self:GetBase()
-		local Master = self:GetMaster()
-
-		if not self._attidFollow or not IsValid( Base ) or not IsValid( Master ) then return true end
-
-		local PhysObj = Master:GetPhysicsObject()
-
-		if not IsValid( PhysObj ) then return true end
-
-		if PhysObj:IsMotionEnabled() then PhysObj:EnableMotion( false ) end
-
-		local att = Base:GetAttachment( self._attidFollow )
-
-		if not att then self:NextThink( T + 1 ) return true end
-
-		local OldAng = Master:GetAngles()
-		local NewAng = att.Ang
-
-		if OldAng ~= NewAng then
-			Master:SetAngles( att.Ang )
-			self:PhysWake()
-		end
-
-		return true
+		return false
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
@@ -66,15 +39,25 @@ if SERVER then
 
 		if not IsValid( base ) then return end
 
+		local startpos = dmginfo:GetDamagePosition()
+		local endpos = startpos + dmginfo:GetDamageForce():GetNormalized() * 50000
+
+		local trace = util.TraceLine( {
+			start = startpos,
+			endpos = endpos,
+			whitelist = true,
+			ignoreworld = true,
+			filter = base,
+		} )
+
+		if not trace.Hit then
+			dmginfo:SetDamageType( dmginfo:GetDamageType() + DMG_PREVENT_PHYSICS_FORCE )
+		end
+
 		base:OnTakeDamage( dmginfo )
 	end
 
 	function ENT:PhysicsCollide( data, phys )
-		local base = self:GetBase()
-
-		if not IsValid( base ) then return end
-
-		base:PhysicsCollide( data, phys )
 	end
 
 	function ENT:Use( ply )
@@ -87,20 +70,17 @@ if SERVER then
 		base:Use( ply )
 	end
 
-	function ENT:OnRemove()
-	end
-
 	return
-end
-
-function ENT:Initialize()
-end
-
-function ENT:OnRemove()
 end
 
 function ENT:Draw()
 	if not LVS.DeveloperEnabled then return end
 
 	self:DrawModel()
+end
+
+function ENT:Think()
+end
+
+function ENT:OnRemove()
 end
