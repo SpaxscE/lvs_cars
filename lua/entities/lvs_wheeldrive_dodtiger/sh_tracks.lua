@@ -4,6 +4,22 @@ if SERVER then
 	ENT.PivotSteerByBrake = false
 	ENT.PivotSteerWheelRPM = 25
 
+	function ENT:OnLeftTrackRepaired()
+		self:SetBodygroup(3,0)
+	end
+
+	function ENT:OnLeftTrackDestroyed()
+		self:SetBodygroup(3,1)
+	end
+
+	function ENT:OnRightTrackRepaired()
+		self:SetBodygroup(4,0)
+	end
+
+	function ENT:OnRightTrackDestroyed()
+		self:SetBodygroup(4,1)
+	end
+
 	function ENT:TracksCreate( PObj )
 		self:CreateTrackPhysics( "models/blu/tanks/tiger_tracks_col.mdl" )
 

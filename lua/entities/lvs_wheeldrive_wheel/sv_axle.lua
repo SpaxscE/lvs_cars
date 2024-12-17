@@ -1,13 +1,24 @@
 
 AccessorFunc(ENT, "axle", "Axle", FORCE_NUMBER)
 
-function ENT:Damage()
-	self:SetNWDamaged( true )
+function ENT:SetDamaged( new )
+	if new == self:GetNWDamaged() then return end
 
-	if not self._torqueFactor then return end
+	self:SetNWDamaged( new )
 
-	self.old_torqueFactor = self._torqueFactor
-	self._torqueFactor = 0
+	if new then
+		if not self._torqueFactor or self.old_torqueFactor then return end
+
+		self.old_torqueFactor = self._torqueFactor
+		self._torqueFactor = self._torqueFactor * 0.25
+
+		return
+	end
+
+	if self._torqueFactor and not self.old_torqueFactor then
+		self.old_torqueFactor = self._torqueFactor
+		self._torqueFactor = 0
+	end
 end
 
 function ENT:Destroy()
@@ -15,6 +26,18 @@ function ENT:Destroy()
 
 	self:SetDestroyed( true )
 	self:SetDamaged( true )
+
+	if self._torqueFactor and not self.old_torqueFactor then
+		self.old_torqueFactor = self._torqueFactor
+		self._torqueFactor = 0
+	end
+
+	local Master = self:GetMaster()
+
+	if not IsValid( Master ) or IsValid( self.bsLockDMG ) then return end
+
+	self.bsLockDMG = constraint.AdvBallsocket(self,Master,0,0,vector_origin,vector_origin,0,0,-0.1,-0.1,-0.1,0.1,0.1,0.1,0,0,0,1,1)
+	self.bsLockDMG.DoNotDuplicate = true
 end
 
 function ENT:Repair()
@@ -22,6 +45,10 @@ function ENT:Repair()
 
 	self:SetDestroyed( false )
 	self:SetDamaged( false )
+
+	if IsValid( self.bsLockDMG ) then
+		self.bsLockDMG:Remove()
+	end
 
 	if not self.old_torqueFactor then return end
 

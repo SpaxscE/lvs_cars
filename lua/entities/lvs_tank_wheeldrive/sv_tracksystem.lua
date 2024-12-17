@@ -1,13 +1,23 @@
 
-function ENT:SetTrackArmorLeft( Armor, WheelChain )
-	self:SetTrackArmor( Armor, WheelChain )
+function ENT:OnLeftTrackRepaired()
 end
 
-function ENT:SetTrackArmorRight( Armor, WheelChain )
-	self:SetTrackArmor( Armor, WheelChain )
+function ENT:OnRightTrackRepaired()
+end
+
+function ENT:OnLeftTrackDestroyed()
+end
+
+function ENT:OnRightTrackDestroyed()
+end
+
+function ENT:GetTrackPhysics()
+	return self._TrackPhysics
 end
 
 function ENT:CreateTrackPhysics( mdl )
+	if IsValid( self._TrackPhysics ) then return self._TrackPhysics end
+
 	if not isstring( mdl ) then return NULL end
 
 	local TrackPhysics = ents.Create( "lvs_wheeldrive_component" )
@@ -22,6 +32,8 @@ function ENT:CreateTrackPhysics( mdl )
 	TrackPhysics:SetBase( self )
 	self:TransferCPPI( TrackPhysics )
 	self:DeleteOnRemove( TrackPhysics )
+
+	self._TrackPhysics = TrackPhysics
 
 	local weld_constraint = constraint.Weld( TrackPhysics, self, 0, 0 )
 	weld_constraint.DoNotDuplicate = true
@@ -61,6 +73,12 @@ function ENT:CreateWheelChain( wheels )
 	local WheelChain = {}
 
 	WheelChain.OnDestroyed = function( ent )
+		if not IsValid( ent ) or ent._tracksDestroyed then return end
+
+		ent._tracksDestroyed = true
+
+		self:OnTrackDestroyed( ent.wheeltype )
+
 		for _, wheel in pairs( wheels ) do
 			if not IsValid( wheel ) then continue end
 
@@ -69,10 +87,26 @@ function ENT:CreateWheelChain( wheels )
 	end
 
 	WheelChain.OnRepaired = function( ent )
+		if not IsValid( ent ) or not ent._tracksDestroyed then return end
+
+		ent._tracksDestroyed = nil
+
+		self:OnTrackRepaired( ent.wheeltype )
+
 		for _, wheel in pairs( wheels ) do
 			if not IsValid( wheel ) then continue end
 
 			wheel:Repair()
+		end
+	end
+
+	WheelChain.OnHealthChanged = function( ent, dmginfo, old, new )
+		if new >= old then return end
+
+		for _, wheel in pairs( wheels ) do
+			if not IsValid( wheel ) then continue end
+
+			wheel:SetDamaged( true )
 		end
 	end
 
@@ -84,5 +118,40 @@ function ENT:SetTrackArmor( Armor, WheelChain )
 
 	Armor.OnDestroyed = WheelChain.OnDestroyed
 	Armor.OnRepaired = WheelChain.OnRepaired
+	Armor.OnHealthChanged = WheelChain.OnHealthChanged
 	Armor:SetLabel( "Tracks" )
+end
+
+function ENT:OnTrackRepaired( wheeltype )
+	if wheeltype == LVS.WHEELTYPE_LEFT then
+		self:OnLeftTrackRepaired()
+	end
+
+	if wheeltype == LVS.WHEELTYPE_RIGHT then
+		self:OnRightTrackRepaired()
+	end
+end
+
+function ENT:OnTrackDestroyed( wheeltype )
+	if wheeltype == LVS.WHEELTYPE_LEFT then
+		self:OnLeftTrackDestroyed()
+	end
+
+	if wheeltype == LVS.WHEELTYPE_RIGHT then
+		self:OnRightTrackDestroyed()
+	end
+end
+
+function ENT:SetTrackArmorLeft( Armor, WheelChain )
+
+	Armor.wheeltype = LVS.WHEELTYPE_LEFT
+
+	self:SetTrackArmor( Armor, WheelChain )
+end
+
+function ENT:SetTrackArmorRight( Armor, WheelChain )
+
+	Armor.wheeltype = LVS.WHEELTYPE_RIGHT
+
+	self:SetTrackArmor( Armor, WheelChain )
 end

@@ -57,8 +57,6 @@ function ENT:LockRotation( TimedLock )
 end
 
 function ENT:ReleaseRotation()
-	if self._RotationForceLocked then return end
-
 	if self._RotationLockTime then
 		if self._RotationLockTime > CurTime() then
 			return
