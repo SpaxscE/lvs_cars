@@ -48,14 +48,14 @@ if SERVER then
 
 			self:AddToGibList( ent )
 
-			timer.Simple( 4.5, function()
+			timer.Simple( 59.5, function()
 				if not IsValid( ent ) then return end
 
 				ent:SetRenderMode( RENDERMODE_TRANSCOLOR )
 				ent:SetRenderFX( kRenderFxFadeFast )
 			end )
 
-			timer.Simple( 5, function()
+			timer.Simple( 60, function()
 				if not IsValid( ent ) then return end
 
 				ent:Remove()
