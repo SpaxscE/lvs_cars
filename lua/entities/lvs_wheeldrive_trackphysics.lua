@@ -8,6 +8,60 @@ function ENT:SetupDataTables()
 end
 
 if SERVER then
+	function ENT:AddToGibList( ent )
+		if not istable( self._GibList ) then self._GibList = {} end
+
+		table.insert( self._GibList, ent )
+	end
+
+	function ENT:GetGibList()
+		return self._GibList or {}
+	end
+
+	function ENT:SpawnGib( LeftOrRight )
+		local base = self:GetBase()
+
+		local options = {
+			[LVS.WHEELTYPE_LEFT] = "left",
+			[LVS.WHEELTYPE_RIGHT] = "right"
+		}
+
+		local side = options[ LeftOrRight ]
+
+		if not side or not IsValid( base ) or not istable( base.TrackGibs ) or not base.TrackGibs[ side ] then return end
+
+		for _, data in pairs( base.TrackGibs[ side ] ) do
+			local class = util.IsValidRagdoll( data.mdl ) and "prop_ragdoll" or "prop_physics"
+
+			local ent = ents.Create( class )
+
+			if not IsValid( ent ) then continue end
+
+			ent:SetModel( data.mdl )
+			ent:SetPos( base:LocalToWorld( data.pos ) )
+			ent:SetAngles( base:LocalToWorldAngles( data.ang ) )
+			ent:Spawn()
+			ent:Activate()
+			ent:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
+
+			self:DeleteOnRemove( ent )
+
+			self:AddToGibList( ent )
+		end
+	end
+
+	function ENT:ClearGib()
+		local Gibs = self:GetGibList()
+
+		for _, ent in pairs( Gibs ) do
+			if not IsValid( ent ) then continue end
+
+			ent:Remove()
+		end
+
+		table.Empty( Gibs )
+	end
+
 	function ENT:Initialize()	
 		self:SetUseType( SIMPLE_USE )
 		self:PhysicsInit( SOLID_VPHYSICS )
@@ -66,6 +120,10 @@ if SERVER then
 		if not IsValid( base ) then return end
 
 		base:Use( ply )
+	end
+
+	function ENT:OnRemove()
+		self:ClearGib()
 	end
 
 	return
