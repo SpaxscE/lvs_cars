@@ -48,6 +48,8 @@ if SERVER then
 			ent:Activate()
 			ent:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
 
+			ent:EmitSound("lvs/tracks_break"..math.random(1,3)..".wav")
+
 			if IsRagdoll then
 				for i = 1, ent:GetPhysicsObjectCount() do
 					local bone = ent:GetPhysicsObjectNum( i )
