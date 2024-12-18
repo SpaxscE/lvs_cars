@@ -109,6 +109,17 @@ if SERVER then
 		end
 
 		if not HitEnt:IsPlayer() and PhysObj:GetStress() > 10 and HitEnt:GetClass() ~= self:GetClass() then
+			local startpos = self:LocalToWorld( self:OBBCenter() )
+			local up = self:GetUp()
+
+			local trace = util.TraceLine( {
+				start = startpos,
+				endpos = startpos + up * 10,
+				filter = self,
+			} )
+
+			if not trace.Hit then return end
+
 			self.ShouldDetonate = true
 		else
 			if data.Speed > 60 and data.DeltaTime > 0.1 then

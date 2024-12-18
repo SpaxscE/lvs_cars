@@ -8,14 +8,14 @@ if SERVER then
 		["left"] = {
 			{
 				mdl = "models/blu/tanks/sherman_tracks_ragdoll.mdl",
-				pos = Vector(0,41.3,0),
+				pos = Vector(0,41.3,3),
 				ang = Angle(-90,-90,0),
 			},
 		},
 		["right"] = {
 			{
 				mdl = "models/blu/tanks/sherman_tracks_ragdoll.mdl",
-				pos = Vector(0,-41.3,0),
+				pos = Vector(0,-41.3,3),
 				ang = Angle(-90,-90,0),
 			},
 		}
