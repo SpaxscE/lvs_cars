@@ -88,18 +88,18 @@ function ENT:CreateWheelChain( wheels )
 	end
 
 	WheelChain.OnRepaired = function( ent )
+		for _, wheel in pairs( wheels ) do
+			if not IsValid( wheel ) then continue end
+
+			wheel:Repair()
+		end
+
 		if not IsValid( ent ) or not ent._tracksDestroyed then return end
 
 		ent._tracksDestroyed = nil
 
 		self:OnTrackRepaired( ent.wheeltype )
 		self:OnHandleTrackGib( ent.wheeltype, false )
-
-		for _, wheel in pairs( wheels ) do
-			if not IsValid( wheel ) then continue end
-
-			wheel:Repair()
-		end
 	end
 
 	WheelChain.OnHealthChanged = function( ent, dmginfo, old, new )
