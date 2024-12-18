@@ -105,7 +105,7 @@ if SERVER then
 		if not IsValid( base ) then return end
 
 		local startpos = dmginfo:GetDamagePosition()
-		local endpos = startpos + dmginfo:GetDamageForce():GetNormalized() * 50000
+		local endpos = startpos + dmginfo:GetDamageForce():GetNormalized() * 30
 
 		local trace = util.TraceLine( {
 			start = startpos,
