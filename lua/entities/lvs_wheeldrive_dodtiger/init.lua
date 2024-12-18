@@ -52,7 +52,7 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(127,0,35), Angle(-67,0,0), Vector(-15,-37,-1), Vector(15,37,1), 4000, self.FrontArmor )
 
 	-- front bottom plate
-	self:AddArmor( Vector(111,0,18), Angle(-22,0,0), Vector(-11,-37,-1), Vector(11,37,1), 500, self.RoofArmor )
+	self:AddArmor( Vector(111,0,18), Angle(-22,0,0), Vector(-11,-37,-1), Vector(11,37,1), 1200, self.RearArmor )
 
 	--left up
 	self:AddArmor( Vector(-8,64,56), Angle(0,0,0), Vector(-105,-1,-18), Vector(105,1,18), 1600, self.SideArmor )
