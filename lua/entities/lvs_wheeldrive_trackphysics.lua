@@ -38,8 +38,8 @@ if SERVER then
 			if not IsValid( ent ) then continue end
 
 			ent:SetModel( data.mdl )
-			ent:SetPos( base:LocalToWorld( data.pos ) )
-			ent:SetAngles( base:LocalToWorldAngles( data.ang ) )
+			ent:SetPos( self:LocalToWorld( data.pos ) )
+			ent:SetAngles( self:LocalToWorldAngles( data.ang ) )
 			ent:Spawn()
 			ent:Activate()
 			ent:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
@@ -115,7 +115,9 @@ if SERVER then
 			filter = base,
 		} )
 
-		if not trace.Hit then
+		if trace.Hit then
+			dmginfo:SetDamagePosition( trace.HitPos )
+		else
 			dmginfo:SetDamageType( dmginfo:GetDamageType() + DMG_PREVENT_PHYSICS_FORCE )
 		end
 
