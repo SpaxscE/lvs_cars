@@ -47,6 +47,19 @@ if SERVER then
 			self:DeleteOnRemove( ent )
 
 			self:AddToGibList( ent )
+
+			timer.Simple( 4.5, function()
+				if not IsValid( ent ) then return end
+
+				ent:SetRenderMode( RENDERMODE_TRANSCOLOR )
+				ent:SetRenderFX( kRenderFxFadeFast )
+			end )
+
+			timer.Simple( 5, function()
+				if not IsValid( ent ) then return end
+
+				ent:Remove()
+			end )
 		end
 	end
 
