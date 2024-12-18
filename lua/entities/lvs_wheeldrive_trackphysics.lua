@@ -51,7 +51,7 @@ if SERVER then
 			ent:EmitSound("lvs/tracks_break"..math.random(1,3)..".wav")
 
 			if IsRagdoll then
-				for i = 1, ent:GetPhysicsObjectCount() do
+				for i = 1, (ent:GetPhysicsObjectCount() - 1) do
 					local bone = ent:GetPhysicsObjectNum( i )
 
 					if not IsValid( bone ) then continue end
