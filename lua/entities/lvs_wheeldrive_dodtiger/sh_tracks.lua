@@ -7,14 +7,14 @@ if SERVER then
 	ENT.TrackGibs = {
 		["left"] = {
 			{
-				mdl = "models/blu/tanks/sherman_tracks_ragdoll.mdl",
+				mdl = "models/blu/tanks/tiger_tracks_ragdoll.mdl",
 				pos = Vector(0,54.7,0),
 				ang = Angle(-90,-90,0),
 			},
 		},
 		["right"] = {
 			{
-				mdl = "models/blu/tanks/sherman_tracks_ragdoll.mdl",
+				mdl = "models/blu/tanks/tiger_tracks_ragdoll.mdl",
 				pos = Vector(0,-54.7,0),
 				ang = Angle(-90,-90,0),
 			},
