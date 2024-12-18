@@ -36,7 +36,7 @@ function ENT:Destroy()
 
 	if not IsValid( Master ) or IsValid( self.bsLockDMG ) then return end
 
-	local Fric = 0.8
+	local Fric = 10
 
 	self.bsLockDMG = constraint.AdvBallsocket(self,Master,0,0,vector_origin,vector_origin,0,0,-180,-180,-180,180,180,180,Fric,Fric,Fric,1,1)
 	self.bsLockDMG.DoNotDuplicate = true
