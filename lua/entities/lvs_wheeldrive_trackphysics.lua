@@ -104,8 +104,16 @@ if SERVER then
 
 		if not IsValid( base ) then return end
 
+		local Force = dmginfo:GetDamageForce()
+		local fLength = Force:Length()
+
+		-- translate force value to armor penetration value is Force * 0.1
+		-- mm to inch is * 0.0393701
+		-- so correct value is * 0.00393701
+		local pLength = fLength * 0.00393701
+
 		local startpos = dmginfo:GetDamagePosition()
-		local endpos = startpos + dmginfo:GetDamageForce():GetNormalized() * 30
+		local endpos = startpos + Force:GetNormalized() * pLength
 
 		local trace = util.TraceLine( {
 			start = startpos,
