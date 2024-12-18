@@ -197,7 +197,7 @@ else
 		local BodyColor = EntTable.TurretColorMain
 
 		for _, wheel in pairs( self:GetWheels() ) do
-			if not wheel:GetDestroyed() then continue end
+			if not wheel:GetDamaged() then continue end
 
 			BodyColor = EntTable.TurretColorDamaged
 

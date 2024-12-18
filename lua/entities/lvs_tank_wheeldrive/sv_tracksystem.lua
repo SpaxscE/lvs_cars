@@ -20,7 +20,7 @@ function ENT:CreateTrackPhysics( mdl )
 
 	if not isstring( mdl ) then return NULL end
 
-	local TrackPhysics = ents.Create( "lvs_wheeldrive_component" )
+	local TrackPhysics = ents.Create( "lvs_wheeldrive_trackphysics" )
 
 	if not IsValid( TrackPhysics ) then return NULL end
 
@@ -78,6 +78,7 @@ function ENT:CreateWheelChain( wheels )
 		ent._tracksDestroyed = true
 
 		self:OnTrackDestroyed( ent.wheeltype )
+		self:OnHandleTrackGib( ent.wheeltype, true )
 
 		for _, wheel in pairs( wheels ) do
 			if not IsValid( wheel ) then continue end
@@ -92,6 +93,7 @@ function ENT:CreateWheelChain( wheels )
 		ent._tracksDestroyed = nil
 
 		self:OnTrackRepaired( ent.wheeltype )
+		self:OnHandleTrackGib( ent.wheeltype, false )
 
 		for _, wheel in pairs( wheels ) do
 			if not IsValid( wheel ) then continue end
@@ -154,4 +156,18 @@ function ENT:SetTrackArmorRight( Armor, WheelChain )
 	Armor.wheeltype = LVS.WHEELTYPE_RIGHT
 
 	self:SetTrackArmor( Armor, WheelChain )
+end
+
+function ENT:OnHandleTrackGib( wheeltype, destroy )
+	local TrackPhys = self:GetTrackPhysics()
+
+	if not IsValid( TrackPhys ) then return end
+
+	if destroy then
+		TrackPhys:SpawnGib( wheeltype )
+
+		return
+	end
+
+	TrackPhys:ClearGib()
 end

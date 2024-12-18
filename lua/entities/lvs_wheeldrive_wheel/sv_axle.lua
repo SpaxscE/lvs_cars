@@ -15,10 +15,10 @@ function ENT:SetDamaged( new )
 		return
 	end
 
-	if self._torqueFactor and not self.old_torqueFactor then
-		self.old_torqueFactor = self._torqueFactor
-		self._torqueFactor = 0
-	end
+	if not self.old_torqueFactor then return end
+
+	self._torqueFactor = self.old_torqueFactor
+	self.old_torqueFactor = nil
 end
 
 function ENT:Destroy()
@@ -27,16 +27,11 @@ function ENT:Destroy()
 	self:SetDestroyed( true )
 	self:SetDamaged( true )
 
-	if self._torqueFactor and not self.old_torqueFactor then
-		self.old_torqueFactor = self._torqueFactor
-		self._torqueFactor = 0
-	end
-
 	local Master = self:GetMaster()
 
 	if not IsValid( Master ) or IsValid( self.bsLockDMG ) then return end
 
-	local Fric = 0.75
+	local Fric = 10
 
 	self.bsLockDMG = constraint.AdvBallsocket(self,Master,0,0,vector_origin,vector_origin,0,0,-180,-180,-180,180,180,180,Fric,Fric,Fric,1,1)
 	self.bsLockDMG.DoNotDuplicate = true
@@ -51,11 +46,6 @@ function ENT:Repair()
 	if IsValid( self.bsLockDMG ) then
 		self.bsLockDMG:Remove()
 	end
-
-	if not self.old_torqueFactor then return end
-
-	self._torqueFactor = self.old_torqueFactor
-	self.old_torqueFactor = nil
 end
 
 function ENT:SetMaster( master )
