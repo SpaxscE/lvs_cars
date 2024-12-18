@@ -15,10 +15,10 @@ function ENT:SetDamaged( new )
 		return
 	end
 
-	if self._torqueFactor and not self.old_torqueFactor then
-		self.old_torqueFactor = self._torqueFactor
-		self._torqueFactor = 0
-	end
+	if not self.old_torqueFactor then return end
+
+	self._torqueFactor = self.old_torqueFactor
+	self.old_torqueFactor = nil
 end
 
 function ENT:Destroy()
@@ -26,11 +26,6 @@ function ENT:Destroy()
 
 	self:SetDestroyed( true )
 	self:SetDamaged( true )
-
-	if self._torqueFactor and not self.old_torqueFactor then
-		self.old_torqueFactor = self._torqueFactor
-		self._torqueFactor = 0
-	end
 
 	local Master = self:GetMaster()
 
@@ -51,11 +46,6 @@ function ENT:Repair()
 	if IsValid( self.bsLockDMG ) then
 		self.bsLockDMG:Remove()
 	end
-
-	if not self.old_torqueFactor then return end
-
-	self._torqueFactor = self.old_torqueFactor
-	self.old_torqueFactor = nil
 end
 
 function ENT:SetMaster( master )
