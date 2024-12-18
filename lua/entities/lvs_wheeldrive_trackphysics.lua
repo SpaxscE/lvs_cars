@@ -30,8 +30,12 @@ if SERVER then
 
 		if not side or not IsValid( base ) or not istable( base.TrackGibs ) or not base.TrackGibs[ side ] then return end
 
+		local vel = self:GetVelocity()
+
 		for _, data in pairs( base.TrackGibs[ side ] ) do
-			local class = util.IsValidRagdoll( data.mdl ) and "prop_ragdoll" or "prop_physics"
+			local IsRagdoll = util.IsValidRagdoll( data.mdl ) 
+
+			local class = IsRagdoll and "prop_ragdoll" or "prop_physics"
 
 			local ent = ents.Create( class )
 
@@ -43,6 +47,22 @@ if SERVER then
 			ent:Spawn()
 			ent:Activate()
 			ent:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
+
+			if IsRagdoll then
+				for i = 1, ent:GetPhysicsObjectCount() do
+					local bone = ent:GetPhysicsObjectNum( i )
+
+					if not IsValid( bone ) then continue end
+
+					bone:AddVelocity( vel )
+				end
+			else
+				local PhysObj = ent:GetPhysicsObject()
+
+				if IsValid( PhysObj ) then
+					PhysObj:AddVelocity( vel )
+				end
+			end
 
 			self:DeleteOnRemove( ent )
 
