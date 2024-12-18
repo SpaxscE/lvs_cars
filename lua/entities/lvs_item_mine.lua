@@ -59,12 +59,8 @@ if SERVER then
 		local effectdata = EffectData()
 		effectdata:SetOrigin( Pos )
 		effectdata:SetNormal( Vector(0,0,1) )
-
-		if self:WaterLevel() >= 2 then
-			util.Effect( "WaterSurfaceExplosion", effectdata, true, true )
-		else
-			util.Effect( "lvs_defence_explosion", effectdata )
-		end
+		effectdata:SetMagnitude( 1 )
+		util.Effect( "lvs_bullet_impact_explosive", effectdata, true, true )
 
 		local attacker = self:GetAttacker()
 
