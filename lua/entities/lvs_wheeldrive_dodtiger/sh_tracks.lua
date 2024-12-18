@@ -4,6 +4,23 @@ if SERVER then
 	ENT.PivotSteerByBrake = false
 	ENT.PivotSteerWheelRPM = 25
 
+	ENT.TrackGibs = {
+		["left"] = {
+			{
+				mdl = "models/blu/tanks/sherman_tracks_ragdoll.mdl",
+				pos = Vector(0,54.7,0),
+				ang = Angle(-90,-90,0),
+			},
+		},
+		["right"] = {
+			{
+				mdl = "models/blu/tanks/sherman_tracks_ragdoll.mdl",
+				pos = Vector(0,-54.7,0),
+				ang = Angle(-90,-90,0),
+			},
+		}
+	}
+
 	function ENT:OnLeftTrackRepaired()
 		self:SetBodygroup(3,0)
 	end
