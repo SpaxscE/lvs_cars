@@ -12,7 +12,7 @@ AddCSLuaFile( "modules/sh_turret_splitsound.lua" )
 ENT.DSArmorDamageReductionType = DMG_CLUB
 ENT.DSArmorIgnoreDamageType = DMG_BULLET + DMG_SONIC + DMG_ENERGYBEAM
 
-function ENT:AddAmmoRack( pos, fxpos, ang, mins, maxs )
+function ENT:AddAmmoRack( pos, fxpos, ang, mins, maxs, target )
 	local AmmoRack = ents.Create( "lvs_wheeldrive_ammorack" )
 
 	if not IsValid( AmmoRack ) then
@@ -23,11 +23,13 @@ function ENT:AddAmmoRack( pos, fxpos, ang, mins, maxs )
 		return
 	end
 
-	AmmoRack:SetPos( self:LocalToWorld( pos ) )
-	AmmoRack:SetAngles( self:GetAngles() )
+	if not target then target = self end
+
+	AmmoRack:SetPos( target:LocalToWorld( pos ) )
+	AmmoRack:SetAngles( target:GetAngles() )
 	AmmoRack:Spawn()
 	AmmoRack:Activate()
-	AmmoRack:SetParent( self )
+	AmmoRack:SetParent( target )
 	AmmoRack:SetBase( self )
 	AmmoRack:SetEffectPosition( fxpos )
 
@@ -38,13 +40,14 @@ function ENT:AddAmmoRack( pos, fxpos, ang, mins, maxs )
 	mins = mins or Vector(-30,-30,-30)
 	maxs = maxs or Vector(30,30,30)
 
-	debugoverlay.BoxAngles( self:LocalToWorld( pos ), mins, maxs, self:LocalToWorldAngles( ang ), 15, Color( 255, 0, 0, 255 ) )
+	debugoverlay.BoxAngles( target:LocalToWorld( pos ), mins, maxs, target:LocalToWorldAngles( ang ), 15, Color( 255, 0, 0, 255 ) )
 
 	self:AddDS( {
 		pos = pos,
 		ang = ang,
 		mins = mins,
 		maxs =  maxs,
+		entity = target,
 		Callback = function( tbl, ent, dmginfo )
 			if not IsValid( AmmoRack ) then return end
 
