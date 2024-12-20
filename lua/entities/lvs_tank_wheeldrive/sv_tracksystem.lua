@@ -38,8 +38,6 @@ function ENT:CreateTrackPhysics( mdl )
 	local weld_constraint = constraint.Weld( TrackPhysics, self, 0, 0 )
 	weld_constraint.DoNotDuplicate = true
 
-	TrackPhysics:SetCollisionGroup( COLLISION_GROUP_WORLD )
-
 	return TrackPhysics
 end
 
