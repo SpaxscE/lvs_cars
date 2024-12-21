@@ -8,6 +8,14 @@ function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",1, "Master" )
 end
 
+function ENT:GetMins()
+	return self:OBBMins()
+end
+
+function ENT:GetMaxs()
+	return self:OBBMaxs()
+end
+
 if SERVER then
 	function ENT:SetFollowAttachment( id )
 		self._attidFollow = id
@@ -63,12 +71,65 @@ if SERVER then
 		return true
 	end
 
+	function ENT:OnHealthChanged( dmginfo, old, new )
+	end
+
+	function ENT:OnRepaired()
+	end
+
+	function ENT:OnDestroyed( dmginfo )
+	end
+
 	function ENT:OnTakeDamage( dmginfo )
 		local base = self:GetBase()
 
 		if not IsValid( base ) then return end
 
+		local OldTotalHealth = 0
+		local NewTotalHealth = 0
+		local CallDestroyed = false
+
+		local children = self:GetChildren()
+
+		for _, entity in pairs( children ) do
+			if entity:GetClass() ~= "lvs_armor" then continue end
+
+			OldTotalHealth = OldTotalHealth + entity:GetHP()
+
+			if entity._IsRepairFunctionTagged then continue end
+
+			entity._IsRepairFunctionTagged = true
+
+			local OldOnRepaired = entity.OnRepaired
+
+			entity.OnRepaired = function( ent )
+				if IsValid( self ) then
+					self:OnRepaired()
+				end
+
+				OldOnRepaired( ent )
+			end
+		end
+
 		base:OnTakeDamage( dmginfo )
+
+		for _, entity in pairs( children ) do
+			if entity:GetClass() ~= "lvs_armor" then continue end
+
+			local HP = entity:GetHP()
+
+			NewTotalHealth = NewTotalHealth + HP
+
+			if HP > 0 then continue end
+
+			CallDestroyed = true
+		end
+
+		self:OnHealthChanged( dmginfo, OldTotalHealth, NewTotalHealth )
+
+		if CallDestroyed then
+			self:OnDestroyed( dmginfo )
+		end
 	end
 
 	function ENT:PhysicsCollide( data, phys )
