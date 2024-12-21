@@ -221,7 +221,6 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 		local Tick2 = 1 / deltatimeNew
 
 		forceMul = Tick1 / Tick2
-
 	else
 		WheelTable._lvsNextSimulate = T - 1
 	end

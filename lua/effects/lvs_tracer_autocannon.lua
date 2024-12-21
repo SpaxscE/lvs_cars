@@ -37,17 +37,17 @@ function EFFECT:Init( data )
 	if not self.emitter then return end
 
 	local VecCol = (render.GetLightColor( pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
-	for i = 0,10 do
+	for i = 0, 2 do
 		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], pos )
 
 		if not particle then continue end
 
 		particle:SetVelocity( dir * 700 + VectorRand() * 200 )
-		particle:SetDieTime( math.Rand(2,3) )
+		particle:SetDieTime( math.Rand(0.5,1) )
 		particle:SetAirResistance( 250 ) 
 		particle:SetStartAlpha( 50 )
 		particle:SetStartSize( 5 )
-		particle:SetEndSize( 120 )
+		particle:SetEndSize( 80 )
 		particle:SetRollDelta( math.Rand(-1,1) )
 		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
 		particle:SetGravity( Vector(0,0,100) )
@@ -79,12 +79,12 @@ function EFFECT:Init( data )
 	if not trace or not trace.Hit then return end
 
 	local VecCol = (render.GetLightColor( trace.HitPos + trace.HitNormal ) * 0.8 + Vector(0.17,0.15,0.1)) * 255
-	for i = 1,24 do
+	for i = 1, 12 do
 		local particle = self.emitter:Add( self.MatSmoke[math.random(1,#self.MatSmoke)], trace.HitPos )
 		
 		if not particle then continue end
 
-		local ang = i * 15
+		local ang = i * 30
 		local X = math.cos( math.rad(ang) )
 		local Y = math.sin( math.rad(ang) )
 
@@ -96,7 +96,7 @@ function EFFECT:Init( data )
 		particle:SetEndSize( 80 )
 		particle:SetRollDelta( math.Rand(-1,1) )
 		particle:SetColor( math.min( VecCol.r, 255 ), math.min( VecCol.g, 255 ), math.min( VecCol.b, 255 ) )
-		particle:SetGravity( Vector(0,0,150) + self.Dir * 2000 )
+		particle:SetGravity( Vector(0,0,150) + self.Dir * 1000 )
 		particle:SetCollide( false )
 	end
 
@@ -108,7 +108,7 @@ function EFFECT:Init( data )
 
 	if not IsValid( ViewEnt ) then return end
 
-	local Intensity = ply:InVehicle() and 1 or 10
+	local Intensity = ply:InVehicle() and 1 or 2
 	local Ratio = math.min( 250 / (ViewEnt:GetPos() - trace.HitPos):Length(), 1 )
 
 	if Ratio < 0 then return end
@@ -131,8 +131,6 @@ function EFFECT:Think()
 			start = StartPos,
 			endpos = EndPos,
 		} )
-
-		if not trace.Hit then return false end
 
 		local effectdata = EffectData()
 		effectdata:SetOrigin( trace.HitPos )
@@ -158,7 +156,7 @@ function EFFECT:Think()
 
 	local Vel = bullet.Velocity / 10
 
-	for i = 0, Dist, 25 do
+	for i = 0, Dist, 100 do
 		local cur_pos = self.OldPos + Dir * i
 
 		local VecCol = (render.GetLightColor( cur_pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
