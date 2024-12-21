@@ -50,12 +50,12 @@ if SERVER then
 	function ENT:Use( ply )
 	end
 
-	function ENT:Detonate()
+	function ENT:Detonate( Pos )
 		if self.IsExploded then return end
 
 		self.IsExploded = true
 
-		local Pos = self:GetPos()
+		if not isvector( Pos ) then Pos = self:GetPos() end
 
 		local effectdata = EffectData()
 		effectdata:SetOrigin( Pos )
@@ -79,11 +79,7 @@ if SERVER then
 			end
 		end
 
-		if self.ShouldDetonate then
-			self:Detonate()
-		end
-
-		self:NextThink( CurTime() + 0.1 )
+		self:NextThink( CurTime() + 1 )
 
 		return true
 	end
@@ -118,18 +114,7 @@ if SERVER then
 		end
 
 		if not HitEnt:IsPlayer() and HitEnt:GetClass() ~= self:GetClass() then
-			local startpos = self:LocalToWorld( self:OBBCenter() )
-			local up = self:GetUp()
-
-			local trace = util.TraceLine( {
-				start = startpos,
-				endpos = startpos + up * 10,
-				filter = self,
-			} )
-
-			if not trace.Hit then return end
-
-			self.ShouldDetonate = true
+			self:Detonate( data.HitPos )
 		else
 			if data.Speed > 60 and data.DeltaTime > 0.1 then
 				self:EmitSound( "weapon.ImpactHard" )
