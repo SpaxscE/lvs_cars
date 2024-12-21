@@ -130,10 +130,10 @@ function ENT:PhysicsCollide( data, physobj )
 	local HitEntity = data.HitEntity
 	local HitObject = data.HitObject
 
-	if IsValid( HitEntity ) and (HitEntity:GetCollisionGroup() == COLLISION_GROUP_WEAPON or HitEntity:GetClass() == "prop_ragdoll") and IsValid( HitObject ) then
+	if IsValid( HitEntity ) and IsValid( HitObject ) then
 		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
 
-		if HitObject:GetMass() < physobj:GetMass() then
+		if HitObject:IsMotionEnabled() and HitObject:GetMass() < physobj:GetMass() then
 			HitObject:SetVelocityInstantaneous( data.OurOldVelocity * 2 )
 		end
 	end

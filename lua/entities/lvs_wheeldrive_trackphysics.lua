@@ -155,6 +155,16 @@ if SERVER then
 	end
 
 	function ENT:PhysicsCollide( data, phys )
+		local HitEntity = data.HitEntity
+		local HitObject = data.HitObject
+
+		if not IsValid( HitEntity ) or not IsValid( HitObject ) then return end
+
+		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
+
+		if HitObject:IsMotionEnabled() and (HitEntity:GetClass() == "prop_ragdoll" or HitEntity:GetCollisionGroup() == COLLISION_GROUP_WEAPON) then
+			HitObject:SetVelocityInstantaneous( data.OurOldVelocity * 2 )
+		end
 	end
 
 	function ENT:Use( ply )
