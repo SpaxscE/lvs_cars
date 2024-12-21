@@ -8,6 +8,10 @@ function ENT:GetPivotSteer()
 	return self._PivotSteer or 0
 end
 
+function ENT:SetPivotSteer( new )
+	self._PivotSteer = new
+end
+
 function ENT:PivotSteer()
 	if not self.PivotSteerEnable then return false end
 

@@ -37,30 +37,47 @@ function ENT:RunAI()
 
 	local TargetPos = GotoPos
 
+	local T = CurTime()
+
 	if IsValid( Target ) then
-		GotoPos = Target:GetPos()
-	else
-		if self:GetAITEAM() ~= 0 then
-			local TraceFilter = self:GetCrosshairFilterEnts()
-
-			local Front = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + Pod:GetForward() * RangerLength } )
-			local FrontLeft = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,15,0) ):Right() * RangerLength } )
-			local FrontRight = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-15,0) ):Right() * RangerLength } )
-			local FrontLeft1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,60,0) ):Right() * RangerLength } )
-			local FrontRight1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-60,0) ):Right() * RangerLength } )
-			local FrontLeft2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,85,0) ):Right() * RangerLength } )
-			local FrontRight2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-85,0) ):Right() * RangerLength } )
-
-			GotoPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
-
-			if self:GetReverse() then
-				if Front.Fraction < 0.03 then
-					GotoPos = StartPos - Pod:GetForward() * 1000
-				end
+		if self:AIHasWeapon( 1 ) then
+			if (self._LastGotoPos or 0) > T then
+				GotoPos = self._OldGotoPos
 			else
-				if Front.Fraction < 0.01 then
-					GotoPos = StartPos - Pod:GetForward() * 1000
-				end
+				local Pos = Target:GetPos()
+				local Sub = self:GetPos() - Pos
+				local Dir = Sub:GetNormalized()
+				local Dist = Sub:Length()
+
+				GotoPos = Pos + Dir * math.min( 2000, Dist )
+
+				self._LastGotoPos = T + math.random(4,8)
+				self._OldGotoPos = GotoPos
+			end
+		else
+			GotoPos = Target:GetPos()
+		end
+
+	else
+		local TraceFilter = self:GetCrosshairFilterEnts()
+
+		local Front = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos + Pod:GetForward() * RangerLength } )
+		local FrontLeft = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,15,0) ):Right() * RangerLength } )
+		local FrontRight = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-15,0) ):Right() * RangerLength } )
+		local FrontLeft1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,60,0) ):Right() * RangerLength } )
+		local FrontRight1 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-60,0) ):Right() * RangerLength } )
+		local FrontLeft2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,85,0) ):Right() * RangerLength } )
+		local FrontRight2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-85,0) ):Right() * RangerLength } )
+
+		GotoPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
+
+		if self:GetReverse() then
+			if Front.Fraction < 0.03 then
+				GotoPos = StartPos - Pod:GetForward() * 1000
+			end
+		else
+			if Front.Fraction < 0.01 then
+				GotoPos = StartPos - Pod:GetForward() * 1000
 			end
 		end
 	end
@@ -70,24 +87,47 @@ function ENT:RunAI()
 
 	self:PhysWake()
 
-	if self:IsLegalInput() then
-		self:LerpThrottle( Throttle )
+	if self.PivotSteerEnable and Throttle == 0 then
+		local ang = self:GetAngles()
+		ang.y = Pod:GetAngles().y + 90
 
-		if Throttle == 0 then
-			self:LerpBrake( 1 )
-		else
-			self:LerpBrake( 0 )
+		local View = self:GetAimVector()
+
+		local LocalAngSteer = math.Clamp( (self:AngleBetweenNormal( View, ang:Right() ) - 90) / 10,-1,1)
+
+		Throttle = math.abs( LocalAngSteer ) ^ 2
+
+		if Throttle < 0.1 then
+			Throttle = 0
+			LocalAngSteer = 0
 		end
+
+		self:SetSteer( 0 )
+		self:SetPivotSteer( -LocalAngSteer )
+		self:LerpThrottle( Throttle )
+		self:LerpBrake( 0 )
 	else
-		self:LerpThrottle( 0 )
-		self:LerpBrake( Throttle )
+		self:SetPivotSteer( 0 )
+
+		if self:IsLegalInput() then
+			self:LerpThrottle( Throttle )
+
+			if Throttle == 0 then
+				self:LerpBrake( 1 )
+			else
+				self:LerpBrake( 0 )
+			end
+		else
+			self:LerpThrottle( 0 )
+			self:LerpBrake( Throttle )
+		end
+
+		self:SetReverse( TargetPosLocal.y < 0 )
+
+		self:ApproachTargetAngle( Pod:LocalToWorldAngles( (GotoPos - self:GetPos()):Angle() ) )
 	end
 
 	self:ReleaseHandbrake()
-
-	self:SetReverse( TargetPosLocal.y < 0 )
-
-	self:ApproachTargetAngle( Pod:LocalToWorldAngles( (GotoPos - self:GetPos()):Angle() ) )
 
 	self._AIFireInput = false
 
@@ -116,7 +156,7 @@ function ENT:RunAI()
 			if CurWeapon > 2 then
 				self:AISelectWeapon( 1 )
 			else
-				if Target.LVS and CurHeat < 0.9 then
+				if CurHeat < 0.9 then
 					if CurWeapon == 1 and self:AIHasWeapon( 2 ) then
 						self:AISelectWeapon( 2 )
 
@@ -132,7 +172,9 @@ function ENT:RunAI()
 		end
 	end
 
-	self:SetAIAimVector( (TargetPos - StartPos):GetNormalized() )
+	T = T + self:EntIndex() * 1.337
+
+	self:SetAIAimVector( (TargetPos + Vector(0,math.sin( T * 0.5 ) * 30,math.cos( T * 2 ) * 30) - StartPos):GetNormalized() )
 end
 
 function ENT:OnAITakeDamage( dmginfo )
