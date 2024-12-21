@@ -118,12 +118,24 @@ function ENT:PhysicsOnGround( PhysObj )
 end
 
 function ENT:PhysicsCollide( data, physobj )
+
 	if data.Speed > 150 and data.DeltaTime > 0.2 then
 		local VelDif = data.OurOldVelocity:Length() - data.OurNewVelocity:Length()
 
 		local Volume = math.min( math.abs( VelDif ) / 300 , 1 )
 
 		self:EmitSound( "lvs/vehicles/generic/suspension_hit_".. math.random(1,17) ..".ogg", 70, 100, Volume ^ 2 )
+	end
+
+	local HitEntity = data.HitEntity
+	local HitObject = data.HitObject
+
+	if IsValid( HitEntity ) and (HitEntity:GetCollisionGroup() == COLLISION_GROUP_WEAPON or HitEntity:GetClass() == "prop_ragdoll") and IsValid( HitObject ) then
+		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
+
+		if HitObject:GetMass() < physobj:GetMass() then
+			HitObject:SetVelocityInstantaneous( data.OurOldVelocity * 2 )
+		end
 	end
 
 	if math.abs(data.OurNewVelocity.z - data.OurOldVelocity.z) > 100 then
