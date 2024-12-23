@@ -102,7 +102,7 @@ function ENT:CalcWheelEffects()
 
 	if not IsValid( Base ) then return end
 
-	self._NextFx = T + (Base:GetAI() and 0.2 or 0.05)
+	self._NextFx = T + (Base:GetAI() and 0.1 or 0.05)
 
 	local Radius = Base:GetUp() * (self:GetRadius() + 1)
 
