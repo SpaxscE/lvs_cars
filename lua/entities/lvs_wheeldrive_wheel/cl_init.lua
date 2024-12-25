@@ -10,6 +10,26 @@ function ENT:Initialize()
 	self:DrawShadow( false )
 end
 
+function ENT:DrawModelBroken( self )
+	local base = self:GetBase()
+
+	if not IsValid( base ) then
+		self:DrawModel( flags )
+
+		return
+	end
+
+	local bone = 0
+	local pos, ang = self:GetBonePosition( bone )
+
+	self:SetBonePosition( bone, pos - base:GetUp() * self.RimOffset, ang )
+
+	self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
+	self:DrawModel( flags )
+
+	self:SetBonePosition( bone, pos , ang )
+end
+
 if GravHull then
 	function ENT:Draw( flags )
 		if self:GetHideModel() then return end
@@ -20,6 +40,13 @@ if GravHull then
 else
 	function ENT:Draw( flags )
 		if self:GetHideModel() then return end
+
+		if self:GetNWDamaged() then
+
+			self:DrawModelBroken( self )
+
+			return
+		end
 
 		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 		self:DrawModel( flags )

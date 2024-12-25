@@ -118,12 +118,15 @@ if CLIENT then
 
 		if not IsValid( veh ) then return end
 
+		local Pitch = net.ReadFloat()
+		local Yaw = net.ReadFloat()
+
 		if isfunction( veh.SetTurretPitch ) then
-			veh:SetTurretPitch( net.ReadFloat() )
+			veh:SetTurretPitch( Pitch )
 		end
 
 		if isfunction( veh.SetTurretYaw ) then
-			veh:SetTurretYaw( net.ReadFloat() )
+			veh:SetTurretYaw( Yaw )
 		end
 	end )
 else
