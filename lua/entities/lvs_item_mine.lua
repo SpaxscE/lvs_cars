@@ -42,6 +42,7 @@ if SERVER then
 		self:SetSolid( SOLID_VPHYSICS )
 		self:SetUseType( SIMPLE_USE )
 		self:SetCollisionGroup( COLLISION_GROUP_WEAPON  )
+		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 		self:DrawShadow( false )
 
 		self.First = true
