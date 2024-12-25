@@ -118,8 +118,13 @@ if CLIENT then
 
 		if not IsValid( veh ) then return end
 
-		veh:SetTurretPitch( net.ReadFloat() )
-		veh:SetTurretYaw( net.ReadFloat() )
+		if isfunction( veh.SetTurretPitch ) then
+			veh:SetTurretPitch( net.ReadFloat() )
+		end
+
+		if isfunction( veh.SetTurretYaw ) then
+			veh:SetTurretYaw( net.ReadFloat() )
+		end
 	end )
 else
 	util.AddNetworkString( "lvs_turret_sync_other" )
