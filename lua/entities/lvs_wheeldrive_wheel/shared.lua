@@ -6,8 +6,6 @@ ENT.DoNotDuplicate = true
 
 ENT.RenderGroup = RENDERGROUP_BOTH 
 
-ENT.RimOffset = 4
-
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "Radius")
 	self:NetworkVar( "Float", 1, "Width")

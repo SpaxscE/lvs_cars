@@ -5,7 +5,6 @@ AddCSLuaFile( "cl_skidmarks.lua" )
 include("shared.lua")
 include("sv_axle.lua")
 include("sv_brakes.lua")
-include("sv_damage.lua")
 
 function ENT:GetWheelType()
 	return self._WheelType or LVS.WHEELTYPE_NONE
