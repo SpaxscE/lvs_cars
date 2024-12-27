@@ -51,7 +51,6 @@ function ENT:GetSuspensionStiffness()
 end
 
 function ENT:Initialize()
-	self:SetRenderMode( RENDERMODE_TRANSALPHA )
 	self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 	self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
 end

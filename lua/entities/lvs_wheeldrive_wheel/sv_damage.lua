@@ -6,13 +6,28 @@ function ENT:OnTakeDamage( dmginfo )
 
 	if not IsValid( base ) then return end
 
+	if self:GetWheelChainMode() then
+		base:OnTakeDamage( dmginfo )
+
+		return
+	end
+
+	local MaxHealth = base:GetMaxHP()
+	local MaxArmor = self:GetMaxHP()
+	local Damage = dmginfo:GetDamage()
+
+	local ArmoredHealth = MaxHealth + MaxArmor
+	local NumShotsToKill = ArmoredHealth / Damage
+
+	local ScaleDamage =  math.Clamp( MaxHealth / (NumShotsToKill * Damage),0,1)
+
+	dmginfo:ScaleDamage( ScaleDamage )
+
 	base:OnTakeDamage( dmginfo )
 
-	if self:GetWheelChainMode() or not dmginfo:IsDamageType( self.DSDamageAllowedType ) then return end
+	if not dmginfo:IsDamageType( self.DSDamageAllowedType ) then return end
 
 	if not isnumber( base.WheelPhysicsTireHeight ) or base.WheelPhysicsTireHeight <= 0 then return end
-
-	local Damage = dmginfo:GetDamage()
 
 	local CurHealth = self:GetHP()
 
@@ -46,6 +61,12 @@ function ENT:DestroyTire()
 	PhysObj:SetMaterial( "metal" )
 
 	self:EmitSound("lvs/wheel_pop.ogg")
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin( self:GetPos() )
+	effectdata:SetEntity( base )
+	effectdata:SetNormal( Vector(0,0,1) )
+	util.Effect( "lvs_physics_wheelsmoke", effectdata, true, true )
 
 	if not IsValid( self.SuspensionConstraintElastic ) then return end
 

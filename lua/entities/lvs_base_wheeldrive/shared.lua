@@ -9,7 +9,7 @@ ENT.Category = "[LVS] - Cars"
 ENT.Spawnable			= false
 ENT.AdminSpawnable		= false
 
-ENT.MaxHealth = 400
+ENT.MaxHealth = 600
 ENT.MaxHealthEngine = 50
 ENT.MaxHealthFuelTank = 10
 

@@ -16,7 +16,7 @@ ENT.MDL = "models/diggercars/m5m16/m5m16.mdl"
 
 ENT.AITEAM = 2
 
-ENT.MaxHealth = 500
+ENT.MaxHealth = 650
 ENT.MaxHealthEngine = 400
 ENT.MaxHealthFuelTank = 100
 

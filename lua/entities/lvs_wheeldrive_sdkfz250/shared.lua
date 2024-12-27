@@ -19,7 +19,7 @@ ENT.AITEAM = 1
 
 ENT.DSArmorIgnoreForce = 1000
 
-ENT.MaxHealth = 500
+ENT.MaxHealth = 650
 ENT.MaxHealthEngine = 400
 ENT.MaxHealthFuelTank = 100
 
