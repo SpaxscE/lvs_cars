@@ -26,7 +26,7 @@ ENT.PhysicsInertia = Vector(400,400,200)
 
 ENT.ForceAngleMultiplier = 0.5
 
-ENT.PhysicsDampingSpeed = 250
+ENT.PhysicsDampingSpeed = 500
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = false
 
