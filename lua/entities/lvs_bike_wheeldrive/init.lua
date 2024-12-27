@@ -46,25 +46,25 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 end
 
 function ENT:CalcDismount( data, physobj )
-	--if data.OurNewVelocity:Length2D() > 500 then return end
+	if (data.OurOldVelocity:Length2D() - data.OurNewVelocity:Length2D()) * data.DeltaTime < 300 then return end
 
-	--[[
 	if self._IsDismounted then return end
 
 	self._IsDismounted = true
 
-	--local LocalSpeed = self:WorldToLocal( self:GetPos() + data.OurOldVelocity )
+	local LocalSpeed = self:WorldToLocal( self:GetPos() + data.OurOldVelocity )
 
 	for _, ply in pairs( self:GetEveryone() ) do
 		if ply:GetNoDraw() then continue end
 
 		ply:SetNoDraw( true )
+		ply:SetAbsVelocity( LocalSpeed )
 		ply:CreateRagdoll()
 		ply:SetNWBool( "lvs_camera_follow_ragdoll", true )
 
 		ply:lvsSetInputDisabled( true )
 
-		timer.Simple( 4, function()
+		timer.Simple( 3, function()
 			if not IsValid( ply ) then return end
 
 			ply:SetNoDraw( false )
@@ -86,7 +86,6 @@ function ENT:CalcDismount( data, physobj )
 
 		self._IsDismounted = nil
 	end)
-	]]
 end
 
 function ENT:OnWheelCollision( data, physobj )

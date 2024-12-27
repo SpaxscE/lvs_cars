@@ -118,12 +118,6 @@ function ENT:PhysicsCollide( data, physobj )
 		local Volume = math.min( math.abs( VelDif ) / 300 , 1 )
 
 		self:EmitSound( "lvs/vehicles/generic/suspension_hit_".. math.random(1,17) ..".ogg", 70, 100, Volume ^ 2 )
-
-		local base = self:GetBase()
-
-		if IsValid( base ) then
-			base:OnWheelCollision( data, physobj )
-		end
 	end
 
 	local HitEntity = data.HitEntity
@@ -139,5 +133,11 @@ function ENT:PhysicsCollide( data, physobj )
 
 	if math.abs(data.OurNewVelocity.z - data.OurOldVelocity.z) > 100 then
 		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
+	else
+		local base = self:GetBase()
+
+		if IsValid( base ) then
+			base:OnWheelCollision( data, physobj )
+		end
 	end
 end
