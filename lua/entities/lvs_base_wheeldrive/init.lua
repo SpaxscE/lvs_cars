@@ -151,8 +151,8 @@ function ENT:AlignView( ply )
 	end)
 end
 
-function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime )
-	return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
+	return ForceAngle, vector_origin, simulate
 end
 
 function ENT:PhysicsSimulate( phys, deltatime )
@@ -176,11 +176,11 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		self:SetWheelVelocity( Vel )
 
-		if not self:StabilityAssist() or not self:WheelsOnGround() then return vector_origin, vector_origin, SIM_NOTHING end
+		if not self:StabilityAssist() or not self:WheelsOnGround() then return self:PhysicsSimulateOverride( vector_origin, phys, deltatime, SIM_NOTHING ) end
 
 		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
 
-		return self:PhysicsSimulateOverride( ForceAngle, phys, deltatime )
+		return self:PhysicsSimulateOverride( ForceAngle, phys, deltatime, SIM_GLOBAL_ACCELERATION )
 	end
 
 	return self:SimulateRotatingWheel( ent, phys, deltatime )

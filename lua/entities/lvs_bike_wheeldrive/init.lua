@@ -8,19 +8,26 @@ ENT.ForcedForwardAngle = Angle(0,0,0)
 ENT.LeanAngleIdle = -10
 ENT.LeanAnglePark = -10
 
-function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime )
+function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 	local Steer = self:GetSteer()
 
 	local VelL = self:WorldToLocal( self:GetPos() + phys:GetVelocity() )
 
-	if self:ShouldPutFootDown() then
+	local ShouldIdle = self:ShouldPutFootDown()
+
+	if ShouldIdle then
 		Steer = self:GetEngineActive() and self.LeanAngleIdle or self.LeanAnglePark
-		VelL.x = self.MaxVelocity * 0.5
+		VelL.x = self.MaxVelocity
 	end
 
 	local Mul = (math.max( self:GetUp().z, 0 ) ^ 2) * 50 * (math.max( VelL.x / self.MaxVelocity, 0 ) ^ 2) * self.PhysicsWheelGyroMul
+	local Diff = (Steer - self:GetAngles().r)
 
-	ForceAngle.x = ((Steer - self:GetAngles().r) * 2.5 * self.PhysicsRollMul - phys:GetAngleVelocity().x * self.PhysicsDampingRollMul) * Mul
+	ForceAngle.x = (Diff * 2.5 * self.PhysicsRollMul - phys:GetAngleVelocity().x * self.PhysicsDampingRollMul) * Mul
 
-	return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+	if ShouldIdle and math.abs( Diff ) > 1 then
+		simulate = SIM_GLOBAL_ACCELERATION
+	end
+
+	return ForceAngle, vector_origin, simulate
 end
