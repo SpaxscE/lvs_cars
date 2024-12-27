@@ -1,5 +1,27 @@
 include("shared.lua")
 
+local lerp_to_ragdoll = 0
+local freezeangles = Angle(0,0,0)
+
+function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
+	if ply:GetNWBool( "lvs_camera_follow_ragdoll", false ) then
+		local ragdoll = ply:GetRagdollEntity()
+
+		if IsValid( ragdoll ) then
+			lerp_to_ragdoll = math.min( lerp_to_ragdoll + FrameTime() * 5, 1 )
+
+			local newpos = LerpVector( lerp_to_ragdoll, pos, ragdoll:GetPos() )
+
+			return newpos, freezeangles, fov
+		end
+	end
+
+	lerp_to_ragdoll = 0
+	freezeangles = angles
+
+	return pos, angles, fov
+end
+
 function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
 	local roll = angles.r
 

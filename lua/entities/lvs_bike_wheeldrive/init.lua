@@ -11,6 +11,19 @@ ENT.LeanAnglePark = -10
 local vector_origin = Vector(0,0,0)
 
 function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
+	if self._IsDismounted then
+
+		local Pod = self:GetDriverSeat()
+
+		if IsValid( Pod ) then
+			local Gravity = self:GetWorldUp() * self:GetWorldGravity() * phys:GetMass() * deltatime
+			phys:ApplyForceCenter( Gravity )
+			phys:ApplyForceOffset( -Gravity, Pod:GetPos() )
+		end
+
+		return vector_origin, vector_origin, SIM_NOTHING
+	end
+
 	local Steer = self:GetSteer()
 
 	local VelL = self:WorldToLocal( self:GetPos() + phys:GetVelocity() )
@@ -32,4 +45,51 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 	end
 
 	return ForceAngle, vector_origin, simulate
+end
+
+function ENT:CalcDismount( data, physobj )
+	if self._IsDismounted then return end
+
+	self._IsDismounted = true
+
+	local LocalSpeed = self:WorldToLocal( self:GetPos() + data.OurOldVelocity )
+
+	for _, ply in pairs( self:GetEveryone() ) do
+		if ply:GetNoDraw() then continue end
+
+		ply:SetNoDraw( true )
+		ply:SetAbsVelocity( LocalSpeed )
+		ply:CreateRagdoll()
+		ply:SetNWBool( "lvs_camera_follow_ragdoll", true )
+
+		timer.Simple(2, function()
+			if not IsValid( ply ) then return end
+
+			ply:SetNoDraw( false )
+
+			ply:SetNWBool( "lvs_camera_follow_ragdoll", false)
+
+			local ragdoll = ply:GetRagdollEntity()
+
+			if not IsValid( ragdoll ) then return end
+
+			ragdoll:Remove()
+		end)
+	end
+
+	timer.Simple(2, function()
+		if not IsValid( self ) then return end
+
+		self._IsDismounted = nil
+	end)
+end
+
+function ENT:OnWheelCollision( data, physobj )
+	self:CalcDismount( data, physobj )
+end
+
+function ENT:OnCollision( data, physobj )
+	self:CalcDismount( data, physobj )
+
+	return false
 end

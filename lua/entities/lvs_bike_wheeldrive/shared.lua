@@ -63,7 +63,7 @@ function ENT:CalcMainActivity( ply )
 end
 
 function ENT:GetWheelUp()
-	return self:GetUp() * math.Clamp( math.abs( self:GetSteer() / 20 ), 1, 1.5 )
+	return self:GetUp() * math.Clamp( 1 + math.abs( self:GetSteer() / 10 ), 1, 1.5 )
 end
 
 function ENT:GetVehicleType()

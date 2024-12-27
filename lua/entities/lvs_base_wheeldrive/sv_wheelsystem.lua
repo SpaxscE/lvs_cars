@@ -396,3 +396,6 @@ function ENT:WheelsOnGround()
 
 	return false
 end
+
+function ENT:OnWheelCollision( data, physobj )
+end
