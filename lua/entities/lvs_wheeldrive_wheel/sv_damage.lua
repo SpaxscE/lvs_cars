@@ -10,6 +10,8 @@ function ENT:OnTakeDamage( dmginfo )
 
 	if self:GetWheelChainMode() or not dmginfo:IsDamageType( self.DSDamageAllowedType ) then return end
 
+	if not isnumber( base.WheelPhysicsTireHeight ) or base.WheelPhysicsTireHeight <= 0 then return end
+
 	local Damage = dmginfo:GetDamage()
 
 	local CurHealth = self:GetHP()
@@ -43,13 +45,13 @@ function ENT:DestroyTire()
 
 	PhysObj:SetMaterial( "metal" )
 
+	self:EmitSound("lvs/wheel_pop.ogg")
+
 	if not IsValid( self.SuspensionConstraintElastic ) then return end
 
 	local Length = (self.SuspensionConstraintElastic:GetTable().length or 25) - base.WheelPhysicsTireHeight 
 
 	self.SuspensionConstraintElastic:Fire( "SetSpringLength", math.max( Length - base.WheelPhysicsTireHeight , 1 ) )
-
-	self:EmitSound("lvs/wheel_pop.ogg")
 end
 
 function ENT:RepairTire()

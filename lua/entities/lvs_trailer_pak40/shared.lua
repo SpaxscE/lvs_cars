@@ -17,6 +17,7 @@ ENT.AITEAM = 1
 
 ENT.WheelPhysicsMass = 350
 ENT.WheelPhysicsInertia = Vector(10,8,10)
+ENT.WheelPhysicsTireHeight = 0 -- tire height 0 = doesnt use tires
 
 ENT.CannonArmorPenetration = 14500
 

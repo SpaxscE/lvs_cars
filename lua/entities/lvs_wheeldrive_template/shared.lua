@@ -114,6 +114,7 @@ ENT.TransGears = 4 -- amount of gears in forward direction. NOTE: the engine sou
 
 --ENT.WheelPhysicsMass = 100 -- do not mess with this unless you can balance everything yourself again.
 --ENT.WheelPhysicsInertia = Vector(10,8,10) -- do not mess with this unless you can balance everything yourself again.
+--ENT.WheelPhysicsTireHeight = 4 -- changes the tire height. If tire is blown the wheel sink this amount into the ground. Set to 0 to disable tire damage
 --[[
 -- physics friction lookup table. The default used one is 10, jeeptire
 ENT.WheelPhysicsMaterials = {
