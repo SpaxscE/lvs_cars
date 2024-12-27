@@ -151,6 +151,10 @@ function ENT:AlignView( ply )
 	end)
 end
 
+function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime )
+	return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+end
+
 function ENT:PhysicsSimulate( phys, deltatime )
 
 	if self:GetEngineActive() then phys:Wake() end
@@ -176,7 +180,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
 
-		return ForceAngle, vector_origin, SIM_GLOBAL_ACCELERATION
+		return self:PhysicsSimulateOverride( ForceAngle, phys, deltatime )
 	end
 
 	return self:SimulateRotatingWheel( ent, phys, deltatime )
