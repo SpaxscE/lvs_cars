@@ -157,12 +157,27 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 	local RPM = math.abs( self:GetRPM() )
 
 	if self:GetDamaged() and RPM > 30 then
-		local effectdata = EffectData()
-		effectdata:SetOrigin( self:GetPos() )
-		effectdata:SetNormal( self:GetForward() )
-		util.Effect( "lvs_physics_trackscraping", effectdata, true, true )
+		if self:GetWheelChainMode() then
+			local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetNormal( self:GetForward() )
+			util.Effect( "lvs_physics_trackscraping", effectdata, true, true )
 
-		Base:DoTireSound( "damage_layer" )
+			Base:DoTireSound( "damage_layer" )
+		else
+			local Ang = self:GetForward():Angle() + Angle(10,0,0)
+			Ang:RotateAroundAxis( Base:GetUp(), -90 )
+
+			local effectdata = EffectData()
+			effectdata:SetOrigin( trace.HitPos + trace.HitNormal )
+			effectdata:SetNormal( Ang:Forward() * math.min( self:GetSlip() / 10000, 3 ) * (self:GetRPM() > 0 and 1 or -1) )
+			effectdata:SetMagnitude( 1 )
+			util.Effect( "manhacksparks", effectdata, true, true )
+
+			Base:DoTireSound( "damage_layer" )
+
+			return
+		end
 	end
 
 	if RPM > 50 then

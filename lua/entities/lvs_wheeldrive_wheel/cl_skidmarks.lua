@@ -1,4 +1,6 @@
 
+ENT.SkidmarkMaterialDamaged = Material("sprites/lvs/skidmark_damaged")
+
 ENT.SkidmarkTraceAdd = Vector(0,0,10)
 ENT.SkidmarkDelay = 0.05
 ENT.SkidmarkLifetime = 10
@@ -47,6 +49,7 @@ function ENT:StartSkidmark( pos )
 		active = true,
 		startpos = pos + self.SkidmarkTraceAdd,
 		delay = CurTime() + self.SkidmarkDelay,
+		damaged = self:GetNWDamaged(),
 		positions = {},
 	}
 
@@ -139,6 +142,12 @@ function ENT:RenderSkidMarks()
 		local prev
 		local AmountDrawn = 0
 
+		if skidmark.damaged then
+			render.SetMaterial( self.SkidmarkMaterialDamaged )
+		else
+			render.SetColorMaterial()
+		end
+
 		for markID, data in pairs( skidmark.positions ) do
 			if not prev then
 
@@ -165,8 +174,6 @@ end
 
 hook.Add( "PreDrawTranslucentRenderables", "!!!!lvs_skidmarks", function( bDepth, bSkybox )
 	if bSkybox then return end
-
-	render.SetColorMaterial()
 
 	for _, wheel in ipairs( ents.FindByClass("lvs_wheeldrive_wheel") ) do
 		wheel:RenderSkidMarks()

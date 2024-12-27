@@ -31,8 +31,9 @@ function ENT:SetupDataTables()
 	if SERVER then
 		self:SetMaxHP( 100 )
 		self:SetHP( 100 )
-
 		self:SetWidth( 3 )
+
+		self:NetworkVarNotify( "HP", self.HealthValueChanged )
 	end
 end
 

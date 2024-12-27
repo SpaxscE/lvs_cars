@@ -11,19 +11,48 @@ function ENT:Initialize()
 end
 
 if GravHull then
-	function ENT:Draw( flags )
-		if self:GetHideModel() then return end
+	function ENT:DrawWheel( flags )
+		self:SetAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) ) -- GravHull overwrites SetRenderAngles, but SetAngles works too...
 
-		self:SetAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
 		self:DrawModel( flags )
 	end
 else
-	function ENT:Draw( flags )
-		if self:GetHideModel() then return end
-
+	function ENT:DrawWheel( flags )
 		self:SetRenderAngles( self:LocalToWorldAngles( self:GetAlignmentAngle() ) )
+
 		self:DrawModel( flags )
 	end
+end
+
+function ENT:DrawWheelBroken( flags )
+	local base = self:GetBase()
+
+	if not IsValid( base ) then
+		self:DrawModel( flags )
+
+		return
+	end
+
+	local pos, ang = self:GetBonePosition( 0 )
+
+	self:SetBonePosition( 0, pos - base:GetUp() * base.WheelPhysicsTireHeight, ang )
+
+	self:DrawWheel( flags )
+
+	self:SetBonePosition( 0, pos , ang )
+end
+
+function ENT:Draw( flags )
+	if self:GetHideModel() then return end
+
+	if self:GetNWDamaged() then
+
+		self:DrawWheelBroken( flags )
+
+		return
+	end
+
+	self:DrawWheel( flags )
 end
 
 function ENT:DrawTranslucent()

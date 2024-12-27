@@ -60,6 +60,7 @@ ENT.PhysicsDampingReverse = false
 
 ENT.WheelPhysicsMass = 100
 ENT.WheelPhysicsInertia = Vector(10,8,10)
+ENT.WheelPhysicsTireHeight = 4
 ENT.WheelPhysicsMaterials = {
 	[0] = "friction_00", -- 0
 	[1] = "friction_10", --  0.1

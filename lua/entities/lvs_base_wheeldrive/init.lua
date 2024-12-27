@@ -453,6 +453,12 @@ function ENT:OnMaintenance()
 			self:OnRefueled()
 		end
 	end
+
+	for _, wheel in pairs( self:GetWheels() ) do
+		if not IsValid( wheel ) then continue end
+
+		wheel:SetHP( wheel:GetMaxHP() )
+	end
 end
 
 function ENT:OnSuperCharged( enable )

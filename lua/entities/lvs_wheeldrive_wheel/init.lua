@@ -5,6 +5,7 @@ AddCSLuaFile( "cl_skidmarks.lua" )
 include("shared.lua")
 include("sv_axle.lua")
 include("sv_brakes.lua")
+include("sv_damage.lua")
 
 function ENT:GetWheelType()
 	return self._WheelType or LVS.WHEELTYPE_NONE
@@ -73,14 +74,6 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
-end
-
-function ENT:OnTakeDamage( dmginfo )
-	local base = self:GetBase()
-
-	if not IsValid( base ) then return end
-
-	base:OnTakeDamage( dmginfo )
 end
 
 function ENT:lvsMakeSpherical( radius )
