@@ -42,7 +42,11 @@ if CLIENT then
 		local id = self:GetNameID()
 		local rotation = -self:WorldToLocalAngles( Wheel:GetAngles() ).r
 
+		local zpos = Base:WorldToLocal( Wheel:GetPos() ).z
+
+		if Wheel:GetNWDamaged() then zpos = zpos - Base.WheelPhysicsTireHeight end
+
 		Base:SetPoseParameter("vehicle_wheel_"..id.."_spin",rotation)
-		Base:SetPoseParameter("vehicle_wheel_"..id.."_height",math.Remap( Base:WorldToLocal( Wheel:GetPos() ).z, self:GetPose0(), self:GetPose1(), 0, 1))
+		Base:SetPoseParameter("vehicle_wheel_"..id.."_height",math.Remap( zpos, self:GetPose0(), self:GetPose1(), 0, 1))
 	end
 end

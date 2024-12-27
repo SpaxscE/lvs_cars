@@ -27,7 +27,7 @@ function ENT:TireSoundThink()
 
 			local sound = self:StartTireSound( snd )
 
-			if string.StartsWith( snd, "skid" ) or snd == "tire_destroyed_layer" then
+			if string.StartsWith( snd, "skid" ) or snd == "tire_damage_layer" then
 				local vel = speed
 				speed = math.max( math.abs( self:GetWheelVelocity() ) - vel, 0 ) * 5 + vel
 			end

@@ -2,27 +2,24 @@
 ENT.DSDamageAllowedType = DMG_SLASH + DMG_AIRBOAT + DMG_BULLET + DMG_SNIPER + DMG_BUCKSHOT
 
 function ENT:OnTakeDamage( dmginfo )
-
 	local base = self:GetBase()
 
 	if not IsValid( base ) then return end
 
 	base:OnTakeDamage( dmginfo )
 
-	if self:GetWheelChainMode() then return end
+	if self:GetWheelChainMode() or not dmginfo:IsDamageType( self.DSDamageAllowedType ) then return end
 
-	if dmginfo:IsDamageType( self.DSDamageAllowedType ) then
-		local Damage = dmginfo:GetDamage()
+	local Damage = dmginfo:GetDamage()
 
-		local CurHealth = self:GetHP()
+	local CurHealth = self:GetHP()
 
-		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
+	local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
 
-		self:SetHP( NewHealth )
+	self:SetHP( NewHealth )
 
-		if NewHealth == 0 then
-			self:DestroyTire()
-		end
+	if NewHealth == 0 then
+		self:DestroyTire()
 	end
 end
 
