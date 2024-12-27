@@ -6,6 +6,8 @@ ENT.DoNotDuplicate = true
 
 ENT.RenderGroup = RENDERGROUP_BOTH 
 
+ENT._lvsRepairToolLabel = "Wheel"
+
 function ENT:SetupDataTables()
 	self:NetworkVar( "Float", 0, "Radius")
 	self:NetworkVar( "Float", 1, "Width")
