@@ -476,8 +476,8 @@ function ENT:ApproachTargetAngle( TargetAngle )
 
 	if not IsValid( pod ) then return end
 
-	local ang = self:GetAngles()
-	ang.y = pod:GetAngles().y + 90
+	local ang = pod:GetAngles()
+	ang:RotateAroundAxis( self:GetUp(), 90 )
 
 	local Forward = ang:Right()
 	local View = pod:WorldToLocalAngles( TargetAngle ):Forward()
