@@ -73,6 +73,7 @@ function ENT:Think()
 end
 
 function ENT:OnRemove()
+	self:StopLeakAir()
 end
 
 function ENT:lvsMakeSpherical( radius )

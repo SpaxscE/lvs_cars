@@ -14,14 +14,10 @@ if SERVER then
 		self:SetTrackDriveWheelRight( R1 )
 
 		local LeftTracksArmor = self:AddArmor( Vector(-55,30,20), Angle(0,0,0), Vector(-50,-10,-25), Vector(50,10,15), 200, 1000 )
-		LeftTracksArmor.OnDestroyed = LeftWheelChain.OnDestroyed
-		LeftTracksArmor.OnRepaired = LeftWheelChain.OnRepaired
-		LeftTracksArmor:SetLabel( "Tracks" )
+		self:SetTrackArmorLeft( LeftTracksArmor, LeftWheelChain )
 
 		local RightTracksArmor = self:AddArmor( Vector(-55,-30,20), Angle(0,0,0), Vector(-50,-10,-25), Vector(50,10,15), 200, 1000 )
-		RightTracksArmor.OnDestroyed = RightWheelChain.OnDestroyed
-		RightTracksArmor.OnRepaired = RightWheelChain.OnRepaired
-		RightTracksArmor:SetLabel( "Tracks" )
+		self:SetTrackArmorRight( RightTracksArmor, RightWheelChain )
 
 		self:DefineAxle( {
 			Axle = {

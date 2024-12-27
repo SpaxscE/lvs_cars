@@ -1,5 +1,21 @@
 
 if SERVER then
+	function ENT:OnLeftTrackRepaired()
+		self:SetBodygroup(1,0)
+	end
+
+	function ENT:OnLeftTrackDestroyed()
+		self:SetBodygroup(1,1)
+	end
+
+	function ENT:OnRightTrackRepaired()
+		self:SetBodygroup(2,0)
+	end
+
+	function ENT:OnRightTrackDestroyed()
+		self:SetBodygroup(2,1)
+	end
+
 	function ENT:TracksCreate( PObj )
 		local WheelModel = "models/diggercars/sdkfz250/250_wheel.mdl"
 
@@ -16,14 +32,10 @@ if SERVER then
 		self:SetTrackDriveWheelRight( R1 )
 
 		local LeftTracksArmor = self:AddArmor( Vector(-25,30,20), Angle(0,0,0), Vector(-50,-10,-15), Vector(50,10,15), 200, 0 )
-		LeftTracksArmor.OnDestroyed = LeftWheelChain.OnDestroyed
-		LeftTracksArmor.OnRepaired = LeftWheelChain.OnRepaired
-		LeftTracksArmor:SetLabel( "Tracks" )
+		self:SetTrackArmorLeft( LeftTracksArmor, LeftWheelChain )
 
 		local RightTracksArmor = self:AddArmor( Vector(-25,-30,20), Angle(0,0,0), Vector(-50,-10,-15), Vector(50,10,15), 200, 0 )
-		RightTracksArmor.OnDestroyed = RightWheelChain.OnDestroyed
-		RightTracksArmor.OnRepaired = RightWheelChain.OnRepaired
-		RightTracksArmor:SetLabel( "Tracks" )
+		self:SetTrackArmorRight( RightTracksArmor, RightWheelChain )
 
 		self:DefineAxle( {
 			Axle = {

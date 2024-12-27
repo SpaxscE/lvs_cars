@@ -214,7 +214,11 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 				return
 			end
 		end
-	
+
+		if snd_type == "roll" and not self:GetWheelChainMode() and self:GetHP() ~= self:GetMaxHP() then
+			surface = "_damaged"
+		end
+
 		Base:DoTireSound( snd_type..surface )
 	end
 end

@@ -1,5 +1,5 @@
 
-ENT.DSDamageAllowedType = DMG_SLASH + DMG_AIRBOAT + DMG_BULLET + DMG_SNIPER + DMG_BUCKSHOT
+ENT.DSDamageAllowedType = DMG_SLASH + DMG_AIRBOAT + DMG_BULLET + DMG_SNIPER + DMG_BUCKSHOT + DMG_PREVENT_PHYSICS_FORCE
 
 function ENT:OnTakeDamage( dmginfo )
 	local base = self:GetBase()
@@ -12,18 +12,21 @@ function ENT:OnTakeDamage( dmginfo )
 		return
 	end
 
-	local MaxHealth = base:GetMaxHP()
 	local MaxArmor = self:GetMaxHP()
 	local Damage = dmginfo:GetDamage()
 
-	local ArmoredHealth = MaxHealth + MaxArmor
-	local NumShotsToKill = ArmoredHealth / Damage
+	if not dmginfo:IsDamageType( DMG_PREVENT_PHYSICS_FORCE ) then
+		local MaxHealth = base:GetMaxHP()
 
-	local ScaleDamage =  math.Clamp( MaxHealth / (NumShotsToKill * Damage),0,1)
+		local ArmoredHealth = MaxHealth + MaxArmor
+		local NumShotsToKill = ArmoredHealth / Damage
 
-	dmginfo:ScaleDamage( ScaleDamage )
+		local ScaleDamage =  math.Clamp( MaxHealth / (NumShotsToKill * Damage),0,1)
 
-	base:OnTakeDamage( dmginfo )
+		dmginfo:ScaleDamage( ScaleDamage )
+
+		base:OnTakeDamage( dmginfo )
+	end
 
 	if not dmginfo:IsDamageType( self.DSDamageAllowedType ) then return end
 
@@ -31,13 +34,46 @@ function ENT:OnTakeDamage( dmginfo )
 
 	local CurHealth = self:GetHP()
 
-	local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
+	local NewHealth = math.Clamp( CurHealth - Damage, 0, MaxArmor )
 
 	self:SetHP( NewHealth )
 
-	if NewHealth == 0 then
-		self:DestroyTire()
+	if NewHealth > 0 then
+		self:StartLeakAir()
+
+		return
 	end
+
+	self:DestroyTire()
+end
+
+function ENT:StartLeakAir()
+	if self._IsLeakingAir then return end
+
+	self._IsLeakingAir = true
+
+	local ID = "lvsLeakAir"..self:EntIndex()
+
+	timer.Create( ID, 0.2, 0, function()
+		if not IsValid( self ) then timer.Remove( ID ) return end
+
+		local dmg = DamageInfo()
+		dmg:SetDamage( 1 )
+		dmg:SetAttacker( self )
+		dmg:SetInflictor( self )
+		dmg:SetDamageType( DMG_PREVENT_PHYSICS_FORCE )
+		self:TakeDamageInfo( dmg )
+	end)
+end
+
+function ENT:StopLeakAir()
+	if not self._IsLeakingAir then return end
+
+	local ID = "lvsLeakAir"..self:EntIndex()
+
+	timer.Remove( ID )
+
+	self._IsLeakingAir = nil
 end
 
 function ENT:HealthValueChanged( name, old, new)
@@ -51,6 +87,8 @@ function ENT:DestroyTire()
 
 	self:SetNWDamaged( true )
 
+	self:StopLeakAir()
+
 	local base = self:GetBase()
 	local PhysObj = self:GetPhysicsObject()
 
@@ -60,7 +98,7 @@ function ENT:DestroyTire()
 
 	PhysObj:SetMaterial( "metal" )
 
-	self:EmitSound("lvs/wheel_pop.ogg")
+	self:EmitSound("lvs/wheel_pop"..math.random(1,4)..".ogg")
 
 	local effectdata = EffectData()
 	effectdata:SetOrigin( self:GetPos() )
@@ -76,6 +114,8 @@ function ENT:DestroyTire()
 end
 
 function ENT:RepairTire()
+	self:StopLeakAir()
+
 	if not self._OldTirePhysProp then return end
 
 	self:SetNWDamaged( false )
@@ -93,6 +133,10 @@ function ENT:RepairTire()
 	:: FinishRepairTire ::
 
 	self._OldTirePhysProp = nil
+end
+
+function ENT:IsTireDestroyed()
+	return isstring( self._OldTirePhysProp )
 end
 
 function ENT:SetDamaged( new )
