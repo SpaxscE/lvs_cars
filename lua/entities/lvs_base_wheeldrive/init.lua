@@ -151,6 +151,8 @@ function ENT:AlignView( ply )
 	end)
 end
 
+local vector_origin = Vector(0,0,0)
+
 function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 	return ForceAngle, vector_origin, simulate
 end

@@ -8,6 +8,8 @@ ENT.ForcedForwardAngle = Angle(0,0,0)
 ENT.LeanAngleIdle = -10
 ENT.LeanAnglePark = -10
 
+local vector_origin = Vector(0,0,0)
+
 function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 	local Steer = self:GetSteer()
 
