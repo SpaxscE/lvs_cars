@@ -25,6 +25,7 @@ ENT.PhysicsWeightScale = 0.5
 ENT.PhysicsInertia = Vector(400,400,200)
 
 ENT.ForceAngleMultiplier = 0.5
+
 ENT.PhysicsDampingSpeed = 250
 ENT.PhysicsDampingForward = true
 ENT.PhysicsDampingReverse = false
@@ -38,6 +39,10 @@ ENT.WheelPhysicsInertia = Vector(5,4,5)
 
 ENT.WheelSideForce = 800
 ENT.WheelDownForce = 1000
+
+function ENT:ShouldPutFootDown()
+	return self:GetNWHandBrake() or self:GetVelocity():Length() < 20
+end
 
 function ENT:CalcMainActivity( ply )
 	if ply ~= self:GetDriver() then return self:CalcMainActivityPassenger( ply ) end
@@ -64,4 +69,3 @@ end
 function ENT:GetVehicleType()
 	return "bike"
 end
-
