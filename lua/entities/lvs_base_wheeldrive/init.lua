@@ -176,7 +176,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 		self:SetWheelVelocity( Vel )
 
-		if not self:StabilityAssist() or not self:WheelsOnGround() then return self:PhysicsSimulateOverride( vector_origin, phys, deltatime, SIM_NOTHING ) end
+		if not self:StabilityAssist() or not self:WheelsOnGround() then return self:PhysicsSimulateOverride( Vector(0,0,0), phys, deltatime, SIM_NOTHING ) end
 
 		local ForceAngle = Vector(0,0, math.deg( -phys:GetAngleVelocity().z ) * math.min( phys:GetVelocity():Length() / self.PhysicsDampingSpeed, 1 ) * self.ForceAngleMultiplier )
 
