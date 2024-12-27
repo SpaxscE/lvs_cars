@@ -333,6 +333,10 @@ function ENT:BodygroupIsValid( name, groups )
 	return false
 end
 
+function ENT:GetWheelUp()
+	return self:GetUp()
+end
+
 function ENT:GetVehicleType()
 	return "car"
 end

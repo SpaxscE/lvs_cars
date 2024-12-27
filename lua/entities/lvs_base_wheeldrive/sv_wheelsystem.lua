@@ -174,7 +174,12 @@ function ENT:DefineAxle( data )
 	self._WheelAxleID = self._WheelAxleID + 1
 
 	-- defaults
-	data.Axle.ForwardAngle = data.Axle.ForwardAngle or Angle(0,0,0)
+	if self.ForcedForwardAngle then
+		data.Axle.ForwardAngle = self.ForcedForwardAngle
+	else
+		data.Axle.ForwardAngle = data.Axle.ForwardAngle or Angle(0,0,0)
+	end
+
 	data.Axle.SteerType = data.Axle.SteerType or LVS.WHEEL_STEER_NONE
 	data.Axle.SteerAngle = data.Axle.SteerAngle or 20
 	data.Axle.TorqueFactor = data.Axle.TorqueFactor or 1

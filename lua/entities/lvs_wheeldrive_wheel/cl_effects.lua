@@ -104,7 +104,7 @@ function ENT:CalcWheelEffects()
 
 	self._NextFx = T + (Base:GetAI() and 0.1 or 0.05)
 
-	local Radius = Base:GetUp() * (self:GetRadius() + 1)
+	local Radius = Base:GetWheelUp() * (self:GetRadius() + 1)
 
 	local Vel = self:GetVelocity()
 	local Pos =  self:GetPos() + Vel * 0.025
