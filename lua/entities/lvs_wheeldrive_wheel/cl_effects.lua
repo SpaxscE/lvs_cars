@@ -163,7 +163,7 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 			effectdata:SetNormal( self:GetForward() )
 			util.Effect( "lvs_physics_trackscraping", effectdata, true, true )
 
-			Base:DoTireSound( "damage_layer" )
+			Base:DoTireSound( "tracks_damage_layer" )
 		else
 			local Ang = self:GetForward():Angle() + Angle(10,0,0)
 			Ang:RotateAroundAxis( Base:GetUp(), -90 )
@@ -174,7 +174,7 @@ function ENT:CalcWheelSounds( Base, trace, traceWater )
 			effectdata:SetMagnitude( 1 )
 			util.Effect( "manhacksparks", effectdata, true, true )
 
-			Base:DoTireSound( "damage_layer" )
+			Base:DoTireSound( "tire_damage_layer" )
 
 			return
 		end

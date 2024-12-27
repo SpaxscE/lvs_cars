@@ -105,7 +105,8 @@ ENT.TireSoundTypes = {
 	["skid"] = "common/null.wav",
 	["skid_dirt"] = "lvs/vehicles/generic/wheel_skid_dirt.wav",
 	["skid_wet"] = "common/null.wav",
-	["damage_layer"] = "lvs/tracks_damaged_loop.wav",
+	["tracks_damage_layer"] = "lvs/tracks_damaged_loop.wav",
+	["tire_damage_layer"] = "lvs/wheel_destroyed_loop.wav",
 }
 
 function ENT:TireSoundThink()
@@ -117,7 +118,7 @@ function ENT:TireSoundThink()
 
 			local sound = self:StartTireSound( snd )
 
-			if string.StartsWith( snd, "skid" ) then
+			if string.StartsWith( snd, "skid" ) or snd == "tire_destroyed_layer" then
 				local vel = speed
 				speed = math.max( math.abs( self:GetWheelVelocity() ) - vel, 0 ) * 5 + vel
 			end
@@ -125,7 +126,7 @@ function ENT:TireSoundThink()
 			local volume = math.min(speed / math.max( self.MaxVelocity, self.MaxVelocityReverse ),1) ^ 2 * T
 			local pitch = 100 + math.Clamp((speed - 400) / 200,0,155)
 
-			if snd == "damage_layer" then
+			if snd == "tracks_damage_layer" then
 				volume = math.min( speed / 100, 1 ) * T
 			end
 
