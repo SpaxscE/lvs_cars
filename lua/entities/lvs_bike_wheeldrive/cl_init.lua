@@ -16,7 +16,7 @@ function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
 		if IsValid( ragdoll ) then
 			lerp_to_ragdoll = math.min( lerp_to_ragdoll + FrameTime(), 1 )
 
-			local eyeang = ply:EyeAngles()
+			local eyeang = ply:EyeAngles() - Angle(0,90,0)
 
 			local newpos = LerpVector( lerp_to_ragdoll, pos, ragdoll:GetPos() )
 			local newang = LerpAngle( lerp_to_ragdoll, freezeangles, freezeangles + eyeang )
