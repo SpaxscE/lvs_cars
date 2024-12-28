@@ -147,10 +147,3 @@ function ENT:ToggleEngine()
 		end
 	end
 end
-
-function ENT:OnDriverEnterVehicle( ply )
-	ply:SetCollisionGroup( COLLISION_GROUP_PLAYER )
-end
-
-function ENT:OnDriverExitVehicle( ply )
-end
