@@ -58,13 +58,46 @@ function ENT:GetPlayerBoneManipulation( ply, PodID )
 
 	local CurValue = ply._smlvsBikerFoot ^ 2
 
-	local Pose = table.Copy( self.PlayerBoneManipulate[ PodID ] )
+	local Pose = table.Copy( self.PlayerBoneManipulate[ PodID ] or {} )
 
-	for bone, EndAngle in pairs( self.DriverBoneManipulate ) do
+	local BoneManip = self:GetEngineActive() and self.DriverBoneManipulateIdle or self.DriverBoneManipulateParked
+
+	for bone, EndAngle in pairs( BoneManip or {} ) do
 		local StartAngle = Pose[ bone ] or angle_zero
 
 		Pose[ bone ] = LerpAngle( CurValue, StartAngle, EndAngle )
 	end
 
+	if self.DriverBoneManipulateKickStart and ply._KickStartValue then
+		ply._KickStartValue = math.max( ply._KickStartValue - Rate, 0 )
+
+		local Start = self.DriverBoneManipulateKickStart.Start
+		local End = self.DriverBoneManipulateKickStart.End
+
+		for bone, EndAngle in pairs( End ) do
+			local StartAngle = Start[ bone ] or angle_zero
+
+			Pose[ bone ] = LerpAngle( ply._KickStartValue, StartAngle, EndAngle )
+		end
+
+		if ply._KickStartValue == 0 then ply._KickStartValue = nil end
+	end
+
 	return Pose or {}
 end
+
+function ENT:GetKickStarter()
+	local Driver = self:GetDriver()
+
+	if not IsValid( Driver ) then return 0 end
+
+	return math.sin( (Driver._KickStartValue or 0) * math.pi ) ^ 2
+end
+
+net.Receive( "lvs_kickstart_network" , function( len )
+	local ply = net.ReadEntity()
+
+	if not IsValid( ply ) then return end
+
+	ply._KickStartValue = 1
+end )

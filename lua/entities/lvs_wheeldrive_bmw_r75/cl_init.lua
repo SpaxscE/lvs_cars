@@ -2,6 +2,7 @@ include("shared.lua")
 
 function ENT:UpdatePoseParameters( steer )
 	self:SetPoseParameter( "vehicle_steer", steer )
+	self:SetPoseParameter( "kickstart", self:GetKickStarter() )
 end
 
 function ENT:OnEngineActiveChanged( Active )

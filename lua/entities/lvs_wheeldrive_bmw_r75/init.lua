@@ -2,6 +2,9 @@ AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
 
+ENT.LeanAngleIdle = -10
+ENT.LeanAnglePark = 10
+
 function ENT:OnSpawn( PObj )
 	self:AddDriverSeat( Vector(-10,0,23), Angle(0,-90,0) )
 	self:AddPassengerSeat( Vector(-25,0,24), Angle(0,-90,-5) )

@@ -39,10 +39,29 @@ ENT.KickStarterMinAttempts = 2
 ENT.KickStarterMaxAttempts = 4
 ENT.KickStarterAttemptsInSeconds = 5
 
-ENT.DriverBoneManipulate = {
+ENT.DriverBoneManipulateIdle = {
 	["ValveBiped.Bip01_L_Thigh"] = Angle(-25,45,0),
 	["ValveBiped.Bip01_L_Calf"] = Angle(0,-30,0),
 	["ValveBiped.Bip01_L_Foot"] = Angle(0,0,0),
+}
+
+ENT.DriverBoneManipulateParked = {
+	["ValveBiped.Bip01_R_Thigh"] = Angle(25,45,0),
+	["ValveBiped.Bip01_R_Calf"] = Angle(0,-30,0),
+	["ValveBiped.Bip01_R_Foot"] = Angle(0,0,0),
+}
+
+ENT.DriverBoneManipulateKickStart = {
+	Start = {
+		["ValveBiped.Bip01_L_Thigh"] = Angle(-20,60,25),
+		["ValveBiped.Bip01_L_Calf"] = Angle(0,0,0),
+		["ValveBiped.Bip01_L_Foot"] = Angle(0,-10,0),
+	},
+	End = {
+		["ValveBiped.Bip01_L_Thigh"] = Angle(-20,-10,25),
+		["ValveBiped.Bip01_L_Calf"] = Angle(0,70,0),
+		["ValveBiped.Bip01_L_Foot"] = Angle(0,-10,0),
+	},
 }
 
 ENT.PlayerBoneManipulate = {

@@ -52,6 +52,10 @@ function ENT:CalcDismount( data, physobj )
 
 	self._IsDismounted = true
 
+	if self:GetEngineActive() then
+		self:StopEngine()
+	end
+
 	local LocalSpeed = self:WorldToLocal( self:GetPos() + data.OurOldVelocity )
 
 	for _, ply in pairs( self:GetEveryone() ) do
@@ -106,6 +110,8 @@ function ENT:OnWheelCollision( data, physobj )
 	self:CalcDismount( data, physobj )
 end
 
+util.AddNetworkString( "lvs_kickstart_network" )
+
 function ENT:ToggleEngine()
 	if self:GetEngineActive() then
 		self:StopEngine()
@@ -121,6 +127,10 @@ function ENT:ToggleEngine()
 				self._KickStartAttemt = 0
 				self.KickStarterStart = T
 			end
+
+			net.Start( "lvs_kickstart_network" )
+				net.WriteEntity( self:GetDriver() )
+			net.Broadcast()
 
 			self._KickStartAttemt = self._KickStartAttemt + 1
 
