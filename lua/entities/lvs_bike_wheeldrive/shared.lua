@@ -45,6 +45,7 @@ ENT.KickStarterSound = "lvs/vehicles/bmw_r75/moped_crank.wav"
 ENT.KickStarterMinAttempts = 2
 ENT.KickStarterMaxAttempts = 4
 ENT.KickStarterAttemptsInSeconds = 5
+ENT.KickStarterMinDelay = 0.5
 
 ENT.FastSteerAngleClamp = 15
 

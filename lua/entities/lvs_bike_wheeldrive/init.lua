@@ -119,9 +119,11 @@ function ENT:ToggleEngine()
 		self._KickStartAttemt = 0
 	else
 		if self.KickStarter and not self:GetAI() then
-			self:EmitSound( self.KickStarterSound, 70, 100, 0.5 )
-
 			local T = CurTime()
+
+			if (self._KickStartTime or 0) > T then return end
+
+			self:EmitSound( self.KickStarterSound, 70, 100, 0.5 )
 
 			if not self._KickStartAttemt or ((T - (self.KickStarterStart or 0)) > (self.KickStarterAttemptsInSeconds or 0)) then
 				self._KickStartAttemt = 0
@@ -133,6 +135,7 @@ function ENT:ToggleEngine()
 			net.Broadcast()
 
 			self._KickStartAttemt = self._KickStartAttemt + 1
+			self._KickStartTime = T + self.KickStarterMinDelay
 
 			if self._KickStartAttemt >= math.random( self.KickStarterMinAttempts, self.KickStarterMaxAttempts ) then
 				self._KickStartAttemt = nil
