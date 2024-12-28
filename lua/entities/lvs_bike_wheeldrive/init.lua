@@ -15,8 +15,8 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 
 		if IsValid( Pod ) then
 			local Gravity = self:GetWorldUp() * self:GetWorldGravity() * phys:GetMass() * deltatime
-			phys:ApplyForceCenter( Gravity )
-			phys:ApplyForceOffset( -Gravity, Pod:GetPos() )
+			phys:ApplyForceCenter( Gravity * 1.5 )
+			phys:ApplyForceOffset( -Gravity * 3, Pod:GetPos() )
 		end
 
 		return vector_origin, vector_origin, SIM_NOTHING
@@ -84,21 +84,26 @@ function ENT:CalcDismount( data, physobj )
 end
 
 function ENT:OnWheelCollision( data, physobj )
-	if data.OurOldVelocity:Length() < 200 then return end
+	local Speed = math.abs(data.OurOldVelocity:Length() - data.OurNewVelocity:Length())
+
+	if Speed < 200 then return end
 
 	local ent = physobj:GetEntity()
 
 	local pos, ang = WorldToLocal( data.HitPos, angle_zero, ent:GetPos(), ent:GetDirectionAngle() )
+	local radius = ent:GetRadius() - 2
 
-	if pos.z < -1 then return end
+	if Speed > 300 then
+		if math.abs( pos.y ) > radius and self:GetUp().z < 0.5 then
+			self:CalcDismount( data, physobj )
+		end
+	end
+
+	if math.abs( pos.x ) < radius or pos.z < -1 then return end
 
 	self:CalcDismount( data, physobj )
 end
 
 function ENT:OnCollision( data, physobj )
-	if data.Speed < 400 or data.DeltaTime < 0.2 then return false end
-
-	self:CalcDismount( data, physobj )
-
 	return false
 end
