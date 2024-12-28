@@ -46,6 +46,8 @@ ENT.KickStarterMinAttempts = 2
 ENT.KickStarterMaxAttempts = 4
 ENT.KickStarterAttemptsInSeconds = 5
 
+ENT.FastSteerAngleClamp = 15
+
 function ENT:ShouldPutFootDown()
 	return self:GetNWHandBrake() or self:GetVelocity():Length() < 20
 end
