@@ -69,3 +69,7 @@ end
 function ENT:GetVehicleType()
 	return "bike"
 end
+
+function ENT:GravGunPickupAllowed( ply )
+	return false
+end

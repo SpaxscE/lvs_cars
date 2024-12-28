@@ -46,8 +46,6 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 end
 
 function ENT:CalcDismount( data, physobj )
-	if (data.OurOldVelocity:Length2D() - data.OurNewVelocity:Length2D()) * data.DeltaTime < 200 then return end
-
 	if self._IsDismounted then return end
 
 	self._IsDismounted = true
@@ -63,11 +61,10 @@ function ENT:CalcDismount( data, physobj )
 		ply:SetNWBool( "lvs_camera_follow_ragdoll", true )
 		ply:lvsSetInputDisabled( true )
 
-		timer.Simple( 3, function()
+		timer.Simple( math.Rand(3.5,4.5), function()
 			if not IsValid( ply ) then return end
 
 			ply:SetNoDraw( false )
-			ply:SetAbsVelocity( vector_origin )
 			ply:SetNWBool( "lvs_camera_follow_ragdoll", false)
 			ply:lvsSetInputDisabled( false )
 
@@ -79,7 +76,7 @@ function ENT:CalcDismount( data, physobj )
 		end)
 	end
 
-	timer.Simple(2, function()
+	timer.Simple(3, function()
 		if not IsValid( self ) then return end
 
 		self._IsDismounted = nil
@@ -87,10 +84,20 @@ function ENT:CalcDismount( data, physobj )
 end
 
 function ENT:OnWheelCollision( data, physobj )
+	if data.Speed < 200 or data.DeltaTime < 0.2 then return end
+
+	local ent = physobj:GetEntity()
+
+	local pos, ang = WorldToLocal( data.HitPos, angle_zero, ent:GetPos(), ent:GetDirectionAngle() )
+
+	if pos.z < -1 then return end
+
 	self:CalcDismount( data, physobj )
 end
 
 function ENT:OnCollision( data, physobj )
+	if data.Speed < 400 or data.DeltaTime < 0.2 then return false end
+
 	self:CalcDismount( data, physobj )
 
 	return false

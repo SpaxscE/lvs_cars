@@ -51,8 +51,11 @@ function ENT:GetSuspensionStiffness()
 end
 
 function ENT:Initialize()
-	self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 	self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
+end
+
+function ENT:GravGunPickupAllowed( ply )
+	return false
 end
 
 function ENT:StartThink()
