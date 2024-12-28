@@ -8,7 +8,7 @@ function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
 		local ragdoll = ply:GetRagdollEntity()
 
 		if IsValid( ragdoll ) then
-			lerp_to_ragdoll = math.min( lerp_to_ragdoll + FrameTime() * 5, 1 )
+			lerp_to_ragdoll = math.min( lerp_to_ragdoll + FrameTime(), 1 )
 
 			local newpos = LerpVector( lerp_to_ragdoll, pos, ragdoll:GetPos() )
 

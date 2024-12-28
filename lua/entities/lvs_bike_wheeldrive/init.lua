@@ -46,7 +46,7 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 end
 
 function ENT:CalcDismount( data, physobj )
-	if (data.OurOldVelocity:Length2D() - data.OurNewVelocity:Length2D()) * data.DeltaTime < 300 then return end
+	if (data.OurOldVelocity:Length2D() - data.OurNewVelocity:Length2D()) * data.DeltaTime < 200 then return end
 
 	if self._IsDismounted then return end
 
@@ -61,16 +61,14 @@ function ENT:CalcDismount( data, physobj )
 		ply:SetAbsVelocity( LocalSpeed )
 		ply:CreateRagdoll()
 		ply:SetNWBool( "lvs_camera_follow_ragdoll", true )
-
 		ply:lvsSetInputDisabled( true )
 
 		timer.Simple( 3, function()
 			if not IsValid( ply ) then return end
 
 			ply:SetNoDraw( false )
-
+			ply:SetAbsVelocity( vector_origin )
 			ply:SetNWBool( "lvs_camera_follow_ragdoll", false)
-
 			ply:lvsSetInputDisabled( false )
 
 			local ragdoll = ply:GetRagdollEntity()

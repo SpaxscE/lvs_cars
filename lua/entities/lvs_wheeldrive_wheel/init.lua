@@ -133,11 +133,11 @@ function ENT:PhysicsCollide( data, physobj )
 
 	if math.abs(data.OurNewVelocity.z - data.OurOldVelocity.z) > 100 then
 		physobj:SetVelocityInstantaneous( data.OurOldVelocity )
-	else
-		local base = self:GetBase()
+	end
 
-		if IsValid( base ) then
-			base:OnWheelCollision( data, physobj )
-		end
+	local base = self:GetBase()
+
+	if IsValid( base ) then
+		base:OnWheelCollision( data, physobj )
 	end
 end
