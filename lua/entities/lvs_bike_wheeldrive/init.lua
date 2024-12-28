@@ -5,6 +5,8 @@ include("shared.lua")
 -- code relies on this forward angle...
 ENT.ForcedForwardAngle = Angle(0,0,0)
 
+ENT.TippingForceMul = 1
+
 ENT.LeanAngleIdle = -10
 ENT.LeanAnglePark = -10
 
@@ -15,8 +17,8 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 
 		if IsValid( Pod ) then
 			local Gravity = self:GetWorldUp() * self:GetWorldGravity() * phys:GetMass() * deltatime
-			phys:ApplyForceCenter( Gravity * 1.5 )
-			phys:ApplyForceOffset( -Gravity * 3, Pod:GetPos() )
+			phys:ApplyForceCenter( Gravity * 1.5 * self.TippingForceMul )
+			phys:ApplyForceOffset( -Gravity * 3 * self.TippingForceMul, Pod:GetPos() )
 		end
 
 		return vector_origin, vector_origin, SIM_NOTHING
