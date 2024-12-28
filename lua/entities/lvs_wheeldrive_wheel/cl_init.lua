@@ -27,7 +27,7 @@ end
 function ENT:DrawWheelBroken( flags )
 	local base = self:GetBase()
 
-	if not IsValid( base ) then
+	if not IsValid( base ) or not LVS.MapDoneLoading then
 		self:DrawModel( flags )
 
 		return
