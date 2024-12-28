@@ -84,7 +84,7 @@ function ENT:CalcDismount( data, physobj )
 end
 
 function ENT:OnWheelCollision( data, physobj )
-	if data.Speed < 200 or data.DeltaTime < 0.2 then return end
+	if data.OurOldVelocity:Length() < 200 then return end
 
 	local ent = physobj:GetEntity()
 
