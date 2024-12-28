@@ -27,8 +27,19 @@ function ENT:CalcViewPassenger( ply, pos, angles, fov, pod )
 	return LVS:CalcView( self, ply, pos, angles, fov, pod )
 end
 
+function ENT:CalcViewSpeed( ply, pos, angles, pod )
+	self._viewpunch_fov = self._viewpunch_fov and self._viewpunch_fov or 0
+
+	pos = pos + pod:GetRight() * self._viewpunch_fov / 5
+	angles = angles + -Angle( 1, 0, 0) * self._viewpunch_fov / 5
+
+	return pos, angles
+end
+
 function ENT:LVSCalcView( ply, original_pos, original_angles, original_fov, pod )
 	local pos, angles, fov = self:CalcViewOverride( ply, original_pos, original_angles, original_fov, pod )
+
+	pos, angles = self:CalcViewSpeed( ply, pos, angles, pod )
 
 	local new_fov = math.min( fov + self:CalcViewPunch( ply, pos, angles, fov, pod ), 180 )
 
@@ -58,7 +69,7 @@ function ENT:CalcViewPunch( ply, pos, angles, fov, pod )
 
 	local direction = (90 - self:AngleBetweenNormal( angles:Forward(), Vel:GetNormalized() )) / 90
 
-	local FovValue = math.min( VelPercentMaxSpeed ^ 2 * 100, 15 )
+	local FovValue = math.min( VelPercentMaxSpeed ^ 2 * 50, 15 )
 
 	local Throttle = self:GetThrottle()
 	local Brake = self:GetBrake()
