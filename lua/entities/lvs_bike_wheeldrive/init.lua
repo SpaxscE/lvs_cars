@@ -106,6 +106,31 @@ function ENT:OnWheelCollision( data, physobj )
 	self:CalcDismount( data, physobj )
 end
 
-function ENT:OnCollision( data, physobj )
-	return false
+function ENT:ToggleEngine()
+	if self:GetEngineActive() then
+		self:StopEngine()
+
+		self._KickStartAttemt = 0
+	else
+		if self.KickStarter and not self:GetAI() then
+			self:EmitSound( self.KickStarterSound, 70, 100, 0.5 )
+
+			local T = CurTime()
+
+			if not self._KickStartAttemt or ((T - (self.KickStarterStart or 0)) > (self.KickStarterAttemptsInSeconds or 0)) then
+				self._KickStartAttemt = 0
+				self.KickStarterStart = T
+			end
+
+			self._KickStartAttemt = self._KickStartAttemt + 1
+
+			if self._KickStartAttemt >= math.random( self.KickStarterMinAttempts, self.KickStarterMaxAttempts ) then
+				self._KickStartAttemt = nil
+
+				self:StartEngine()
+			end
+		else
+			self:StartEngine()
+		end
+	end
 end

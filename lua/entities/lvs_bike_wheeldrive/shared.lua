@@ -40,6 +40,12 @@ ENT.WheelPhysicsInertia = Vector(5,4,5)
 ENT.WheelSideForce = 800
 ENT.WheelDownForce = 1000
 
+ENT.KickStarter = true
+ENT.KickStarterSound = "lvs/vehicles/bmw_r75/moped_crank.wav"
+ENT.KickStarterMinAttempts = 2
+ENT.KickStarterMaxAttempts = 4
+ENT.KickStarterAttemptsInSeconds = 5
+
 function ENT:ShouldPutFootDown()
 	return self:GetNWHandBrake() or self:GetVelocity():Length() < 20
 end

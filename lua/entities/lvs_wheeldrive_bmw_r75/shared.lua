@@ -33,6 +33,12 @@ ENT.PhysicsWheelGyroMul = 1
 
 ENT.lvsShowInSpawner = true
 
+ENT.KickStarter = true
+ENT.KickStarterSound = "lvs/vehicles/bmw_r75/moped_crank.wav"
+ENT.KickStarterMinAttempts = 2
+ENT.KickStarterMaxAttempts = 4
+ENT.KickStarterAttemptsInSeconds = 5
+
 ENT.DriverBoneManipulate = {
 	["ValveBiped.Bip01_L_Thigh"] = Angle(-25,45,0),
 	["ValveBiped.Bip01_L_Calf"] = Angle(0,-30,0),
