@@ -61,6 +61,17 @@ function ENT:CalcDismount( data, physobj )
 	for _, ply in pairs( self:GetEveryone() ) do
 		if ply:GetNoDraw() then continue end
 
+		local EnablePartDrawing = false
+
+		if pac then
+			local Pod = ply:GetVehicle()
+
+			if IsValid( Pod ) and not Pod.HidePlayer then
+				EnablePartDrawing = true
+				pac.TogglePartDrawing( ply, 0 )
+			end
+		end
+
 		ply:SetNoDraw( true )
 		ply:SetAbsVelocity( LocalSpeed )
 		ply:CreateRagdoll()
@@ -70,6 +81,10 @@ function ENT:CalcDismount( data, physobj )
 		timer.Simple( math.Rand(3.5,4.5), function()
 			if not IsValid( ply ) then return end
 
+			if EnablePartDrawing then
+				pac.TogglePartDrawing( ply, 1 )
+			end
+	
 			ply:SetNoDraw( false )
 			ply:SetNWBool( "lvs_camera_follow_ragdoll", false)
 			ply:lvsSetInputDisabled( false )
