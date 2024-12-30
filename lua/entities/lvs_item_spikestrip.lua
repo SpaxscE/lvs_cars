@@ -11,6 +11,9 @@ ENT.Spawnable		= true
 ENT.AdminOnly		= false
 
 if SERVER then
+	function ENT:SetAttacker( ent ) self._attacker = ent end
+	function ENT:GetAttacker() return self._attacker or self end
+
 	function ENT:SpawnFunction( ply, tr, ClassName )
 		if not tr.Hit then return end
 
@@ -18,6 +21,7 @@ if SERVER then
 		ent:SetPos( tr.HitPos + tr.HitNormal )
 		ent:Spawn()
 		ent:Activate()
+		ent:SetAttacker( ply )
 
 		return ent
 	end
@@ -25,18 +29,15 @@ if SERVER then
 	function ENT:OnTakeDamage( dmginfo )
 	end
 
-	function ENT:Initialize()	
+	function ENT:Initialize()
 		self:SetModel( "models/diggercars/shared/spikestrip_static.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetTrigger( true )
-
-		local PhysObj = self:GetPhysicsObject()
-
-		if not IsValid( PhysObj ) then return end
-
-		PhysObj:EnableMotion( false )
 	end
 
+	function ENT:UpdateFold()
+	end
+	
 	function ENT:Think()
 		local PhysObj = self:GetPhysicsObject()
 
@@ -46,7 +47,9 @@ if SERVER then
 			end
 		end
 
-		self:NextThink( CurTime() + 1 )
+		self:UpdateFold()
+
+		self:NextThink( CurTime() )
 
 		return true
 	end
@@ -66,17 +69,24 @@ if SERVER then
 	function ENT:EndTouch( entity )
 	end
 
-	
 	function ENT:Touch( entity )
 		if not IsValid( entity ) or entity:GetClass() ~= "lvs_wheeldrive_wheel" then return end
 
 		local Destroy = entity:GetVelocity():Length() > 200
 
 		if not Destroy then
-			for i = -1,1 do
+			for i = 1,3 do
+				local L = self:LookupAttachment( "l"..i )
+				local R = self:LookupAttachment( "r"..i )
+
+				local attL = self:GetAttachment( L )
+				local attR = self:GetAttachment( R )
+
+				if not attL or not attR then continue end
+
 				local trace = util.TraceLine( {
-					start = self:LocalToWorld( Vector(5 * i,-109,12) ),
-					endpos = self:LocalToWorld( Vector(5 * i,109,12) ),
+					start = attL.Pos,
+					endpos = attR.Pos,
 					filter = entity,
 					whitelist = true,
 				} )
@@ -99,7 +109,7 @@ if SERVER then
 
 		local dmginfo = DamageInfo()
 		dmginfo:SetDamage( entity:GetHP() )
-		dmginfo:SetAttacker( self )
+		dmginfo:SetAttacker( self:GetAttacker() )
 		dmginfo:SetDamageType( DMG_PREVENT_PHYSICS_FORCE ) 
 
 		entity:TakeDamageInfo( dmginfo )
@@ -112,7 +122,7 @@ if SERVER then
 
 		if not IsValid( PhysObj ) then return end
 
-		PhysObj:ApplyTorqueCenter( Vector(0,0, PhysObj:GetVelocity():Length() * 250 * (PhysObj:GetAngleVelocity().z > 0 and 1 or -1) ) )
+		PhysObj:ApplyTorqueCenter( Vector(0,0, PhysObj:GetVelocity():Length() * 100 * (PhysObj:GetAngleVelocity().z > 0 and 1 or -1) ) )
 	end
 
 end
