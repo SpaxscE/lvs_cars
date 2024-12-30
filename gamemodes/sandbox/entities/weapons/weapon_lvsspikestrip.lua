@@ -72,10 +72,10 @@ if CLIENT then
 		
 		if not attachment then return end
 
-		local pos = attachment.Pos + attachment.Ang:Forward() * 40
+		local pos = attachment.Pos + attachment.Ang:Forward() * 3 - attachment.Ang:Up() * 30
 		local ang = attachment.Ang
-		ang:RotateAroundAxis(attachment.Ang:Up(), 0)
-		ang:RotateAroundAxis(attachment.Ang:Right(), 0)
+		ang:RotateAroundAxis(attachment.Ang:Up(), -40)
+		ang:RotateAroundAxis(attachment.Ang:Right(), -90)
 		ang:RotateAroundAxis(attachment.Ang:Forward(), 0)
 
 		self:SetRenderOrigin( pos )
@@ -111,11 +111,12 @@ if SERVER then
 
 		if not IsValid( ent ) then return end
 
-		ent:SetAngles( ply:EyeAngles() + Angle(0,180,0) )
+		ent:SetAngles( Angle(0,180 + ply:EyeAngles().y,0) )
 		ent:SetPos( ply:GetShootPos() - Vector(0,0,10) )
 		ent:Spawn()
 		ent:Activate()
 		ent:SetAttacker( ply )
+		ent:SetOwner( ply )
 
 		ply:AddCleanup( "lvsspikestrip", ent )
 
@@ -128,7 +129,7 @@ if SERVER then
 
 		if not IsValid( PhysObj ) then return end
 
-		PhysObj:SetVelocityInstantaneous( ply:GetAimVector() * 100 + Vector(0,0,75) )
+		PhysObj:SetVelocityInstantaneous( ply:GetAimVector() * 200 + Vector(0,0,75) )
 	end
 end
 
