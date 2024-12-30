@@ -1,4 +1,4 @@
-"LightmappedGeneric"
+"VertexLitGeneric"
 {
 	"$basetexture" "models/diggercars/shared/spikestrip"
 	"$bumpmap" "models/diggercars/shared/spikestrip_nm"
