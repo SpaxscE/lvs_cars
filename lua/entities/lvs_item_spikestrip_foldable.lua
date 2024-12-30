@@ -4,11 +4,14 @@ ENT.Base = "lvs_item_spikestrip"
 
 ENT.AutomaticFrameAdvance = true
 
+ENT.PhysicsSounds = true
+
 if SERVER then
 	function ENT:Initialize()
 		self:SetModel( "models/diggercars/shared/spikestrip_fold.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetTrigger( true )
+		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
 		self:SetUseType( SIMPLE_USE )
 
 		local PhysObj = self:GetPhysicsObject()

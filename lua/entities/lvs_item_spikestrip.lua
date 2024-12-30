@@ -12,6 +12,8 @@ ENT.AdminOnly		= false
 
 ENT.RenderGroup = RENDERGROUP_BOTH 
 
+ENT.PhysicsSounds = true
+
 if SERVER then
 	function ENT:SetAttacker( ent ) self._attacker = ent end
 	function ENT:GetAttacker() return self._attacker or self end
@@ -35,6 +37,7 @@ if SERVER then
 		self:SetModel( "models/diggercars/shared/spikestrip_static.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetTrigger( true )
+		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
 	end
 
 	function ENT:UpdateFold()
