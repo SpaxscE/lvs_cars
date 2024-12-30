@@ -12,6 +12,7 @@ if SERVER then
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetTrigger( true )
 		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
+		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 		self:SetUseType( SIMPLE_USE )
 
 		local PhysObj = self:GetPhysicsObject()

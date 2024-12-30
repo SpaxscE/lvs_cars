@@ -38,6 +38,7 @@ if SERVER then
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetTrigger( true )
 		self:SetCollisionGroup( COLLISION_GROUP_WEAPON )
+		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 	end
 
 	function ENT:UpdateFold()
