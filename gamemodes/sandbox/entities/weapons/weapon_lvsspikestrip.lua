@@ -49,8 +49,8 @@ if CLIENT then
 		local ang =  bm:GetAngles()	
 		
 		pos = pos + ang:Up() * 28
-		pos = pos + ang:Right() * 3
-		pos = pos + ang:Forward() * -6
+		pos = pos + ang:Right() * 8
+		pos = pos + ang:Forward() * -5
 		
 		ang:RotateAroundAxis(ang:Forward(), -210)
 		ang:RotateAroundAxis(ang:Right(),-60)
@@ -59,7 +59,7 @@ if CLIENT then
 		self.pViewModel:SetPos( pos )
 		self.pViewModel:SetAngles( ang )
 		self.pViewModel:DrawModel()
-		self.pViewModel:SetModelScale( 0.25 )
+		self.pViewModel:SetModelScale( 0.5 )
 	end
 
 	function SWEP:DrawWorldModel()
@@ -91,8 +91,6 @@ end
 
 function SWEP:Initialize()
 	self:SetHoldType( self.HoldType )
-
-	self:HideViewModel()
 end
 
 function SWEP:OwnerChanged()
@@ -133,24 +131,6 @@ if SERVER then
 	end
 end
 
-function SWEP:HideViewModel( unhide )
-	local ply = self:GetOwner()
-
-	if not IsValid( ply ) then return end
-
-	local vm = ply:GetViewModel()
-
-	if not IsValid( vm ) then return end
-
-	if unhide then
-		vm:SetMaterial("")
-
-		return
-	end
-
-	vm:SetMaterial("null")
-end
-
 function SWEP:PrimaryAttack()
 	local ply = self:GetOwner()
 
@@ -173,18 +153,13 @@ end
 function SWEP:Deploy()
 	self:SendWeaponAnim( ACT_VM_DRAW )
 
-	self:HideViewModel()
-
 	return true
 end
 
 function SWEP:Holster()
 
-	self:HideViewModel( true )
-
 	return true
 end
 
 function SWEP:OnRemove()
-	self:HideViewModel( true )
 end
