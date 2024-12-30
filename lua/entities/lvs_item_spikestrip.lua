@@ -10,6 +10,8 @@ ENT.Category = "[LVS]"
 ENT.Spawnable		= true
 ENT.AdminOnly		= false
 
+ENT.RenderGroup = RENDERGROUP_BOTH 
+
 if SERVER then
 	function ENT:SetAttacker( ent ) self._attacker = ent end
 	function ENT:GetAttacker() return self._attacker or self end
@@ -125,16 +127,31 @@ if SERVER then
 		PhysObj:ApplyTorqueCenter( Vector(0,0, PhysObj:GetVelocity():Length() * 100 * (PhysObj:GetAngleVelocity().z > 0 and 1 or -1) ) )
 	end
 
+	return
 end
 
-if CLIENT then
-	function ENT:Think()
-	end
+function ENT:Think()
+end
 
-	function ENT:Draw( flags )
-		self:DrawModel( flags )
-	end
+function ENT:Draw( flags )
+	self:DrawModel( flags )
+end
 
-	function ENT:OnRemove()
-	end
+local spritemat = Material( "sprites/light_glow02_add" )
+local spritecolor = Color( 255, 93, 0, 255)
+
+function ENT:DrawTranslucent( flags )
+	self:DrawModel( flags )
+
+	local size1 = 16 * (math.abs( math.cos( CurTime() * 4 ) ) ^ 10)
+	local size2 = 16 * (math.abs( math.sin( CurTime() * 4 ) ) ^ 10)
+
+	render.SetMaterial( spritemat )
+	render.DrawSprite( self:LocalToWorld( Vector(8,-116.5,10) ), size1, size1, spritecolor )
+	render.DrawSprite( self:LocalToWorld( Vector(-7,-116.5,10) ), size2, size2, spritecolor )
+	render.DrawSprite( self:LocalToWorld( Vector(8,118,10) ), size2, size2, spritecolor )
+	render.DrawSprite( self:LocalToWorld( Vector(-7,118,10) ), size1, size1, spritecolor )
+end
+
+function ENT:OnRemove()
 end

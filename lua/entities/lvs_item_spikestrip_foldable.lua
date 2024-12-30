@@ -10,6 +10,12 @@ if SERVER then
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetTrigger( true )
 		self:SetUseType( SIMPLE_USE )
+
+		local PhysObj = self:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then return end
+
+		PhysObj:EnableDrag( false )
 	end
 
 	function ENT:UpdateFold()
@@ -35,11 +41,28 @@ if SERVER then
 	function ENT:Use( ply )
 		if not IsValid( ply ) or not ply:IsPlayer() then return end
 
+		local PhysObj = self:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then return end
+
+		if PhysObj:IsMotionEnabled() then return end
+
 		if ply:HasWeapon("weapon_lvsspikestrip") then return end
 
+		ply:EmitSound("items/ammo_pickup.wav")
 		ply:Give("weapon_lvsspikestrip")
 		ply:SelectWeapon("weapon_lvsspikestrip")
 
 		self:Remove()
 	end
+
+	return
+end
+
+function ENT:Draw( flags )
+	self:DrawModel( flags )
+end
+
+function ENT:DrawTranslucent( flags )
+	self:DrawModel( flags )
 end
