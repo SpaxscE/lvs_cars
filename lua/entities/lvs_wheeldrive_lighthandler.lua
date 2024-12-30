@@ -79,6 +79,8 @@ function ENT:Initialize()
 
 	if not istable( base.Lights ) then return end
 
+	self:TranslatePaths( base, base.Lights )
+
 	self:InitializeLights( base, base.Lights )
 
 	for typeid, typedata in pairs( base.Lights ) do
@@ -99,6 +101,24 @@ function ENT:Initialize()
 		data.max = #data.pattern
 
 		self._TriggerList[ typedata.Trigger ] = data
+	end
+end
+
+function ENT:TranslatePaths( base, data )
+	if not istable( data ) then return end
+
+	local materials = base:GetMaterials()
+
+	for typeid, typedata in pairs( data ) do
+		if ( typedata.SubMaterialID or not typedata.SubMaterialPath ) then continue end
+		
+		local subMaterialID = table.KeyFromValue( materials, typedata.SubMaterialPath )
+
+		if ( subMaterialID ) then
+			subMaterialID = subMaterialID - 1
+
+			typedata.SubMaterialID = subMaterialID
+		end
 	end
 end
 
