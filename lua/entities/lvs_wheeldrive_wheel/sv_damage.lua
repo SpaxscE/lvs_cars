@@ -7,6 +7,8 @@ function ENT:OnTakeDamage( dmginfo )
 	if not IsValid( base ) then return end
 
 	if self:GetWheelChainMode() then
+		if dmginfo:IsDamageType( DMG_PREVENT_PHYSICS_FORCE ) then return end
+
 		base:OnTakeDamage( dmginfo )
 
 		return
@@ -96,7 +98,7 @@ function ENT:DestroyTire()
 
 	self._OldTirePhysProp = PhysObj:GetMaterial()
 
-	PhysObj:SetMaterial( "metal" )
+	PhysObj:SetMaterial( "glass" )
 
 	self:EmitSound("lvs/wheel_pop"..math.random(1,4)..".ogg")
 
@@ -123,7 +125,7 @@ function ENT:RepairTire()
 
 	local PhysObj = self:GetPhysicsObject()
 
-	if not IsValid( PhysObj ) or PhysObj:GetMaterial() ~= "metal" then
+	if not IsValid( PhysObj ) or PhysObj:GetMaterial() ~= "glass" then
 		goto FinishRepairTire
 	end
 

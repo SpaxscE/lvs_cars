@@ -16,7 +16,7 @@ ENT.MDL = "models/diggercars/bmw_r75/r75_bike.mdl"
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 750
+ENT.MaxHealth = 500
 
 ENT.MaxVelocity = 1250
 ENT.MaxVelocityReverse = 100
