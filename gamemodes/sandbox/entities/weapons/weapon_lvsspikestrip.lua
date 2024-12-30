@@ -5,21 +5,21 @@ SWEP.Category				= "[LVS]"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= false
 
-SWEP.ViewModel			= "models/weapons/v_slam.mdl"
-SWEP.WorldModel			= "models/blu/lvsmine.mdl"
+SWEP.ViewModel			= "models/weapons/c_slam.mdl"
+SWEP.WorldModel			= "models/diggercars/shared/spikestrip_fold.mdl"
 
-SWEP.UseHands				= false
+SWEP.UseHands				= true
 SWEP.ViewModelFlip			= false
-SWEP.ViewModelFOV			= 10
+SWEP.ViewModelFOV			= 60
 SWEP.AutoSwitchTo 			= true
 SWEP.AutoSwitchFrom 		= true
 
-SWEP.HoldType				= "slam"
+SWEP.HoldType				= "physgun"
 
 SWEP.Primary.ClipSize		= -1
-SWEP.Primary.DefaultClip		= 3
+SWEP.Primary.DefaultClip		= -1
 SWEP.Primary.Automatic		= false
-SWEP.Primary.Ammo			= "slam"
+SWEP.Primary.Ammo			= "none"
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -35,7 +35,7 @@ if CLIENT then
 
 	SWEP.DrawWeaponInfoBox 	= false
 
-	SWEP.pViewModel = ClientsideModel("models/blu/lvsmine.mdl", RENDERGROUP_OPAQUE)
+	SWEP.pViewModel = ClientsideModel("models/diggercars/shared/spikestrip_fold.mdl", RENDERGROUP_OPAQUE)
 	SWEP.pViewModel:SetNoDraw( true )
 
 	function SWEP:ViewModelDrawn()
@@ -48,17 +48,18 @@ if CLIENT then
 		local pos =  bm:GetTranslation()
 		local ang =  bm:GetAngles()	
 		
-		pos = pos + ang:Up() * 220
-		pos = pos + ang:Right() * 2
-		pos = pos + ang:Forward() * -12
+		pos = pos + ang:Up() * 28
+		pos = pos + ang:Right() * 3
+		pos = pos + ang:Forward() * -6
 		
-		ang:RotateAroundAxis(ang:Forward(), 45)
-		ang:RotateAroundAxis(ang:Right(),120)
-		ang:RotateAroundAxis(ang:Up(), 0)
+		ang:RotateAroundAxis(ang:Forward(), -210)
+		ang:RotateAroundAxis(ang:Right(),-60)
+		ang:RotateAroundAxis(ang:Up(), 90)
 		
 		self.pViewModel:SetPos( pos )
 		self.pViewModel:SetAngles( ang )
 		self.pViewModel:DrawModel()
+		self.pViewModel:SetModelScale( 0.25 )
 	end
 
 	function SWEP:DrawWorldModel()
@@ -71,10 +72,10 @@ if CLIENT then
 		
 		if not attachment then return end
 
-		local pos = attachment.Pos + attachment.Ang:Forward() * 2
+		local pos = attachment.Pos + attachment.Ang:Forward() * 40
 		local ang = attachment.Ang
-		ang:RotateAroundAxis(attachment.Ang:Up(), 20)
-		ang:RotateAroundAxis(attachment.Ang:Right(), -30)
+		ang:RotateAroundAxis(attachment.Ang:Up(), 0)
+		ang:RotateAroundAxis(attachment.Ang:Right(), 0)
 		ang:RotateAroundAxis(attachment.Ang:Forward(), 0)
 
 		self:SetRenderOrigin( pos )
@@ -84,12 +85,14 @@ if CLIENT then
 	end
 
 	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText( "z", "WeaponIcons", x + wide/2, y + tall*0.2, Color( 255, 210, 0, 255 ), TEXT_ALIGN_CENTER )
+		draw.SimpleText( "P", "WeaponIcons", x + wide/2, y + tall*0.2, Color( 255, 210, 0, 255 ), TEXT_ALIGN_CENTER )
 	end
 end
 
 function SWEP:Initialize()
 	self:SetHoldType( self.HoldType )
+
+	self:HideViewModel()
 end
 
 function SWEP:OwnerChanged()
@@ -98,81 +101,67 @@ end
 function SWEP:Think()
 end
 
-function SWEP:TakePrimaryAmmo( num )
+if SERVER then
+	function SWEP:PlaceStrip()
+		local ply = self:GetOwner()
+
+		ply:EmitSound( "npc/zombie/claw_miss1.wav" )
+
+		local ent = ents.Create( "lvs_item_spikestrip_foldable" )
+
+		if not IsValid( ent ) then return end
+
+		ent:SetAngles( ply:EyeAngles() + Angle(0,180,0) )
+		ent:SetPos( ply:GetShootPos() - Vector(0,0,10) )
+		ent:Spawn()
+		ent:Activate()
+		ent:SetAttacker( ply )
+
+		ply:AddCleanup( "lvsspikestrip", ent )
+
+		undo.Create("Spike Strip")
+			undo.AddEntity( ent )
+			undo.SetPlayer( ply )
+		undo.Finish()
+
+		local PhysObj = ent:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then return end
+
+		PhysObj:SetVelocityInstantaneous( ply:GetAimVector() * 100 + Vector(0,0,75) )
+	end
+end
+
+function SWEP:HideViewModel( unhide )
 	local ply = self:GetOwner()
 
-	if self:Clip1() <= 0 then
+	if not IsValid( ply ) then return end
 
-		if self:Ammo1() <= 0 then return end
+	local vm = ply:GetViewModel()
 
-		ply:RemoveAmmo( num, self:GetPrimaryAmmoType() )
+	if not IsValid( vm ) then return end
+
+	if unhide then
+		vm:SetMaterial("")
 
 		return
 	end
 
-	self:SetClip1( math.max(self:Clip1() - num,0) )
-
-end
-
-function SWEP:CanPrimaryAttack()
-	self.NextFire = self.NextFire or 0
-	
-	return self.NextFire <= CurTime() and self:Ammo1() > 0
-end
-
-function SWEP:SetNextPrimaryFire( time )
-	self.NextFire = time
-end
-
-function SWEP:ThrowMine()
-	if CLIENT then return end
-
-	local ply = self:GetOwner()
-
-	ply:EmitSound( "npc/zombie/claw_miss1.wav" )
-
-	local ent = ents.Create( "lvs_item_mine" )
-
-	if not IsValid( ent ) then return end
-
-	ent:SetPos( ply:GetShootPos() - Vector(0,0,10) )
-	ent:Spawn()
-	ent:Activate()
-	ent:SetAttacker( ply )
-
-	ply:AddCleanup( "lvsspikestrip", ent )
-
-	undo.Create("Spike Strip")
-		undo.AddEntity( ent )
-		undo.SetPlayer( ply )
-	undo.Finish()
-
-	local PhysObj = ent:GetPhysicsObject()
-
-	if not IsValid( PhysObj ) then return end
-
-	PhysObj:SetVelocityInstantaneous( ply:GetAimVector() * 200 + Vector(0,0,150) )
-	PhysObj:AddAngleVelocity( VectorRand() * 20 ) 
+	vm:SetMaterial("null")
 end
 
 function SWEP:PrimaryAttack()
-	if not self:CanPrimaryAttack() then return end
-
 	local ply = self:GetOwner()
 
 	self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 	ply:SetAnimation( PLAYER_ATTACK1 )
 
-	self:ThrowMine()
-
 	self:SetNextPrimaryFire( CurTime() + 1.5 )
 
-	self:TakePrimaryAmmo( 1 )
-
 	if SERVER then
-		if self:Ammo1() <= 0 then
-			ply:StripWeapon( "weapon_lvsspikestrip" ) 
-		end
+		self:PlaceStrip()
+
+		ply:StripWeapon( "weapon_lvsspikestrip" ) 
 	end
 end
 
@@ -182,10 +171,19 @@ end
 
 function SWEP:Deploy()
 	self:SendWeaponAnim( ACT_VM_DRAW )
-	
+
+	self:HideViewModel()
+
 	return true
 end
 
 function SWEP:Holster()
+
+	self:HideViewModel( true )
+
 	return true
+end
+
+function SWEP:OnRemove()
+	self:HideViewModel( true )
 end
