@@ -5,12 +5,12 @@ SWEP.Category				= "[LVS]"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= false
 
-SWEP.ViewModel			= "models/weapons/v_slam.mdl"
+SWEP.ViewModel			= "models/weapons/c_scrubriglvs.mdl"
 SWEP.WorldModel			= "models/blu/lvsmine.mdl"
 
-SWEP.UseHands				= false
+SWEP.UseHands				= true
 SWEP.ViewModelFlip			= false
-SWEP.ViewModelFOV			= 10
+SWEP.ViewModelFOV			= 60
 SWEP.AutoSwitchTo 			= true
 SWEP.AutoSwitchFrom 		= true
 
@@ -45,18 +45,19 @@ if CLIENT then
 		if not IsValid( ply ) then return end
 
 		local vm = ply:GetViewModel()
-		local bm = vm:GetBoneMatrix(0)
+		local bm = vm:GetBoneMatrix( 1 )
 		local pos =  bm:GetTranslation()
 		local ang =  bm:GetAngles()	
-		
-		pos = pos + ang:Up() * 220
-		pos = pos + ang:Right() * 2
-		pos = pos + ang:Forward() * -12
-		
-		ang:RotateAroundAxis(ang:Forward(), 45)
-		ang:RotateAroundAxis(ang:Right(),120)
-		ang:RotateAroundAxis(ang:Up(), 0)
-		
+
+		pos = pos + ang:Up() * 25
+		pos = pos + ang:Right() * 1
+		pos = pos + ang:Forward() * -3
+
+		ang:RotateAroundAxis(ang:Forward(),60)
+		ang:RotateAroundAxis(ang:Right(),170)
+		ang:RotateAroundAxis(ang:Up(),65)
+
+		self.pViewModel:SetModelScale( 0.75 )
 		self.pViewModel:SetPos( pos )
 		self.pViewModel:SetAngles( ang )
 		self.pViewModel:DrawModel()
@@ -164,7 +165,6 @@ function SWEP:PrimaryAttack()
 
 	local ply = self:GetOwner()
 
-	self:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 	ply:SetAnimation( PLAYER_ATTACK1 )
 
 	self:ThrowMine()
@@ -185,7 +185,7 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Deploy()
-	self:SendWeaponAnim( ACT_VM_DRAW )
+	self:SendWeaponAnim( ACT_SLAM_STICKWALL_DRAW )
 	
 	return true
 end

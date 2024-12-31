@@ -52,7 +52,7 @@ function ENT:GetPlayerBoneManipulation( ply, PodID )
 
 	local TargetValue = self:ShouldPutFootDown() and 1 or 0
 
-	local Rate = math.min( RealFrameTime() * 2, 1 )
+	local Rate = math.min( FrameTime() * 2, 1 )
 
 	ply._smlvsBikerFoot = ply._smlvsBikerFoot and (ply._smlvsBikerFoot + (TargetValue - ply._smlvsBikerFoot) * Rate) or 0
 

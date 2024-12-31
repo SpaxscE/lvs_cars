@@ -5,7 +5,7 @@ SWEP.Category				= "[LVS]"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= false
 
-SWEP.ViewModel			= "models/weapons/c_slam.mdl"
+SWEP.ViewModel			= "models/weapons/c_scrubriglvs.mdl"
 SWEP.WorldModel			= "models/diggercars/shared/spikestrip_fold.mdl"
 
 SWEP.UseHands				= true
