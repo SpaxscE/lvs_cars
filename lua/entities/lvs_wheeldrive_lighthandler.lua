@@ -115,7 +115,11 @@ function ENT:InitializeLights( base, data )
 
 		if typedata.SubMaterialID then
 			if isstring( typedata.SubMaterialID ) then
-				data[typeid].SubMaterialID = table.KeyFromValue( materials, typedata.SubMaterialID ) - 1
+				local ID = table.KeyFromValue( materials, typedata.SubMaterialID )
+
+				if isnumber( ID ) then
+					data[typeid].SubMaterialID = ID - 1
+				end
 			end
 
 			data[typeid].SubMaterial = self:CreateSubMaterial( typedata.SubMaterialID, typedata.Trigger )
