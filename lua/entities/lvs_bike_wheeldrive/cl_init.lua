@@ -14,7 +14,7 @@ function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
 		local ragdoll = ply:GetRagdollEntity()
 
 		if IsValid( ragdoll ) then
-			lerp_to_ragdoll = math.min( lerp_to_ragdoll + FrameTime(), 1 )
+			lerp_to_ragdoll = math.min( lerp_to_ragdoll + FrameTime() * 2, 1 )
 
 			local eyeang = ply:EyeAngles() - Angle(0,90,0)
 
@@ -52,7 +52,7 @@ function ENT:GetPlayerBoneManipulation( ply, PodID )
 
 	local TargetValue = self:ShouldPutFootDown() and 1 or 0
 
-	local Rate = math.min( FrameTime() * 2, 1 )
+	local Rate = math.min( FrameTime() * 3, 1 )
 
 	ply._smlvsBikerFoot = ply._smlvsBikerFoot and (ply._smlvsBikerFoot + (TargetValue - ply._smlvsBikerFoot) * Rate) or 0
 

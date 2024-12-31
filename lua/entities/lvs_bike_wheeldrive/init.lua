@@ -16,9 +16,11 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 		local Pod = self:GetDriverSeat()
 
 		if IsValid( Pod ) then
+			local z = math.max( self:GetUp().z, 0 )
+
 			local Gravity = self:GetWorldUp() * self:GetWorldGravity() * phys:GetMass() * deltatime
-			phys:ApplyForceCenter( Gravity * 1.5 * self.TippingForceMul )
-			phys:ApplyForceOffset( -Gravity * 3 * self.TippingForceMul, Pod:GetPos() )
+			phys:ApplyForceCenter( Gravity * 1.5 * self.TippingForceMul * z )
+			phys:ApplyForceOffset( -Gravity * 3 * self.TippingForceMul * z, Pod:GetPos() )
 		end
 
 		return vector_origin, vector_origin, SIM_NOTHING
@@ -51,6 +53,8 @@ function ENT:CalcDismount( data, physobj )
 	if self._IsDismounted then return end
 
 	self._IsDismounted = true
+
+	self:PhysicsCollide( data, physobj )
 
 	if self:GetEngineActive() then
 		self:StopEngine()
