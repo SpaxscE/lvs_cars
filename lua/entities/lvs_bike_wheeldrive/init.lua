@@ -20,7 +20,7 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 
 			local Gravity = self:GetWorldUp() * self:GetWorldGravity() * phys:GetMass() * deltatime
 			phys:ApplyForceCenter( Gravity * 1.5 * self.TippingForceMul * z )
-			phys:ApplyForceOffset( -Gravity * 3 * self.TippingForceMul * z, Pod:GetPos() )
+			phys:ApplyForceOffset( -Gravity * 3 * self.TippingForceMul, Pod:GetPos() )
 		end
 
 		return vector_origin, vector_origin, SIM_NOTHING
