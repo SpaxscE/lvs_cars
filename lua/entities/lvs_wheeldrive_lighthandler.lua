@@ -106,12 +106,18 @@ function ENT:InitializeLights( base, data )
 
 	if not istable( data ) then return end
 
+	local materials = base:GetMaterials()
+
 	for typeid, typedata in pairs( data ) do
 		if not typedata.Trigger then
 			data[typeid] = nil
 		end
 
 		if typedata.SubMaterialID then
+			if isstring( typedata.SubMaterialID ) then
+				data[typeid].SubMaterialID = table.KeyFromValue( materials, typedata.SubMaterialID ) - 1
+			end
+
 			data[typeid].SubMaterial = self:CreateSubMaterial( typedata.SubMaterialID, typedata.Trigger )
 			data[typeid].SubMaterialBrightness = typedata.SubMaterialBrightness or 1
 		end
@@ -375,7 +381,7 @@ function ENT:LightsThink( base )
 			end
 		end
 
-		if not typedata.SubMaterialID or not typedata.SubMaterial then continue end
+		if not isnumber( typedata.SubMaterialID ) or not typedata.SubMaterial then continue end
 
 		typedata.SubMaterial:SetFloat("$detailblendfactor", mul * typedata.SubMaterialBrightness )
 
