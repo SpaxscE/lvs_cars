@@ -177,6 +177,10 @@ end
 
 function ENT:DoExhaustFX( Magnitude )
 	for _, data in ipairs( self.ExhaustPositions ) do
+		if ( data.bodygroup ) then
+			if ( self:GetBodygroup( data.bodygroup.id ) != data.bodygroup.value ) then continue end
+		end
+
 		local effectdata = EffectData()
 			effectdata:SetOrigin( self:LocalToWorld( data.pos ) )
 			effectdata:SetNormal( self:LocalToWorldAngles( data.ang ):Forward() )
