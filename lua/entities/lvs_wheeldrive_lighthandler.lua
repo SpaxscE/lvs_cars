@@ -66,7 +66,7 @@ end
 function ENT:Initialize()
 	local base = self:GetBase()
 
-	if not IsValid( base ) then
+	if not IsValid( base ) or not base:IsInitialized() then
 
 		timer.Simple( 1, function()
 			if not IsValid( self ) then return end
