@@ -171,10 +171,7 @@ function ENT:OnChangeGear( oldGear, newGear )
 		if oldGear > newGear then
 			if Damaged then
 				self:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
-
-				if EngineDamaged then
-					self:DoExhaustBackFire()
-				end
+				self:DoExhaustBackFire()
 			end
 		else
 			if EngineDamaged then
