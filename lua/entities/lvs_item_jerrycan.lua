@@ -11,7 +11,7 @@ ENT.AdminOnly		= false
 
 ENT.AutomaticFrameAdvance = true
 
-ENT.FuelAmount = 120 -- seconds
+ENT.FuelAmount = 500 -- seconds
 ENT.FuelType = LVS.FUELTYPE_PETROL
 
 ENT.lvsGasStationFillSpeed = 0.05
@@ -20,6 +20,7 @@ ENT.lvsGasStationRefillMe = true
 function ENT:SetupDataTables()
 	self:NetworkVar( "Bool", 0, "Active" )
 	self:NetworkVar( "Float", 0, "Fuel" )
+	self:NetworkVar( "Entity",0, "User" )
 
 	if SERVER then
 		self:SetFuel( 1 )
@@ -34,6 +35,14 @@ function ENT:IsUpright()
 	local Up = self:GetUp()
 
 	return Up.z > 0.5
+end
+
+function ENT:GetFuelType()
+	return self.FuelType
+end
+
+function ENT:GetSize()
+	return self.FuelAmount
 end
 
 function ENT:GetFuelType()
@@ -58,81 +67,66 @@ if SERVER then
 		self:SetUseType( SIMPLE_USE )
 	end
 
-	function ENT:RefuelByTouch( entity )
-		if self:GetFuel() <= 0 then return end
-
-		if not IsValid( entity ) then return end
-
-		if not entity.LVS or not entity.GetFuelTank then return end
-
-		local FuelTank = entity:GetFuelTank()
-
-		if not IsValid( FuelTank ) then return end
-
-		if FuelTank:GetFuelType() ~= self.FuelType then return end
-
-		local FuelCap = FuelTank:GetDoorHandler()
-
-		if IsValid( FuelCap ) and not FuelCap:IsOpen() then return end
-
-		if FuelTank:GetFuel() ~= 1 then
-			local Cur = FuelTank:GetFuel()
-			local Need = 1 - Cur
-
-			local Available = (1 / FuelTank:GetSize()) * self.FuelAmount * self:GetFuel()
-
-			local Add = math.min( Available, Need )
-
-			self:SetFuel( Available - Add )
-			FuelTank:SetFuel( Cur + Add )
-
-			entity:OnRefueled()
-		end
+	function ENT:OnRefueled()
+		self:EmitSound( "vehicles/jetski/jetski_no_gas_start.wav" )
 	end
 
-	function ENT:RefuelByPouring( trace, amount )
-		local entity = trace.Entity
-		local pos = trace.HitPos
+	function ENT:TakeFuel( Need )
+		local Fuel = self:GetFuel()
+		local Size = self:GetSize()
+		local Available = math.min( Size * Fuel, Size* self.lvsGasStationFillSpeed )
+		local Give = math.min( Need, Available )
 
-		if self:GetFuel() <= 0 then return end
+		self:SetFuel( Fuel - Give / Size )
 
-		if not IsValid( entity ) then return end
+		return Give
+	end
 
-		if not entity.LVS or not entity.GetFuelTank then return end
+	function ENT:giveSWEP( ply )
+		self:EmitSound("common/wpn_select.wav")
 
-		local FuelTank = entity:GetFuelTank()
+		ply:SetSuppressPickupNotices( true )
+		ply:Give( "weapon_lvsfuelfiller" )
+		ply:SetSuppressPickupNotices( false )
 
-		if not IsValid( FuelTank ) then return end
+		ply:SelectWeapon( "weapon_lvsfuelfiller" )
+		self:SetUser( ply )
 
-		if FuelTank:GetFuelType() ~= self.FuelType then return end
+		local SWEP = ply:GetWeapon( "weapon_lvsfuelfiller" )
+	
+		if not IsValid( SWEP ) then return end
 
-		local FuelCap = FuelTank:GetDoorHandler()
+		SWEP:SetFuelType( self:GetFuelType() )
+		SWEP:SetCallbackTarget( self )
+	end
 
-		if not IsValid( FuelCap ) then
-			if FuelTank:GetFuel() ~= 1 then
-				FuelTank:SetFuel( math.min( FuelTank:GetFuel() + amount, 1 ) )
-			end
+	function ENT:removeSWEP( ply )
+		if ply:HasWeapon( "weapon_lvsfuelfiller" ) then
+			ply:StripWeapon( "weapon_lvsfuelfiller" )
+			ply:SwitchToDefaultWeapon()
+		end
+		self:SetUser( NULL )
+	end
+
+	function ENT:checkSWEP( ply )
+		if not ply:Alive() or ply:InVehicle() then
+
+			self:removeSWEP( ply )
 
 			return
 		end
 
-		if not FuelCap:IsOpen() then return end
+		local weapon = ply:GetActiveWeapon()
 
-		if FuelTank:GetFuel() ~= 1 and (trace.HitPos - FuelCap:GetPos()):Length() < 50 then
-			FuelTank:SetFuel( math.min( FuelTank:GetFuel() + amount, 1 ) )
+		if not IsValid( weapon ) or weapon:GetClass() ~= "weapon_lvsfuelfiller" then
+			self:removeSWEP( ply )
+
+			return
 		end
-	end
 
-	function ENT:Use( ply )
-		self:SetActive( not self:GetActive() )
+		if (ply:GetPos() - self:GetPos()):LengthSqr() < 150000 then return end
 
-		if self:GetActive() then
-			self:PlayAnimation( "open" )
-
-			self:EmitSound("buttons/lever7.wav")
-		else
-			self:PlayAnimation( "close" )
-		end
+		self:removeSWEP( ply )
 	end
 
 	function ENT:Think()
@@ -140,28 +134,61 @@ if SERVER then
 			local amount = FrameTime() * 0.25
 
 			self:SetFuel( math.max( self:GetFuel() - amount, 0 ) )
-
-			local Pos = self:LocalToWorld( Vector(7.19,-0.01,10.46) )
-			local trace = util.TraceHull( {
-				start = Pos,
-				endpos = Pos - Vector(0,0,500),
-				mins = Vector(-15,-15,0),
-				maxs = Vector(15,15,0),
-				filter = self,
-			} )
-
-			self:RefuelByPouring( trace, amount * 0.25 )
 		end
 
-		self:NextThink( CurTime() )
+		local ply = self:GetUser()
+		local T = CurTime()
+
+		if IsValid( ply ) then
+			self:checkSWEP( ply )
+		end
+
+		self:NextThink( T )
 
 		return true
 	end
 
-	function ENT:PhysicsCollide( data, physobj )
-		if not self:IsOpen() then return end
+	function ENT:Use( ply )
+		if not IsValid( ply ) or not ply:IsPlayer() then return end
 
-		self:RefuelByTouch( data.HitEntity )
+		local Active = self:GetActive()
+		local User = self:GetUser()
+
+		if IsValid( User ) and User == ply then
+			self:removeSWEP( ply )
+			self:PlayAnimation( "close" )
+			self:SetActive( false )
+
+			return
+		end
+
+		if Active then
+			if ply:HasWeapon("weapon_lvsfuelfiller") or ply:KeyDown( IN_WALK ) or ply:KeyDown( IN_SPEED ) then
+				self:PlayAnimation( "close" )
+				self:SetActive( false )
+			else
+				if not IsValid( User ) then
+					self:giveSWEP( ply )
+				end
+			end
+	
+			return
+		end
+
+		self:SetActive ( true )
+		self:PlayAnimation( "open" )
+		self:EmitSound("buttons/lever7.wav")
+	end
+
+	function ENT:OnRemove()
+		local User = self:GetUser()
+
+		if not IsValid( User ) then return end
+
+		self:removeSWEP( User )
+	end
+
+	function ENT:PhysicsCollide( data, physobj )
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
@@ -176,11 +203,6 @@ if SERVER then
 		self:SetPlaybackRate( playbackrate )
 		self:SetSequence( sequence )
 	end
-
-	function ENT:OnRefueled()
-		self:EmitSound( "vehicles/jetski/jetski_no_gas_start.wav" )
-	end
-
 end
 
 if CLIENT then
@@ -189,9 +211,14 @@ if CLIENT then
 
 	function ENT:Draw()
 		self:DrawModel()
+		self:DrawCable()
 
 		local ply = LocalPlayer()
 		local Pos = self:GetPos()
+
+		if not IsValid( ply ) then return end
+
+		if ply:HasWeapon("weapon_lvsfuelfiller") then return end
 
 		if (ply:GetPos() - Pos):LengthSqr() > 5000000 then return end
 
@@ -216,6 +243,61 @@ if CLIENT then
 		end
 	end
 
+	local cable = Material( "cable/cable2" )
+	local function bezier(p0, p1, p2, p3, t)
+		local e = p0 + t * (p1 - p0)
+		local f = p1 + t * (p2 - p1)
+		local g = p2 + t * (p3 - p2)
+
+		local h = e + t * (f - e)
+		local i = f + t * (g - f)
+
+		local p = h + t * (i - h)
+
+		return p
+	end
+
+	function ENT:DrawCable()
+		local plyL = LocalPlayer()
+
+		if not IsValid( plyL ) then return end
+
+		if plyL:GetPos():DistToSqr( self:GetPos() ) > 350000 then return end
+
+		local ply = self:GetUser()
+
+		if not IsValid( ply ) then return end
+
+		local pos = self:LocalToWorld( Vector(10,0,45) )
+		local ang = self:LocalToWorldAngles( Angle(0,90,90) )
+
+		local startPos = self:LocalToWorld( Vector(7,0,5) )
+		local p2 = self:LocalToWorld( Vector(8,0,40) )
+		local p3
+		local endPos
+
+		local id = ply:LookupAttachment("anim_attachment_rh")
+		local attachment = ply:GetAttachment( id )
+
+		if not attachment then return end
+
+		endPos = (attachment.Pos + attachment.Ang:Forward() * -3 + attachment.Ang:Right() * 2 + attachment.Ang:Up() * -3.5)
+		p3 = endPos + attachment.Ang:Right() * 5 - attachment.Ang:Up() * 20
+
+		render.StartBeam( 15 )
+		render.SetMaterial( cable )
+
+		for i = 0,15 do
+			local pos = bezier(startPos, p2, p3, endPos, i / 14)
+
+			local Col = (render.GetLightColor( pos ) * 0.8 + Vector(0.2,0.2,0.2)) * 255
+
+			render.AddBeam( pos, 1, 0, Color(Col.r,Col.g,Col.b,255) )
+		end
+
+		render.EndBeam()
+	end
+
 	function ENT:OnRemove()
 		self:StopPour()
 	end
@@ -238,19 +320,10 @@ if CLIENT then
 	function ENT:DoEffect()
 		local Up = self:GetUp()
 		local Pos = self:LocalToWorld( Vector(7.19,-0.01,10.46) )
-		local trace = util.TraceHull( {
-			start = Pos,
-			endpos = Pos - Vector(0,0,500),
-			mins = Vector(-15,-15,0),
-			maxs = Vector(15,15,0),
-			filter = self,
-		} )
 
 		local emitter = ParticleEmitter( Pos, false )
 		local particle = emitter:Add( "effects/slime1", Pos )
 
-		local NoCallback = IsValid( trace.Entity ) and trace.Entity.LVS
-	
 		if particle then
 			particle:SetVelocity( Up * math.abs( Up.z ) * 100 )
 			particle:SetGravity( Vector( 0, 0, -600 ) )
@@ -262,14 +335,6 @@ if CLIENT then
 			particle:SetRoll( math.Rand( -1, 1 ) )
 			particle:SetColor( 240,200,0,255 )
 			particle:SetCollide( true )
-
-			if NoCallback then
-				particle:SetDieTime( 0.5 )
-
-				emitter:Finish()
-				return
-			end
-
 			particle:SetCollideCallback( function( part, hitpos, hitnormal )
 				local effectdata = EffectData() 
 					effectdata:SetOrigin( hitpos ) 

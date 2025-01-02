@@ -63,6 +63,7 @@ if SERVER then
 		if not IsValid( SWEP ) then return end
 
 		SWEP:SetFuelType( self:GetFuelType() )
+		SWEP:SetCallbackTarget( self )
 	end
 
 	function ENT:removeSWEP( ply )
@@ -119,6 +120,8 @@ if SERVER then
 				self:removeSWEP( ply )
 			end
 		else
+			if ply:HasWeapon("weapon_lvsfuelfiller") then return end
+
 			self:giveSWEP( ply )
 		end
 	end
@@ -181,13 +184,14 @@ if CLIENT then
 	ENT.FrameMat = Material( "lvs/3d2dmats/frame.png" )
 	ENT.RefuelMat = Material( "lvs/3d2dmats/refuel.png" )
 
-
 	function ENT:Draw()
 		self:DrawModel()
 		self:DrawCable()
 
 		local ply = LocalPlayer()
 		local Pos = self:GetPos()
+
+		if not IsValid( ply ) then return end
 
 		if (ply:GetPos() - Pos):LengthSqr() > 5000000 then return end
 
@@ -213,7 +217,11 @@ if CLIENT then
 	end
 
 	function ENT:DrawCable()
-		if LocalPlayer():GetPos():DistToSqr( self:GetPos() ) > 350000 then return end
+		local plyL = LocalPlayer()
+
+		if not IsValid( plyL ) then return end
+
+		if plyL:GetPos():DistToSqr( self:GetPos() ) > 350000 then return end
 
 		local pos = self:LocalToWorld( Vector(10,0,45) )
 		local ang = self:LocalToWorldAngles( Angle(0,90,90) )

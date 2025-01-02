@@ -24,6 +24,7 @@ SWEP.HitDistance = 128
 
 function SWEP:SetupDataTables()
 	self:NetworkVar( "Int",0, "FuelType" )
+	self:NetworkVar( "Entity",0, "CallbackTarget" )
 end
 
 function SWEP:GetTank( entity )
@@ -56,6 +57,9 @@ if CLIENT then
 	SWEP.SlotPos			= 3
 
 	SWEP.DrawWeaponInfoBox 	= false
+
+	local FrameMat = Material( "lvs/3d2dmats/frame.png" )
+	local RefuelMat = Material( "lvs/3d2dmats/refuel.png" )
 
 	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 	end
@@ -96,6 +100,54 @@ if CLIENT then
 		draw.SimpleText( text, font, x, y, col or color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	end
 
+	local function DrawIcon( pos, fueltype, fuelamount, visible )
+		local data2D = pos:ToScreen()
+
+		if not data2D.visible then return end
+
+		local data = LVS.FUELTYPES[ fueltype ]
+
+		if not istable( data ) then return end
+
+		local x = data2D.x
+		local y = data2D.y
+
+		local scale = visible and 2 or 1
+
+		if visible then
+			local IconColor = Color( data.color.x, data.color.y, data.color.z, 200 )
+			local ScissorScale = 50
+			local offset = ScissorScale * scale * fuelamount
+			local offset2 = ScissorScale * scale * (1 - fuelamount)
+
+			surface.SetDrawColor( Color(0,0,0,200) )
+			render.SetScissorRect(  x - 40 * scale, y - ScissorScale * 0.5 * scale - offset, x + 40 * scale, y + ScissorScale * 0.5 * scale - offset, true )
+			surface.SetMaterial( FrameMat )
+			surface.DrawTexturedRect( x - 25 * scale, y - 25 * scale, 50 * scale, 50 * scale )
+			surface.SetMaterial( RefuelMat )
+			surface.DrawTexturedRect( x - 40 * scale, y - 40 * scale, 80 * scale, 80 * scale )
+
+			surface.SetDrawColor( IconColor )
+			render.SetScissorRect(  x - 40 * scale, y - ScissorScale * 0.5 * scale + offset2, x + 40 * scale, y + ScissorScale * 0.5 * scale + offset2, true )
+			surface.SetMaterial( FrameMat )
+			surface.DrawTexturedRect( x - 25 * scale, y - 25 * scale, 50 * scale, 50 * scale )
+			surface.SetMaterial( RefuelMat )
+			surface.DrawTexturedRect( x - 40 * scale, y - 40 * scale, 80 * scale, 80 * scale )
+			render.SetScissorRect( 0,0,0,0,false )
+
+			draw.SimpleText( data.name, "LVS_FONT", x, y - 40 * scale, IconColor, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		else
+			local IconColor = Color( data.color.x, data.color.y, data.color.z, 100 )
+
+			surface.SetDrawColor( IconColor )
+
+			surface.SetMaterial( FrameMat )
+			surface.DrawTexturedRect( x - 25 * scale, y - 25 * scale, 50 * scale, 50 * scale )
+			surface.SetMaterial( RefuelMat )
+			surface.DrawTexturedRect( x - 40 * scale, y - 40 * scale, 80 * scale, 80 * scale )
+		end
+	end
+
 	function SWEP:DrawHUD()
 		local ply = self:GetOwner()
 
@@ -127,23 +179,33 @@ if CLIENT then
 
 		if not IsValid( FuelTank ) then return end
 
-		if FuelTank:GetFuelType() ~= self:GetFuelType() then
-			DrawText( trace.HitPos, "Incorrect Fuel Type", Color(255,0,0,255) )
+		local pos = trace.HitPos
+		local fuelamount = FuelTank:GetFuel()
+		local fueltype = FuelTank:GetFuelType()
+
+		if fueltype ~= self:GetFuelType() then
+
+			local FuelName = LVS.FUELTYPES[ fueltype ].name or ""
+
+			DrawText( trace.HitPos, "Incorrect Fuel Type. Requires: "..FuelName, Color(255,0,0,255) )
 
 			return
 		end
 
 		if not IsValid( FuelCap ) then
-			DrawText( trace.HitPos, math.Round(FuelTank:GetFuel() * 100,1).."%", Color(0,255,0,255) )
+			DrawIcon( pos, fueltype, fuelamount, true )
+			DrawText( pos, math.Round(fuelamount * 100,1).."%", Color(0,255,0,255) )
 
 			return
 		end
 
 		if FuelCap:IsOpen() then
 			if (trace.HitPos - FuelCap:GetPos()):Length() > self.RangeToCap then
-				DrawText( trace.HitPos, "Aim at Fuel Cap!", Color(255,255,0,255) )
+				DrawIcon( FuelCap:GetPos(), fueltype, fuelamount, false )
+				DrawText( pos, "Aim at Fuel Cap!", Color(255,255,0,255) )
 			else
-				DrawText( trace.HitPos, math.Round(FuelTank:GetFuel() * 100,1).."%", Color(0,255,0,255) )
+				DrawIcon( FuelCap:GetPos(), fueltype, fuelamount, true )
+				DrawText( pos, math.Round(fuelamount * 100,1).."%", Color(0,255,0,255) )
 			end
 
 			return
@@ -153,7 +215,10 @@ if CLIENT then
 
 		if not isstring( Key ) then Key = "[+use is not bound to a key]" end
 
-		DrawText( FuelCap:GetPos(), "Press "..Key.." to Open", Color(255,255,0,255) )
+		local pos = FuelCap:GetPos()
+
+		DrawIcon( pos, fueltype, fuelamount, false )
+		DrawText( pos, "Press "..Key.." to Open", Color(255,255,0,255) )
 	end
 end
 
@@ -214,8 +279,26 @@ function SWEP:Refuel( trace )
 		if (trace.HitPos - FuelCap:GetPos()):Length() > self.RangeToCap then return end
 	end
 
-	if FuelTank:GetFuel() ~= 1 then
-		FuelTank:SetFuel( math.min( FuelTank:GetFuel() + (entity.lvsGasStationFillSpeed or 0.05), 1 ) )
-		entity:OnRefueled()
+	if FuelTank:GetFuel() == 1 then return end
+
+	local Target = self:GetCallbackTarget()
+
+	if FuelTank == Target then return end
+
+	if IsValid( Target ) and Target.TakeFuel then
+		local Size = FuelTank:GetSize()
+		local Cur = FuelTank:GetFuel()
+		local Need = 1 - Cur
+		local Add = Target:TakeFuel( Need * Size )
+
+		if Add > 0 then
+			FuelTank:SetFuel( Cur + Add / Size )
+			entity:OnRefueled()
+		end
+
+		return
 	end
+
+	FuelTank:SetFuel( math.min( FuelTank:GetFuel() + (entity.lvsGasStationFillSpeed or 0.05), 1 ) )
+	entity:OnRefueled()
 end
