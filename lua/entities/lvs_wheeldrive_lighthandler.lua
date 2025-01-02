@@ -284,7 +284,7 @@ end
 local function DistanceMul( ent )
 	local dist = (LocalPlayer():GetPos() - ent:GetPos()):LengthSqr()
 
-	return math.max( 1 - (dist / 25000000), 0 )
+	return math.max( 1 - (dist / 10000000), 0 )
 end
 
 function ENT:LightsThink( base )
@@ -609,7 +609,7 @@ function ENT:RenderLights( base, data )
 				if not projdata.colorR or not projdata.colorG or not projdata.colorB or not projdata.brightness then self:InitializeLights( base ) break end
 
 				local L = 100 + 700 * brightness
-				local W = 50 + 50 * brightness
+				local W = 50 + 100 * brightness
 
 				render.SetMaterial( self.LightMaterial )
 				render.DrawBeam( pos, pos + dir * L, W, -0.01, 0.99, Color( projdata.colorR * mul, projdata.colorG * mul, projdata.colorB * mul, projdata.brightness ) )

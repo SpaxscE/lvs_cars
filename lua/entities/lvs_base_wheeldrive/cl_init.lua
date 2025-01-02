@@ -152,10 +152,35 @@ function ENT:OnEngineStallBroken()
 end
 
 function ENT:OnChangeGear( oldGear, newGear )
-	if self:GetHP() < self:GetMaxHP() * 0.5 and oldGear > newGear then
-		self:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
+	local HP = self:GetHP()
+	local MaxHP = self:GetMaxHP()
 
-		self:DoExhaustBackFire()
+	local Engine = self:GetEngine()
+	local EngineHP = 0
+	local EngineMaxHP = 0
+
+	if IsValid( Engine ) then
+		EngineHP = Engine:GetHP()
+		EngineMaxHP = Engine:GetMaxHP()
+	end
+
+	local Damaged = HP < MaxHP * 0.5
+	local EngineDamaged = EngineHP < EngineMaxHP
+
+	if (Damaged or EngineDamaged) then
+		if oldGear > newGear then
+			if Damaged then
+				self:EmitSound( "lvs/vehicles/generic/gear_grind"..math.random(1,6)..".ogg", 75, math.Rand(70,100), 0.25 )
+
+				if EngineDamaged then
+					self:DoExhaustBackFire()
+				end
+			end
+		else
+			if EngineDamaged then
+				self:DoExhaustBackFire()
+			end
+		end
 	else
 		self:EmitSound( self.TransShiftSound, 75 )
 	end
