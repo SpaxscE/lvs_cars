@@ -27,10 +27,6 @@ ENT.EngineTorque = 250
 ENT.TransGears = 4
 ENT.TransGearsReverse = 1
 
-ENT.PhysicsRollMul = 1
-ENT.PhysicsDampingRollMul = 1
-ENT.PhysicsWheelGyroMul = 1
-
 ENT.lvsShowInSpawner = true
 
 ENT.KickStarter = true

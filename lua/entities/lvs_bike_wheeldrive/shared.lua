@@ -31,6 +31,7 @@ ENT.PhysicsDampingReverse = false
 ENT.PhysicsRollMul = 1
 ENT.PhysicsDampingRollMul = 1
 ENT.PhysicsWheelGyroMul = 1
+ENT.PhysicsWheelGyroSpeed = 400
 
 ENT.WheelPhysicsMass = 250
 ENT.WheelPhysicsInertia = Vector(5,4,5)

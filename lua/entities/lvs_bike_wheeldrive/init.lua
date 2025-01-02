@@ -11,7 +11,9 @@ ENT.LeanAngleIdle = -10
 ENT.LeanAnglePark = -10
 
 function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
-	if self._IsDismounted then
+	local EntTable = self:GetTable()
+
+	if EntTable._IsDismounted then
 
 		local Pod = self:GetDriverSeat()
 
@@ -19,8 +21,8 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 			local z = math.max( self:GetUp().z, 0 )
 
 			local Gravity = self:GetWorldUp() * self:GetWorldGravity() * phys:GetMass() * deltatime
-			phys:ApplyForceCenter( Gravity * 1.5 * self.TippingForceMul * z )
-			phys:ApplyForceOffset( -Gravity * 3 * self.TippingForceMul, Pod:GetPos() )
+			phys:ApplyForceCenter( Gravity * 1.5 * EntTable.TippingForceMul * z )
+			phys:ApplyForceOffset( -Gravity * 3 * EntTable.TippingForceMul, Pod:GetPos() )
 		end
 
 		return vector_origin, vector_origin, SIM_NOTHING
@@ -33,14 +35,14 @@ function ENT:PhysicsSimulateOverride( ForceAngle, phys, deltatime, simulate )
 	local ShouldIdle = self:ShouldPutFootDown()
 
 	if ShouldIdle then
-		Steer = self:GetEngineActive() and self.LeanAngleIdle or self.LeanAnglePark
-		VelL.x = self.MaxVelocity
+		Steer = self:GetEngineActive() and EntTable.LeanAngleIdle or EntTable.LeanAnglePark
+		VelL.x = EntTable.MaxVelocity
 	end
 
-	local Mul = (math.max( self:GetUp().z, 0 ) ^ 2) * 50 * (math.max( VelL.x / self.MaxVelocity, 0 ) ^ 2) * self.PhysicsWheelGyroMul
+	local Mul = (self:GetUp().z > 0 and 1 or 0) * 50 * (math.min( math.abs( VelL.x ) / EntTable.PhysicsWheelGyroSpeed, 1 ) ^ 2) * EntTable.PhysicsWheelGyroMul
 	local Diff = (Steer - self:GetAngles().r)
 
-	ForceAngle.x = (Diff * 2.5 * self.PhysicsRollMul - phys:GetAngleVelocity().x * self.PhysicsDampingRollMul) * Mul
+	ForceAngle.x = (Diff * 2.5 * EntTable.PhysicsRollMul - phys:GetAngleVelocity().x * EntTable.PhysicsDampingRollMul) * Mul
 
 	if ShouldIdle and math.abs( Diff ) > 1 then
 		simulate = SIM_GLOBAL_ACCELERATION
