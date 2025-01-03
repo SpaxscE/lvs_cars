@@ -165,7 +165,7 @@ function ENT:OnChangeGear( oldGear, newGear )
 	end
 
 	local Damaged = HP < MaxHP * 0.5
-	local EngineDamaged = EngineHP < EngineMaxHP
+	local EngineDamaged = EngineHP < EngineMaxHP * 0.5
 
 	if (Damaged or EngineDamaged) then
 		if oldGear > newGear then

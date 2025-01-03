@@ -21,7 +21,7 @@ function ENT:TakeCollisionDamage( damage, attacker )
 	if not IsValid( Engine ) then return end
 
 	local dmginfo = DamageInfo()
-	dmginfo:SetDamage( damage / 100 )
+	dmginfo:SetDamage(  (math.min(damage / 4000,1) ^ 2) * 200 )
 	dmginfo:SetAttacker( attacker )
 	dmginfo:SetInflictor( attacker )
 	dmginfo:SetDamageType( DMG_CRUSH + DMG_VEHICLE )
@@ -116,15 +116,9 @@ function ENT:RemoveWeapons()
 	for _, pod in pairs( self:GetPassengerSeats() ) do
 		local weapon = pod:lvsGetWeapon()
 
-		if not IsValid( weapon ) or not weapon._activeWeapon then continue end
+		if not IsValid( weapon ) then continue end
 
-		local CurWeapon = self.WEAPONS[ weapon:GetPodIndex() ][ weapon._activeWeapon ]
-
-		if not CurWeapon then continue end
-
-		if CurWeapon.FinishAttack then
-			CurWeapon.FinishAttack( weapon )
-		end
+		weapon:WeaponsFinish()
 	end
 
 	self:WeaponsOnRemove()
