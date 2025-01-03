@@ -627,7 +627,7 @@ function ENT:DamageFX( vehicle )
 			effectdata:SetEntity( vehicle )
 		util.Effect( "lvs_carengine_fire", effectdata )
 	else
-		EntTable ._FireStopTime = nil
+		EntTable._FireStopTime = nil
 
 		self:StopFireSound()
 
