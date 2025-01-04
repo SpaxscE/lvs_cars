@@ -15,7 +15,7 @@ function ENT:DoExhaustFX( Magnitude )
 end
 
 function ENT:ExhaustEffectsThink()
-	if not self:GetBackfire() then return end
+	if not self.GetBackfire or not self:GetBackfire() then return end
 
 	local Throttle = self:GetThrottle()
 
