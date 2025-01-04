@@ -33,6 +33,19 @@ function ENT:DrawWheelBroken( flags )
 		return
 	end
 
+	-- Alternative method, tuning wheels... Workaround for diggers wheel pack. Flickers for some people... it is what it is
+	if self:GetBoneCount() > 1 then
+		local pos = self:GetPos()
+
+		self:SetRenderOrigin( pos - base:GetUp() * base.WheelPhysicsTireHeight )
+		self:DrawWheel( flags )
+		self:SetRenderOrigin()
+
+		return
+	end
+
+	-- bone position method... more reliable and works on infmap, but doesnt work on diggers wheel pack
+
 	self:SetupBones()
 
 	local pos, ang = self:GetBonePosition( 0 )
