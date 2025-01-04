@@ -231,3 +231,7 @@ function ENT:AddTrailerHitch( pos, hitchtype )
 
 	return TrailerHitch
 end
+
+function ENT:AddTuningExhaust()
+	self:SetBackfire( true )
+end

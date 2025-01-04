@@ -6,6 +6,7 @@ include("cl_tiresounds.lua")
 include("cl_camera.lua")
 include("cl_hud.lua")
 include("cl_scrolltexture.lua")
+include("cl_exhausteffects.lua")
 
 DEFINE_BASECLASS( "lvs_base" )
 
@@ -102,6 +103,7 @@ function ENT:Think()
 	BaseClass.Think( self )
 
 	self:TireSoundThink()
+	self:ExhaustEffectsThink()
 
 	if isfunction( self.UpdatePoseParameters ) then
 		self:CalcPoseParameters()
@@ -123,22 +125,6 @@ function ENT:PostDrawTranslucent()
 	if not IsValid( Handler ) or not istable( self.Lights ) then return end
 
 	Handler:RenderLights( self, self.Lights )
-end
-
-function ENT:DoExhaustBackFire()
-	if not istable( self.ExhaustPositions ) then return end
-
-	for _, data in ipairs( self.ExhaustPositions ) do
-		if math.random( 1, math.floor( #self.ExhaustPositions * 0.75 ) ) ~= 1 then continue end
-
-		timer.Simple( math.Rand(0.5,1), function()
-			local effectdata = EffectData()
-				effectdata:SetOrigin( data.pos )
-				effectdata:SetAngles( data.ang )
-				effectdata:SetEntity( self )
-			util.Effect( "lvs_carexhaust_backfire", effectdata )
-		end )
-	end
 end
 
 function ENT:OnEngineStallBroken()
@@ -180,6 +166,10 @@ function ENT:OnChangeGear( oldGear, newGear )
 		end
 	else
 		self:EmitSound( self.TransShiftSound, 75 )
+
+		if self:GetBackfire() then
+			self:CalcExhaustPop()
+		end
 	end
 
 	self:SuppressViewPunch( self.TransShiftSpeed )
@@ -191,24 +181,9 @@ end
 
 function ENT:OnEngineActiveChanged( Active )
 	if Active then
-		self:EmitSound( "lvs/vehicles/generic/engine_start1.wav", 75, 100,  LVS.EngineVolume )
+		self:EmitSound( "lvs/vehicles/generic/engine_start1.wav", 75, 100, LVS.EngineVolume )
 	else
-		self:EmitSound( "vehicles/jetski/jetski_off.wav", 75, 100,  LVS.EngineVolume )
-	end
-end
-
-function ENT:DoExhaustFX( Magnitude )
-	for _, data in ipairs( self.ExhaustPositions ) do
-		if data.bodygroup then
-			if not self:BodygroupIsValid( data.bodygroup.name, data.bodygroup.active ) then continue end
-		end
-
-		local effectdata = EffectData()
-			effectdata:SetOrigin( self:LocalToWorld( data.pos ) )
-			effectdata:SetNormal( self:LocalToWorldAngles( data.ang ):Forward() )
-			effectdata:SetMagnitude( Magnitude )
-			effectdata:SetEntity( self )
-		util.Effect( "lvs_exhaust", effectdata )
+		self:EmitSound( "vehicles/jetski/jetski_off.wav", 75, 100, LVS.EngineVolume )
 	end
 end
 

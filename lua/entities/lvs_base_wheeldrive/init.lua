@@ -7,6 +7,7 @@ AddCSLuaFile( "cl_hud_speedometer.lua" )
 AddCSLuaFile( "cl_optics.lua" )
 AddCSLuaFile( "cl_tiresounds.lua" )
 AddCSLuaFile( "cl_scrolltexture.lua" )
+AddCSLuaFile( "cl_exhausteffects.lua" )
 AddCSLuaFile( "sh_animations.lua" )
 AddCSLuaFile( "sh_camera_eyetrace.lua" )
 include("shared.lua")
@@ -281,8 +282,12 @@ function ENT:SimulateRotatingWheel( ent, phys, deltatime )
 			local BoostRPM = 0
 
 			if self:GetReverse() then
+				Torque = math.min( Torque, 0 )
+
 				BoostRPM = ent:VelToRPM( EntTable.MaxVelocityReverse / EntTable.TransGearsReverse ) * 0.5
 			else
+				Torque = math.max( Torque, 0 )
+
 				BoostRPM = ent:VelToRPM( EntTable.MaxVelocity / EntTable.TransGears ) * 0.5
 			end
 

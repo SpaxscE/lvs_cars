@@ -2,7 +2,7 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.PrintName = "Gauge"
+ENT.PrintName = "Tuning Exhaust"
 ENT.Author = "Luna"
 ENT.Category = "[LVS]"
 
@@ -22,7 +22,7 @@ if SERVER then
 	end
 
 	function ENT:Initialize()	
-		self:SetModel( "models/diggercars/tacho.mdl" )
+		self:SetModel( "models/props_vehicles/carparts_muffler01a.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:PhysWake()
@@ -37,23 +37,23 @@ if SERVER then
 
 		local ent = data.HitEntity
 
-		if not IsValid( ent ) or not ent.LVS or not isfunction( ent.SetRacingHud ) then return end
+		if not IsValid( ent ) or not ent.LVS or not isfunction( ent.SetBackfire ) then return end
 
-		ent:SetRacingHud( not ent:GetRacingHud() )
+		ent:SetBackfire( not ent:GetBackfire() )
 
 		local ply = self:GetCreator()
 
-		if ent:GetRacingHud() then
+		if ent:GetBackfire() then
 			ent:EmitSound("common/wpn_hudoff.wav")
 
 			if IsValid( ply ) then
-				ply:ChatPrint( "Gauge Added" )
+				ply:ChatPrint( "Tuning Exhaust Added" )
 			end
 		else
 			ent:EmitSound("common/wpn_denyselect.wav")
 
 			if IsValid( ply ) then
-				ply:ChatPrint( "Gauge Removed" )
+				ply:ChatPrint( "Tuning Exhaust Removed" )
 			end
 		end
 
