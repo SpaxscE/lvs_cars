@@ -1,4 +1,10 @@
 
+function ENT:IsBackFireEnabled()
+	if not isfunction( self.GetBackfire ) then return false end
+
+	return self:GetBackfire()
+end
+
 function ENT:DoExhaustFX( Magnitude )
 	for _, data in ipairs( self.ExhaustPositions ) do
 		if data.bodygroup then
@@ -15,7 +21,7 @@ function ENT:DoExhaustFX( Magnitude )
 end
 
 function ENT:ExhaustEffectsThink()
-	if not self.GetBackfire or not self:GetBackfire() then return end
+	if not self:IsBackFireEnabled() then return end
 
 	local Throttle = self:GetThrottle()
 

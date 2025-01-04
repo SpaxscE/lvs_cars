@@ -167,7 +167,7 @@ function ENT:OnChangeGear( oldGear, newGear )
 	else
 		self:EmitSound( self.TransShiftSound, 75 )
 
-		if self:GetBackfire() then
+		if self:IsBackFireEnabled() then
 			self:CalcExhaustPop()
 		end
 	end
