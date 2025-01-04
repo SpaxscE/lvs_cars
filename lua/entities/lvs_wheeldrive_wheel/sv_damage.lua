@@ -108,6 +108,21 @@ function ENT:DestroyTire()
 	effectdata:SetNormal( Vector(0,0,1) )
 	util.Effect( "lvs_physics_wheelsmoke", effectdata, true, true )
 
+	self._RestoreBodyGroups = {}
+
+	for id, group in pairs( self:GetBodyGroups() ) do
+		for subid, subgroup in pairs( group.submodels ) do
+			if subgroup == "" or string.lower( subgroup ) == "empty" then
+
+				local bodyGroupId = id - 1
+
+				self._RestoreBodyGroups[ bodyGroupId ] = self:GetBodygroup( bodyGroupId )
+	
+				self:SetBodygroup( bodyGroupId, subid )
+			end
+		end
+	end
+
 	if not IsValid( self.SuspensionConstraintElastic ) then return end
 
 	local Length = (self.SuspensionConstraintElastic:GetTable().length or 25) - base.WheelPhysicsTireHeight 
@@ -119,6 +134,14 @@ function ENT:RepairTire()
 	self:StopLeakAir()
 
 	if not self._OldTirePhysProp then return end
+
+	if istable( self._RestoreBodyGroups ) then
+		for bodyGroupId, subid in pairs( self._RestoreBodyGroups ) do
+			self:SetBodygroup( bodyGroupId, subid )
+		end
+
+		self._RestoreBodyGroups = nil
+	end
 
 	self:SetNWDamaged( false )
 	self:SetSuspensionHeight( self._SuspensionHeightMultiplier )

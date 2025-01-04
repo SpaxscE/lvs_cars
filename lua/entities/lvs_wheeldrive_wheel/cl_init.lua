@@ -33,11 +33,11 @@ function ENT:DrawWheelBroken( flags )
 		return
 	end
 
+	self:SetupBones()
+
 	local pos, ang = self:GetBonePosition( 0 )
 
 	if not pos then self:DrawModel( flags ) return end
-
-	self:SetupBones()
 
 	self:SetBonePosition( 0, pos - base:GetUp() * base.WheelPhysicsTireHeight, ang )
 
