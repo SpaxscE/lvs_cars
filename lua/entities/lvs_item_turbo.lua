@@ -100,6 +100,16 @@ end
 function ENT:HandleSounds( vehicle, engine )
 	if not self.snd then return end
 
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) then return end
+
+	local TargetDSP = ply:lvsGetDSP()
+
+	if self.snd:GetDSP() ~= TargetDSP then
+		self.snd:SetDSP( TargetDSP )
+	end
+
 	if not self.TurboRPM then
 		self.TurboRPM = 0
 	end
@@ -113,9 +123,9 @@ function ENT:HandleSounds( vehicle, engine )
 
 	if throttle == 0 and (self.TurboRPM > 350) then
 		if istable( vehicle.TurboBlowOff ) then
-			self:EmitSound( vehicle.TurboBlowOff[ math.random( 1, #vehicle.TurboBlowOff ) ], 75, 100, volume * LVS.EngineVolume )
+			self:EmitSound( vehicle.TurboBlowOff[ math.random( 1, #vehicle.TurboBlowOff ) ], 75, 100, volume * LVS.EngineVolume, CHAN_AUTO, 0, TargetDSP )
 		else
-			self:EmitSound( vehicle.TurboBlowOff, 75, 100, volume * LVS.EngineVolume )
+			self:EmitSound( vehicle.TurboBlowOff, 75, 100, volume * LVS.EngineVolume, CHAN_AUTO, 0, TargetDSP )
 		end
 		self.TurboRPM = 0
 	end

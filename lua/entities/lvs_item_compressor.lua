@@ -100,6 +100,16 @@ end
 function ENT:HandleSounds( vehicle, engine )
 	if not self.snd then return end
 
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) then return end
+
+	local TargetDSP = ply:lvsGetDSP()
+
+	if self.snd:GetDSP() ~= TargetDSP then
+		self.snd:SetDSP( TargetDSP )
+	end
+
 	local throttle = engine:GetClutch() and 0 or vehicle:GetThrottle()
 	local volume = (0.2 + math.max( math.sin( math.rad( ((engine:GetRPM() - vehicle.EngineIdleRPM) / (vehicle.EngineMaxRPM - vehicle.EngineIdleRPM)) * 90 ) ), 0 ) * 0.8) * throttle * vehicle.SuperChargerVolume
 	local pitch = engine:GetRPM() / vehicle.EngineMaxRPM

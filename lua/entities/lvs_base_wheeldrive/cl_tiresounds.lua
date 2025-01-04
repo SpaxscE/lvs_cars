@@ -20,6 +20,12 @@ function ENT:TireSoundRemove()
 end
 
 function ENT:TireSoundThink()
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) then return end
+
+	local TargetDSP = ply:lvsGetDSP()
+
 	for snd, _ in pairs( self.TireSoundTypes ) do
 		local T = self:GetTireSoundTime( snd )
 
@@ -35,6 +41,10 @@ function ENT:TireSoundThink()
 
 			local volume = math.min(speed / 1000,1) ^ 2 * T
 			local pitch = 100 + math.Clamp((speed - 400) / 200,0,155)
+
+			if sound:GetDSP() ~= TargetDSP then
+				sound:SetDSP( TargetDSP )
+			end
 
 			sound:ChangeVolume( volume, 0 )
 			sound:ChangePitch( pitch, 0.5 ) 

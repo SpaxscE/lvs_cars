@@ -234,6 +234,7 @@ function ENT:HandleEngineSounds( vehicle )
 	local EntTable = self:GetTable()
 
 	local DrivingMe = ply:lvsGetVehicle() == vehicle
+	local TargetDSP = ply:lvsGetDSP()
 
 	local IsManualTransmission = vehicle:IsManualTransmission()
 
@@ -477,6 +478,10 @@ function ENT:HandleEngineSounds( vehicle )
 				if sound.int then sound.int:ChangeVolume( 0, 0 ) end
 			end
 		else
+			if sound:GetDSP() ~= TargetDSP then
+				sound:SetDSP( TargetDSP )
+			end
+
 			sound:ChangePitch( math.Clamp( Pitch * PitchMul, 0, 255 ), FadeSpeed )
 			sound:ChangeVolume( Volume, 0.15 )
 		end
