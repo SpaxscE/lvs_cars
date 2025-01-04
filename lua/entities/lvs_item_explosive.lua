@@ -61,6 +61,7 @@ if SERVER then
 		local effectdata = EffectData()
 		effectdata:SetOrigin( Pos )
 		effectdata:SetNormal( Vector(0,0,1) )
+		effectdata:SetMagnitude( 1 )
 
 		if self:WaterLevel() >= 2 then
 			util.Effect( "WaterSurfaceExplosion", effectdata, true, true )
