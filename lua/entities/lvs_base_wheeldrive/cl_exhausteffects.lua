@@ -58,9 +58,9 @@ function ENT:CalcExhaustPop()
 			if RPM < self.EngineMaxRPM * 0.6 then return end
 
 			if i == 0 then
-				self:DoExhaustPop( 0.5 )
+				self:DoExhaustPop( LVS.EngineVolume )
 			else
-				self:DoExhaustPop( 0.5 * LVS.EngineVolume )
+				self:DoExhaustPop( 0.75 * LVS.EngineVolume )
 			end
 		end )
 	end

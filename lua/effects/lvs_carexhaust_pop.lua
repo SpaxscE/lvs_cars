@@ -25,6 +25,22 @@ function EFFECT:Init( data )
 
 	self:SetPos( Pos )
 
+	local ply = LocalPlayer()
+
+	if not IsValid( ply ) then return end
+
+	local veh = ply:lvsGetVehicle()
+
+	if IsValid( veh ) and veh == self.Ent then
+		local pod = ply:GetVehicle()
+
+		if IsValid( pod ) and not pod:GetThirdPersonMode() then
+			sound.Play( "lvs/vehicles/generic/exhaust_pop_interior"..math.random(1,12)..".ogg", Pos, 75, math.random(98,105), volume )
+
+			return
+		end
+	end
+
 	local dlight = DynamicLight( self.Ent:EntIndex() * math.random(1,4), true )
 
 	if dlight then
@@ -38,7 +54,7 @@ function EFFECT:Init( data )
 		dlight.DieTime = CurTime() + 0.2
 	end
 
-	sound.Play( "lvs/vehicles/generic/exhaust_pop"..math.random(1,19)..".ogg", Pos, 75, math.random(98,105), volume )
+	sound.Play( "lvs/vehicles/generic/exhaust_pop"..math.random(1,16)..".ogg", Pos, 75, math.random(98,105), volume )
 end
 
 function EFFECT:Think()
