@@ -25,7 +25,6 @@ if SERVER then
 		self:SetUseType( SIMPLE_USE )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
-		self:SetCollisionGroup( COLLISION_GROUP_WORLD )
 		self:DrawShadow( false )
 
 		self:SetMaterial( "models/wireframe" )
@@ -38,6 +37,21 @@ if SERVER then
 		PhysObj:EnableDrag( false )
 		PhysObj:EnableGravity( false ) 
 		PhysObj:EnableMotion( true )
+
+		timer.Simple( 0, function()
+			if not IsValid( self ) or not self.GetBase then return end
+
+			local Base = self:GetBase()
+
+			if not IsValid( Base ) or not Base.GetWheels then return end
+
+			for _, Wheel in pairs( Base:GetWheels() ) do
+				if not IsValid( Wheel ) then continue end
+
+				local nocollide_constraint = constraint.NoCollide(self,Wheel,0,0)
+				nocollide_constraint.DoNotDuplicate = true
+			end
+		end )
 	end
 
 	function ENT:Think()
