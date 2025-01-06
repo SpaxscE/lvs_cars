@@ -25,6 +25,8 @@ if SERVER then
 		self:SetUseType( SIMPLE_USE )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
+		self:AddEFlags( EFL_DONTBLOCKLOS )
+		self:AddFlags( FL_OBJECT )
 		self:DrawShadow( false )
 
 		self:SetMaterial( "models/wireframe" )

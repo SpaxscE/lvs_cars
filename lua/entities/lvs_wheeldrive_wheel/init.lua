@@ -52,6 +52,8 @@ end
 
 function ENT:Initialize()
 	self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
+	self:AddEFlags( EFL_DONTBLOCKLOS )
+	self:AddFlags( FL_OBJECT )
 end
 
 function ENT:GravGunPickupAllowed( ply )
