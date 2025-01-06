@@ -52,8 +52,9 @@ end
 
 function ENT:Initialize()
 	self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
+
+	-- this is so vj npcs can still see us
 	self:AddEFlags( EFL_DONTBLOCKLOS )
-	self:AddFlags( FL_OBJECT )
 end
 
 function ENT:GravGunPickupAllowed( ply )
