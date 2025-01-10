@@ -1,5 +1,6 @@
 
 ENT.DSDamageAllowedType = DMG_SLASH + DMG_AIRBOAT + DMG_BULLET + DMG_SNIPER + DMG_BUCKSHOT + DMG_PREVENT_PHYSICS_FORCE
+ENT.DSArmorIgnoreForce = 0
 
 function ENT:OnTakeDamage( dmginfo )
 	local base = self:GetBase()
@@ -18,6 +19,10 @@ function ENT:OnTakeDamage( dmginfo )
 	local Damage = dmginfo:GetDamage()
 
 	if not dmginfo:IsDamageType( DMG_PREVENT_PHYSICS_FORCE ) then
+		local IsFireDamage = dmginfo:IsDamageType( DMG_BURN )
+
+		if dmginfo:GetDamageForce():Length() < self.DSArmorIgnoreForce and not IsFireDamage then return end
+
 		local MaxHealth = base:GetMaxHP()
 
 		local ArmoredHealth = MaxHealth + MaxArmor
