@@ -92,6 +92,15 @@ function ENT:AddWheel( data )
 	Wheel:CheckAlignment()
 	Wheel:SetWheelType( data.wheeltype )
 
+	if isnumber( data.MaxHealth ) then
+		Wheel:SetMaxHP( data.MaxHealth )
+		Wheel:SetHP( data.MaxHealth )
+	end
+
+	if isnumber( data.DSArmorIgnoreForce ) then
+		Wheel.DSArmorIgnoreForce = data.DSArmorIgnoreForce
+	end
+
 	self:DeleteOnRemove( Wheel )
 	self:TransferCPPI( Wheel )
 

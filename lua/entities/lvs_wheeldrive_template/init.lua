@@ -105,6 +105,9 @@ function ENT:OnSpawn( PObj )
 		mdl = "path/to/model.mdl",
 		mdl_ang = Angle(0,0,0), -- use this to match model orientation with wheel rotation
 
+		MaxHealth = 100, -- changes max health of wheel
+		DSArmorIgnoreForce = 0, -- changes the damage force that is needed to damage this wheel
+
 		--camber = 0, -- camber alignment
 		--caster = 0, -- caster alignment
 		--toe = 0, -- toe alignment
