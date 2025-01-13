@@ -22,6 +22,13 @@ function ENT:AISetMovementTarget( pos, dist )
 	self._MovementDistance = (dist or 500)
 end
 
+local DontChase = {
+	["starfighter"] = true,
+	["repulsorlift"] = true,
+	["plane"] = true,
+	["helicopter"] = true,
+}
+
 function ENT:RunAI()
 	local Pod = self:GetDriverSeat()
 
@@ -39,7 +46,9 @@ function ENT:RunAI()
 
 	local T = CurTime()
 
-	if IsValid( Target ) then
+	local IsTargetValid = IsValid( Target )
+
+	if IsTargetValid then
 		if self:AIHasWeapon( 1 ) then
 			if (self._LastGotoPos or 0) > T then
 				GotoPos = self._OldGotoPos
@@ -69,7 +78,22 @@ function ENT:RunAI()
 		local FrontLeft2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,85,0) ):Right() * RangerLength } )
 		local FrontRight2 = util.TraceLine( { start = StartPos, filter = TraceFilter, endpos = StartPos - Pod:LocalToWorldAngles( Angle(0,-85,0) ):Right() * RangerLength } )
 
+		local traceWater = util.TraceLine( {
+			start = Front.HitPos,
+			endpos = Front.HitPos - Vector(0,0,50000),
+			filter = self:GetCrosshairFilterEnts(),
+			mask = MASK_WATER
+		} )
+
+		if traceWater.Hit then
+			Front.HitPos = StartPos
+		end
+
 		GotoPos = (Front.HitPos + FrontLeft.HitPos + FrontRight.HitPos + FrontLeft1.HitPos + FrontRight1.HitPos + FrontLeft2.HitPos + FrontRight2.HitPos) / 7
+
+		if not self:GetEngineActive() then
+			self:StartEngine()
+		end
 
 		if self:GetReverse() then
 			if Front.Fraction < 0.03 then
@@ -87,7 +111,16 @@ function ENT:RunAI()
 
 	self:PhysWake()
 
-	if self.PivotSteerEnable and Throttle == 0 then
+	local PivotSteer = self.PivotSteerEnable
+	local DontMove = PivotSteer and Throttle == 0
+
+	if PivotSteer and IsTargetValid and Target.LVS and Target.GetVehicleType then
+		if DontChase[ Target:GetVehicleType() ] then
+			DontMove = true
+		end
+	end
+
+	if DontMove then
 		local ang = self:GetAngles()
 		ang.y = Pod:GetAngles().y + 90
 
