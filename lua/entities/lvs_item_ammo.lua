@@ -79,9 +79,7 @@ if SERVER then
 		if not entity.LVS then return end
 
 		if self:AddSingleRound( entity ) then
-			entity:OnMaintenance()
-			hook.Run( "LVS_OnVehicleMaintenance", entity, self )
-
+			entity:OnMaintenance(self)
 			entity:EmitSound("items/ammo_pickup.wav")
 
 			self.MarkForRemove = true
