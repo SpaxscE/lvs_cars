@@ -107,8 +107,12 @@ function ENT:PhysicsMaterialUpdate( TargetValue )
 end
 
 function ENT:PhysicsOnGround( PhysObj )
-	if not PhysObj then
+	if not IsValid(PhysObj) then
 		PhysObj = self:GetPhysicsObject()
+	end
+
+	if not IsValid(PhysObj) then
+		return false
 	end
 
 	local EntLoad,_ = PhysObj:GetStress()
