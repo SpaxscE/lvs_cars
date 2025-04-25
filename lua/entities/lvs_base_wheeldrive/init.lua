@@ -444,7 +444,7 @@ function ENT:OnRefueled()
 	FuelTank:EmitSound( "vehicles/jetski/jetski_no_gas_start.wav" )
 end
 
-function ENT:OnMaintenance()
+function ENT:OnMaintenance(entity)
 	local FuelTank = self:GetFuelTank()
 	local Engine = self:GetEngine()
 
@@ -468,6 +468,8 @@ function ENT:OnMaintenance()
 
 		wheel:SetHP( wheel:GetMaxHP() )
 	end
+
+	hook.Run( "LVS.OnVehicleMaintenance", self, entity )
 end
 
 function ENT:OnSuperCharged( enable )

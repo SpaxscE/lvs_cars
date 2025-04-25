@@ -21,7 +21,7 @@ if SERVER then
 		return ent
 	end
 
-	function ENT:Initialize()	
+	function ENT:Initialize()
 		self:SetModel( "models/misc/88mm_shell.mdl" )
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:PhysWake()
@@ -79,8 +79,7 @@ if SERVER then
 		if not entity.LVS then return end
 
 		if self:AddSingleRound( entity ) then
-			entity:OnMaintenance()
-
+			entity:OnMaintenance(self)
 			entity:EmitSound("items/ammo_pickup.wav")
 
 			self.MarkForRemove = true
