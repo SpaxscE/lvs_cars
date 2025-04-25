@@ -158,7 +158,7 @@ if SERVER then
 		base:OnTakeDamage( dmginfo )
 	end
 
-	function ENT:PhysicsCollide( data, phys )
+	function ENT:PhysicsCollide( data, physobj )
 		local HitEntity = data.HitEntity
 		local HitObject = data.HitObject
 

@@ -106,10 +106,11 @@ function ENT:PhysicsMaterialUpdate( TargetValue )
 	PhysObj:SetMaterial( base.WheelPhysicsMaterials[ ListID ] )
 end
 
-function ENT:PhysicsOnGround( PhysObj )
-	if not PhysObj then
-		PhysObj = self:GetPhysicsObject()
-	end
+function ENT:PhysicsOnGround()
+
+	local PhysObj = self:GetPhysicsObject()
+
+	if not IsValid( PhysObj ) then return false end
 
 	local EntLoad,_ = PhysObj:GetStress()
 
