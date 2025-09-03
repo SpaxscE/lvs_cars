@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/blu/sherman/sherman_zippo_snow"
+	"$bumpmap" "models/blu/sherman/sherman_tank_normal"
+
+	"$phong" "1"
+	"$phongexponent"  "20"
+	"$phongboost" "2"
+	"$phongfresnelranges" "[.1 .5 1]"
+}
