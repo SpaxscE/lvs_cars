@@ -4,9 +4,9 @@ include("entities/lvs_tank_wheeldrive/modules/sh_turret_ballistics.lua")
 
 ENT.TurretBallisticsPredicted = false -- sherman optics are not adjustable
 
-ENT.TurretBallisticsProjectileVelocity = ENT.ProjectileVelocityCoaxial
+ENT.TurretBallisticsProjectileVelocity = 10000
 ENT.TurretBallisticsMuzzleAttachment = "turret_machinegun"
-ENT.TurretBallisticsViewAttachment = "sight2"
+ENT.TurretBallisticsViewAttachment = "turret_machinegun"
 
 ENT.TurretAimRate = 25
 

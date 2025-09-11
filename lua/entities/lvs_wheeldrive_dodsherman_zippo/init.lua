@@ -9,29 +9,15 @@ include("sh_tracks.lua")
 include("sh_turret.lua")
 
 function ENT:OnSpawn( PObj )
-	self:SetBodygroup( 4, 1 )
-
 	local ID = self:LookupAttachment( "machinegun" )
 	local Muzzle = self:GetAttachment( ID )
 	self.SNDTurretMGf = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/sherman/mg_loop.wav", "lvs/vehicles/sherman/mg_loop_interior.wav" )
 	self.SNDTurretMGf:SetSoundLevel( 95 )
 	self.SNDTurretMGf:SetParent( self, ID )
 
-	local ID = self:LookupAttachment( "muzzle_zippo" )
-	local Muzzle = self:GetAttachment( ID )
-	local FlameThrower = ents.Create( "lvs_item_flamethrower" )
-	FlameThrower:SetPos( Muzzle.Pos )
-	FlameThrower:SetAngles( Muzzle.Ang )
-	FlameThrower:SetParent( self, ID )
-	FlameThrower:Spawn()
-	FlameThrower:Activate()
+	self:SetBodygroup( 4, 1 )
+	local FlameThrower = self:AddFlameEmitter( self, "muzzle_zippo" )
 	self.WPNFlameThrower = FlameThrower
-
-	local ID = self:LookupAttachment( "turret_machinegun" )
-	local Muzzle = self:GetAttachment( ID )
-	self.SNDTurretMG = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/sherman/mg_loop.wav", "lvs/vehicles/sherman/mg_loop_interior.wav" )
-	self.SNDTurretMG:SetSoundLevel( 95 )
-	self.SNDTurretMG:SetParent( self, ID )
 
 	local DriverSeat = self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
 	DriverSeat.HidePlayer = true

@@ -35,12 +35,6 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	surface.SetDrawColor( self.OpticsCrosshairColor )
 	surface.DrawTexturedRect( Pos2D.x - size * 0.5, Pos2D.y - size * 0.5, size, size )
 
-	if Type == 1 then
-		self:DrawRotatedText( "MG", Pos2D.x + 30, Pos2D.y + 10, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
-	else
-		self:DrawRotatedText( "ERR", Pos2D.x + 30, Pos2D.y + 10, "LVS_FONT_PANEL", Color(0,0,0,220), 0)
-	end
-
 	local ScrW = ScrW()
 	local ScrH = ScrH()
 
