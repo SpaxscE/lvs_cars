@@ -108,7 +108,7 @@ function EFFECT:Init( data )
 
 	if not IsValid( ViewEnt ) then return end
 
-	local Intensity = ply:InVehicle() and 1 or 2
+	local Intensity = 2
 	local Ratio = math.min( 250 / (ViewEnt:GetPos() - trace.HitPos):Length(), 1 )
 
 	if Ratio < 0 then return end
