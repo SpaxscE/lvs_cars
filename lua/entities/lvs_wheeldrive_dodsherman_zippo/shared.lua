@@ -99,7 +99,7 @@ function ENT:InitWeapons()
 
 	-- flamethrower
 	local weapon = {}
-	weapon.Icon = Material("lvs/weapons/mg.png")
+	weapon.Icon = Material("lvs/weapons/flamethrower.png")
 	weapon.Ammo = 1000
 	weapon.Delay = 0.1
 	weapon.HeatRateUp = 0
