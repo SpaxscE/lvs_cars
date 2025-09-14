@@ -116,7 +116,6 @@ function ENT:InitWeapons()
 		if not IsValid( ent.WPNFlameThrower ) then return end
 		ent.WPNFlameThrower:Disable()
 	end
-	weapon.OnOverheat = function( ent ) end
 	weapon.HudPaint = function( ent, X, Y, ply )
 		local ID = ent:LookupAttachment(  "turret_cannon" )
 
