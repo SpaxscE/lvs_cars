@@ -108,6 +108,7 @@ function ENT:InitWeapons()
 	end
 	weapon.StartAttack = function( ent )
 		if not IsValid( ent.WPNFlameThrower ) then return end
+		ent.WPNFlameThrower:SetAttacker( ent:GetDriver() )
 		ent.WPNFlameThrower:Enable()
 	end
 	weapon.FinishAttack = function( ent )
