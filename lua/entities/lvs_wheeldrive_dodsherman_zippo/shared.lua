@@ -102,8 +102,8 @@ function ENT:InitWeapons()
 	weapon.Icon = Material("lvs/weapons/flamethrower.png")
 	weapon.Ammo = 4000
 	weapon.Delay = 0.05
-	weapon.HeatRateUp = 0.1
-	weapon.HeatRateDown = 0.1
+	weapon.HeatRateUp = 0.25
+	weapon.HeatRateDown = 0.5
 	weapon.Attack = function( ent )
 		ent:TakeAmmo( 1 )
 	end
