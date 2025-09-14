@@ -100,11 +100,12 @@ function ENT:InitWeapons()
 	-- flamethrower
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/flamethrower.png")
-	weapon.Ammo = 1000
-	weapon.Delay = 0.1
-	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 0.25
+	weapon.Ammo = 4000
+	weapon.Delay = 0.05
+	weapon.HeatRateUp = 0.1
+	weapon.HeatRateDown = 0.1
 	weapon.Attack = function( ent )
+		ent:TakeAmmo( 1 )
 	end
 	weapon.StartAttack = function( ent )
 		if not IsValid( ent.WPNFlameThrower ) then return end
@@ -135,32 +136,56 @@ function ENT:InitWeapons()
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
-	weapon.OnSelect = function( ent )
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/overheat.wav")
 	end
 	self:AddWeapon( weapon )
-
 
 	-- smoke
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/smoke_launcher.png")
-	weapon.Ammo = 3
+	weapon.Ammo = 6
 	weapon.Delay = 1
 	weapon.HeatRateUp = 1
-	weapon.HeatRateDown = 0.05
+	weapon.HeatRateDown = 0.2
 	weapon.Attack = function( ent )
+		local ID = ent:LookupAttachment(  "turret_cannon" )
+
+		local Muzzle = ent:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		ent:EmitSound("lvs/vehicles/sherman/cannon_reload.wav", 75, 100, 1, CHAN_WEAPON )
+		ent:EmitSound("lvs/smokegrenade.wav")
 		ent:TakeAmmo( 1 )
 
 		local grenade = ents.Create( "lvs_item_smoke" )
-		grenade:SetPos( ent:LocalToWorld( Vector(-92,0,51) ) )
-		grenade:SetAngles( ent:GetAngles() )
-		grenade:SetParent( ent )
+		grenade:SetPos( Muzzle.Pos )
+		grenade:SetAngles( Muzzle.Ang )
 		grenade:Spawn()
 		grenade:Activate()
-		grenade:Enable()
-		grenade:SetColor( Color(0,0,0,0) )
+		grenade:GetPhysicsObject():SetVelocity( Muzzle.Ang:Forward() * 2000 ) 
+	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local ID = ent:LookupAttachment(  "turret_cannon" )
+
+		local Muzzle = ent:GetAttachment( ID )
+
+		if Muzzle then
+			local traceTurret = util.TraceLine( {
+				start = Muzzle.Pos,
+				endpos = Muzzle.Pos + Muzzle.Ang:Forward() * 50000,
+				filter = ent:GetCrosshairFilterEnts()
+			} )
+
+			local MuzzlePos2D = traceTurret.HitPos:ToScreen() 
+
+			ent:PaintCrosshairSquare( MuzzlePos2D, COLOR_WHITE )
+
+			ent:LVSPaintHitMarker( MuzzlePos2D )
+		end
 	end
 	self:AddWeapon( weapon )
-
 
 	-- turret rotation disabler
 	local weapon = {}

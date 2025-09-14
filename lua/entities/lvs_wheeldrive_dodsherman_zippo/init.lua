@@ -17,6 +17,13 @@ function ENT:OnSpawn( PObj )
 
 	self:SetBodygroup( 4, 1 )
 	local FlameThrower = self:AddFlameEmitter( self, "muzzle_zippo" )
+	--[[FlameThrower:SetFlameLifeTime( 1.5 )
+	FlameThrower:SetFlameVelocity( 1000 )
+	FlameThrower:SetFlameSize( 80 )
+	FlameThrower:SetDamage( 100 )
+	FlameThrower:SetFlameStartSound( "lvs/weapons/flame_start.wav" )
+	FlameThrower:SetFlameStopSound( "lvs/weapons/flame_end.wav" )
+	FlameThrower:SetFlameLoopSound( "lvs/weapons/flame_loop.wav" )]]
 	self.WPNFlameThrower = FlameThrower
 
 	local DriverSeat = self:AddDriverSeat( Vector(0,0,60), Angle(0,-90,0) )
