@@ -335,6 +335,25 @@ function ENT:OnSpawn( PObj )
 		},
 	} )
 ]]
+
+
+	--[[
+
+	-- add hydraulics:
+
+	-- self:CreateHydraulicControler( type, wheel_entity )
+	-- valid types are: "fl" "fr" "rl" "rr" ""
+
+	-- example:
+
+	local Wheel = self:AddWheel( {
+		pos = Vector(-60,-30,-15),
+		mdl = "models/props_vehicles/tire001c_car.mdl",
+		mdl_ang = Angle(0,0,0),
+	} ),
+	self:CreateHydraulicControler( "fl", Wheel )
+
+	]]
 end
 
 --[[
