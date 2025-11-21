@@ -133,6 +133,7 @@ function ENT:OnSpawn( PObj )
 			--	LVS.WHEEL_STEER_NONE -- non steering wheel
 			--	LVS.WHEEL_STEER_FRONT -- a wheel that turns left when left key is pressed
 			--	LVS.WHEEL_STEER_REAR -- ..turns right when left key is pressed
+			-- 	LVS.WHEEL_STEER_ACKERMANN -- turns the wheel using ackermann geometry
 
 			SteerAngle = 30, -- max steer angle, unused in steer type LVS.WHEEL_STEER_NONE
 
