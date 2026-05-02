@@ -24,7 +24,6 @@ ENT.MaxHealthFuelTank = 100
 ENT.DSArmorIgnoreForce = 1200
 ENT.CannonArmorPenetration = 3900
 
-
 ENT.MaxVelocity = 1000
 
 ENT.EngineCurve = 0.2
@@ -35,6 +34,11 @@ ENT.TransGearsReverse = 5
 
 ENT.FastSteerAngleClamp = 5
 ENT.FastSteerDeactivationDriftAngle = 12
+
+ENT.SteerAssistDeadZoneAngle = 1
+ENT.SteerAssistMaxAngle = 15
+ENT.SteerAssistExponent = 2
+ENT.SteerAssistMultiplier = 3
 
 ENT.PhysicsWeightScale = 1.5
 ENT.PhysicsDampingForward = true
