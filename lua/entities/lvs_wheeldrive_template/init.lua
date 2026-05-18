@@ -383,14 +383,15 @@ function ENT:DoMissileDistraction()
 
 
 	-- or do all manually:
-	--
-	--	self:SetMissileNoTarget( 2 ) -- this sets how many seconds we can not be found by missiles. Value doesn't have to be high as the flares themself act as distraction aswell
-	--
-	--	-- self:CreateFlare( PosWorld, DirWorld, Velocity )
-	--	local FlareEnt = self:CreateFlare( self:LocalToWorld( Vector(0,0,50) ), self:GetForward(), 1200 )
-	--
-	--	-- play funny sound
-	--	self:EmitSound("lvs/diprip_countermeasure.wav",85,100,0.25)
+	--[[
+		self:SetMissileNoTarget( 2 ) -- this sets how many seconds we can not be found by missiles. Value doesn't have to be high as the flares themself act as distraction aswell
+
+		-- self:CreateFlare( PosWorld, DirWorld, Velocity )
+		local FlareEnt = self:CreateFlare( self:LocalToWorld( Vector(0,0,50) ), self:GetForward(), 1200 )
+
+		-- play funny sound
+		self:EmitSound("weapons/flaregun/fire.wav")
+	--]]
 
 
 
